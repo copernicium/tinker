@@ -1,0 +1,9 @@
+/* dot -Tpng new.dot > outfile.png */
+/* cygstart outfile.png */
+
+digraph G {
+	a[shape=box];
+	a -> b [label=" hello"];
+	b -> c;
+	c -> d;
+}
