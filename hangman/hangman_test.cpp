@@ -19,14 +19,21 @@ int main(){
 				if(c==guess) locs.push_back(i);
 			}
 			solver.fill(locs,guess);
+			std::cout<<"\nCorrect, the letter "<<guess<<" is present in the word.\n";
 		}
-		else solver.wrong(guess);
+		else{
+			solver.wrong(guess);
+			std::cout<<"\nWrong: there are no letter "<<guess<<"'s in the word.\n";
+		}
 		if(game.done()){
 			std::cout<<draw_gallows(ATTEMPTS-game.remaining())<<"\n";
 			if(right) std::cout<<"\nYou win! The word was \""<<game.print_word()<<"\"!\n";
 			else std::cout<<"\nYou lost. The word was "<<game.print_word()<<"\n";
 		}
 	}
+	std::cout<<game.remaining()<<"\n";
+	if(game.remaining()==0) log(false,game.print_word(),__FILE__);
+	else log(true,game.print_word(),__FILE__);
 	return 0;
 }
 
