@@ -1,15 +1,4 @@
 #include <iostream>
 #include <chrono>
-
-using namespace std;
-
-unsigned long int get_nano(){
-	auto seedauto=chrono::time_point_cast<chrono::nanoseconds>(chrono::system_clock::now());
-        auto seedvalue=chrono::duration_cast<chrono::nanoseconds>(seedauto.time_since_epoch());
-        unsigned long int seed=seedvalue.count();
-	return seed;
-}
-
-int main(){
-	while(1) cout<<get_nano()<<endl;
-}
+unsigned long int get_nano(){ return (unsigned long int)(std::chrono::duration_cast<std::chrono::nanoseconds>((std::chrono::time_point_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now())).time_since_epoch())).count(); }//returns system time in nanoseconds
+int main(){ while(1) std::cout<<get_nano()<<"\n"; }
