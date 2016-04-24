@@ -1,133 +1,106 @@
-/*	Author: Logan Traffas
-TODO:
-	- 
-*/
 #include <iostream>
 #include <vector>
+#include <cassert>
 #include <string>
 
 using namespace std;
 
 const vector<char> alphabet={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 
-template <typename T>
-ostream& operator<<(ostream& o, vector<T> v){
-	o<<"<";
-	for(unsigned int i=0; i<v.size(); i++){
-		o<<v[i]<<" ";
+class Square{
+	private:
+	vector<vector<char>> square_;
+	
+	public:
+	vector<vector<char>> get();
+	friend ostream& operator<<(ostream&,Square);
+	Square();
+};
+
+Square::Square():square_({{}}){
+	square_={alphabet};
+	vector<char> temp=alphabet;
+	for(unsigned int i=0; i<alphabet.size()-1; i++){
+		temp.push_back(temp.front());
+		temp.erase(temp.begin());
+		square_.push_back(temp);
 	}
-	o<<">";
-	return o;
 }
 
-ostream& operator<<(ostream& o, vector<vector<char>> v){
-	for(unsigned int i=0; i<v.size(); i++){
-		for(unsigned int j=0; j<v[i].size(); j++){
-			o<<v[i][j];
+ostream& operator<<(ostream& o,Square a){
+	vector<vector<char>> b=a.get();
+	for(unsigned int i=0;i<b.size();i++){
+		for(unsigned int j=0;j<b[i].size();j++){
+			o<<b[i][j];
 		}
 		o<<"\n";
 	}
 	return o;
 }
 
-string to_key(const string key,const string message){
-	string keyed;
-	unsigned int x=0;
-	for(unsigned int i=0; i<message.size(); i++){
-		if(message[i]==' ')keyed+=' ';
-		else{
-			keyed+=key[x];
-			x++;
-			if(x==key.size())x=0;
-		}
-	}
-	cout<<"Keyed:         "<<keyed<<"\n";
-	return keyed;
+vector<vector<char>> Square::get(){
+	return square_;
 }
 
-string encode(const string keyed,const string message,const vector<vector<char>> square,const string punct){
+int find_letter(char a){
+	for(unsigned int i=0; i<alphabet.size(); i++){
+		if(tolower(a)==tolower(alphabet[i])) return i;
+	}
+	return -1;
+}
+
+string encode(string const message, string const filled){
 	string encoded;
-	for(unsigned int i=0; i<keyed.size(); i++){
-		if(keyed[i]==' ')encoded+=' ';
-		else{
-			for(unsigned int j=0; j<alphabet.size(); j++){
-				if(tolower(keyed[i])==tolower(alphabet[j])){
-					for(unsigned int k=0; k<square.size(); k++){
-						if(tolower(message[i])==tolower(square[k].front())){
-							encoded+=square[k][j];
-							break;
-						}							
-					}
-				}
-			}
+	for(unsigned int i=0; i<message.size(); i++){
+		int column=find_letter(message[i]);
+		if(column==-1){//if it's not a letter
+			encoded+=message[i];
+			continue;
 		}
+		int row=find_letter(filled[i]);
+		assert(row!=-1);
+		Square square;
+		encoded+=square.get()[row][column];
 	}
-	for(unsigned int i=0; i<punct.size(); i++){
-		if(punct[i]!=' ')encoded.insert(encoded.begin()+i,punct[i]);
-	}
-	return encoded;
+	return encoded;	
 }
 
-string decode(const string keyed,const string cipher,const vector<vector<char>> square,const string punct){
-	string decoded;
-	for(unsigned int i=0; i<keyed.size(); i++){
-		if(keyed[i]==' ')decoded+=' ';
-		else{
-			for(unsigned int j=0; j<alphabet.size(); j++){
-				if(tolower(keyed[i])==tolower(alphabet[j])){
-					for(unsigned int k=0; k<square.size(); k++){
-						if(tolower(cipher[i])==tolower(square[k][j])){
-							decoded+=square[k].front();
-							break;
-						}							
-					}
-				}
-			}
+string fill(const string message,const string key){
+	assert(message.size()>0 && key.size()>0);
+	string filled;
+	unsigned int j=0;
+	for(unsigned int i=0; i<message.size(); i++){
+		if(find_letter(message[i])==-1){
+			filled+=message[i];
+			continue;//leave punct
 		}
+		filled+=key[j%key.size()];
+		j++;
 	}
-	for(unsigned int i=0; i<punct.size(); i++){
-		if(punct[i]!=' ')decoded.insert(decoded.begin()+i,punct[i]);
-	}
-	return decoded;
+	return filled;
 }
 
-string find_punct(string& cipher){
-	string punct=cipher;
-	for(unsigned int i=0; i<cipher.size(); i++){
-		if(cipher[i]!=' '){
-			for(unsigned int j=0; j<alphabet.size(); j++){
-				if(tolower(cipher[i])==tolower(alphabet[j])){
-					punct.erase(punct.begin()+i);
-					punct.insert(i," ");
-					break;
-				}
-			}
-		}
-	}
-	for(unsigned int i=0; i<punct.size(); i++){
-		if(punct[i]!=' ')cipher.erase(cipher.begin()+i);
-	}
-	return punct;
-}
+string decode(const string encoded, const string filled){
+	(void)encoded;
+	(void)filled;
+	return " ";
+} 
 
 int main(){
-	vector<vector<char>> square;
-	square.push_back(alphabet);
-	vector<char> temp=alphabet;
-	for(unsigned int i=0; i<alphabet.size(); i++){
-		temp.push_back(temp.front());
-		temp.erase(temp.begin());
-		square.push_back(temp);
-	}
-	cout<<"Input key:     ";
-	string key;
-	getline(cin,key);
-	cout<<"Input cipher:  ";
-	string cipher;
-	getline(cin,cipher);
-	string punct=find_punct(cipher);
-	string keyed=to_key(key,cipher);
-	cout<<"Decoded:       "<<decode(keyed,cipher,square,punct)<<"\n";
-	cout<<"Encoded:       "<<encode(keyed,cipher,square,punct);
+	Square square;
+	cout<<square<<"\n";
+	string key,message;
+	cout<<"Key:     ";
+	cin>>key;
+	cout<<"Message: ";
+	cin>>message;
+	string keyed=fill(message,key);
+	cout<<"Keyed:   "<<keyed<<"\n";
+	string encoded=encode(message,keyed);
+	cout<<"Encoded: "<<encoded<<"\n";
+	string decoded=decode(message,keyed);
+	cout<<"Decoded: "<<decoded;
+	cout<<"\n\n";
 	return 0;
 }
+
