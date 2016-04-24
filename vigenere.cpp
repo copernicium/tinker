@@ -80,15 +80,15 @@ string fill(const string message,const string key){
 	return filled;
 }
 
-string decode(const string encoded, const string filled){
-	(void)encoded;
-	(void)filled;
-	return " ";
+string decode(const string encoded, const string keyed){
+	string decoded;
+	for(unsigned int i=0;i<encoded.size();i++){
+		decoded+=alphabet[(find_letter(encoded[i])-find_letter(keyed[i])+26)%26];
+	}
+	return decoded;
 } 
 
 int main(){
-	Square square;
-	cout<<square<<"\n";
 	string key,message;
 	cout<<"Key:     ";
 	cin>>key;
