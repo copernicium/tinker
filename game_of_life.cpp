@@ -2,10 +2,12 @@
 #include <array>
 #include <vector>
 #include <cassert>
+#include <chrono>
 
 #define X_LEN 10
 #define Y_LEN 10
 #define RUN_TIME 1000
+#define UPDATE_EVERY 500
 
 using namespace std;
 
@@ -131,15 +133,25 @@ std::ostream& operator<<(std::ostream& o,Grid a){
 	return o;
 }
 
-int main(){
+unsigned long int get_time(){
+	return (std::chrono::duration_cast<std::chrono::milliseconds>((std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now())).time_since_epoch())).count();
+}
+
+void run(){
 	Grid grid;
 	vector<Point> init_points{{4,5},{4,4},{4,3}};
 	grid.init(init_points);
 	cout<<grid<<"\n";
-	for(unsigned int i=0;i<RUN_TIME; i++){
+	for(unsigned int i=0;i<RUN_TIME; ){
+		if(get_time()%UPDATE_EVERY!=0) continue;
+		i++;
+		system("clear");
 		grid.update();
 		cout<<grid<<"\n";
-		system("clear");
 	}
+}
+
+int main(){
+	run();
 	return 0;
 }
