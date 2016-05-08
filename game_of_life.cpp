@@ -31,14 +31,16 @@ ostream& operator<<(ostream& o,Point a){
 
 vector<Point> get_neighbors(Point a){
 	vector<Point> v;
-	if(a.x>0)v.push_back({a.x-1,a.y});//left
-	if(a.x>0 && a.y>0)v.push_back({a.x-1,a.y-1});//up left
-	if(a.x>0 && a.y<Y_LEN-1)v.push_back({a.x-1,a.y+1});//down left
-	
-	if(a.x<X_LEN-1) v.push_back({a.x+1,a.y});//right
-	if(a.x<X_LEN-1 && a.y>0)v.push_back({a.x+1,a.y-1});//up right
-	if(a.x<X_LEN-1 && a.y<Y_LEN-1)v.push_back({a.x+1,a.y+1});//down right
-	
+	if(a.x>0){
+		v.push_back({a.x-1,a.y});//left
+		if(a.y>0)v.push_back({a.x-1,a.y-1});//up left
+		if(a.y<Y_LEN-1)v.push_back({a.x-1,a.y+1});//down left
+	}
+	if(a.x<X_LEN-1){
+		v.push_back({a.x+1,a.y});//right
+		if(a.y>0)v.push_back({a.x+1,a.y-1});//up right
+		if(a.y<Y_LEN-1)v.push_back({a.x+1,a.y+1});//down right
+	}
 	if(a.y>0) v.push_back({a.x,a.y-1});//up
 	if(a.y<Y_LEN-1) v.push_back({a.x,a.y+1});//down	
 	return v;
