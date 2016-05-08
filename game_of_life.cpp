@@ -5,7 +5,7 @@
 
 #define X_LEN 10
 #define Y_LEN 10
-#define RUN_TIME 10
+#define RUN_TIME 1000
 
 using namespace std;
 
@@ -139,6 +139,7 @@ int main(){
 	for(unsigned int i=0;i<RUN_TIME; i++){
 		grid.update();
 		cout<<grid<<"\n";
+		system("clear");
 	}
 	return 0;
 }
