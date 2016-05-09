@@ -1,4 +1,4 @@
-//complie with -DTIME_UNITS=[unit of time to use]
+//compile with -DTIME_UNITS=[unit of time to use]
 #include <chrono>
 #ifndef TIME_UNITS
 #define TIME_UNITS seconds
