@@ -2,7 +2,7 @@
 #include <array>
 #include <vector>
 #include <cassert>
-#include <chrono>
+#include "simple_time.h"
 
 #define X_LEN 10
 #define Y_LEN 10
@@ -131,10 +131,6 @@ std::ostream& operator<<(std::ostream& o,Grid a){
 		o<<"\n";
 	}
 	return o;
-}
-
-unsigned long int get_time(){
-	return (std::chrono::duration_cast<std::chrono::milliseconds>((std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now())).time_since_epoch())).count();
 }
 
 void run(){
