@@ -2,9 +2,14 @@
 #include <array>
 #include <cassert>
 #include <string>
+#include <fstream>
 #include <stdlib.h>
 
 using namespace std;
+
+static const string LOG_PATH="tic_tac_toe_logs/";
+static const string LOG_TEMPLATE="tic_tac_toe_log_";
+static string log_name="";
 
 enum class Mark{BLANK,X,O};
 
@@ -93,6 +98,13 @@ Board::State Board::state(){
 	return Board::State::DRAW;
 }
 
+ostream& operator<<(ostream& o,Board::State a){
+	#define Y(NAME) if(a==Board::State::NAME)return o<<""#NAME;
+	Y(UNFINISHED) Y(X) Y(O) Y(DRAW)
+	#undef Y
+	assert(0);
+}
+
 Board::Board():boxes(){
 	for(unsigned int i=0; i<3;i++){
 		for(unsigned int j=0; j<3; j++){
@@ -107,9 +119,46 @@ Mark Board::get(Box b){
 	return boxes[b.row][b.column];
 }
 
-void Board::place(Box b,Mark m){
-	assert(get(b)==Mark::BLANK);
-	boxes[b.row][b.column]=m;
+bool file_exists(string file_name) {
+    ifstream file;
+    file.open(file_name);
+    bool file_exists = file.is_open();
+    file.close();
+    return file_exists;
+}
+
+void make_file_name(){
+	unsigned int file_number=0;
+	string file_name=LOG_TEMPLATE;
+	while(true){
+		file_name.append(to_string(file_number));
+		if(!file_exists(LOG_PATH+file_name))break;
+		file_name.erase(file_name.size()-1,file_name.size());
+		file_number++;
+	}
+	ofstream out(LOG_PATH+file_name);
+	out<<file_name;
+	out.close();
+	log_name=file_name;
+}
+
+void log(const Box box,const Mark player){
+	if(log_name=="")make_file_name();
+	ofstream out(LOG_PATH+log_name,ios::app);
+	out<<"\n"<<player<<" "<<box;
+	out.close();
+}
+
+void log(const Board::State final_state){
+	ofstream out(LOG_PATH+log_name,ios::app);
+	out<<"\n"<<final_state;
+	out.close();
+}
+
+void Board::place(Box box,Mark mark){
+	log(box,mark);
+	assert(get(box)==Mark::BLANK);
+	boxes[box.row][box.column]=mark;
 }
 
 ostream& operator<<(ostream& o,Board a){
@@ -163,6 +212,7 @@ void game(){
 			break;
 		default: assert(0);
 	}
+	log(board.state());
 }
 
 int main(){
