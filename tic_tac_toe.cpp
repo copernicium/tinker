@@ -93,7 +93,6 @@ Board::State Board::state(){
 	return Board::State::DRAW;
 }
 
-
 Board::Board():boxes(){
 	for(unsigned int i=0; i<3;i++){
 		for(unsigned int j=0; j<3; j++){
@@ -141,14 +140,15 @@ void player_turn(Board& board, const Mark mark){
 
 void game(){
 	Board board;
+	Mark player=Mark::X;
 	while(board.state()==Board::State::UNFINISHED){
 		system("clear");
 		cout<<"Tic Tac Toe\n"<<board;
-		player_turn(board,Mark::X);
-		system("clear");
-		cout<<"Tic Tac Toe\n"<<board;
-		if(board.state()==Board::State::UNFINISHED)player_turn(board,Mark::O);
+		player_turn(board,player);
+		player=(player==Mark::X)? Mark::O : Mark::X;
 	}
+	system("clear");
+	cout<<"Tic Tac Toe\n"<<board;
 	switch(board.state()){
 		case Board::State::DRAW:
 			cout<<"It was a draw!";
