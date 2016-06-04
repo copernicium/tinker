@@ -51,10 +51,10 @@ class Board{
 	private:
 	array<array<Mark,3>,3> boxes;
 	public:
-	Mark get(Box);
+	Mark get(Box)const;
 	void place(Box,Mark);
 	bool done();
-	State state();
+	State state()const;
 	Board();
 	Board(array<array<Mark,3>,3>);
 };
@@ -71,7 +71,7 @@ void rotate_90(array<array<Mark,3>,3>& boxes){
 	boxes=new_boxes;
 }
 
-Board::State Board::state(){
+Board::State Board::state()const{
 	{
 		array<array<Mark,3>,3> test=boxes;
 		for(unsigned int angle=0; angle<360; angle+=90){
@@ -115,7 +115,7 @@ Board::Board():boxes(){
 
 Board::Board(array<array<Mark,3>,3> b):boxes(b){}
 
-Mark Board::get(Box b){
+Mark Board::get(Box b)const{
 	return boxes[b.row][b.column];
 }
 
@@ -125,6 +125,17 @@ bool file_exists(string file_name) {
     bool file_exists = file.is_open();
     file.close();
     return file_exists;
+}
+ostream& operator<<(ostream& o,const Board a){
+	for(unsigned int row=0; row<3; row++){
+		o<<"   |   |   \n";
+		#define X(ROW,COLUMN) " "<<(a.get({ROW,COLUMN}))<<" "
+		o<<X(row,0)<<"|"<<X(row,1)<<"|"<<X(row,2)<<"\n";
+		#undef X
+		o<<"   |   |   \n";
+		if(row<2)o<<"===========\n";
+	}
+	return o;
 }
 
 void make_file_name(){
@@ -136,41 +147,44 @@ void make_file_name(){
 		file_name.erase(file_name.size()-1,file_name.size());
 		file_number++;
 	}
-	ofstream out(LOG_PATH+file_name);
-	out<<file_name;
-	out.close();
 	log_name=file_name;
 }
 
 void log(const Box box,const Mark player){
 	if(log_name=="")make_file_name();
 	ofstream out(LOG_PATH+log_name,ios::app);
-	out<<"\n"<<player<<" "<<box;
+	out<<player<<" "<<box<<"\n";
 	out.close();
 }
 
-void log(const Board::State final_state){
+void log(const Board board){
 	ofstream out(LOG_PATH+log_name,ios::app);
-	out<<"\n"<<final_state;
+	out<<"winner\n"<<board.state()<<"\nboard\n"<<board;
 	out.close();
+}
+
+Mark to_mark(char str){
+	if(str==' ')return Mark::BLANK;
+	if(str=='X')return Mark::X;
+	if(str=='O')return Mark::O;
+	assert(0);
+}
+
+Board parse(array<string,11> board_str){
+	Board board;
+	array<unsigned int,3> in_str{1,5,9};
+	for(unsigned int row=0; row<3; row++){
+		for(unsigned int column=0; column<3; column++){
+			board.place({row,column},to_mark(board_str[in_str[row]][in_str[column]]));
+		}
+	}
+	return board;
 }
 
 void Board::place(Box box,Mark mark){
 	log(box,mark);
 	assert(get(box)==Mark::BLANK);
 	boxes[box.row][box.column]=mark;
-}
-
-ostream& operator<<(ostream& o,Board a){
-	for(unsigned int row=0; row<3; row++){
-		o<<"   |   |   \n";
-		#define X(ROW,COLUMN) " "<<(a.get({ROW,COLUMN}))<<" "
-		o<<X(row,0)<<"|"<<X(row,1)<<"|"<<X(row,2)<<"\n";
-		#undef X
-		o<<"   |   |   \n";
-		if(row<2)o<<"===========\n";
-	}
-	return o;
 }
 
 void player_turn(Board& board, const Mark mark){
@@ -212,10 +226,22 @@ void game(){
 			break;
 		default: assert(0);
 	}
-	log(board.state());
+	log(board);
 }
 
 int main(){
+	/*array<string,11> test;
+	ifstream in("test");
+	unsigned int i=0;
+	while(!in.eof()){
+		string line;
+		getline(in,line);
+		test[i]=line;
+		i++;
+	}
+	in.close();
+	cout<<parse(test);
+	assert(0);*/
 	game();
 	return 0;
 }
