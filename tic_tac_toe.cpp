@@ -1,3 +1,8 @@
+/*TODO:
+	- Check for duplicates function
+	- AI
+*/
+
 #include "tic_tac_toe.h"
 
 #include <iostream>
