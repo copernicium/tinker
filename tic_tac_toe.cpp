@@ -92,11 +92,54 @@ Board::Board():boxes(){
 
 Board::Board(array<array<Mark,3>,3> b):boxes(b){}
 
+void Arguments::parse(unsigned int x, char* arguments[]){
+	vector<string> valid_args{"--populate_logs","--use_ai"};
+	for(unsigned int i=0; i<x; i++){
+		if((string)arguments[i]==valid_args[0]){
+			populate_logs=true;
+		}
+		if((string)arguments[i]==valid_args[1]){
+			use_ai=true;
+		}
+	}
+}
+
 Mark Board::get(Box b)const{
 	return boxes[b.row][b.column];
 }
 
-Board_log::Board_log():board(),moves(){}
+Board_log::Board_log():file_name(),board(),moves(){}
+
+Arguments::Arguments():populate_logs(false),use_ai(false){}
+
+bool operator==(const Box a,const Box b){
+	if(a.row!=b.row)return false;
+	return a.column==b.column;
+}
+
+bool operator==(const Move a,const Move b){
+	if(a.mark!=b.mark) return false;
+	return a.box==b.box;
+}
+
+bool operator==(const Board a,const Board b){
+	for(unsigned int row=0; row<3; row++){
+		for(unsigned int column=0; column<3; column++){
+			if(a.get({row,column})!=b.get({row,column}))return false;
+		}
+	}
+	return true;
+}
+
+bool operator!=(const Board a,const Board b){
+	return !(a==b);
+}
+
+bool operator==(const Board_log a,const Board_log b){
+	if(a.file_name!=b.file_name) return false;
+	if(a.board!=b.board) return false;
+	return a.moves==b.moves;
+}
 
 bool file_exists(string file_name) {
     ifstream file;
@@ -123,7 +166,8 @@ ostream& operator<<(ostream& o,const Move a){
 }
 
 ostream& operator<<(ostream& o,const Board_log a){
-	o<<"\n"<<a.board;
+	o<<"file_name:"<<a.file_name<<"\n";
+	o<<a.board;
 	o<<"moves:"<<a.moves;
 	return o;
 }
@@ -154,6 +198,12 @@ void check_for_duplicates(){
 		string file_name=LOG_TEMPLATE;
 		file_name.append(to_string(i));
 		logged_boards.push_back(parse(file_name));
+	}
+	for(unsigned int i=0; i<logged_boards.size(); i++){
+		cout<<"\nbegin\n"<<logged_boards[i]<<"end\n";
+		for(unsigned int angle=0; angle<360; angle+=90){
+			//HERE
+		}
 	}
 }
 
@@ -192,6 +242,7 @@ Board_log parse(string log_name){
 	}
 	in.close();
 	Board_log board_log;
+	board_log.file_name=log_name;
 	{//get moves
 		for(unsigned int i=0; i<file.size(); i++){
 			if(file[i]=="state")break;
@@ -212,7 +263,6 @@ Board_log parse(string log_name){
 		}
 		board_log.board=parse(board_str);
 	}
-	cout<<board_log<<"\n";
 	return board_log;
 }
 
@@ -266,7 +316,9 @@ void game(){
 	log(board);
 }
 
-int main(){
+int main(int x,char *arg[]){
+	Arguments arguments;
+	arguments.parse(x,arg);
 	game();
 	return 0;
 }

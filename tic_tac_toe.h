@@ -39,10 +39,17 @@ struct Move{
 };
 
 struct Board_log{
-	//string file_name;
+	string file_name;
 	Board board;
 	vector<Move> moves;
 	Board_log();
+};
+
+struct Arguments{
+	bool populate_logs;
+	bool use_ai;
+	void parse(unsigned int,char *[]);
+	Arguments();
 };
 
 template<class Type, long unsigned int Len>
@@ -71,5 +78,11 @@ ostream& operator<<(ostream&,Board::State);
 ostream& operator<<(ostream&,const Board);
 ostream& operator<<(ostream&,const Move);
 ostream& operator<<(ostream&,const Board_log);
+
+bool operator==(const Box a,const Box b);
+bool operator==(const Move a,const Move b);
+bool operator==(const Board a,const Board b);
+bool operator!=(const Board a,const Board b);
+bool operator==(const Board_log a,const Board_log b);
 
 Board_log parse(string);
