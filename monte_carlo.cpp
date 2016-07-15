@@ -1,6 +1,7 @@
 #include <iostream>
 #include <random>
 #include "simple_time.h"
+#include <iomanip>
 
 using namespace std;
 
@@ -24,11 +25,12 @@ int main(){
 	for(unsigned int i=0; i<N; i++){
 		double alliance_1_score=alliance_1(generator);
 		double alliance_2_score=alliance_2(generator);
-		cout<<alliance_1_score<<"   "<<alliance_2_score<<"\n";
+		cout<<fixed<<setprecision(5)<<alliance_1_score<<"   "<<alliance_2_score<<"\n";
 		if(alliance_1_score > alliance_2_score) alliance_1_wins++;
 		else if (alliance_1_score <alliance_2_score) alliance_2_wins++;
 		else ties++;
 	}
+	cout<<"\n";
 	cout<<"alliance_1_wins:"<<alliance_1_wins<<"\n";
 	cout<<"alliance_2_wins:"<<alliance_2_wins<<"\n";
 	cout<<"ties:"<<ties<<"\n";
