@@ -139,7 +139,7 @@ void run(){
 	grid.init(init_points);
 	cout<<grid<<"\n";
 	for(unsigned int i=0;i<RUN_TIME; ){
-		if(get_time()%UPDATE_EVERY!=0) continue;
+		if(get_time(Time_type::MILLISECONDS)%UPDATE_EVERY!=0) continue;
 		i++;
 		system("clear");
 		grid.update();
