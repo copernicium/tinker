@@ -1,3 +1,4 @@
+#include "simple_time.h"
 #include<iostream>
 #include<random>
 #include<cassert>
@@ -75,11 +76,16 @@ double stddev(vector<double> const& v){
 }
 
 int main(){
+	auto last=get_time(Time_type::NANOSECONDS);
+	unsigned int a=0;
+	#define NOW get_time(Time_type::NANOSECONDS)
+	#define TIME_PRINT a++; cout<<"\t\tTime diff "<<a<<": "<<(NOW-last)/1000000000.0<<"\n"; last=NOW;
 	default_random_engine generator;
 	normal_distribution<double> t1_dist(40,30);
 	normal_distribution<double> t2_dist(50,5);
 	using Result=pair<double,double>;
 	vector<Result> results;
+	
 	for(auto i:range(10000)) results|=make_pair(t1_dist(generator),t2_dist(generator));
 
 	/*for(auto r:results){
@@ -88,17 +94,18 @@ int main(){
 		cout<<a<<"\t"<<b<<"\n";
 	}
 	cout<<"\n";*/
-
+	TIME_PRINT
 	auto t1_sample=firsts(results);
 	cout<<"Team 1 mean:"<<mean(t1_sample)<<"\n";
+	TIME_PRINT
 	cout<<"stddev:"<<stddev(t1_sample)<<"\n";
+	TIME_PRINT
 	cout<<"\n";
-
 	auto t2_sample=seconds(results);
 	cout<<"Team 2 mean:"<<mean(t2_sample)<<"\n";
 	cout<<"stddev:"<<stddev(t2_sample)<<"\n";
 	cout<<"\n";
-
+	
 	auto t1_wins=(filter([](auto p){ return p.first>p.second; },results).size()+0.0)/results.size();
 	PRINT(t1_wins);
 }
