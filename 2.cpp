@@ -77,9 +77,8 @@ double stddev(vector<double> const& v){
 
 int main(){
 	auto last=get_time(Time_type::NANOSECONDS);
-	unsigned int a=0;
 	#define NOW get_time(Time_type::NANOSECONDS)
-	#define TIME_PRINT a++; cout<<"\t\tTime diff "<<a<<": "<<(NOW-last)/1000000000.0<<"\n"; last=NOW;
+	#define TIME_PRINT cout<<"\t\tTime diff: "<<(NOW-last)/1000000000.0<<"\n"; last=NOW;
 	default_random_engine generator;
 	normal_distribution<double> t1_dist(40,30);
 	normal_distribution<double> t2_dist(50,5);
