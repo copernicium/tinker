@@ -6,14 +6,14 @@
 using namespace std;
 
 int main(){
-	const int N=1000;
+	const int N=10000;
 	
-	const double MEAN_1=60;
-	const double STANDARD_DEVIATION_1=10;
+	const double MEAN_1=40;
+	const double STANDARD_DEVIATION_1=30;
 	normal_distribution<double> alliance_1(MEAN_1,STANDARD_DEVIATION_1);
 	
 	const double MEAN_2=50;
-	const double STANDARD_DEVIATION_2=30;
+	const double STANDARD_DEVIATION_2=5;
 	normal_distribution<double> alliance_2(MEAN_2,STANDARD_DEVIATION_2);
 
 	default_random_engine generator(get_time(Time_type::NANOSECONDS));
@@ -34,5 +34,7 @@ int main(){
 	cout<<"alliance_1_wins:"<<alliance_1_wins<<"\n";
 	cout<<"alliance_2_wins:"<<alliance_2_wins<<"\n";
 	cout<<"ties:"<<ties<<"\n";
+	cout<<"alliance_1 win percentage:"<<((float)alliance_1_wins/(float)N)<<"\n";
+	cout<<"alliance_2 win percentage:"<<((float)alliance_2_wins/(float)N);
 	return 0;
 }
