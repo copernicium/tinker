@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 using namespace std;
 
@@ -26,9 +27,8 @@ struct Dog:public Animal{
 };
 
 int main(){
-	Animal *a=new Dog();
+	unique_ptr<Animal> a=make_unique<Dog>();
 	a->make_noise();
 	cout<<"\n";
-	delete a;
 	return 0;
 }
