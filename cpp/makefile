@@ -1,8 +1,5 @@
 all: vigenere game_of_life tic_tac_toe monte_carlo 
 
-logan_expernimental: logan_experimental.cpp
-	g++ -std=c++14 logan_experimental.cpp -o "logan_experimental"
-
 vigenere: vigenere.cpp
 	g++ -std=c++11 -g -Wall -Werror -Wextra vigenere.cpp -o "vigenere"
 
