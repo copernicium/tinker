@@ -1,7 +1,4 @@
-all: vigenere game_of_life tic_tac_toe monte_carlo eric_original
-
-eric_original: eric_original.cpp
-	g++ -std=c++14 eric_original.cpp -o "eric_original" 
+all: vigenere game_of_life tic_tac_toe monte_carlo 
 
 logan_expernimental: logan_experimental.cpp
 	g++ -std=c++14 logan_experimental.cpp -o "logan_experimental"
@@ -20,4 +17,4 @@ monte_carlo: monte_carlo.cpp
 
 .PHONY: clean
 clean:
-	rm -rf vigenere; rm -rf game_of_life; rm -rf tic_tac_toe; rm -rf monte_carlo; rm -rf eric_original; rm -rf logan_experimental;
+	rm -rf vigenere; rm -rf game_of_life; rm -rf tic_tac_toe; rm -rf monte_carlo;
