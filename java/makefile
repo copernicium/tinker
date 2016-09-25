@@ -10,6 +10,9 @@ hello: hello.java
 Simple_maze: Simple_maze.java
 	javac Simple_maze.java
 
+FourRectanglePrinter: FourRectanglePrinter.java
+	javac FourRectanglePrinter.java
+
 .PHONY: clean
 clean:
-	rm -rf hello.class; rm -rf Simple_maze.class; rm -rf PiEstimator.class;
+	rm -rf hello.class; rm -rf Simple_maze.class; rm -rf PiEstimator.class; rm -rf FourRectanglePrinter.class
