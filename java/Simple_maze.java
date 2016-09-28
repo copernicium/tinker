@@ -6,10 +6,10 @@ public class Simple_maze{
 		private int x, y;
 		public void set(int a,int b){
 			assert(a>=0);
-			assert(b>=0);
 			assert(a<X_LIM);
-			assert(b<Y_LIM);
 			x=a;
+			assert(b>=0);
+			assert(b<Y_LIM);
 			y=b;
 		}
 		public int getx(){
@@ -24,12 +24,16 @@ public class Simple_maze{
 		@Override public boolean equals(Object b){
 			if(!(b instanceof Location)) return false;
 			Location test=(Location)b;
-			if(x!=test.x) return false;
-			return y==test.y;
+			if(this.x!=test.x) return false;
+			return this.y==test.y;
 		}
 		public Location(){
 			x=0;
 			y=0;
+		}
+		public Location(int a,int b){
+			x=a;
+			y=b;
 		}
 	}
 	public Location loc;
@@ -40,15 +44,22 @@ public class Simple_maze{
 	}
 	
 	public static void main(String[] args){
-		Simple_maze maze=new Simple_maze();
-		Location l = new Location();
-		System.out.println(l.toString());
-		l.set(9,9);
-		System.out.println(l.toString());
+		Location a = new Location();
+		Location b = new Location(9,9);
 		
-		while(!maze.done()){
-			
-		}
+		System.out.println(a.toString());
+		System.out.println(b.toString());
+		
+		System.out.println(a.equals(b));
+		
+		a.set(2,2);
+		
+		System.out.println(a.getx());
+		System.out.println(a.gety());
+		
+		System.out.println(b.getx());
+		System.out.println(b.gety());
+		
 		System.out.println("End");
 	}
 	
