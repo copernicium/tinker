@@ -1,17 +1,17 @@
 #include <iostream>
-#include <cmath>
 
-using namespace std;
-
-double next_number(double square_root,double radicand){//takes a potential square root and the test and averages them. Eventually they must converge on the actual root.
-	return (square_root + (radicand/square_root)) / 2;
+void next_number(double& square_root,const double radicand){//takes a potential square root and the test and averages them. Eventually they must converge on the actual root.
+	square_root = (square_root + (radicand / square_root)) / 2;
 }
 
 int main(){
 	srand(time(NULL));
-	double radicand = rand(), square_root = rand();
-	while(square_root != next_number(square_root,radicand)){//run until square root is found
-		square_root = next_number(square_root,radicand);
-		cout<<square_root<<"\n";
+	const double radicand = rand();
+	double square_root = rand();
+	while(true){//run until square root is found
+		double last = square_root;
+		next_number(square_root,radicand);
+		std::cout<<square_root<<"\n";
+		if(last == square_root) break;
 	}
 }
