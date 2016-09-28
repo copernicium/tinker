@@ -1,17 +1,20 @@
 #include <iostream>
 
-void next_number(double& square_root,const double radicand){//takes a potential square root and the test and averages them. Eventually they must converge on the actual root.
+double sqrt(double& square_root,const double radicand){//take any square_root seed and radicand and find the square root
+	double last = square_root;
 	square_root = (square_root + (radicand / square_root)) / 2;
+	if(last != square_root) sqrt(square_root,radicand);
+	return square_root;
+}
+
+double sqrt(const double radicand){//use one as the square_root seed and a radicand to find the square root
+	double one = 1;
+	return sqrt(one,radicand); 
 }
 
 int main(){
 	srand(time(NULL));
+	
 	const double radicand = rand();
-	double square_root = rand();
-	while(true){//run until square root is found
-		double last = square_root;
-		next_number(square_root,radicand);
-		std::cout<<square_root<<"\n";
-		if(last == square_root) break;
-	}
+	std::cout<<"radicand:"<<radicand<<" square root:"<<sqrt(radicand)<<"\n";
 }
