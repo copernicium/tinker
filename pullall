@@ -1,5 +1,5 @@
 for d in ./*/; do 
 	if [ -d "$d/.git/" ];
-	then (cd "$d" && git pull);
+	then (cd "$d" && printf "$d  " && git pull);
 	fi
 done
