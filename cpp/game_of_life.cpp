@@ -4,10 +4,10 @@
 #include <cassert>
 #include "simple_time.h"
 
-#define X_LEN 100
-#define Y_LEN 40
+#define X_LEN 190
+#define Y_LEN 48
 #define RUN_TIME 1000
-#define UPDATE_EVERY 500
+#define UPDATE_EVERY 1
 
 using namespace std;
 
@@ -148,24 +148,29 @@ std::string to_string(Grid a){
 void run(){
 	srand(time(NULL));
 	Grid grid;
-	vector<Point> random_points;
-	for(unsigned int x=0; x<X_LEN; x++){
-		for(unsigned int y=0; y<Y_LEN; y++){
-			bool random=(rand() % 2);
-			if(random)random_points.push_back(Point{x,y});
+	while(true){
+		vector<Point> random_points;
+		for(unsigned int x=0; x<X_LEN; x++){
+			for(unsigned int y=0; y<Y_LEN; y++){
+				bool random=(rand() % 2);
+				if(random)random_points.push_back(Point{x,y});
+			}
 		}
-	}
-	//vector<Point> init_points{{4,5},{4,4},{4,3}};
-	//grid.init(init_points);
-	grid.init(random_points);
-	//cout<<grid<<"\n";
-	for(unsigned int i=0;i<RUN_TIME; ){
-		if(get_time(Time_type::MILLISECONDS)%UPDATE_EVERY!=0) continue;
-		i++;
-		grid.update();
+		grid.init(random_points);
 		string grid_str = to_string(grid);
-		system("clear");
 		cout<<grid_str<<"\n";
+		string last_grid = grid_str;
+		int i =0;
+		while(true){
+			i++;
+			if(get_time(Time_type::MILLISECONDS)%UPDATE_EVERY!=0) continue;
+			if(i%2==0)last_grid = grid_str;
+			grid.update();
+			grid_str = to_string(grid);
+			if(last_grid == grid_str) break;
+			system("clear");
+			cout<<grid_str<<"\n";
+		}
 	}
 }
 
