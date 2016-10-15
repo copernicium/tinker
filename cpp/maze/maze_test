@@ -1,0 +1,5 @@
+make
+if [ $? -eq 0 ]; then ./maze
+    else
+        echo Make failed
+fi

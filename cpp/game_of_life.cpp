@@ -4,8 +4,8 @@
 #include <cassert>
 #include "simple_time.h"
 
-#define X_LEN 10
-#define Y_LEN 10
+#define X_LEN 100
+#define Y_LEN 40
 #define RUN_TIME 1000
 #define UPDATE_EVERY 500
 
@@ -119,7 +119,7 @@ void Grid::init(vector<Point> v){
 	for(unsigned int i=0; i<v.size(); i++){
 		Point p=v[i];
 		assert(p.x<X_LEN && p.y<Y_LEN);
-		grid[p.y][p.x]=!grid[p.y][p.x];
+		grid[p.y][p.x]=true;//!grid[p.y][p.x];
 	}
 }
 
@@ -133,17 +133,39 @@ std::ostream& operator<<(std::ostream& o,Grid a){
 	return o;
 }
 
+std::string to_string(Grid a){
+	string s;
+	for(unsigned int y=0; y<Y_LEN; y++){
+		for(unsigned int x=0; x<X_LEN; x++){
+			bool b = a.get()[y][x];
+			s += b ? "X" : " ";
+		}
+		s+="\n";
+	}
+	return s;
+}
+
 void run(){
+	srand(time(NULL));
 	Grid grid;
-	vector<Point> init_points{{4,5},{4,4},{4,3}};
-	grid.init(init_points);
-	cout<<grid<<"\n";
+	vector<Point> random_points;
+	for(unsigned int x=0; x<X_LEN; x++){
+		for(unsigned int y=0; y<Y_LEN; y++){
+			bool random=(rand() % 2);
+			if(random)random_points.push_back(Point{x,y});
+		}
+	}
+	//vector<Point> init_points{{4,5},{4,4},{4,3}};
+	//grid.init(init_points);
+	grid.init(random_points);
+	//cout<<grid<<"\n";
 	for(unsigned int i=0;i<RUN_TIME; ){
 		if(get_time(Time_type::MILLISECONDS)%UPDATE_EVERY!=0) continue;
 		i++;
-		system("clear");
 		grid.update();
-		cout<<grid<<"\n";
+		string grid_str = to_string(grid);
+		system("clear");
+		cout<<grid_str<<"\n";
 	}
 }
 
