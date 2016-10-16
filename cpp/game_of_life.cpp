@@ -5,9 +5,9 @@
 #include "simple_time.h"
 
 #define X_LEN 190
-#define Y_LEN 48
+#define Y_LEN 65
 #define RUN_TIME 1000
-#define UPDATE_EVERY 1
+#define UPDATE_EVERY 5
 
 using namespace std;
 
