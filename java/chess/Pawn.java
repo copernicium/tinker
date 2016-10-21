@@ -5,10 +5,15 @@ import java.util.Vector;
 public class Pawn extends ChessPiece
 {
     boolean firstMove;
+	@Override
+	public String toString(){
+		return "P";
+	}
     @Override
     public Vector<ChessPosition> getNewPositions(){
         switch(this.color){
-            
+			case WHITE:
+            case BLACK:
             default: break;
         }
         
@@ -29,10 +34,12 @@ public class Pawn extends ChessPiece
     }
     Pawn(){
         super();
+		type = Type.PAWN;
         firstMove = true;
     }
-    public Pawn(ChessPosition position,Color color,boolean firstMove){
+    public Pawn(ChessPosition position,Color color){
         super(position,color);
-        this.firstMove = firstMove;
+        this.type = Type.PAWN;
+		this.firstMove = true;
     }
 }

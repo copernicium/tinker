@@ -4,10 +4,16 @@ import java.util.Vector;
  */
 public class ChessPiece
 {
-    public enum Color{WHITE,BlACK};
+    public enum Type{PAWN,ROOK,KNIGHT,BISHOP,QUEEN,KING};
+	protected Type type;
+	public enum Color{WHITE,BLACK};
     protected Color color;
     protected ChessPosition position;
     
+	public String toString(){
+		return "U";
+	}
+	
     public Vector<ChessPosition> getNewPositions(){
         //TODO: finish this
         return new Vector<ChessPosition>(0);
@@ -27,6 +33,10 @@ public class ChessPiece
     public Color getColor(){
         return color;
     }
+	
+	public Type getType(){
+		return type;
+	}
     
     public ChessPosition getPosition(){
         return position;
