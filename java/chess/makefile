@@ -1,9 +1,20 @@
-all: Board
+all: ChessBoard ChessPosition ChessPiece Pawn Game
 
+ChessPiece: ChessPiece.java
+	javac ChessPiece.java
 
-Board: Board.java
-	javac Board.java
+Pawn: Pawn.java
+	javac Pawn.java
+	
+ChessPosition: ChessPosition.java
+	javac ChessPosition.java
+
+ChessBoard: ChessBoard.java
+	javac ChessBoard.java
+
+Game: Game.java
+	javac Game.java
 
 .PHONY: clean
 clean:
-	rm -rf Board.class; 
+	rm -rf ChessBoard.class; rm-rf ChessPosition.class; rm -rf ChessPiece.class; rm -rf Pawn.class; rm -rf Game.class;
