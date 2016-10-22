@@ -14,26 +14,37 @@ public class ChessBoard
     }
     private ChessPiece[] whitePieces;
     private ChessPiece[] blackPieces;
-    
-    public boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color){
-        switch(color){
-            case WHITE:
-                for(ChessPiece chessPiece: whitePieces){
-                    if(checkPosition.equals(chessPiece.getPosition())) return true;
-                }
-                break;
-            case BLACK:
-                for(ChessPiece chessPiece: blackPieces){
-                    if(checkPosition.equals(chessPiece.getPosition())) return true;
-                }
-                break;
-            default: break;
-        }
+	
+	public static boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color, ChessPiece[] unavailablePositions){
+        assert(unavailablePositions.length > 0 && unavailablePositions[0].getColor()==color);
+		for(ChessPiece a: unavailablePositions){
+			if(checkPosition.equals(a.getPosition())) return true;
+		}
         return false;
     }
+	
+	public void print(){
+		String[][] board = {{""}};
+		ChessPiece[] chessPieces = whitePieces;
+		for(int i = 0; i < 2; i++){
+			for(ChessPiece a: chessPieces){
+				board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()][ChessPosition.Column.DIMENSION - a.getPosition().getColumn().get()] = a.toString();
+			}
+			chessPieces = blackPieces;
+		}
+		System.out.print(board);
+	}
     
     public void move(ChessPiece chessPiece,ChessPosition chessPosition){
-        chessPiece.move(chessPosition);
+		switch(chessPiece.getColor()){
+			case WHITE:
+				chessPiece.move(chessPosition,whitePieces);
+				break;
+			case BLACK:
+				chessPiece.move(chessPosition,blackPieces);
+				break;
+			default: break;
+		}
         //if(this.isOccupied(chessPosition,)) kill(chessPosition);
     }
     

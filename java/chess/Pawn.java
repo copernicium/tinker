@@ -10,26 +10,21 @@ public class Pawn extends ChessPiece
         return "P";
     }
     @Override
-    public Vector<ChessPosition> getNewPositions(){
-        Vector<ChessPosition> possibleMoves = new Vector<ChessPosition>(0);
-        switch(this.color){
-            case WHITE:
-                if(firstMove) possibleMoves.addElement(new ChessPosition(this.position.getRow().get()+2,this.position.getColumn().get()));
-                possibleMoves.addElement(new ChessPosition(this.position.getRow().get()+1,this.position.getColumn().get()));
-                break;
-            case BLACK:
-                if(firstMove) possibleMoves.addElement(new ChessPosition(this.position.getRow().get()-2,this.position.getColumn().get()));
-                possibleMoves.addElement(new ChessPosition(this.position.getRow().get()-1,this.position.getColumn().get()));
-                break;
-            default: break;
-        }
-        
-        //TODO: finish this
+    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO
+		Vector<ChessPosition> possibleMoves = new Vector<ChessPosition>(0);
+        if(firstMove){
+			ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+2,this.position.getColumn().get());
+			if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);
+		}
+		{
+			ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+1,this.position.getColumn().get());
+			if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);					
+		}
         return possibleMoves;
     }
     @Override
-     public void move(ChessPosition position){
-        for(ChessPosition a: getNewPositions()){
+     public void move(ChessPosition position, ChessPiece[] chessPieces){
+        for(ChessPosition a: getNewPositions(chessPieces)){
             if(position == a){
                 this.position = a;
                 this.firstMove = false;

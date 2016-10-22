@@ -21,14 +21,21 @@ public class ChessPiece
         return "U";
     }
     
-    protected Vector<ChessPosition> getNewPositions(){
+	public Color getColor(){
+        return color;
+    }
+	
+	protected boolean isMoveAllowed(ChessPosition testPosition,ChessPiece[] chessPieces){
+		return !ChessBoard.isOccupied(testPosition,this.color,chessPieces);
+	}
+	
+    protected Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
         System.err.println("This is not a valid chess piece.");
         System.exit(1);
-        //TODO: finish this
         return new Vector<ChessPosition>(0);
     }
     
-    public void move(ChessPosition position){
+    public void move(ChessPosition position, ChessPiece[] chessPieces){
         /*for(ChessPosition a: getNewPositions()){
             if(position == a){
                 this.position = a;
@@ -37,10 +44,6 @@ public class ChessPiece
         }*/
         System.err.println("This is not a valid chess piece.");
         System.exit(1);
-    }
-    
-    public Color getColor(){
-        return color;
     }
     
     public Type getType(){
