@@ -24,15 +24,26 @@ public class ChessBoard
     }
 	
 	public void print(){
-		String[][] board = {{""}};
+		String[][] board = new String[ChessPosition.Row.DIMENSION][ChessPosition.Column.DIMENSION];
 		ChessPiece[] chessPieces = whitePieces;
+		for(int i = 0; i < board.length; i++){
+			for(int j = 0; j < board[i].length; j++){
+				board[i][j] = " ";
+			}
+		}
 		for(int i = 0; i < 2; i++){
 			for(ChessPiece a: chessPieces){
-				board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()][ChessPosition.Column.DIMENSION - a.getPosition().getColumn().get()] = a.toString();
+				//System.out.println(a.getPosition().toString() + " " + a.getType() + " " + a.getPosition().getColumn().get());
+				board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()-1][a.getPosition().getColumn().get()] = a.toString();
 			}
 			chessPieces = blackPieces;
 		}
-		System.out.print(board);
+		for(String[] a: board){
+			for(String b:a){
+				System.out.print(b);
+			}
+			System.out.print("\n");
+		}
 	}
     
     public void move(ChessPiece chessPiece,ChessPosition chessPosition){
@@ -54,8 +65,12 @@ public class ChessBoard
     
     private ChessPiece[] fillHalfOfBoard(ChessPiece.Color color){
         ChessPiece[] chessPieces = new ChessPiece[NumbersOfPieces.TOTAL];
+		for(int i = 0; i < NumbersOfPieces.TOTAL; i++){
+			chessPieces[i] = new ChessPiece();
+		}
         int piecesFilled = 0;
-        for(int i =0; i < NumbersOfPieces.PAWNS; i++) chessPieces[i+piecesFilled] = new Pawn(new ChessPosition(),color);
+		ChessPosition.Row pawnRow = (color == ChessPiece.Color.WHITE ) ? new ChessPosition.Row(ChessPosition.Row._2) : new ChessPosition.Row(ChessPosition.Row._7);
+        for(int i =0; i < NumbersOfPieces.PAWNS; i++) chessPieces[i+piecesFilled] = new Pawn(new ChessPosition(pawnRow.get(),i),color);
         piecesFilled += NumbersOfPieces.PAWNS;
         for(int i =0; i < NumbersOfPieces.ROOKS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(),color);
         piecesFilled += NumbersOfPieces.ROOKS;
@@ -70,7 +85,7 @@ public class ChessBoard
     }
     
     public ChessBoard(){
-        whitePieces = fillHalfOfBoard(ChessPiece.Color.WHITE);
+		whitePieces = fillHalfOfBoard(ChessPiece.Color.WHITE);
         blackPieces = fillHalfOfBoard(ChessPiece.Color.BLACK);
     }
 }

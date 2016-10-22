@@ -9,9 +9,13 @@ public class ChessPosition{
         public int get(){
             return value;
         }
+		
+		public String toString(){
+			return "NYI";
+		}
         
         public void set(int value){
-            assert(value < DIMENSION);
+            assert(value < DIMENSION && value >= 0);
             this.value = value;
         }
         
@@ -31,6 +35,11 @@ public class ChessPosition{
         public static final int F=5;
         public static final int G=6;
         public static final int H=7;
+		@Override 
+		public String toString(){
+			final String[] COLUMNNAMES = {"A","B","C","D","E","F","G","H","DIMENSION"};
+			return COLUMNNAMES[get()];
+		}
         public Column(){
             super();
         }
@@ -48,6 +57,10 @@ public class ChessPosition{
         public static final int _6=5;
         public static final int _7=6;
         public static final int _8=7;
+		public String toString(){
+			final String[] ROWNAMES = {"1","2","3","4","5","6","7","8","DIMENSION"};
+			return ROWNAMES[get()];
+		}
         public Row(){
             super();
         }
@@ -62,6 +75,10 @@ public class ChessPosition{
         if(b.getColumn()!=this.getColumn()) return false;
         return true;
     }
+	
+	public String toString(){
+		return column.toString() + row.toString();
+	}
     
     public Column getColumn(){
         return column;
@@ -72,17 +89,23 @@ public class ChessPosition{
     }
     
     public ChessPosition(){
+		column = new Column();
         column.set(Column.A);
+		row = new Row();
         row.set(Row._1);
     }
-    public ChessPosition(Column column,Row row){
+    public ChessPosition(Row row,Column column){
+		this.column = new Column();
+		this.row = new Row();
         this.column = column;
         this.row = row;
     }
-     public ChessPosition(int column,int row){
-         assert(column < Column.DIMENSION && column >= 0);
-         assert(row < Row.DIMENSION && row >=0);
-         this.column.set(column);
-         this.row.set(row);
+     public ChessPosition(int row,int column){
+		assert(column < Column.DIMENSION && column >= 0);
+		assert(row < Row.DIMENSION && row >=0);
+		this.column = new Column();
+		this.row = new Row();
+		this.column.set(column);
+        this.row.set(row);
     }
 }
