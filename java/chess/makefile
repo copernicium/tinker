@@ -17,4 +17,4 @@ Game: Game.java
 
 .PHONY: clean
 clean:
-	rm -rf ChessBoard.class; rm-rf ChessPosition.class; rm -rf ChessPiece.class; rm -rf Pawn.class; rm -rf Game.class;
+	rm -rf ChessBoard.class; rm -rf ChessPosition.class; rm -rf ChessPiece.class; rm -rf Pawn.class; rm -rf Game.class;

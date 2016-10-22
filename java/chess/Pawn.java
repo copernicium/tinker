@@ -5,20 +5,27 @@ import java.util.Vector;
 public class Pawn extends ChessPiece
 {
     boolean firstMove;
-	@Override
-	public String toString(){
-		return "P";
-	}
+    @Override
+    public String toString(){
+        return "P";
+    }
     @Override
     public Vector<ChessPosition> getNewPositions(){
+        Vector<ChessPosition> possibleMoves = new Vector<ChessPosition>(0);
         switch(this.color){
-			case WHITE:
+            case WHITE:
+                if(firstMove) possibleMoves.addElement(new ChessPosition(this.position.getRow().get()+2,this.position.getColumn().get()));
+                possibleMoves.addElement(new ChessPosition(this.position.getRow().get()+1,this.position.getColumn().get()));
+                break;
             case BLACK:
+                if(firstMove) possibleMoves.addElement(new ChessPosition(this.position.getRow().get()-2,this.position.getColumn().get()));
+                possibleMoves.addElement(new ChessPosition(this.position.getRow().get()-1,this.position.getColumn().get()));
+                break;
             default: break;
         }
         
         //TODO: finish this
-        return new Vector<ChessPosition>(0);
+        return possibleMoves;
     }
     @Override
      public void move(ChessPosition position){
@@ -34,12 +41,12 @@ public class Pawn extends ChessPiece
     }
     Pawn(){
         super();
-		type = Type.PAWN;
+        type = Type.PAWN;
         firstMove = true;
     }
     public Pawn(ChessPosition position,Color color){
         super(position,color);
         this.type = Type.PAWN;
-		this.firstMove = true;
+        this.firstMove = true;
     }
 }

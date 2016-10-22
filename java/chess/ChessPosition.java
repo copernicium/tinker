@@ -2,56 +2,66 @@
  * Represents a position of the chess board
  */
 public class ChessPosition{
-	private static class Dimension{
-		protected int value;
-		public static final int DIMENSION=8;
-		
-		public void set(int value){
-			assert(value < DIMENSION);
-			this.value = value;
-		}
-		
-		public Dimension(){
-			value = 0;
-		}
-		public Dimension(int value){
-			set(value);
-		}
-	}
+    private static class Dimension{
+        protected int value;
+        public static final int DIMENSION=8;
+        
+        public int get(){
+            return value;
+        }
+        
+        public void set(int value){
+            assert(value < DIMENSION);
+            this.value = value;
+        }
+        
+        public Dimension(){
+            value = 0;
+        }
+        public Dimension(int value){
+            set(value);
+        }
+    }
     public static class Column extends Dimension{
-		public static final int A=0;
-		public static final int B=1;
-		public static final int C=2;
-		public static final int D=3;
-		public static final int E=4;
-		public static final int F=5;
-		public static final int G=6;
-		public static final int H=7;
-		public Column(){
-			super();
-		}
-		public Column(int value){
-			super(value);
-		}
-	};
+        public static final int A=0;
+        public static final int B=1;
+        public static final int C=2;
+        public static final int D=3;
+        public static final int E=4;
+        public static final int F=5;
+        public static final int G=6;
+        public static final int H=7;
+        public Column(){
+            super();
+        }
+        public Column(int value){
+            super(value);
+        }
+    };
     private Column column;
-	public static class Row extends Dimension{
-		public static final int _1=0;
-		public static final int _2=1;
-		public static final int _3=2;
-		public static final int _4=3;
-		public static final int _5=4;
-		public static final int _6=5;
-		public static final int _7=6;
-		public static final int _8=7;
-		public Row(){
-			super();
-		}
-		public Row(int value){
-			super(value);
-		}
-	}
+    public static class Row extends Dimension{
+        public static final int _1=0;
+        public static final int _2=1;
+        public static final int _3=2;
+        public static final int _4=3;
+        public static final int _5=4;
+        public static final int _6=5;
+        public static final int _7=6;
+        public static final int _8=7;
+        public Row(){
+            super();
+        }
+        public Row(int value){
+            super(value);
+        }
+    }
     private Row row;
+    
+    public boolean equals(ChessPosition b){
+        if(b.getRow()!=this.getRow()) return false;
+        if(b.getColumn()!=this.getColumn()) return false;
+        return true;
+    }
     
     public Column getColumn(){
         return column;
@@ -68,5 +78,11 @@ public class ChessPosition{
     public ChessPosition(Column column,Row row){
         this.column = column;
         this.row = row;
+    }
+     public ChessPosition(int column,int row){
+         assert(column < Column.DIMENSION && column >= 0);
+         assert(row < Row.DIMENSION && row >=0);
+         this.column.set(column);
+         this.row.set(row);
     }
 }
