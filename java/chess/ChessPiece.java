@@ -6,7 +6,19 @@ public class ChessPiece
 {
     public enum Type{PAWN,ROOK,KNIGHT,BISHOP,QUEEN,KING};
     protected Type type;
-    public enum Color{WHITE,BLACK};
+    public enum Color{
+		WHITE,BLACK;
+		public static Color not(Color a){
+			switch(a){
+				case WHITE: 
+					return BLACK;
+				case BLACK:
+					return WHITE;
+				default: MyAssert.myAssert(false);
+			}
+			return WHITE;
+		}
+	};
     protected Color color;
     protected ChessPosition position;
     protected boolean alive;

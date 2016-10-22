@@ -13,6 +13,7 @@ public class ChessBoard
         public static final int TOTAL=16;
     }
     private ChessPiece[] pieces;
+	private ChessPiece.Color playerTurn;
 	
 	public static boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color,ChessPiece[] pieces){
 		for(ChessPiece a: pieces){
@@ -48,6 +49,7 @@ public class ChessBoard
 	}
 	
     public void move(ChessPiece chessPiece,ChessPosition chessPosition){
+		MyAssert.myAssert(chessPiece.getColor() == playerTurn);
 		MyAssert.myAssert(checkExists(chessPiece));
 		int i = 0;
 		for(; i < pieces.length; i++){
@@ -55,6 +57,7 @@ public class ChessBoard
 		}
 		pieces[i].move(chessPosition,pieces);
 		if(isOccupied(chessPosition,pieces[i].getColor(),pieces)) kill(chessPosition);//kill the opposite color piece
+		playerTurn = ChessPiece.Color.not(playerTurn);
     }
     
     private void kill(ChessPosition chessPosition){
@@ -87,5 +90,6 @@ public class ChessBoard
     
     public ChessBoard(){
 		pieces = fillBoard();
+		playerTurn = ChessPiece.Color.WHITE;
     }
 }

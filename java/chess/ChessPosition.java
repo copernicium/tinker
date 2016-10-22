@@ -30,7 +30,7 @@ public class ChessPosition{
             set(value);
         }
     }
-    public static class Column extends Dimension{
+    public static class Column extends Dimension{//called files
         public static final int A=0;
         public static final int B=1;
         public static final int C=2;
@@ -52,7 +52,7 @@ public class ChessPosition{
         }
     };
     private Column column;
-    public static class Row extends Dimension{
+    public static class Row extends Dimension{//called ranks
         public static final int _1=0;
         public static final int _2=1;
         public static final int _3=2;

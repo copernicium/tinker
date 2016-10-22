@@ -10,34 +10,18 @@ public class Pawn extends ChessPiece
         return "P";
     }
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO: add diagonals
+    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO: add captures and maybe en passant and maybe promotion
 		Vector<ChessPosition> possibleMoves = new Vector<ChessPosition>(0);
-		switch(this.color){
-			case WHITE:
-				{
-					if(firstMove){
-						ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+2,this.position.getColumn().get());
-						if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);
-					}
-					{
-						ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+1,this.position.getColumn().get());
-						if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);					
-					}
-				}
-				break;
-			case BLACK: 
-				{
-					if(firstMove){
-						ChessPosition testPosition = new ChessPosition(this.position.getRow().get()-2,this.position.getColumn().get());
-						if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);
-					}
-					{
-						ChessPosition testPosition = new ChessPosition(this.position.getRow().get()-1,this.position.getColumn().get());
-						if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);					
-					}
-				}
-				break;
-			default: MyAssert.myAssert(false);
+		int direction = (this.color == ChessPiece.Color.WHITE) ? 1 : -1;
+		if(firstMove){
+			final int INITIALTWOSQUAREADVANCE = 2;
+			ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+(INITIALTWOSQUAREADVANCE *direction),this.position.getColumn().get());
+			if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);
+		}
+		{
+			final int REGULARMOVEMENT = 1;
+			ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+(REGULARMOVEMENT*direction),this.position.getColumn().get());
+			if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);					
 		}
         return possibleMoves;
     }
