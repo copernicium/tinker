@@ -13,9 +13,13 @@ public class ChessPosition{
 		public String toString(){
 			return "NYI";
 		}
+		
+		public boolean equals(Dimension b){
+			return this.get()==b.get();
+		}
         
         public void set(int value){
-            assert(value < DIMENSION && value >= 0);
+            MyAssert.myAssert(value < DIMENSION && value >= 0);
             this.value = value;
         }
         
@@ -71,8 +75,8 @@ public class ChessPosition{
     private Row row;
     
     public boolean equals(ChessPosition b){
-        if(b.getRow()!=this.getRow()) return false;
-        if(b.getColumn()!=this.getColumn()) return false;
+        if(!b.getRow().equals(this.getRow())) return false;
+        if(!b.getColumn().equals(this.getColumn())) return false;
         return true;
     }
 	
@@ -101,8 +105,8 @@ public class ChessPosition{
         this.row = row;
     }
      public ChessPosition(int row,int column){
-		assert(column < Column.DIMENSION && column >= 0);
-		assert(row < Row.DIMENSION && row >=0);
+		MyAssert.myAssert(column < Column.DIMENSION && column >= 0);
+		MyAssert.myAssert(row < Row.DIMENSION && row >=0);
 		this.column = new Column();
 		this.row = new Row();
 		this.column.set(column);

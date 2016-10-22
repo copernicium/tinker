@@ -10,24 +10,51 @@ public class Pawn extends ChessPiece
         return "P";
     }
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO
+    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO: add diagonals
 		Vector<ChessPosition> possibleMoves = new Vector<ChessPosition>(0);
-        if(firstMove){
-			ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+2,this.position.getColumn().get());
-			if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);
-		}
-		{
-			ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+1,this.position.getColumn().get());
-			if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);					
+		switch(this.color){
+			case WHITE:
+				{
+					if(firstMove){
+						ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+2,this.position.getColumn().get());
+						if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);
+					}
+					{
+						ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+1,this.position.getColumn().get());
+						if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);					
+					}
+					System.out.println(possibleMoves.toString());
+				}
+				break;
+			case BLACK: 
+				{
+					if(firstMove){
+						ChessPosition testPosition = new ChessPosition(this.position.getRow().get()-2,this.position.getColumn().get());
+						if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);
+					}
+					{
+						ChessPosition testPosition = new ChessPosition(this.position.getRow().get()-1,this.position.getColumn().get());
+						if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);					
+					}
+				}
+				break;
+			default: MyAssert.myAssert(false);
 		}
         return possibleMoves;
     }
     @Override
-     public void move(ChessPosition position, ChessPiece[] chessPieces){
+    public void move(ChessPosition newPosition, ChessPiece[] chessPieces){
+		System.out.print(this.getPosition().toString() + " Possible Moves:");
+		for(ChessPosition a: getNewPositions(chessPieces)){
+			System.out.print(a.toString() + ",");
+		}
+		System.out.print("\n");
         for(ChessPosition a: getNewPositions(chessPieces)){
-            if(position == a){
-                this.position = a;
+			System.out.println(newPosition.toString() + " vs " + a.toString());
+            if(newPosition.equals(a)){
+                this.position = newPosition;
                 this.firstMove = false;
+				System.out.println("SUCCESSFUL:" + this.getPosition().toString());
                 return;
             }
         }
