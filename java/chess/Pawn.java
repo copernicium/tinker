@@ -23,7 +23,6 @@ public class Pawn extends ChessPiece
 						ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+1,this.position.getColumn().get());
 						if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);					
 					}
-					System.out.println(possibleMoves.toString());
 				}
 				break;
 			case BLACK: 
@@ -44,17 +43,10 @@ public class Pawn extends ChessPiece
     }
     @Override
     public void move(ChessPosition newPosition, ChessPiece[] chessPieces){
-		System.out.print(this.getPosition().toString() + " Possible Moves:");
-		for(ChessPosition a: getNewPositions(chessPieces)){
-			System.out.print(a.toString() + ",");
-		}
-		System.out.print("\n");
         for(ChessPosition a: getNewPositions(chessPieces)){
-			System.out.println(newPosition.toString() + " vs " + a.toString());
             if(newPosition.equals(a)){
                 this.position = newPosition;
                 this.firstMove = false;
-				System.out.println("SUCCESSFUL:" + this.getPosition().toString());
                 return;
             }
         }

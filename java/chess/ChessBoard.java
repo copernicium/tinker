@@ -55,7 +55,6 @@ public class ChessBoard
 		}
 		pieces[i].move(chessPosition,pieces);
 		if(isOccupied(chessPosition,pieces[i].getColor(),pieces)) kill(chessPosition);//kill the opposite color piece
-		System.out.println("SUCCESS");
     }
     
     private void kill(ChessPosition chessPosition){
