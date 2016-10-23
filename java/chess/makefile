@@ -1,23 +1,23 @@
-all: ChessBoard ChessPosition ChessPiece Pawn Game MySystem
+all: ChessBoard.class ChessPosition.class ChessPiece.class Pawn.class Game.class MySystem.class
 
-MySystem: MySystem.java
+MySystem.class: MySystem.java
 	javac MySystem.java
 
-ChessPiece: ChessPiece.java
+ChessPiece.class: ChessPiece.java
 	javac ChessPiece.java
 
-Pawn: Pawn.java
+Pawn.class: Pawn.java
 	javac Pawn.java
 	
-ChessPosition: ChessPosition.java
+ChessPosition.class: ChessPosition.java
 	javac ChessPosition.java
 
-ChessBoard: ChessBoard.java
+ChessBoard.class: ChessBoard.java
 	javac ChessBoard.java
 
-Game: Game.java
+Game.class: Game.java
 	javac Game.java
 
 .PHONY: clean
 clean:
-	rm -rf ChessBoard.class; rm -rf ChessPosition.class; rm -rf ChessPiece.class; rm -rf Pawn.class; rm -rf Game.class; rm -rf MySystem.class; 
+	find -name \*.class |xargs rm;
