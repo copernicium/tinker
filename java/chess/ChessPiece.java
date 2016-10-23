@@ -14,7 +14,7 @@ public class ChessPiece
 					return BLACK;
 				case BLACK:
 					return WHITE;
-				default: MyAssert.myAssert(false);
+				default: MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 			}
 			return WHITE;
 		}
@@ -26,13 +26,7 @@ public class ChessPiece
 	public boolean getAlive(){
 		return alive;
 	}
-	
-    protected boolean inBounds(ChessPosition checkPosition){
-        if(checkPosition.getColumn().get() > ChessPosition.Column.DIMENSION && checkPosition.getColumn().get() >= 0) return false;
-        if(checkPosition.getRow().get() > ChessPosition.Row.DIMENSION  && checkPosition.getRow().get() >=0) return false;
-        return true;
-    }
-    
+	    
     public String toString(){
         return "U";
     }
@@ -47,10 +41,6 @@ public class ChessPiece
 		if(!this.getPosition().equals(b.getPosition())) return false;
 		if(this.getAlive() != b.getAlive()) return false;
 		return true;
-	}
-	
-	protected boolean isMoveAllowed(ChessPosition testPosition,ChessPiece[] chessPieces){
-		return !ChessBoard.isOccupied(testPosition,this.color,chessPieces);
 	}
 	
     protected Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){

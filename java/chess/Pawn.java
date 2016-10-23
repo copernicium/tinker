@@ -4,7 +4,8 @@ import java.util.Vector;
  */
 public class Pawn extends ChessPiece
 {
-    boolean firstMove;
+    boolean firstMove;//pawns can move differently on their first move
+	
     @Override
     public String toString(){
         return "P";
@@ -13,15 +14,34 @@ public class Pawn extends ChessPiece
     public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO: add captures and maybe en passant and maybe promotion
 		Vector<ChessPosition> possibleMoves = new Vector<ChessPosition>(0);
 		int direction = (this.color == ChessPiece.Color.WHITE) ? 1 : -1;
+		
 		if(firstMove){
 			final int INITIALTWOSQUAREADVANCE = 2;
-			ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+(INITIALTWOSQUAREADVANCE *direction),this.position.getColumn().get());
-			if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);
+			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(INITIALTWOSQUAREADVANCE *direction),this.position.getColumn().get()); 
+			if(ChessPosition.inBounds(testPosition)){
+				if(!ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)) possibleMoves.addElement(new ChessPosition(testPosition));
+			}
 		}
 		{
 			final int REGULARMOVEMENT = 1;
-			ChessPosition testPosition = new ChessPosition(this.position.getRow().get()+(REGULARMOVEMENT*direction),this.position.getColumn().get());
-			if(isMoveAllowed(testPosition,chessPieces)) possibleMoves.addElement(testPosition);					
+			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(REGULARMOVEMENT*direction),this.position.getColumn().get());
+			if(ChessPosition.inBounds(testPosition)){
+				if(!ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)) possibleMoves.addElement(new ChessPosition(testPosition));
+			}
+		}
+		{
+			final int DIAGONALDIST = 1;
+			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(DIAGONALDIST*direction),this.position.getColumn().get()+DIAGONALDIST);
+			if(ChessPosition.inBounds(testPosition)){
+				if(ChessBoard.isOccupied(new ChessPosition(testPosition),Color.not(this.color),chessPieces)) possibleMoves.addElement(new ChessPosition(testPosition));
+			}
+		}
+		{
+			final int DIAGONALDIST = 1;
+			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(DIAGONALDIST*direction),this.position.getColumn().get()-DIAGONALDIST);
+			if(ChessPosition.inBounds(testPosition)){
+				if(ChessBoard.isOccupied(new ChessPosition(testPosition),Color.not(this.color),chessPieces)) possibleMoves.addElement(new ChessPosition(testPosition));
+			}
 		}
         return possibleMoves;
     }

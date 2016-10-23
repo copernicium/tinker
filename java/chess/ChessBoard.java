@@ -30,7 +30,6 @@ public class ChessBoard
 			}
 		}
 		for(ChessPiece a: pieces){
-			//System.out.println(a.getPosition().toString() + " " + a.getType() + " " + a.getPosition().getColumn().get());
 			board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()-1][a.getPosition().getColumn().get()] = a.toString();
 		}
 		for(String[] a: board){
@@ -49,18 +48,18 @@ public class ChessBoard
 	}
 	
     public void move(ChessPiece chessPiece,ChessPosition chessPosition){
-		MyAssert.myAssert(chessPiece.getColor() == playerTurn);
-		MyAssert.myAssert(checkExists(chessPiece));
+		MySystem.myAssert(chessPiece.getColor() == playerTurn,MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
 		int i = 0;
 		for(; i < pieces.length; i++){
 			if(chessPiece.getPosition().equals(pieces[i].getPosition())) break;
 		}
 		pieces[i].move(chessPosition,pieces);
-		if(isOccupied(chessPosition,pieces[i].getColor(),pieces)) kill(chessPosition);//kill the opposite color piece
+		if(isOccupied(chessPosition,pieces[i].getColor(),pieces)) capture(chessPosition);//capture the opposite color piece
 		playerTurn = ChessPiece.Color.not(playerTurn);
     }
     
-    private void kill(ChessPosition chessPosition){
+    private void capture(ChessPosition chessPosition){
         //TODO This
     }
     

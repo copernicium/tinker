@@ -1,7 +1,7 @@
-all: ChessBoard ChessPosition ChessPiece Pawn Game MyAssert
+all: ChessBoard ChessPosition ChessPiece Pawn Game MySystem
 
-MyAssert: MyAssert.java
-	javac MyAssert.java
+MySystem: MySystem.java
+	javac MySystem.java
 
 ChessPiece: ChessPiece.java
 	javac ChessPiece.java
@@ -20,4 +20,4 @@ Game: Game.java
 
 .PHONY: clean
 clean:
-	rm -rf ChessBoard.class; rm -rf ChessPosition.class; rm -rf ChessPiece.class; rm -rf Pawn.class; rm -rf Game.class; rm -rf MyAssert.class; 
+	rm -rf ChessBoard.class; rm -rf ChessPosition.class; rm -rf ChessPiece.class; rm -rf Pawn.class; rm -rf Game.class; rm -rf MySystem.class; 

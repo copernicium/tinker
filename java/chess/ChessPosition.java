@@ -19,7 +19,7 @@ public class ChessPosition{
 		}
         
         public void set(int value){
-            MyAssert.myAssert(value < DIMENSION && value >= 0);
+            MySystem.myAssert(value < DIMENSION && value >= 0,MySystem.getFileName(),MySystem.getLineNumber());
             this.value = value;
         }
         
@@ -72,12 +72,40 @@ public class ChessPosition{
             super(value);
         }
     }
+	public static class Tester{
+		private int column;
+		private int row;
+		public int getRow(){
+			return row;
+		}
+		public int getColumn(){
+			return column;
+		}
+		public Tester(){
+			column = 0;
+			row = 0;
+		}
+		public Tester(int row,int column){
+			this.row = row;
+			this.column = column;
+		}
+	}
     private Row row;
     
     public boolean equals(ChessPosition b){
         if(!b.getRow().equals(this.getRow())) return false;
         if(!b.getColumn().equals(this.getColumn())) return false;
         return true;
+    }
+	
+	public static boolean inBounds(int row, int column){
+        if(column >= ChessPosition.Column.DIMENSION || column < 0) return false;
+        if(row >= ChessPosition.Row.DIMENSION || row < 0) return false;
+        return true;
+    }
+	
+	public static boolean inBounds(Tester tester){
+		return inBounds(tester.getRow(),tester.getColumn());
     }
 	
 	public String toString(){
@@ -93,10 +121,7 @@ public class ChessPosition{
     }
     
     public ChessPosition(){
-		column = new Column();
-        column.set(Column.A);
-		row = new Row();
-        row.set(Row._1);
+		this(Row._1,Column.A);
     }
     public ChessPosition(Row row,Column column){
 		this.column = new Column();
@@ -105,11 +130,14 @@ public class ChessPosition{
         this.row = row;
     }
      public ChessPosition(int row,int column){
-		MyAssert.myAssert(column < Column.DIMENSION && column >= 0);
-		MyAssert.myAssert(row < Row.DIMENSION && row >=0);
+		MySystem.myAssert(column < Column.DIMENSION && column >= 0,MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(row < Row.DIMENSION && row >=0,MySystem.getFileName(),MySystem.getLineNumber());
 		this.column = new Column();
 		this.row = new Row();
 		this.column.set(column);
         this.row.set(row);
     }
+	public ChessPosition(ChessPosition.Tester tester){
+		this(tester.getRow(),tester.getColumn());
+	}
 }
