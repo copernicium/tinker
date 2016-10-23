@@ -11,7 +11,7 @@ public class Pawn extends ChessPiece
         return "P";
     }
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO: add captures and maybe en passant and maybe promotion
+    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO: en passant and maybe promotion
 		Vector<ChessPosition> possibleMoves = new Vector<ChessPosition>(0);
 		int direction = (this.color == ChessPiece.Color.WHITE) ? 1 : -1;
 		

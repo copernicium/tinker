@@ -60,7 +60,7 @@ public class ChessBoard
     }
     
     private void capture(ChessPosition chessPosition){
-        //TODO This
+        //TODO add a way of capturing pieces
     }
     
     private ChessPiece[] fillBoard(){
