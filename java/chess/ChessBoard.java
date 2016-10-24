@@ -39,6 +39,10 @@ public class ChessBoard
 			System.out.print("\n");
 		}
 	}
+	
+	public void draw(){//TODO
+		System.out.println("NYI");
+	}
     
 	private boolean checkExists(ChessPiece checkPiece){
 		for(ChessPiece a: pieces){
@@ -48,11 +52,11 @@ public class ChessBoard
 	}
 	
     public void move(ChessPiece chessPiece,ChessPosition chessPosition){
-		MySystem.myAssert(chessPiece.getColor() == playerTurn,MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(chessPiece.getColor() == playerTurn && checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
 		int i = 0;
 		for(; i < pieces.length; i++){
 			if(chessPiece.getPosition().equals(pieces[i].getPosition())) break;
+			if(i == pieces.length-1) MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 		}
 		pieces[i].move(chessPosition,pieces);
 		if(isOccupied(chessPosition,pieces[i].getColor(),pieces)) capture(chessPosition);//capture the opposite color piece

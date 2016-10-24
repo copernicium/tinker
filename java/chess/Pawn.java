@@ -55,8 +55,8 @@ public class Pawn extends ChessPiece
             }
         }
         System.err.println("Move failed. Not a valid move.");
-        System.exit(1);
-    }
+		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+	}
     Pawn(){
         super();
         type = Type.PAWN;

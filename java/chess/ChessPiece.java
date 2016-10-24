@@ -45,13 +45,13 @@ public class ChessPiece
 	
     protected Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
         System.err.println("This is not a valid chess piece.");
-        System.exit(1);
+        MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
         return new Vector<ChessPosition>(0);
     }
     
     public void move(ChessPosition position, ChessPiece[] chessPieces){
         System.err.println("This is not a valid chess piece.");
-        System.exit(1);
+        MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
     }
     
     public Type getType(){
