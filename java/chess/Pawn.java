@@ -1,3 +1,4 @@
+package chess;
 import java.util.Vector;
 /**
  * A pawn piece

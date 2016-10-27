@@ -1,3 +1,4 @@
+package chess;
 /**
  * A representation of a chess board
  */

@@ -1,3 +1,4 @@
+package chess;
 public class MySystem{
 	public static int getLineNumber() {
 		return Thread.currentThread().getStackTrace()[2].getLineNumber();

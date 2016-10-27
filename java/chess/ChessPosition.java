@@ -1,3 +1,4 @@
+package chess;
 /**
  * Represents a position of the chess board
  */

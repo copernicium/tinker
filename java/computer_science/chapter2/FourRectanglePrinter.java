@@ -1,3 +1,5 @@
+package computer_science.chapter2;
+import java.awt.Rectangle;
 /**
  * Write a description of class FourRectanglePrinter here.
  * 
@@ -5,8 +7,6 @@
  * @version 9/25/2016
  * assignment: Chapter 2 individual assignment
  */
-import java.awt.Rectangle;
- 
 public class FourRectanglePrinter
 {
    public static void main(String[] args)

@@ -1,3 +1,4 @@
+package chess;
 /**
  * Runs a chess game
  */
