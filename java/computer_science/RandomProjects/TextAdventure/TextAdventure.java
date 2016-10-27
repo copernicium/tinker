@@ -9,7 +9,7 @@ public class TextAdventure
         Vector<Room> rooms = new Vector<Room>(0);
         {
             Vector<java.lang.Object> objects = new Vector<java.lang.Object>(0);
-            objects.addElement(new java.lang.Object("Dagger","A rusty old dagger that is no fun to play with"));
+            objects.addElement(new Object("Dagger","A rusty old dagger that is no fun to play with"));
             rooms.addElement(new Room("the dining hall","It is large ornate room with a fancy oak table in its center. It's not your style.",objects));
         }
         TextAdventure textAdventure= new TextAdventure(rooms);
