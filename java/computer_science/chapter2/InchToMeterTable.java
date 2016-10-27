@@ -1,3 +1,4 @@
+package computer_science.chapter2;
 /**
  * This program displays a conversion table of inches to meters. 
  * 

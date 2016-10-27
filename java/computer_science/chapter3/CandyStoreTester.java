@@ -1,10 +1,11 @@
+package computer_science.chapter3;
+import java.lang.Math;
 /**
  * A class to test CandyStore 
  * @author Logan Traffas
  * @version 10/7/16\
  * assignment: Chapter 3 Individual Assignment
  */
-import java.lang.Math;
 public class CandyStoreTester
 {
     public static void main(String[] args){

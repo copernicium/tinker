@@ -1,3 +1,4 @@
+package computer_science.chapter1;
 public class ProductOfIntegers{
     public static void main(String[] args){
         int product=1;

@@ -1,3 +1,4 @@
+package computer_science.chapter3;
 /**
  * tests the door class
  * 

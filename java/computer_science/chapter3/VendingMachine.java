@@ -1,3 +1,4 @@
+package computer_science.chapter3;
 /**
  * Class for simulating a vending machine
  * 

@@ -1,3 +1,4 @@
+package computer_science.chapter2;
 import java.awt.Rectangle;
 /**
  * Write a description of class RectangleAreaTester here.

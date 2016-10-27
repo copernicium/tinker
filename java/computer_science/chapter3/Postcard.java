@@ -1,3 +1,4 @@
+package computer_science.chapter3;
 /**
  * Code to write the same message to different friends
  * 

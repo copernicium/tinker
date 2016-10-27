@@ -1,3 +1,4 @@
+package computer_science.chapter3;
 /**
  * A class to simulate commerce at a candy store
  * 

@@ -1,3 +1,4 @@
+package computer_science.chapter4;
 import java.util.Scanner;
 /**
  * A class which reads an input and calculates a few of its powers

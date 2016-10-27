@@ -1,3 +1,4 @@
+package computer_science.RandomProjects;
 import java.util.Vector;
 import java.lang.Math;
 /**
@@ -55,7 +56,7 @@ public class Main{
         }
         /**
          * Checks if two locations are equal
-         * @param The variable to compare
+         * @param b The variable to compare
          * @return If the two variables are equal
          */
         public boolean equals(final Location b){
@@ -63,7 +64,7 @@ public class Main{
         }
         /**
          * Moves the location based on a Move paramter
-         * @param the direction to move
+         * @param move the direction to move
          */
         public void move(Move move){
            switch(move){
@@ -85,7 +86,7 @@ public class Main{
         }
         /**
          * Returns a move that moves the solver in the opposite direction
-         * @param The move that the opposite of is requested
+         * @param a The move that the opposite of is requested
          * @return The opposite move from the parameter
          */
         public static Move oppositeMove(final Move a){

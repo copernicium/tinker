@@ -1,10 +1,4 @@
-/**
- * Write a description of class GraphicalStrings here.
- * 
- * @author Logan Traffas 
- * @version 9/26/2016
- * assignment: individual assignment (harder) for p2.10
- */
+package computer_science.chapter2;
 
 import java.awt.Graphics;
 import java.awt.Color;
@@ -12,6 +6,13 @@ import java.awt.Graphics2D;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+/**
+ * Write a description of class GraphicalStrings here.
+ * 
+ * @author Logan Traffas 
+ * @version 9/26/2016
+ * assignment: individual assignment (harder) for p2.10
+ */
 public class GraphicalStrings extends JComponent
 {
     public static String buildSentence(){//from my phrase o matic

@@ -1,4 +1,4 @@
-
+package computer_science.chapter4;
 /**
  * Write a description of class LetterSize here.
  * 

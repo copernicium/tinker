@@ -1,3 +1,4 @@
+package computer_science.chapter3;
 /**
  * Class for testing the vending machine class
  * 

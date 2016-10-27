@@ -1,3 +1,4 @@
+package computer_science.chapter3;
 /**
  * Simulates an employee
  * 
@@ -64,7 +65,7 @@ public class Employee
     }
     /**
      * Raises the employee's salary by a given percent
-     * @param The percent to raise the employee's salary by
+     * @param percent The percent to raise the employee's salary by
      */
     public void raiseSalary(double percent){
         salary = salary * (1.0 + percent/100);

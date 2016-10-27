@@ -1,4 +1,4 @@
-
+package computer_science.chapter2;
 /**
  * Write a description of class StringUppercase here.
  * 
