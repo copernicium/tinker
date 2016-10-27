@@ -5,7 +5,7 @@ import java.util.Vector;
  */
 public class Pawn extends ChessPiece
 {
-    boolean firstMove;//pawns can move differently on their first move
+    private boolean firstMove;//pawns can move differently on their first move
 	
     @Override
     public String toString(){
@@ -13,7 +13,7 @@ public class Pawn extends ChessPiece
     }
     @Override
     public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO: en passant and maybe promotion
-		Vector<ChessPosition> possibleMoves = new Vector<ChessPosition>(0);
+		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		int direction = (this.color == ChessPiece.Color.WHITE) ? 1 : -1;
 		
 		if(firstMove){

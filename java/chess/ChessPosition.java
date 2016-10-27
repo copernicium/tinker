@@ -3,7 +3,7 @@ package chess;
  * Represents a position of the chess board
  */
 public class ChessPosition{
-    private static class Dimension{
+    private static abstract class Dimension{
         protected int value;
         public static final int DIMENSION=8;
         
@@ -11,9 +11,7 @@ public class ChessPosition{
             return value;
         }
 		
-		public String toString(){
-			return "NYI";
-		}
+		public abstract String toString();
 		
 		public boolean equals(Dimension b){
 			return this.get()==b.get();
@@ -108,7 +106,7 @@ public class ChessPosition{
 	public static boolean inBounds(Tester tester){
 		return inBounds(tester.getRow(),tester.getColumn());
     }
-	
+
 	public String toString(){
 		return column.toString() + row.toString();
 	}

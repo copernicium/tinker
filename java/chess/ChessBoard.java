@@ -4,7 +4,7 @@ package chess;
  */
 public class ChessBoard
 {
-    private static class NumbersOfPieces{
+    private abstract static class NumbersOfPieces{
         public static final int PAWNS=8;
         public static final int ROOKS=2;
         public static final int KNIGHTS=2;
@@ -15,7 +15,7 @@ public class ChessBoard
     }
     private ChessPiece[] pieces;
 	private ChessPiece.Color playerTurn;
-	
+
 	public static boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color,ChessPiece[] pieces){
 		for(ChessPiece a: pieces){
 			if(color == a.getColor() && checkPosition.equals(a.getPosition())) return true;
@@ -67,7 +67,7 @@ public class ChessBoard
     private void capture(ChessPosition chessPosition){
         //TODO add a way of capturing pieces
     }
-    
+
     private ChessPiece[] fillBoard(){
         ChessPiece[] chessPieces = new ChessPiece[NumbersOfPieces.TOTAL*2];
 		for(int i = 0; i < 2*NumbersOfPieces.TOTAL; i++){
