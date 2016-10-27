@@ -21,7 +21,7 @@ public class SimpleCalculator
         System.out.println("The sum" + variableTerm + (x+y));
         System.out.println("The difference" + variableTerm + (x-y));
         System.out.println("The product" + variableTerm + (x*y));
-        System.out.println("The average" + variableTerm + (float)(x+y)/2);
+        System.out.println("The average" + variableTerm + Math.abs((float)(x+y)/2));
         System.out.println("The maximum" + variableTerm + Math.max(x,y));
         System.out.println("The minimum" + variableTerm + Math.min(x,y));
     }
