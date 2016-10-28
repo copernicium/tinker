@@ -15,7 +15,7 @@ public class ChessPiece
 					return BLACK;
 				case BLACK:
 					return WHITE;
-				default: MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+				default: MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 			}
 			return WHITE;
 		}
@@ -46,13 +46,13 @@ public class ChessPiece
 	
     protected Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
         System.err.println("This is not a valid chess piece.");
-        MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+        MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
         return new Vector<>(0);
     }
     
     public void move(ChessPosition position, ChessPiece[] chessPieces){
         System.err.println("This is not a valid chess piece.");
-        MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+        MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
     }
     
     public Type getType(){

@@ -11,6 +11,6 @@ public class Game{
 		chessBoard.move(test,testMove);
 		System.out.println("---------------------");
 		chessBoard.print();
-		System.out.println("NYI");
+		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }

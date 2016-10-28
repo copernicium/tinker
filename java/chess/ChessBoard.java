@@ -67,7 +67,7 @@ public class ChessBoard
 	}
 	
 	public void draw(){//TODO
-		System.out.println("NYI");
+		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 	}
     
 	private boolean checkExists(ChessPiece checkPiece){
