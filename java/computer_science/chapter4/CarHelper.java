@@ -22,31 +22,45 @@ Include pseudocode and the program runs with your assignment.
  * assignment: Chapter 04--Fundamental Data Types--P4.1
  */
 public class CarHelper {
-	public double calculateTotalCost(double estimatedMilesPerYear, double cost, double estimatedGasPriceInFiveYears, double fuelEfficiency, double resaleValueInFiveYears){
+
+	private double estimatedMilesPerYear = 0.0;//miles per year
+	private double cost = 0.0;//dollars
+	private double estimatedGasPriceInFiveYears = 0.0;//dollars per gallon
+	private double fuelEfficiency = 0.0;//miles per gallon
+	private double resaleValueInFiveYears = 0.0;//dollars
+
+	public void setCost(double cost){
+		this.cost = cost;
+	}
+	public void setEstimatedMilesPerYear(double estimatedMilesPerYear){
+		this.estimatedMilesPerYear = estimatedMilesPerYear;
+	}
+
+	public void setFuelEfficiency(double fuelEfficiency){
+		this.fuelEfficiency = fuelEfficiency;
+	}
+
+	public void setResaleValueInFiveYears(double resaleValueInFiveYears){
+		this.resaleValueInFiveYears = resaleValueInFiveYears;
+	}
+
+	public void setEstimatedGasPriceInFiveYears(double estimatedGasPriceInFiveYears){
+		this.estimatedGasPriceInFiveYears = estimatedGasPriceInFiveYears;
+	}
+
+	public double calculateTotalCost(){
 		double calculatedTotalCost = cost;
 		final double TIMESCALE = 5.0;//years
-		calculatedTotalCost =+ (estimatedMilesPerYear/fuelEfficiency)*estimatedGasPriceInFiveYears*TIMESCALE;
+		calculatedTotalCost += (estimatedMilesPerYear / fuelEfficiency) * estimatedGasPriceInFiveYears * TIMESCALE;
 		calculatedTotalCost -= resaleValueInFiveYears;
 		return calculatedTotalCost;
-
 	}
-	public static void main(String[] args){
-		double estimatedMilesPerYear = 0.0;//miles per year
-		double cost = 0.0;//dollars
-		double estimatedGasPriceInFiveYears = 0.0;//dollars per gallon
-		double fuelEfficiency = 0.0;//miles per gallon
-		double resaleValueInFiveYears = 0.0;//dollars
-		Scanner input = new Scanner(System.in);
 
-		System.out.print("What is the cost of the car (dollars)? ");
-		cost = input.nextDouble();
-		System.out.print("\nHow far do you estimate it will travel per year (miles)? ");
-		cost = input.nextDouble();
-		System.out.print("\nWhat do you estimate the cost of gas will be in five years (dollars/gallon)? ");
-		estimatedGasPriceInFiveYears = input.nextDouble();
-		System.out.print("\nWhat is the fuel efficiency of the car (miles per gallon)? ");
-		fuelEfficiency = input.nextDouble();
-		System.out.print("\nWhat is its estimated resale value in five years (dollars)? ");
-		resaleValueInFiveYears = input.nextDouble();
+	public CarHelper(){
+		cost = 0;
+		fuelEfficiency = 0;
+		estimatedGasPriceInFiveYears = 0;
+		estimatedMilesPerYear = 0;
+		resaleValueInFiveYears = 0;
 	}
 }
