@@ -121,8 +121,8 @@ public class ChessBoard
 
     private ChessPiece[] fillBoard(){
 		//TODO: do not allow assignment of pieces to locations occupied by any other piece or something
-		ChessPiece[] chessPieces = new ChessPiece[NumbersOfPieces.Total.TOTAL - 1];//TODO: figure out -1
-		for(int i = 0; i < NumbersOfPieces.Total.TOTAL - 1; i++){
+		ChessPiece[] chessPieces = new ChessPiece[NumbersOfPieces.Total.TOTAL];
+		for(int i = 0; i < NumbersOfPieces.Total.TOTAL; i++){
 			chessPieces[i] = new ChessPiece();
 		}
 		{
@@ -139,6 +139,19 @@ public class ChessBoard
 				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KNIGHT), ChessPiece.Color.WHITE))){
 					chessPieces[findNextUnassigned(chessPieces)] = new Knight(a);
 				}
+			}
+			{
+				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.BISHOP), ChessPiece.Color.WHITE))){
+					chessPieces[findNextUnassigned(chessPieces)] = new Bishop(a);
+				}
+			}
+			{
+				chessPieces[findNextUnassigned(chessPieces)] = new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE);
+				chessPieces[findNextUnassigned(chessPieces)] = new Queen(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK);
+			}
+			{
+				chessPieces[findNextUnassigned(chessPieces)] = new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE);
+				chessPieces[findNextUnassigned(chessPieces)] = new King(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK);
 			}
 		}
         return chessPieces;

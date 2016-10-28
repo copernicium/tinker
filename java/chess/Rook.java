@@ -1,4 +1,6 @@
 package chess;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+
 import java.util.Vector;
 
 /**
@@ -11,12 +13,32 @@ public class Rook extends ChessPiece
         return "R";
     }
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO
+    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO: clean up?
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		{
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get(),this.position.getColumn().get());
-			for(int i = this.position.getRow().get(); i < (ChessPosition.Row._8 - this.position.getRow().get()); i++){
-				testPosition = new ChessPosition.Tester(this.position.getRow().get()+i,this.position.getColumn().get());
+			for(int i = this.position.getRow().get()+1; i <= (ChessPosition.Row._8 - this.position.getRow().get()); i++){
+				ChessPosition.Tester testPosition = new ChessPosition.Tester(i,this.position.getColumn().get());
+				if(ChessPosition.inBounds(testPosition)){
+					if(!ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)) possibleMoves.addElement(new ChessPosition(testPosition));
+					else break;
+				}
+			}
+			for(int i = this.position.getRow().get()-1; i >= ChessPosition.Row._1; i--){
+				ChessPosition.Tester testPosition = new ChessPosition.Tester(i,this.position.getColumn().get());
+				if(ChessPosition.inBounds(testPosition)){
+					if(!ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)) possibleMoves.addElement(new ChessPosition(testPosition));
+					else break;
+				}
+			}
+			for(int i = this.position.getColumn().get()+1; i <= (ChessPosition.Column.H - this.position.getColumn().get()); i++){
+				ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get(),i);
+				if(ChessPosition.inBounds(testPosition)){
+					if(!ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)) possibleMoves.addElement(new ChessPosition(testPosition));
+					else break;
+				}
+			}
+			for(int i = this.position.getColumn().get()-1; i >= ChessPosition.Column.A; i--){
+				ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get(),i);
 				if(ChessPosition.inBounds(testPosition)){
 					if(!ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)) possibleMoves.addElement(new ChessPosition(testPosition));
 					else break;
