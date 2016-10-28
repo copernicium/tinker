@@ -68,6 +68,14 @@ public class ChessBoard
         //TODO add a way of capturing pieces
     }
 
+    private ChessPosition.Row mirror(ChessPosition.Row row){
+		return row;//TODO
+	}
+
+	private ChessPosition.Column mirror(ChessPosition.Column column){
+		return column;//TODO
+	}
+
     private ChessPiece[] fillBoard(){
         ChessPiece[] chessPieces = new ChessPiece[NumbersOfPieces.TOTAL*2];
 		for(int i = 0; i < 2*NumbersOfPieces.TOTAL; i++){
@@ -75,19 +83,20 @@ public class ChessBoard
 		}
         int piecesFilled = 0;
 		final ChessPiece.Color[] ALLCOLORS = {ChessPiece.Color.WHITE,ChessPiece.Color.BLACK};
-		for(ChessPiece.Color color: ALLCOLORS){
-			ChessPosition.Row pawnRow = (color.equals(ChessPiece.Color.WHITE)) ? new ChessPosition.Row(ChessPosition.Row._2) : new ChessPosition.Row(ChessPosition.Row._7);
+		for(ChessPiece.Color color: ALLCOLORS){//TODO: have it mirror pieces onto the other side or something clever
+			ChessPosition.Row pieceRow = (color.equals(ChessPiece.Color.WHITE)) ? new ChessPosition.Row(ChessPosition.Row._1) : new ChessPosition.Row(ChessPosition.Row._8);//the row the piece will be in depending on the color
+			ChessPosition.Row pawnRow = (color.equals(ChessPiece.Color.WHITE)) ? new ChessPosition.Row(ChessPosition.Row._2) : new ChessPosition.Row(ChessPosition.Row._7);//pawns get two rows all to themselves
 			for(int i =0; i < NumbersOfPieces.PAWNS; i++) chessPieces[i+piecesFilled] = new Pawn(new ChessPosition(pawnRow.get(),i),color);
 			piecesFilled += NumbersOfPieces.PAWNS;
-			for(int i =0; i < NumbersOfPieces.ROOKS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(),color);
+			for(int i =0; i < NumbersOfPieces.ROOKS; i++) chessPieces[i+piecesFilled] = new Rook(new ChessPosition(pieceRow,ChessPosition.Column.A),color);
 			piecesFilled += NumbersOfPieces.ROOKS;
-			for(int i =0; i < NumbersOfPieces.KNIGHTS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(),color);
+			for(int i =0; i < NumbersOfPieces.KNIGHTS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(pieceRow,ChessPosition.Column.A),color);
 			piecesFilled += NumbersOfPieces.KNIGHTS;
-			for(int i =0; i < NumbersOfPieces.BISHOPS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(),color);
+			for(int i =0; i < NumbersOfPieces.BISHOPS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(pieceRow,ChessPosition.Column.A),color);
 			piecesFilled += NumbersOfPieces.BISHOPS;
-			for(int i =0; i < NumbersOfPieces.QUEENS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(),color);
+			for(int i =0; i < NumbersOfPieces.QUEENS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(pieceRow,ChessPosition.Column.A),color);
 			piecesFilled += NumbersOfPieces.QUEENS;
-			for(int i =0; i < NumbersOfPieces.KINGS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(),color);
+			for(int i =0; i < NumbersOfPieces.KINGS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(pieceRow,ChessPosition.Column.A),color);
 		}		
         return chessPieces;
     }

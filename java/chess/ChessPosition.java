@@ -122,19 +122,24 @@ public class ChessPosition{
     public ChessPosition(){
 		this(Row._1,Column.A);
     }
+    public ChessPosition(Row row,int column){
+		this(row.get(),column);
+	}
+	public ChessPosition(int row,Column column){
+		this(row,column.get());
+	}
     public ChessPosition(Row row,Column column){
 		this.column = new Column();
 		this.row = new Row();
         this.column = column;
         this.row = row;
     }
-     public ChessPosition(int row,int column){
-		MySystem.myAssert(column < Column.DIMENSION && column >= 0,MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(row < Row.DIMENSION && row >=0,MySystem.getFileName(),MySystem.getLineNumber());
-		this.column = new Column();
-		this.row = new Row();
-		this.column.set(column);
-        this.row.set(row);
+    public ChessPosition(int row,int column){
+		 MySystem.myAssert(inBounds(row,column),MySystem.getFileName(),MySystem.getLineNumber());
+		 this.column = new Column();
+		 this.row = new Row();
+		 this.column.set(column);
+		 this.row.set(row);
     }
 	public ChessPosition(ChessPosition.Tester tester){
 		this(tester.getRow(),tester.getColumn());
