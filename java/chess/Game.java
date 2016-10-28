@@ -9,6 +9,7 @@ public class Game{
 		ChessPiece test = new Pawn(new ChessPosition(ChessPosition.Row._2,ChessPosition.Column.A),ChessPiece.Color.WHITE);
 		ChessPosition testMove = new ChessPosition(ChessPosition.Row._4,ChessPosition.Column.A);
 		chessBoard.move(test,testMove);
+		System.out.println("---------------------");
 		chessBoard.print();
 		System.out.println("NYI");
 	}

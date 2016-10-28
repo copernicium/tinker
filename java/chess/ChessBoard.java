@@ -5,14 +5,39 @@ package chess;
 public class ChessBoard
 {
     private abstract static class NumbersOfPieces{
-        public static final int PAWNS=8;
-        public static final int ROOKS=2;
-        public static final int KNIGHTS=2;
-        public static final int BISHOPS=2;
-        public static final int QUEENS=1;
-        public static final int KINGS=1;
-        public static final int TOTAL=16;
+		public  abstract static class Half{
+			public static final int PAWNS=8;
+			public static final int ROOKS=2;
+			public static final int KNIGHTS=2;
+			public static final int BISHOPS=2;
+			public static final int QUEENS=1;
+			public static final int KINGS=1;
+			public static final int TOTAL=16;
+		}
+
+		public abstract static class Total{
+			public static final int PAWNS=16;
+			public static final int ROOKS=4;
+			public static final int KNIGHTS=4;
+			public static final int BISHOPS=4;
+			public static final int QUEENS=2;
+			public static final int KINGS=2;
+			public static final int TOTAL=32;
+		}
     }
+    private static abstract class PiecePlacement{//placement of pieces on the white and left side.
+		public static abstract class Row{
+			public static final ChessPosition.Row ALL = new ChessPosition.Row(ChessPosition.Row._1);
+			public static final ChessPosition.Row PAWN= new ChessPosition.Row(ChessPosition.Row._2);//pawns are in their own rows
+		}
+		public static abstract class Column{
+			public static final ChessPosition.Column ROOK = new ChessPosition.Column(ChessPosition.Column.A);
+			public static final ChessPosition.Column KNIGHT = new ChessPosition.Column(ChessPosition.Column.B);
+			public static final ChessPosition.Column BISHOP= new ChessPosition.Column(ChessPosition.Column.C);
+			public static final ChessPosition.Column KING = new ChessPosition.Column(ChessPosition.Column.D);
+			public static final ChessPosition.Column QUEEN = new ChessPosition.Column(ChessPosition.Column.E);
+		}
+	}
     private ChessPiece[] pieces;
 	private ChessPiece.Color playerTurn;
 
@@ -68,36 +93,49 @@ public class ChessBoard
         //TODO add a way of capturing pieces
     }
 
-    private ChessPosition.Row mirror(ChessPosition.Row row){
-		return row;//TODO
+    private int findNextUnassigned(ChessPiece[] chessPieces){
+		for(int i = 0; i < chessPieces.length; i++){
+			if(chessPieces[i].getType() == ChessPiece.Type.UNASSIGNED) return i;
+		}
+		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+		return -1;
 	}
 
-	private ChessPosition.Column mirror(ChessPosition.Column column){
-		return column;//TODO
+	private static ChessPosition.Column mirror(ChessPosition.Column column){
+		return new ChessPosition.Column(ChessPosition.Column.H - column.get());
+	}
+
+	private static ChessPosition.Row mirror(ChessPosition.Row row){
+		return new ChessPosition.Row(ChessPosition.Row._8 - row.get());
+	}
+
+	private static ChessPiece[] makeFour(ChessPiece pos1){
+		final int NUMBEROFCORNERS = 4;
+		ChessPiece[] fourPositions = new ChessPiece[NUMBEROFCORNERS];
+		fourPositions[0] = pos1;
+		fourPositions[1] = new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE);
+		fourPositions[2] = new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK);
+		fourPositions[3] = new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK);
+		return fourPositions;
 	}
 
     private ChessPiece[] fillBoard(){
-        ChessPiece[] chessPieces = new ChessPiece[NumbersOfPieces.TOTAL*2];
-		for(int i = 0; i < 2*NumbersOfPieces.TOTAL; i++){
+		//TODO: do not allow assignment of pieces to locations occupied by any other piece or something
+		ChessPiece[] chessPieces = new ChessPiece[NumbersOfPieces.Total.TOTAL - 1];//TODO: figure out -1
+		for(int i = 0; i < NumbersOfPieces.Total.TOTAL - 1; i++){
 			chessPieces[i] = new ChessPiece();
 		}
-        int piecesFilled = 0;
-		final ChessPiece.Color[] ALLCOLORS = {ChessPiece.Color.WHITE,ChessPiece.Color.BLACK};
-		for(ChessPiece.Color color: ALLCOLORS){//TODO: have it mirror pieces onto the other side or something clever
-			ChessPosition.Row pieceRow = (color.equals(ChessPiece.Color.WHITE)) ? new ChessPosition.Row(ChessPosition.Row._1) : new ChessPosition.Row(ChessPosition.Row._8);//the row the piece will be in depending on the color
-			ChessPosition.Row pawnRow = (color.equals(ChessPiece.Color.WHITE)) ? new ChessPosition.Row(ChessPosition.Row._2) : new ChessPosition.Row(ChessPosition.Row._7);//pawns get two rows all to themselves
-			for(int i =0; i < NumbersOfPieces.PAWNS; i++) chessPieces[i+piecesFilled] = new Pawn(new ChessPosition(pawnRow.get(),i),color);
-			piecesFilled += NumbersOfPieces.PAWNS;
-			for(int i =0; i < NumbersOfPieces.ROOKS; i++) chessPieces[i+piecesFilled] = new Rook(new ChessPosition(pieceRow,ChessPosition.Column.A),color);
-			piecesFilled += NumbersOfPieces.ROOKS;
-			for(int i =0; i < NumbersOfPieces.KNIGHTS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(pieceRow,ChessPosition.Column.A),color);
-			piecesFilled += NumbersOfPieces.KNIGHTS;
-			for(int i =0; i < NumbersOfPieces.BISHOPS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(pieceRow,ChessPosition.Column.A),color);
-			piecesFilled += NumbersOfPieces.BISHOPS;
-			for(int i =0; i < NumbersOfPieces.QUEENS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(pieceRow,ChessPosition.Column.A),color);
-			piecesFilled += NumbersOfPieces.QUEENS;
-			for(int i =0; i < NumbersOfPieces.KINGS; i++) chessPieces[i+piecesFilled] = new ChessPiece(new ChessPosition(pieceRow,ChessPosition.Column.A),color);
-		}		
+		{
+			for(int i = 0; i < NumbersOfPieces.Half.PAWNS; i++){
+				chessPieces[findNextUnassigned(chessPieces)] = new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, i), ChessPiece.Color.WHITE);
+				chessPieces[findNextUnassigned(chessPieces)] = new Pawn(new ChessPosition(mirror(PiecePlacement.Row.PAWN), i), ChessPiece.Color.BLACK);
+			}
+			{
+				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE))){
+					chessPieces[findNextUnassigned(chessPieces)] = new Rook(a);
+				}
+			}
+		}
         return chessPieces;
     }
     

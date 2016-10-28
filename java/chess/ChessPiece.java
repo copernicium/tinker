@@ -5,7 +5,7 @@ import java.util.Vector;
  */
 public class ChessPiece
 {
-    public enum Type{PAWN,ROOK,KNIGHT,BISHOP,QUEEN,KING};
+    public enum Type{UNASSIGNED,PAWN,ROOK,KNIGHT,BISHOP,QUEEN,KING};
     protected Type type;
     public enum Color{
 		WHITE,BLACK;
@@ -67,10 +67,12 @@ public class ChessPiece
         position = new ChessPosition();
         color = Color.WHITE;
         alive = true;
+		this.type = Type.UNASSIGNED;
     }
     public ChessPiece(ChessPosition position,Color color){
         this.position = position;
         this.color = color;
+		this.type = Type.UNASSIGNED;
         alive = true;
     }
 }
