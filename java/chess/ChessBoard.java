@@ -135,6 +135,11 @@ public class ChessBoard
 					chessPieces[findNextUnassigned(chessPieces)] = new Rook(a);
 				}
 			}
+			{
+				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KNIGHT), ChessPiece.Color.WHITE))){
+					chessPieces[findNextUnassigned(chessPieces)] = new Knight(a);
+				}
+			}
 		}
         return chessPieces;
     }

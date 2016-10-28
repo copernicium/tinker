@@ -2,26 +2,19 @@ package chess;
 import java.util.Vector;
 
 /**
- * A rook piece
+ * A queen piece
  */
-public class Rook extends ChessPiece
+public class Queen extends ChessPiece
 {
    	@Override
     public String toString(){
-        return "R";
+        return "Q";
     }
     @Override
     public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		{
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get(),this.position.getColumn().get());
-			for(int i = this.position.getRow().get(); i < (ChessPosition.Row._8 - this.position.getRow().get()); i++){
-				testPosition = new ChessPosition.Tester(this.position.getRow().get()+i,this.position.getColumn().get());
-				if(ChessPosition.inBounds(testPosition)){
-					if(!ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)) possibleMoves.addElement(new ChessPosition(testPosition));
-					else break;
-				}
-			}
+			MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 		}
         return possibleMoves;
     }
@@ -36,15 +29,15 @@ public class Rook extends ChessPiece
         System.err.println("Move failed. Not a valid move.");
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 	}
-    public Rook(){
+    public Queen(){
         super();
-        type = Type.ROOK;
+        type = Type.QUEEN;
     }
-    public Rook(ChessPiece chessPiece){
+    public Queen(ChessPiece chessPiece){
 		this(chessPiece.getPosition(),chessPiece.getColor());
 	}
-    public Rook(ChessPosition position, Color color){
+    public Queen(ChessPosition position, Color color){
         super(position,color);
-        this.type = Type.ROOK;
+        this.type = Type.QUEEN;
     }
 }
