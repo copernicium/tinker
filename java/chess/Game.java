@@ -47,8 +47,11 @@ public class Game{
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3,ChessPosition.Column.C);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
-		System.out.println("---------------------");
-		chessBoard.print();
+		{
+			ChessPiece test = new Knight(new ChessPosition(ChessPosition.Row._8,ChessPosition.Column.B),ChessPiece.Color.BLACK);
+			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6,ChessPosition.Column.C);
+			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
+		}
 		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 	}
 

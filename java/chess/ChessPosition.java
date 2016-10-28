@@ -88,9 +88,25 @@ public class ChessPosition{
 			this.row = row;
 			this.column = column;
 		}
+		public Tester(ChessPosition chessPosition){
+			this.row = chessPosition.getRow().get();
+			this.column = chessPosition.getColumn().get();
+		}
 	}
     private Row row;
-    
+
+	public static ChessPosition.Column mirror(ChessPosition.Column column){
+		return new ChessPosition.Column(ChessPosition.Column.H - column.get());
+	}
+
+	public static ChessPosition.Row mirror(ChessPosition.Row row){
+		return new ChessPosition.Row(ChessPosition.Row._8 - row.get());
+	}
+
+	public static int mirror(int generic){
+		return ChessPosition.Row._8 - generic;
+	}
+
     public boolean equals(ChessPosition b){
         if(!b.getRow().equals(this.getRow())) return false;
         if(!b.getColumn().equals(this.getColumn())) return false;

@@ -100,22 +100,14 @@ public class ChessBoard
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 		return -1;
 	}
-
-	private static ChessPosition.Column mirror(ChessPosition.Column column){
-		return new ChessPosition.Column(ChessPosition.Column.H - column.get());
-	}
-
-	private static ChessPosition.Row mirror(ChessPosition.Row row){
-		return new ChessPosition.Row(ChessPosition.Row._8 - row.get());
-	}
-
+	
 	private static ChessPiece[] makeFour(ChessPiece pos1){
 		final int NUMBEROFCORNERS = 4;
 		ChessPiece[] fourPositions = new ChessPiece[NUMBEROFCORNERS];
 		fourPositions[0] = pos1;
-		fourPositions[1] = new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE);
-		fourPositions[2] = new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK);
-		fourPositions[3] = new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK);
+		fourPositions[1] = new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),ChessPosition.mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE);
+		fourPositions[2] = new ChessPiece(new ChessPosition(ChessPosition.mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK);
+		fourPositions[3] = new ChessPiece(new ChessPosition(ChessPosition.mirror(pos1.getPosition().getRow()),ChessPosition.mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK);
 		return fourPositions;
 	}
 
@@ -128,7 +120,7 @@ public class ChessBoard
 		{
 			for(int i = 0; i < NumbersOfPieces.Half.PAWNS; i++){
 				chessPieces[findNextUnassigned(chessPieces)] = new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, i), ChessPiece.Color.WHITE);
-				chessPieces[findNextUnassigned(chessPieces)] = new Pawn(new ChessPosition(mirror(PiecePlacement.Row.PAWN), i), ChessPiece.Color.BLACK);
+				chessPieces[findNextUnassigned(chessPieces)] = new Pawn(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.PAWN), i), ChessPiece.Color.BLACK);
 			}
 			{
 				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE))){
@@ -147,11 +139,11 @@ public class ChessBoard
 			}
 			{
 				chessPieces[findNextUnassigned(chessPieces)] = new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE);
-				chessPieces[findNextUnassigned(chessPieces)] = new Queen(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK);
+				chessPieces[findNextUnassigned(chessPieces)] = new Queen(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK);
 			}
 			{
 				chessPieces[findNextUnassigned(chessPieces)] = new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE);
-				chessPieces[findNextUnassigned(chessPieces)] = new King(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK);
+				chessPieces[findNextUnassigned(chessPieces)] = new King(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK);
 			}
 		}
         return chessPieces;
