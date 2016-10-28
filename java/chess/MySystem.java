@@ -11,7 +11,7 @@ public class MySystem{
 		System.err.println(fileName + ":" + lineNumber + ": Asserting via MyAssert");
 		System.exit(1);
 	}
-	public static void nyi(String fileName,int lineNumber){//TODO: consider not using err
+	public static void nyi(String fileName,int lineNumber){
 		System.err.println("NYI " + fileName + ":" + lineNumber);
 		System.exit(1);
 	}

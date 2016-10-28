@@ -33,7 +33,7 @@ public class Knight extends ChessPiece
 		return lPositions;
 	}
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO
+    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		possibleMoves.addAll(getL(chessPieces,1,2));
 		possibleMoves.addAll(getL(chessPieces,2,1));
