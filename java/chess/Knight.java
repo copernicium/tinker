@@ -10,35 +10,28 @@ public class Knight extends ChessPiece
     public String toString(){
         return "N";
     }
-	/*public Vector<ChessPosition> getL(ChessPiece[] chessPieces,int distanceLeft, int distanceUp){
-		Vector<ChessPosition> lPositions = new Vector<>(0);//TODO: mirror is not what you want Log
-		{
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()-distanceLeft,this.position.getColumn().get()+distanceUp);
-			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)){
-				lPositions.addElement(new ChessPosition(testPosition));
-			}
-			testPosition = new ChessPosition.Tester(testPosition.getRow(),ChessPosition.mirror(testPosition.getColumn()));
-			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)){
-				lPositions.addElement(new ChessPosition(testPosition));
-			}
-			testPosition = new ChessPosition.Tester(ChessPosition.mirror(testPosition.getRow()),testPosition.getColumn());
-			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)){
-				lPositions.addElement(new ChessPosition(testPosition));
-			}
-			testPosition = new ChessPosition.Tester(ChessPosition.mirror(testPosition.getRow()),ChessPosition.mirror(testPosition.getColumn()));
-			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)){
-				lPositions.addElement(new ChessPosition(testPosition));
-			}
-		}
-		return lPositions;
-	}*/
+	public ChessPosition.Tester[] getCorners(int xDisplacement, int yDisplacement){
+		final int NUMBEROFCORNERS = 4;
+		ChessPosition.Tester[] corners = new ChessPosition.Tester[NUMBEROFCORNERS];
+		corners[0] = new ChessPosition.Tester(this.position.getRow().get() + xDisplacement, this.position.getColumn().get() + yDisplacement);
+		corners[1] = new ChessPosition.Tester(this.position.getRow().get() - xDisplacement, this.position.getColumn().get() + yDisplacement);
+		corners[2] = new ChessPosition.Tester(this.position.getRow().get() + xDisplacement, this.position.getColumn().get() - yDisplacement);
+		corners[3] = new ChessPosition.Tester(this.position.getRow().get() - xDisplacement, this.position.getColumn().get() - yDisplacement);
+		return corners;
+	}
     @Override
     public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
-		//possibleMoves.addAll(getL(chessPieces,1,2));
-		//possibleMoves.addAll(getL(chessPieces,2,1));
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
-		System.out.println("At: " + this.position.toString() + " Possible: " + possibleMoves.toString());
+		for(ChessPosition.Tester testPosition: getCorners(-2,1)){
+			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition), this.color, chessPieces)){
+				possibleMoves.addElement(new ChessPosition(testPosition));
+			}
+		}
+		for(ChessPosition.Tester testPosition: getCorners(-1,2)){
+			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition), this.color, chessPieces)){
+				possibleMoves.addElement(new ChessPosition(testPosition));
+			}
+		}
         return possibleMoves;
     }
     @Override
