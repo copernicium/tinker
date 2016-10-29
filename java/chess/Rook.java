@@ -1,5 +1,4 @@
 package chess;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.util.Vector;
 
@@ -14,34 +13,25 @@ public class Rook extends ChessPiece
     }
 
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO: clean up?
+    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		{
-			for(int i = this.position.getRow().get()+1; i <= (ChessPosition.Row._8 - this.position.getRow().get()); i++){
-				ChessPosition.Tester testPosition = new ChessPosition.Tester(i,this.position.getColumn().get());
-				if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)){
-					possibleMoves.addElement(new ChessPosition(testPosition));
-				} else break;
+			int direction = -1, row = 1, column = 0;
+			for(int j = 0; j < 4; j++){
+				for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
+					ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + (i * direction * row), this.position.getColumn().get() + (i * direction * column));
+					if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition), this.color, chessPieces)){
+						possibleMoves.addElement(new ChessPosition(testPosition));
+						if(ChessBoard.isOccupied(new ChessPosition(testPosition), Color.not(this.color), chessPieces)) break;//if it will capture a piece, stop it there
+					} else break;
+				}
+				direction *= -1;//switch direction each time to cover both directions of rows and columns
+				if(j==1){//switch which axes movement is restricted to
+					row = 0;
+					column = 1;
+				}
 			}
-			for(int i = this.position.getRow().get()-1; i >= ChessPosition.Row._1; i--){
-				ChessPosition.Tester testPosition = new ChessPosition.Tester(i,this.position.getColumn().get());
-				if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)){
-					possibleMoves.addElement(new ChessPosition(testPosition));
-				} else break;
-			}
-			for(int i = this.position.getColumn().get()+1; i <= (ChessPosition.Column.H - this.position.getColumn().get()); i++){
-				ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get(),i);
-				if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)){
-					possibleMoves.addElement(new ChessPosition(testPosition));
-				} else break;
-			}
-			for(int i = this.position.getColumn().get()-1; i >= ChessPosition.Column.A; i--){
-				ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get(),i);
-				if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)){
-					possibleMoves.addElement(new ChessPosition(testPosition));
-				} else break;
-			}
-			}
+		}
         return possibleMoves;
     }
     @Override

@@ -16,6 +16,7 @@ public class Bishop extends ChessPiece
 		{
 			MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 		}
+		System.out.println("At:" + this.position.toString() + " Possible:" + possibleMoves.toString());
         return possibleMoves;
     }
     @Override
