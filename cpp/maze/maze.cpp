@@ -464,11 +464,12 @@ int main(int x,char *arg[]){
 	else maze=args.import_other?import_maze(args.import_filename):import_maze();	
 	vector<Move> path=get_path(maze);
 	cout<<"The solution is:\n"<<print_maze(maze,path,1,1);
-	char yn=path.size()>200?'n':'y';
+	char yn = 'y';
+	/*yn=path.size()>200?'n':'y';
 	if(yn!='y'){
 		cout<<"Display path?(y/n) ";
 		cin>>yn;
-	}
+	}*/
 	if(tolower(yn)=='y')cout<<"\nThe path used is:\n"<<path<<"\n\n";
 	if(args.export_maze)export_maze(maze,args.export_filename);
 	return 0;
