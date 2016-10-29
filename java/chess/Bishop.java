@@ -11,12 +11,23 @@ public class Bishop extends ChessPiece
         return "B";
     }
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO
+    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		{
-			MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+			int rowDirection = -1, columnDirection = -1;
+			for(int j = 0; j < 4; j++){
+				for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
+					ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + (i * rowDirection), this.position.getColumn().get() + (i * columnDirection));
+					if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition), this.color, chessPieces)){
+						possibleMoves.addElement(new ChessPosition(testPosition));
+						if(ChessBoard.isOccupied(new ChessPosition(testPosition), Color.not(this.color), chessPieces))
+							break;//if it will capture a piece, stop it there
+					} else break;
+				}
+				rowDirection *= -1;//switch row direction every time
+				if(j == 1) columnDirection *= -1;//switch column direction for every two switches of the row direction so all diagonals are covered
+			}
 		}
-		System.out.println("At:" + this.position.toString() + " Possible:" + possibleMoves.toString());
         return possibleMoves;
     }
     @Override
