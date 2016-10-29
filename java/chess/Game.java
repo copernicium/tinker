@@ -52,6 +52,11 @@ public class Game{
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6,ChessPosition.Column.C);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
+		{
+			ChessPiece test = new King(new ChessPosition(ChessPosition.Row._1, ChessPosition.Column.D), ChessPiece.Color.WHITE);
+			ChessPosition testMove = new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.D);
+			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
+		}
 		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 	}
 

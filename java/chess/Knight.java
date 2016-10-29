@@ -11,7 +11,7 @@ public class Knight extends ChessPiece
         return "N";
     }
 	public Vector<ChessPosition> getL(ChessPiece[] chessPieces,int distanceLeft, int distanceUp){
-		Vector<ChessPosition> lPositions = new Vector<>(0);
+		Vector<ChessPosition> lPositions = new Vector<>(0);//TODO: mirror is not what you want Log
 		{
 			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()-distanceLeft,this.position.getColumn().get()+distanceUp);
 			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)){
@@ -37,7 +37,7 @@ public class Knight extends ChessPiece
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		possibleMoves.addAll(getL(chessPieces,1,2));
 		possibleMoves.addAll(getL(chessPieces,2,1));
-		System.out.println("Available: " + possibleMoves.toString());
+		System.out.println("At: " + this.position.toString() + " Possible: " + possibleMoves.toString());
         return possibleMoves;
     }
     @Override

@@ -11,11 +11,16 @@ public class King extends ChessPiece
     public String toString(){
         return "K";
     }
-    @Override
+	@Override
     public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
-		{
-			MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		for(int y = -1; y <= 1; y++){
+			for(int x = -1; x <= 1; x++){
+				ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + x, this.position.getColumn().get() + y);
+				if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition), this.color, chessPieces)){
+					possibleMoves.addElement(new ChessPosition(testPosition));
+				}
+			}
 		}
         return possibleMoves;
     }

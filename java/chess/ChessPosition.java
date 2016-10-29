@@ -80,6 +80,9 @@ public class ChessPosition{
 		public int getColumn(){
 			return column;
 		}
+		public boolean equals(Tester b){
+			return this.row == b.getRow() && this.column == b.getColumn();
+		}
 		public Tester(){
 			column = 0;
 			row = 0;
