@@ -76,6 +76,24 @@ public class ChessBoard
 		}
 		return false;
 	}
+
+	private int find(ChessPiece.Type type, ChessPiece.Color color){
+		for(int i = 0; i < pieces.length; i++){
+			if(type.equals(pieces[i].getType()) && color == pieces[i].getColor()) return i;
+		}
+		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+		return -1;
+	}
+
+	private boolean checkIfGameOver(){
+		King whiteKing = new King(pieces[find(ChessPiece.Type.KING, ChessPiece.Color.WHITE)]);
+		King blackKing = new King(pieces[find(ChessPiece.Type.KING, ChessPiece.Color.BLACK)]);
+
+		if(whiteKing.getCheckMate()) System.out.println("Game over. " + ChessPiece.Color.not(whiteKing.getColor()).toString() + " wins.");
+		else if(blackKing.getCheckMate()) System.out.println("Game over. " + ChessPiece.Color.not(blackKing.getColor()).toString() + " wins.");
+		else return false;
+		return true;
+	}
 	
     public void move(ChessPiece chessPiece,ChessPosition chessPosition){
 		MySystem.myAssert(chessPiece.getColor() == playerTurn && checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
@@ -86,6 +104,7 @@ public class ChessBoard
 		}
 		pieces[i].move(chessPosition,pieces);
 		if(isOccupied(chessPosition,pieces[i].getColor(),pieces)) capture(chessPosition);//capture the opposite color piece
+		if(checkIfGameOver()) MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());//TODO game over logic
 		playerTurn = ChessPiece.Color.not(playerTurn);
     }
     

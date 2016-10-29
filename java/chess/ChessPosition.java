@@ -134,7 +134,7 @@ public class ChessPosition{
 			case 'H':
 				column = new Column(Column.H);
 				break;
-			default: MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+			default: MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 		}
 		Row row = new Row();
 		switch(input.charAt(1)){

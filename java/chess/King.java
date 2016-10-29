@@ -7,6 +7,8 @@ import java.util.Vector;
  */
 public class King extends ChessPiece
 {
+	private boolean check;
+	private boolean checkMate;
    	@Override
     public String toString(){
         return "K";
@@ -35,9 +37,17 @@ public class King extends ChessPiece
         System.err.println("Move failed. Not a valid move.");
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 	}
+	public boolean getCheck(){
+		return check;
+	}
+	public boolean getCheckMate(){
+		return checkMate;
+	}
     public King(){
         super();
         type = Type.KING;
+		check = false;
+		checkMate = false;
     }
     public King(ChessPiece chessPiece){
 		this(chessPiece.getPosition(),chessPiece.getColor());
@@ -45,5 +55,7 @@ public class King extends ChessPiece
     public King(ChessPosition position, Color color){
         super(position,color);
         this.type = Type.KING;
+		check = false;
+		checkMate = false;
     }
 }
