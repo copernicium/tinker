@@ -1,15 +1,26 @@
 package chess;
+import java.util.Scanner;
 /**
  * Runs a chess game
  */
 public class Game{
-	public static ChessBoard testMove(ChessBoard chessBoard,ChessPiece test, ChessPosition testMove){
+	private static ChessPosition getInput(){
+		Scanner scanner = new Scanner(System.in);
+		String input = scanner.next();
+		return  ChessPosition.toChessPosition(input);
+	}
+	private static void testInput(){
+		System.out.print("Test input: ");
+		ChessPosition chessPosition = getInput();
+		System.out.println("Scanned in: " + chessPosition);
+	}
+	private static ChessBoard testMove(ChessBoard chessBoard,ChessPiece test, ChessPosition testMove){
 		chessBoard.move(test, testMove);
 		System.out.println("---------------------");
 		chessBoard.print();
 		return chessBoard;
 	}
-	public static void test(){
+	private static void testMovement(){
 		ChessBoard chessBoard = new ChessBoard();
 		chessBoard.print();
 		{
@@ -57,14 +68,16 @@ public class Game{
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.D);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 	}
 
-	public static void play(){//TODO: take in user inputs and stuff
+	private static void play(){//TODO: take in user inputs and stuff
 
 	}
 
 	public static void main(String[] args){
-		test();
+		testMovement();
+		testInput();
+		play();
+		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }

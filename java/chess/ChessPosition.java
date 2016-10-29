@@ -106,8 +106,65 @@ public class ChessPosition{
 		return new ChessPosition.Row(ChessPosition.Row._8 - row.get());
 	}
 
-	public static int mirror(int generic){
-		return ChessPosition.Row._8 - generic;
+	public static ChessPosition toChessPosition(String input){
+		MySystem.myAssert(input.length() == 2, MySystem.getFileName(),MySystem.getLineNumber());//make sure its only two characters
+		Column column = new Column();
+		switch(input.charAt(0)){
+			case 'A':
+				column = new Column(Column.A);
+				break;
+			case 'B':
+				column = new Column(Column.B);
+				break;
+			case 'C':
+				column = new Column(Column.C);
+				break;
+			case 'D':
+				column = new Column(Column.D);
+				break;
+			case 'E':
+				column = new Column(Column.E);
+				break;
+			case 'F':
+				column = new Column(Column.F);
+				break;
+			case 'G':
+				column = new Column(Column.G);
+				break;
+			case 'H':
+				column = new Column(Column.H);
+				break;
+			default: MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+		}
+		Row row = new Row();
+		switch(input.charAt(1)){
+			case '1':
+				row = new Row(Row._1);
+				break;
+			case '2':
+				row = new Row(Row._2);
+				break;
+			case '3':
+				row = new Row(Row._3);
+				break;
+			case '4':
+				row = new Row(Row._4);
+				break;
+			case '5':
+				row = new Row(Row._5);
+				break;
+			case '6':
+				row = new Row(Row._6);
+				break;
+			case '7':
+				row = new Row(Row._7);
+				break;
+			case '8':
+				row = new Row(Row._8);
+				break;
+			default: MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+		}
+		return new ChessPosition(row,column);
 	}
 
     public boolean equals(ChessPosition b){
