@@ -12,7 +12,7 @@ public class King extends ChessPiece
         return "K";
     }
 	@Override
-    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){//TODO
+    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		for(int y = -1; y <= 1; y++){
 			for(int x = -1; x <= 1; x++){

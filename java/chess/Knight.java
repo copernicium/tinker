@@ -10,7 +10,7 @@ public class Knight extends ChessPiece
     public String toString(){
         return "N";
     }
-	public Vector<ChessPosition> getL(ChessPiece[] chessPieces,int distanceLeft, int distanceUp){
+	/*public Vector<ChessPosition> getL(ChessPiece[] chessPieces,int distanceLeft, int distanceUp){
 		Vector<ChessPosition> lPositions = new Vector<>(0);//TODO: mirror is not what you want Log
 		{
 			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()-distanceLeft,this.position.getColumn().get()+distanceUp);
@@ -31,12 +31,13 @@ public class Knight extends ChessPiece
 			}
 		}
 		return lPositions;
-	}
+	}*/
     @Override
     public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
-		possibleMoves.addAll(getL(chessPieces,1,2));
-		possibleMoves.addAll(getL(chessPieces,2,1));
+		//possibleMoves.addAll(getL(chessPieces,1,2));
+		//possibleMoves.addAll(getL(chessPieces,2,1));
+		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 		System.out.println("At: " + this.position.toString() + " Possible: " + possibleMoves.toString());
         return possibleMoves;
     }
