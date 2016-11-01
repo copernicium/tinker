@@ -109,7 +109,7 @@ public class ChessPosition{
 	public static ChessPosition toChessPosition(String input){
 		MySystem.myAssert(input.length() == 2, MySystem.getFileName(),MySystem.getLineNumber());//make sure its only two characters
 		Column column = new Column();
-		switch(input.charAt(0)){
+		switch(Character.toUpperCase(input.charAt(0))){
 			case 'A':
 				column = new Column(Column.A);
 				break;

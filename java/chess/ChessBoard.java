@@ -98,7 +98,7 @@ public class ChessBoard
     public void move(ChessPiece chessPiece,ChessPosition chessPosition){
 		MySystem.myAssert(chessPiece.getColor() == playerTurn && checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
 		int i = 0;
-		for(; i < pieces.length; i++){
+		for(; i < pieces.length; i++){//TODO: Replace with find() ?
 			if(chessPiece.getPosition().equals(pieces[i].getPosition())) break;
 			if(i == pieces.length-1) MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 		}
