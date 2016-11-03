@@ -64,20 +64,32 @@ public class Game{
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = new King(new ChessPosition(ChessPosition.Row._1, ChessPosition.Column.D), ChessPiece.Color.WHITE);
-			ChessPosition testMove = new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.D);
+			ChessPiece test = new Rook(new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.C), ChessPiece.Color.WHITE);
+			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.C);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 	}
 
 	private static void play(){//TODO: take in user inputs and stuff
-
+		ChessBoard chessBoard = new ChessBoard();
+		final int ALLOWED_TURNS = 2;//Limit length of game for testing
+		for(int i = 0; i < ALLOWED_TURNS; i++){
+			chessBoard.print();
+			System.out.println("It is " + chessBoard.getPlayerTurn() + "'s turn.");
+			System.out.println("Available pieces to move are: " + chessBoard.getMoveablePositionsByPlayer().toString());
+			System.out.print("Input a piece to move (the piece's location): ");
+			ChessPiece chessPiece = ChessPiece.makePiece(Game.getInput(),chessBoard.getPlayerTurn(),chessBoard.getPieces());
+			System.out.print("\nInput the location to move that piece to (available positions are " + chessPiece.getNewPositions(chessBoard.getPieces())+ ": ");
+			ChessPosition chessPosition = Game.getInput();
+			chessBoard.move(chessPiece,chessPosition);
+		}
 	}
 
 	public static void main(String[] args){
-		testMovement();
-		testInput();
+		//testMovement();
+		//testInput();
 		play();
+		System.out.println("END OF GAME");//used to move the nyi to the bottom of the print outs
 		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }

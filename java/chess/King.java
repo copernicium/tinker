@@ -8,7 +8,23 @@ import java.util.Vector;
 public class King extends ChessPiece
 {
 	private boolean check;
-	private boolean checkMate;
+	private boolean checkMate;//TODO: implement
+
+	public void updateCheck(ChessPiece[] chessPieces){
+		for(ChessPiece chessPiece: chessPieces){
+			for(ChessPosition chessPosition: chessPiece.getNewPositions(chessPieces)){
+				if(chessPosition.equals(this.position)){
+					check = true;
+					return;
+				}
+			}
+		}
+	}
+
+	public void update(ChessPiece[] chessPieces){
+		updateCheck(chessPieces);
+	}
+
    	@Override
     public String toString(){
         return "K";

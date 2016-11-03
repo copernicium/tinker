@@ -33,14 +33,14 @@ public class Pawn extends ChessPiece
 		{
 			final int DIAGONALDIST = 1;
 			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(DIAGONALDIST*direction),this.position.getColumn().get()+DIAGONALDIST);
-			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)){
+			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces) && ChessBoard.isOccupied(new ChessPosition(testPosition),Color.not(this.color),chessPieces)){
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}
 		{
-			final int DIAGONALDIST = 1;
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(DIAGONALDIST*direction),this.position.getColumn().get()-DIAGONALDIST);
-			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces)){
+			final int DIAGONALDIST = -1;
+			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(DIAGONALDIST*direction),this.position.getColumn().get()+DIAGONALDIST);
+			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition),this.color,chessPieces) && ChessBoard.isOccupied(new ChessPosition(testPosition),Color.not(this.color),chessPieces)){
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}

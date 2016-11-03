@@ -1,4 +1,7 @@
 package chess;
+
+import java.util.Vector;
+
 /**
  * A representation of a chess board
  */
@@ -41,8 +44,13 @@ public class ChessBoard
     private ChessPiece[] pieces;
 	private ChessPiece.Color playerTurn;
 
+	public ChessPiece.Color getPlayerTurn(){
+		return playerTurn;
+	}
+
 	public static boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color,ChessPiece[] pieces){
 		for(ChessPiece a: pieces){
+			if(!a.getAlive()) continue;
 			if(color == a.getColor() && checkPosition.equals(a.getPosition())) return true;
 		}
         return false;
@@ -56,7 +64,7 @@ public class ChessBoard
 			}
 		}
 		for(ChessPiece a: pieces){
-			board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()-1][a.getPosition().getColumn().get()] = a.toString();
+			if(a.getAlive()) board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()-1][a.getPosition().getColumn().get()] = a.toString();
 		}
 		for(String[] a: board){
 			for(String b:a){
@@ -72,6 +80,7 @@ public class ChessBoard
     
 	private boolean checkExists(ChessPiece checkPiece){
 		for(ChessPiece a: pieces){
+			if(!checkPiece.getAlive()) continue;
 			if(checkPiece.equals(a)) return true;
 		}
 		return false;
@@ -85,9 +94,48 @@ public class ChessBoard
 		return -1;
 	}
 
+	private int find(ChessPosition chessPosition){
+		for(int i = 0; i < pieces.length; i++){
+			if(chessPosition.equals(pieces[i].getPosition())) return i;
+		}
+		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+		return -1;
+	}
+
+	public ChessPiece[] getPieces(){
+		return pieces;
+	}
+
+	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
+		Vector<ChessPiece> moveablePieces = new Vector<ChessPiece>();
+		for(ChessPiece chessPiece: pieces){
+			if(chessPiece.getNewPositions(pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
+		}
+		return moveablePieces;
+	}
+
+	public Vector<ChessPosition> getMoveablePositionsByPlayer(){
+		Vector<ChessPosition> moveablePositions = new Vector<ChessPosition>();
+		for(ChessPiece chessPiece: pieces){
+			if(chessPiece.getNewPositions(pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePositions.addElement(chessPiece.getPosition());
+		}
+		return moveablePositions;
+	}
+
+	private int find(ChessPiece chessPiece){
+		for(int i =0; i < pieces.length; i++){
+			if(chessPiece.equals(pieces[i])) return i;
+		}
+		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+		return -1;
+	}
+
 	private boolean checkIfGameOver(){
 		King whiteKing = new King(pieces[find(ChessPiece.Type.KING, ChessPiece.Color.WHITE)]);
 		King blackKing = new King(pieces[find(ChessPiece.Type.KING, ChessPiece.Color.BLACK)]);
+
+		whiteKing.update(pieces);
+		blackKing.update(pieces);
 
 		if(whiteKing.getCheckMate()) System.out.println("Game over. " + ChessPiece.Color.not(whiteKing.getColor()).toString() + " wins.");
 		else if(blackKing.getCheckMate()) System.out.println("Game over. " + ChessPiece.Color.not(blackKing.getColor()).toString() + " wins.");
@@ -95,21 +143,21 @@ public class ChessBoard
 		return true;
 	}
 	
-    public void move(ChessPiece chessPiece,ChessPosition chessPosition){
+    public void move(ChessPiece chessPiece,ChessPosition moveThere){
 		MySystem.myAssert(chessPiece.getColor() == playerTurn && checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
-		int i = 0;
-		for(; i < pieces.length; i++){//TODO: Replace with find() ?
-			if(chessPiece.getPosition().equals(pieces[i].getPosition())) break;
-			if(i == pieces.length-1) MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+		int position = find(chessPiece);
+		if(chessPiece.checkMove(moveThere,pieces)){
+			if(isOccupied(moveThere, ChessPiece.Color.not(pieces[position].getColor()),pieces)) capture(moveThere);
+			pieces[position].move(moveThere,pieces);
+		} else {
+			MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());//TODO: if user inputs invalid move
 		}
-		pieces[i].move(chessPosition,pieces);
-		if(isOccupied(chessPosition,pieces[i].getColor(),pieces)) capture(chessPosition);//capture the opposite color piece
 		if(checkIfGameOver()) MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());//TODO game over logic
 		playerTurn = ChessPiece.Color.not(playerTurn);
     }
     
     private void capture(ChessPosition chessPosition){
-        //TODO add a way of capturing pieces
+		pieces[find(chessPosition)].capture();
     }
 
     private int findNextUnassigned(ChessPiece[] chessPieces){
