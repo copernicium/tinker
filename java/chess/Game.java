@@ -79,7 +79,7 @@ public class Game{
 			System.out.println("Available pieces to move are: " + chessBoard.getMoveablePositionsByPlayer().toString());
 			System.out.print("Input a piece to move (the piece's location): ");
 			ChessPiece chessPiece = ChessPiece.makePiece(Game.getInput(),chessBoard.getPlayerTurn(),chessBoard.getPieces());
-			System.out.print("\nInput the location to move that piece to (available positions are " + chessPiece.getNewPositions(chessBoard.getPieces())+ ": ");
+			System.out.print("Input the location to move that piece to (available positions are " + chessPiece.getNewPositions(chessBoard.getPieces())+ ": ");
 			ChessPosition chessPosition = Game.getInput();
 			chessBoard.move(chessPiece,chessPosition);
 		}

@@ -50,16 +50,14 @@ public class ChessPiece
 	}
 
     protected Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
-       return this.getNewPositions(chessPieces);
-		// System.err.println("This is not a valid chess piece.");
-        //MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
-       // return new Vector<>(0);
+      	System.err.println("This is not a valid chess piece.");
+        MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+       	return new Vector<>(0);
     }
     
     public void move(ChessPosition position, ChessPiece[] chessPieces){
-        this.move(position,chessPieces);
-		//System.err.println("This is not a valid chess piece.");
-        //MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+        System.err.println("This is not a valid chess piece.");
+        MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
     }
 
     public boolean checkMove(ChessPosition position,ChessPiece[] chessPieces){
