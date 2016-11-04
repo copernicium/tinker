@@ -10,7 +10,7 @@ public class King extends ChessPiece
 	private boolean check;
 	private boolean checkMate;//TODO: implement
 
-	public void updateCheck(ChessPiece[] chessPieces){
+	private void updateCheck(ChessPiece[] chessPieces){
 		for(ChessPiece chessPiece: chessPieces){
 			for(ChessPosition chessPosition: chessPiece.getNewPositions(chessPieces)){
 				if(chessPosition.equals(this.position)){

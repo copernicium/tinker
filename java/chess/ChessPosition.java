@@ -49,7 +49,7 @@ public class ChessPosition{
         public Column(int value){
             super(value);
         }
-    };
+    }
     private Column column;
     public static class Row extends Dimension{//called ranks
         public static final int _1=0;
@@ -83,17 +83,9 @@ public class ChessPosition{
 		public boolean equals(Tester b){
 			return this.row == b.getRow() && this.column == b.getColumn();
 		}
-		public Tester(){
-			column = 0;
-			row = 0;
-		}
 		public Tester(int row,int column){
 			this.row = row;
 			this.column = column;
-		}
-		public Tester(ChessPosition chessPosition){
-			this.row = chessPosition.getRow().get();
-			this.column = chessPosition.getColumn().get();
 		}
 	}
     private Row row;

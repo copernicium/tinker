@@ -9,7 +9,7 @@ public class Game{
 		String input = scanner.next();
 		return  ChessPosition.toChessPosition(input);
 	}
-	private static void testInput(){
+	/*private static void testInput(){
 		System.out.print("Test input: ");
 		ChessPosition chessPosition = getInput();
 		System.out.println("Scanned in: " + chessPosition);
@@ -68,7 +68,7 @@ public class Game{
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.C);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
-	}
+	}*/
 
 	private static void play(){//TODO: take in user inputs and stuff
 		ChessBoard chessBoard = new ChessBoard();

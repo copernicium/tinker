@@ -10,7 +10,7 @@ public class Knight extends ChessPiece
     public String toString(){
         return "N";
     }
-	public ChessPosition.Tester[] getCorners(int xDisplacement, int yDisplacement){
+	private ChessPosition.Tester[] getCorners(int xDisplacement, int yDisplacement){
 		final int NUMBEROFCORNERS = 4;
 		ChessPosition.Tester[] corners = new ChessPosition.Tester[NUMBEROFCORNERS];
 		corners[0] = new ChessPosition.Tester(this.position.getRow().get() + xDisplacement, this.position.getColumn().get() + yDisplacement);
