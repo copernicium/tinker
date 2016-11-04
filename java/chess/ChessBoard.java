@@ -78,8 +78,8 @@ public class ChessBoard
 		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 	}
     
-	private boolean checkExists(ChessPiece checkPiece){
-		for(ChessPiece a: pieces){
+	private static boolean checkExists(ChessPiece checkPiece,ChessPiece[] chessPieces){
+		for(ChessPiece a: chessPieces){
 			if(!checkPiece.getAlive()) continue;
 			if(checkPiece.equals(a)) return true;
 		}
@@ -94,9 +94,9 @@ public class ChessBoard
 		return -1;
 	}
 
-	private int find(ChessPosition chessPosition){
-		for(int i = 0; i < pieces.length; i++){
-			if(chessPosition.equals(pieces[i].getPosition())) return i;
+	private static int find(ChessPosition chessPosition, ChessPiece[] chessPieces){
+		for(int i = 0; i < chessPieces.length; i++){
+			if(chessPosition.equals(chessPieces[i].getPosition())) return i;
 		}
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 		return -1;
@@ -122,9 +122,9 @@ public class ChessBoard
 		return moveablePositions;
 	}
 
-	private int find(ChessPiece chessPiece){
-		for(int i =0; i < pieces.length; i++){
-			if(chessPiece.equals(pieces[i])) return i;
+	private static int find(ChessPiece chessPiece, ChessPiece[] chessPieces){
+		for(int i =0; i < chessPieces.length; i++){
+			if(chessPiece.equals(chessPieces[i])) return i;
 		}
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 		return -1;
@@ -142,10 +142,22 @@ public class ChessBoard
 		else return false;
 		return true;
 	}
-	
+
+	public static ChessPiece[] testMove(ChessPiece chessPiece,ChessPosition moveThere, ChessPiece[] chessPieces){
+		MySystem.myAssert(checkExists(chessPiece,chessPieces),MySystem.getFileName(),MySystem.getLineNumber());
+		int position = ChessBoard.find(chessPiece,chessPieces);
+		if(chessPiece.checkMove(moveThere,chessPieces)){
+			if(isOccupied(moveThere, ChessPiece.Color.not(chessPieces[position].getColor()),chessPieces)) chessPieces = ChessBoard.capture(moveThere,chessPieces);
+			chessPieces[position].move(moveThere,chessPieces);
+		} else {
+			MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		}
+		return chessPieces;
+	}
+
     public void move(ChessPiece chessPiece,ChessPosition moveThere){
-		MySystem.myAssert(chessPiece.getColor() == playerTurn && checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
-		int position = find(chessPiece);
+		MySystem.myAssert(chessPiece.getColor() == playerTurn && checkExists(chessPiece,this.pieces),MySystem.getFileName(),MySystem.getLineNumber());
+		int position = ChessBoard.find(chessPiece,this.pieces);
 		if(chessPiece.checkMove(moveThere,pieces)){
 			if(isOccupied(moveThere, ChessPiece.Color.not(pieces[position].getColor()),pieces)) capture(moveThere);
 			pieces[position].move(moveThere,pieces);
@@ -157,8 +169,13 @@ public class ChessBoard
     }
     
     private void capture(ChessPosition chessPosition){
-		pieces[find(chessPosition)].capture();
+		pieces[ChessBoard.find(chessPosition,this.pieces)].capture();
     }
+
+	private static ChessPiece[] capture(ChessPosition chessPosition, ChessPiece[] chessPieces){
+		chessPieces[ChessBoard.find(chessPosition,chessPieces)].capture();
+		return chessPieces;
+	}
 
     private int findNextUnassigned(ChessPiece[] chessPieces){
 		for(int i = 0; i < chessPieces.length; i++){

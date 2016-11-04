@@ -8,7 +8,7 @@ import java.util.Vector;
 public class King extends ChessPiece
 {
 	private boolean check;
-	private boolean checkMate;//TODO: implement
+	private boolean checkMate;
 
 	private void updateCheck(ChessPiece[] chessPieces){
 		for(ChessPiece chessPiece: chessPieces){
@@ -29,9 +29,8 @@ public class King extends ChessPiece
 		for(ChessPiece chessPiece: chessPieces){
 			if(!chessPiece.getColor().equals(this.color))continue;
 			for(ChessPosition chessPosition: chessPiece.getNewPositions(chessPieces)){
-				ChessBoard testBoard = new ChessBoard(chessPieces,this.color);
-				testBoard.move(chessPiece,chessPosition);
-				updateCheck(testBoard.getPieces());
+				ChessPiece[] checkPieces = ChessBoard.testMove(chessPiece,chessPosition,chessPieces);
+				updateCheck(checkPieces);
 				if(!this.check){
 					this.checkMate = false;
 					return;
