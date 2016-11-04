@@ -73,16 +73,31 @@ public class Game{
 	private static void play(){//TODO: take in user inputs and stuff
 		ChessBoard chessBoard = new ChessBoard();
 		final int ALLOWED_TURNS = 2;//Limit length of game for testing
-		for(int i = 0; i < ALLOWED_TURNS; i++){
+		while(!chessBoard.checkIfGameOver()){
 			chessBoard.print();
 			System.out.println("It is " + chessBoard.getPlayerTurn() + "'s turn.");
 			System.out.println("Available pieces to move are: " + chessBoard.getMoveablePositionsByPlayer().toString());
 			System.out.print("Input a piece to move (the piece's location): ");
 			ChessPiece chessPiece = ChessPiece.makePiece(Game.getInput(),chessBoard.getPlayerTurn(),chessBoard.getPieces());
+			{
+				boolean checkIfPieceIsValid = false;
+				for(ChessPiece a : chessBoard.getMoveablePiecesByPlayer()){
+					if(chessPiece.equals(a))checkIfPieceIsValid = true;
+				}
+				MySystem.myAssert(checkIfPieceIsValid,MySystem.getFileName(),MySystem.getLineNumber());
+			}
 			System.out.print("Input the location to move that piece to (available positions are " + chessPiece.getNewPositions(chessBoard.getPieces())+ ": ");
 			ChessPosition chessPosition = Game.getInput();
+			{
+				boolean checkIfMoveIsValid = false;
+				for(ChessPosition a : chessPiece.getNewPositions(chessBoard.getPieces())){
+					if(chessPosition.equals(a))checkIfMoveIsValid = true;
+				}
+				MySystem.myAssert(checkIfMoveIsValid,MySystem.getFileName(),MySystem.getLineNumber());
+			}
 			chessBoard.move(chessPiece,chessPosition);
 		}
+		System.out.println("Game over");
 	}
 
 	public static void main(String[] args){

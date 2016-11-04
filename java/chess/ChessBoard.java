@@ -130,7 +130,7 @@ public class ChessBoard
 		return -1;
 	}
 
-	private boolean checkIfGameOver(){
+	public boolean checkIfGameOver(){
 		King whiteKing = new King(pieces[find(ChessPiece.Type.KING, ChessPiece.Color.WHITE)]);
 		King blackKing = new King(pieces[find(ChessPiece.Type.KING, ChessPiece.Color.BLACK)]);
 
@@ -220,4 +220,8 @@ public class ChessBoard
 		pieces = fillBoard();
 		playerTurn = ChessPiece.Color.WHITE;
     }
+    public ChessBoard(ChessPiece[] pieces, ChessPiece.Color playerTurn){
+		this.pieces = pieces;
+		this.playerTurn = playerTurn;
+	}
 }

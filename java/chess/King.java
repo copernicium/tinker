@@ -21,8 +21,29 @@ public class King extends ChessPiece
 		}
 	}
 
+	private void updateCheckMate(ChessPiece[] chessPieces){
+		if(!this.check){
+			this.checkMate = false;
+			return;//if it's not in check, then it doesn't need to check if it's in check mate
+		}
+		for(ChessPiece chessPiece: chessPieces){
+			if(!chessPiece.getColor().equals(this.color))continue;
+			for(ChessPosition chessPosition: chessPiece.getNewPositions(chessPieces)){
+				ChessBoard testBoard = new ChessBoard(chessPieces,this.color);
+				testBoard.move(chessPiece,chessPosition);
+				updateCheck(testBoard.getPieces());
+				if(!this.check){
+					this.checkMate = false;
+					return;
+				}
+			}
+		}
+		this.checkMate = true;
+	}
+
 	public void update(ChessPiece[] chessPieces){
 		updateCheck(chessPieces);
+		updateCheckMate(chessPieces);
 	}
 
    	@Override
