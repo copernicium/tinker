@@ -74,7 +74,7 @@ public class Triangle {
 
 	public double calculateArea(){
 		double s = (a + b + c)/2.0;
-		return Math.sqrt(s(s - a)(s - b)(s - c));
+		return Math.sqrt(s*(s - a)*(s - b)*(s - c));
 	}
 
 	public void setPointOne(Point one){
