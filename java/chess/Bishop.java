@@ -6,8 +6,8 @@ import java.util.Vector;
  */
 public class Bishop extends ChessPiece
 {
-   	@Override
-    public String toString(){
+	@Override
+    public String print(){
         return "B";
     }
     @Override
@@ -41,6 +41,13 @@ public class Bishop extends ChessPiece
         System.err.println("Move failed. Not a valid move.");
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 	}
+	public Bishop(Bishop toCopy) {
+		this.position = new ChessPosition(toCopy.position);
+		this.alive = toCopy.alive;
+		this.color = toCopy.color;
+		this.type = toCopy.type;
+	}
+
     public Bishop(){
         super();
         type = Type.BISHOP;

@@ -8,9 +8,9 @@ public class ChessPiece
     public enum Type{
 		UNASSIGNED,PAWN,ROOK,KNIGHT,BISHOP,QUEEN,KING
     }
-    protected Type type;
     public enum Color{
 		WHITE,BLACK;
+
 		public static Color not(Color a){
 			switch(a){
 				case WHITE: 
@@ -25,6 +25,7 @@ public class ChessPiece
     protected Color color;
     protected ChessPosition position;
     protected boolean alive;
+	protected Type type;
     
 	public boolean getAlive(){
 		return alive;
@@ -34,37 +35,56 @@ public class ChessPiece
 		if(!alive) MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 		alive = false;
 	}
-	    
+
+	@Override
     public String toString(){
-        return "U";
+        return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " alive:" + this.alive + ")";
     }
-    
+
+	public String print(){
+		return "U";
+	}
+
 	public Color getColor(){
         return color;
     }
 	
 	public boolean equals(ChessPiece b){
 		if(this.getType() != b.getType()) return false;
-		if(this.getColor()!=b.getColor()) return false;
+		if(this.getColor() != b.getColor()) return false;
 		if(!this.getPosition().equals(b.getPosition())) return false;
 		if(this.getAlive() != b.getAlive()) return false;
 		return true;
 	}
 
+	public boolean equalsByType(ChessPiece a){
+		switch(this.getType()){
+			case PAWN:{
+				Pawn b = new Pawn(a);
+				return b.equals(this);
+			}
+			case KING:{
+				King b = new King(a);
+				return b.equals(this);
+			}
+			default:
+				return a.equals(this);
+		}
+	}
+
     protected Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
-      	System.err.println("This is not a valid chess piece.");
-        MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+      	MySystem.error("This is not a valid chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
        	return new Vector<>(0);
     }
     
     public void move(ChessPosition position, ChessPiece[] chessPieces){
-        System.err.println("This is not a valid chess piece.");
-        MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+       MySystem.error("This is not a valid chess piece.", MySystem.getFileName(),MySystem.getLineNumber());
     }
 
-    public boolean checkMove(ChessPosition position,ChessPiece[] chessPieces){
-		for(ChessPosition chessPosition: getNewPositions(chessPieces)){
-			if(position.equals(chessPosition)) return true;
+    public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPiece[] CHESS_PIECES){
+		MySystem.myAssert((ChessBoard.checkExists(this,CHESS_PIECES)),MySystem.getFileName(),MySystem.getLineNumber());
+		for(ChessPosition possiblePosition: this.getNewPositions(CHESS_PIECES)){
+			if(CHECK_MOVE.equals(possiblePosition)) return true;
 		}
 		return false;
 	}
@@ -83,6 +103,36 @@ public class ChessPiece
         alive = true;
 		this.type = Type.UNASSIGNED;
     }
+
+    public static ChessPiece[] makePieces(final ChessPiece[] CHESS_PIECES){
+		ChessPiece[] newPieces = new ChessPiece[CHESS_PIECES.length];
+		for(int i = 0; i < CHESS_PIECES.length; i++){
+			newPieces[i] = ChessPiece.makePiece(CHESS_PIECES[i]);
+		}
+		return newPieces;
+	}
+
+    public static ChessPiece makePiece(ChessPiece chessPiece){
+		switch(chessPiece.getType()){
+			case KING:
+				return new King(chessPiece);
+			case KNIGHT:
+				return new Knight(chessPiece);
+			case QUEEN:
+				return new Queen(chessPiece);
+			case ROOK:
+				return new Rook(chessPiece);
+			case PAWN:
+				return new Pawn(chessPiece);
+			case BISHOP:
+				return new Bishop(chessPiece);
+			case UNASSIGNED:
+				return new ChessPiece(chessPiece);
+			default: MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		}
+		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		return new ChessPiece();
+	}
 
 	public static ChessPiece makePiece(ChessPosition position, Color color, ChessPiece[] chessPieces){
 		for(ChessPiece a: chessPieces){
@@ -108,6 +158,13 @@ public class ChessPiece
 		}
 		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 		return new ChessPiece();
+	}
+
+	public ChessPiece(ChessPiece toCopy){
+		this.position = new ChessPosition(toCopy.getPosition());
+		this.color = toCopy.color;
+		this.type = toCopy.type;
+		this.alive = toCopy.alive;
 	}
 
     public ChessPiece(ChessPosition position,Color color){

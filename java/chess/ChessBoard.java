@@ -37,12 +37,13 @@ public class ChessBoard
 			public static final ChessPosition.Column ROOK = new ChessPosition.Column(ChessPosition.Column.A);
 			public static final ChessPosition.Column KNIGHT = new ChessPosition.Column(ChessPosition.Column.B);
 			public static final ChessPosition.Column BISHOP= new ChessPosition.Column(ChessPosition.Column.C);
-			public static final ChessPosition.Column KING = new ChessPosition.Column(ChessPosition.Column.D);
-			public static final ChessPosition.Column QUEEN = new ChessPosition.Column(ChessPosition.Column.E);
+			public static final ChessPosition.Column QUEEN = new ChessPosition.Column(ChessPosition.Column.D);
+			public static final ChessPosition.Column KING = new ChessPosition.Column(ChessPosition.Column.E);
 		}
 	}
     private ChessPiece[] pieces;
 	private ChessPiece.Color playerTurn;
+	private boolean gameOver;
 
 	public ChessPiece.Color getPlayerTurn(){
 		return playerTurn;
@@ -55,6 +56,24 @@ public class ChessBoard
 		}
         return false;
     }
+
+	public static void print(final ChessPiece[] PIECES){
+		String[][] board = new String[ChessPosition.Row.DIMENSION][ChessPosition.Column.DIMENSION];
+		for(int i = 0; i < board.length; i++){
+			for(int j = 0; j < board[i].length; j++){
+				board[i][j] = " ";
+			}
+		}
+		for(ChessPiece a: PIECES){
+			if(a.getAlive()) board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()-1][a.getPosition().getColumn().get()] = a.print();
+		}
+		for(String[] a: board){
+			for(String b:a){
+				System.out.print(b);
+			}
+			System.out.print("\n");
+		}
+	}
 	
 	public void print(){
 		String[][] board = new String[ChessPosition.Row.DIMENSION][ChessPosition.Column.DIMENSION];
@@ -64,7 +83,7 @@ public class ChessBoard
 			}
 		}
 		for(ChessPiece a: pieces){
-			if(a.getAlive()) board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()-1][a.getPosition().getColumn().get()] = a.toString();
+			if(a.getAlive()) board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()-1][a.getPosition().getColumn().get()] = a.print();
 		}
 		for(String[] a: board){
 			for(String b:a){
@@ -78,23 +97,24 @@ public class ChessBoard
 		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 	}
     
-	private static boolean checkExists(ChessPiece checkPiece,ChessPiece[] chessPieces){
-		for(ChessPiece a: chessPieces){
-			if(!checkPiece.getAlive()) continue;
-			if(checkPiece.equals(a)) return true;
+	public static boolean checkExists(final ChessPiece TEST_PIECE,final ChessPiece[] CHESS_PIECES){
+		if(!TEST_PIECE.getAlive()) return false;
+		for(ChessPiece a: CHESS_PIECES){
+			if(!a.getAlive()) continue;
+			if(TEST_PIECE.equalsByType(a)) return true;
 		}
 		return false;
 	}
 
-	private int find(ChessPiece.Type type, ChessPiece.Color color){
-		for(int i = 0; i < pieces.length; i++){
-			if(type.equals(pieces[i].getType()) && color == pieces[i].getColor()) return i;
+	public static int find(ChessPiece.Type type, ChessPiece.Color color, final ChessPiece[] CHESS_PIECES){
+		for(int i = 0; i < CHESS_PIECES.length; i++){
+			if(type == CHESS_PIECES[i].getType() && color == CHESS_PIECES[i].getColor()) return i;
 		}
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 		return -1;
 	}
 
-	private static int find(ChessPosition chessPosition, ChessPiece[] chessPieces){
+	public static int find(ChessPosition chessPosition, ChessPiece[] chessPieces){
 		for(int i = 0; i < chessPieces.length; i++){
 			if(chessPosition.equals(chessPieces[i].getPosition())) return i;
 		}
@@ -107,7 +127,7 @@ public class ChessBoard
 	}
 
 	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
-		Vector<ChessPiece> moveablePieces = new Vector<ChessPiece>();
+		Vector<ChessPiece> moveablePieces = new Vector<>();
 		for(ChessPiece chessPiece: pieces){
 			if(chessPiece.getNewPositions(pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
 		}
@@ -115,64 +135,69 @@ public class ChessBoard
 	}
 
 	public Vector<ChessPosition> getMoveablePositionsByPlayer(){
-		Vector<ChessPosition> moveablePositions = new Vector<ChessPosition>();
+		Vector<ChessPosition> moveablePositions = new Vector<>();
 		for(ChessPiece chessPiece: pieces){
 			if(chessPiece.getNewPositions(pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePositions.addElement(chessPiece.getPosition());
 		}
 		return moveablePositions;
 	}
 
-	private static int find(ChessPiece chessPiece, ChessPiece[] chessPieces){
-		for(int i =0; i < chessPieces.length; i++){
-			if(chessPiece.equals(chessPieces[i])) return i;
+	public static int find(final ChessPiece FIND_ME, final ChessPiece[] CHESS_PIECES){
+		for(int i =0; i < CHESS_PIECES.length; i++){
+			if(FIND_ME.equalsByType(CHESS_PIECES[i]))return i;
 		}
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 		return -1;
 	}
 
-	public boolean checkIfGameOver(){
-		King whiteKing = new King(pieces[find(ChessPiece.Type.KING, ChessPiece.Color.WHITE)]);
-		King blackKing = new King(pieces[find(ChessPiece.Type.KING, ChessPiece.Color.BLACK)]);
+	private void checkIfGameOver(){
+		King whiteKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.WHITE,pieces)]);
+		King blackKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.BLACK,pieces)]);
 
 		whiteKing.update(pieces);
 		blackKing.update(pieces);
 
-		if(whiteKing.getCheckMate()) System.out.println("Game over. " + ChessPiece.Color.not(whiteKing.getColor()).toString() + " wins.");
-		else if(blackKing.getCheckMate()) System.out.println("Game over. " + ChessPiece.Color.not(blackKing.getColor()).toString() + " wins.");
-		else return false;
-		return true;
+		gameOver = (blackKing.getCheckMate() || whiteKing.getCheckMate());
 	}
 
-	public static ChessPiece[] testMove(ChessPiece chessPiece,ChessPosition moveThere, ChessPiece[] chessPieces){
-		MySystem.myAssert(checkExists(chessPiece,chessPieces),MySystem.getFileName(),MySystem.getLineNumber());
-		int position = ChessBoard.find(chessPiece,chessPieces);
-		if(chessPiece.checkMove(moveThere,chessPieces)){
-			if(isOccupied(moveThere, ChessPiece.Color.not(chessPieces[position].getColor()),chessPieces)) chessPieces = ChessBoard.capture(moveThere,chessPieces);
-			chessPieces[position].move(moveThere,chessPieces);
-		} else {
-			MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+	public static ChessPiece[] testMove(final ChessPiece CHESS_PIECE,final ChessPosition MOVE_TO_POS, final ChessPiece[] CHESS_PIECES){
+		ChessPiece[] postMovePieces = ChessPiece.makePieces(CHESS_PIECES);
+		{
+			if(CHESS_PIECE.checkMove(MOVE_TO_POS,CHESS_PIECES)){
+				int position = ChessBoard.find(CHESS_PIECE,postMovePieces);
+				if(ChessBoard.isOccupied(MOVE_TO_POS, ChessPiece.Color.not(CHESS_PIECE.getColor()),postMovePieces)) postMovePieces = ChessBoard.capture(MOVE_TO_POS,postMovePieces);
+				postMovePieces[position].move(MOVE_TO_POS,postMovePieces);
+				return postMovePieces;
+			} else {
+				MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());
+			}
 		}
-		return chessPieces;
+		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		return new ChessPiece[0];
 	}
 
     public void move(ChessPiece chessPiece,ChessPosition moveThere){
-		MySystem.myAssert(chessPiece.getColor() == playerTurn && checkExists(chessPiece,this.pieces),MySystem.getFileName(),MySystem.getLineNumber());
-		int position = ChessBoard.find(chessPiece,this.pieces);
+		MySystem.myAssert(!this.gameOver && chessPiece.getColor() == playerTurn && checkExists(chessPiece,this.pieces),MySystem.getFileName(),MySystem.getLineNumber());
 		if(chessPiece.checkMove(moveThere,pieces)){
-			if(isOccupied(moveThere, ChessPiece.Color.not(pieces[position].getColor()),pieces)) capture(moveThere);
+			int position = ChessBoard.find(chessPiece,this.pieces);
 			pieces[position].move(moveThere,pieces);
+			if(isOccupied(pieces[position].getPosition(), ChessPiece.Color.not(chessPiece.getColor()),pieces)) capture(moveThere);
 		} else {
-			MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());//TODO: if user inputs invalid move
+			MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());//user inputs invalid move
 		}
-		if(checkIfGameOver()) MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());//TODO game over logic
+		checkIfGameOver();
 		playerTurn = ChessPiece.Color.not(playerTurn);
     }
+
+    public boolean getGameOver(){
+		return this.gameOver;
+	}
     
     private void capture(ChessPosition chessPosition){
 		pieces[ChessBoard.find(chessPosition,this.pieces)].capture();
     }
 
-	private static ChessPiece[] capture(ChessPosition chessPosition, ChessPiece[] chessPieces){
+	public static ChessPiece[] capture(ChessPosition chessPosition, ChessPiece[] chessPieces){
 		chessPieces[ChessBoard.find(chessPosition,chessPieces)].capture();
 		return chessPieces;
 	}
@@ -230,15 +255,17 @@ public class ChessBoard
 				chessPieces[findNextUnassigned(chessPieces)] = new King(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK);
 			}
 		}
-        return chessPieces;
+        return ChessPiece.makePieces(chessPieces);
     }
     
     public ChessBoard(){
 		pieces = fillBoard();
 		playerTurn = ChessPiece.Color.WHITE;
+		this.gameOver = false;
     }
     public ChessBoard(ChessPiece[] pieces, ChessPiece.Color playerTurn){
 		this.pieces = pieces;
 		this.playerTurn = playerTurn;
+		this.gameOver = false;
 	}
 }

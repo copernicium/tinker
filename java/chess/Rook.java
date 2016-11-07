@@ -7,8 +7,8 @@ import java.util.Vector;
  */
 public class Rook extends ChessPiece
 {
-   	@Override
-    public String toString(){
+	@Override
+    public String print(){
         return "R";
     }
 
@@ -45,6 +45,14 @@ public class Rook extends ChessPiece
         System.err.println("Move failed. Not a valid move.");
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 	}
+
+	public Rook(Rook toCopy) {
+		this.position = new ChessPosition(toCopy.position);
+		this.alive = toCopy.alive;
+		this.color = toCopy.color;
+		this.type = toCopy.type;
+	}
+
     public Rook(){
         super();
         type = Type.ROOK;

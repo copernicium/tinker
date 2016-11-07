@@ -11,6 +11,10 @@ public class MySystem{
 		System.err.println(fileName + ":" + lineNumber + ": Asserting via MyAssert");
 		System.exit(1);
 	}
+	public static void error(String message, String fileName,int lineNumber){
+		System.err.println(fileName + ":" + lineNumber + ": " + message);
+		System.exit(1);
+	}
 	public static void nyi(String fileName,int lineNumber){
 		System.err.println("NYI " + fileName + ":" + lineNumber);
 		System.exit(1);

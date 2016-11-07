@@ -1,4 +1,5 @@
 package chess;
+
 /**
  * Represents a position of the chess board
  */
@@ -10,7 +11,7 @@ public class ChessPosition{
         public int get(){
             return value;
         }
-		
+
 		public abstract String toString();
 		
 		public boolean equals(Dimension b){
@@ -38,6 +39,11 @@ public class ChessPosition{
         public static final int F=5;
         public static final int G=6;
         public static final int H=7;
+
+		public Column(Column toCopy){
+			this.value = toCopy.value;
+		}
+
 		@Override 
 		public String toString(){
 			final String[] COLUMNNAMES = {"A","B","C","D","E","F","G","H","DIMENSION"};
@@ -50,7 +56,7 @@ public class ChessPosition{
             super(value);
         }
     }
-    private Column column;
+
     public static class Row extends Dimension{//called ranks
         public static final int _1=0;
         public static final int _2=1;
@@ -60,6 +66,11 @@ public class ChessPosition{
         public static final int _6=5;
         public static final int _7=6;
         public static final int _8=7;
+
+		public Row(Row toCopy){
+			this.value = toCopy.value;
+		}
+
 		public String toString(){
 			final String[] ROWNAMES = {"1","2","3","4","5","6","7","8","DIMENSION"};
 			return ROWNAMES[get()];
@@ -88,7 +99,13 @@ public class ChessPosition{
 			this.column = column;
 		}
 	}
+	private Column column;
     private Row row;
+
+	public ChessPosition(ChessPosition toCopy){
+		this.column = new Column(toCopy.column);
+		this.row = new Row(toCopy.row);
+	}
 
 	public static ChessPosition.Column mirror(ChessPosition.Column column){
 		return new ChessPosition.Column(ChessPosition.Column.H - column.get());

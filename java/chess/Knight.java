@@ -6,8 +6,8 @@ import java.util.Vector;
  */
 public class Knight extends ChessPiece
 {
-   	@Override
-    public String toString(){
+	@Override
+    public String print(){
         return "N";
     }
 	private ChessPosition.Tester[] getCorners(int xDisplacement, int yDisplacement){
@@ -44,6 +44,12 @@ public class Knight extends ChessPiece
         }
         System.err.println("Move failed. Not a valid move.");
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+	}
+	public Knight(Knight toCopy) {
+		this.position = new ChessPosition(toCopy.position);
+		this.alive = toCopy.alive;
+		this.color = toCopy.color;
+		this.type = toCopy.type;
 	}
     public Knight(){
         super();
