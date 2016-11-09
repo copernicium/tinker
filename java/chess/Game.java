@@ -7,6 +7,9 @@ public class Game{
 	private static ChessPosition getInput(){
 		Scanner scanner = new Scanner(System.in);
 		String input = scanner.next();
+		{
+
+		}
 		return  ChessPosition.toChessPosition(input);
 	}
 	private static void testInput(){
@@ -114,7 +117,6 @@ public class Game{
 
 	private static void play(){//TODO: take in user inputs and stuff
 		ChessBoard chessBoard = new ChessBoard();
-		final int ALLOWED_TURNS = 2;//Limit length of game for testing
 		while(!chessBoard.getGameOver()){
 			chessBoard.print();
 			System.out.println("It is " + chessBoard.getPlayerTurn() + "'s turn.");

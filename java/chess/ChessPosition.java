@@ -1,5 +1,7 @@
 package chess;
 
+import java.net.CacheRequest;
+
 /**
  * Represents a position of the chess board
  */
@@ -115,65 +117,71 @@ public class ChessPosition{
 		return new ChessPosition.Row(ChessPosition.Row._8 - row.get());
 	}
 
-	public static ChessPosition toChessPosition(String input){
-		MySystem.myAssert(input.length() == 2, MySystem.getFileName(),MySystem.getLineNumber());//make sure its only two characters
-		Column column = new Column();
-		switch(Character.toUpperCase(input.charAt(0))){
-			case 'A':
-				column = new Column(Column.A);
-				break;
-			case 'B':
-				column = new Column(Column.B);
-				break;
-			case 'C':
-				column = new Column(Column.C);
-				break;
-			case 'D':
-				column = new Column(Column.D);
-				break;
-			case 'E':
-				column = new Column(Column.E);
-				break;
-			case 'F':
-				column = new Column(Column.F);
-				break;
-			case 'G':
-				column = new Column(Column.G);
-				break;
-			case 'H':
-				column = new Column(Column.H);
-				break;
-			default: MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+	public static boolean testConversion(final String INPUT){
+		if(INPUT.length() != 2) return false;
+		final int COLUMN_LOC = 0, ROW_LOC = 1;
+		char testColumn = Character.toUpperCase(INPUT.charAt(COLUMN_LOC));
+		final char[] VALID_COLUMNS = {'A','B','C','D','E','F','G','H'};
+		boolean a = (char test, char[] VALIDS) -> {
+			if(test == VALIDS[0]) return false;
+			return true;
 		}
-		Row row = new Row();
-		switch(input.charAt(1)){
+		//if(!contains(testColumn,VALID_COLUMNS) return false;
+		final char[] VALID_ROWS = {'1','2','3','4','5','6','7','8'};
+		return false;
+	}
+
+	private static Column toColumn(final char INPUT){
+		switch(Character.toUpperCase(INPUT)){
+			case 'A':
+				return new Column(Column.A);
+			case 'B':
+				return new Column(Column.B);
+			case 'C':
+				return new Column(Column.C);
+			case 'D':
+				return new Column(Column.D);
+			case 'E':
+				return new Column(Column.E);
+			case 'F':
+				return new Column(Column.F);
+			case 'G':
+				return new Column(Column.G);
+			case 'H':
+				return new Column(Column.H);
+			default:
+				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		}
+		return new Column();
+	}
+
+	private static Row toRow(final char INPUT){
+		switch(Character.toUpperCase(INPUT)){
 			case '1':
-				row = new Row(Row._1);
-				break;
+				return new Row(Row._1);
 			case '2':
-				row = new Row(Row._2);
-				break;
+				return new Row(Row._2);
 			case '3':
-				row = new Row(Row._3);
-				break;
+				return new Row(Row._3);
 			case '4':
-				row = new Row(Row._4);
-				break;
+				return new Row(Row._4);
 			case '5':
-				row = new Row(Row._5);
-				break;
+				return new Row(Row._5);
 			case '6':
-				row = new Row(Row._6);
-				break;
+				return  new Row(Row._6);
 			case '7':
-				row = new Row(Row._7);
-				break;
+				return new Row(Row._7);
 			case '8':
-				row = new Row(Row._8);
-				break;
+				return new Row(Row._8);
 			default: MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 		}
-		return new ChessPosition(row,column);
+		return new Row();
+	}
+
+	public static ChessPosition toChessPosition(String input){
+		MySystem.myAssert(input.length() == 2, MySystem.getFileName(),MySystem.getLineNumber());//make sure its only two characters
+		final int COLUMN_LOC = 0, ROW_LOC = 1;
+		return new ChessPosition(toRow(input.charAt(ROW_LOC)),toColumn(input.charAt(COLUMN_LOC)));
 	}
 
     public boolean equals(ChessPosition b){
