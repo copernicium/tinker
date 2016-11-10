@@ -4,30 +4,50 @@ import java.util.Scanner;
  * Runs a chess game
  */
 public class Game{
+	/**
+	 * Prompts the user to enter in a chess position
+	 * @return the chess position entered by the user
+	 */
 	private static ChessPosition getInput(){
 		Scanner scanner = new Scanner(System.in);
 		String input = scanner.next();
-		if(input.contains("quit") || input.contains("exit")){
-			System.out.println("Quitting from user input.");
-			System.exit(0);
-		}
 		while(!ChessPosition.testConversion(input)){
-			System.out.println("Please input a valid position: ");
+			if(input.contains("quit") || input.contains("exit")){
+				System.out.println("Quitting from user input.");
+				System.exit(0);
+			}
+			System.out.print("Please input a valid position or \"exit\" to exit: ");
 			input = scanner.next();
 		}
 		return  ChessPosition.toChessPosition(input);
 	}
+
+	/**
+	 * Tests that user input and string to ChessPosition conversion is working
+	 */
 	private static void testInput(){
 		System.out.print("Test input: ");
 		ChessPosition chessPosition = getInput();
 		System.out.println("Scanned in: " + chessPosition);
 	}
+
+	/**
+	 * Updates and prints a chess board given some test values
+	 * @param chessBoard the board to update
+	 * @param test the piece to move
+	 * @param testMove the position to move the piece to
+	 * @return the updated chess board
+	 */
 	private static ChessBoard testMove(ChessBoard chessBoard,ChessPiece test, ChessPosition testMove){
 		chessBoard.move(test, testMove);
 		System.out.println("---------------------");
 		chessBoard.print();
 		return chessBoard;
 	}
+
+	/**
+	 * Tests a series of pre-programmed moves that should work
+	 */
 	private static void testMovement(){
 		ChessBoard chessBoard = new ChessBoard();
 		chessBoard.print();
@@ -78,6 +98,10 @@ public class Game{
 		}
 	}
 
+	/**
+	 * Tests to see if the game has ended due to checkmate and prints the appropriate information if it has
+	 * @param CHESS_BOARD the board to check for checkmate
+	 */
 	private static void checkChecks(final ChessBoard CHESS_BOARD){
 		King whiteKing = new King(CHESS_BOARD.getPieces()[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.WHITE,CHESS_BOARD.getPieces())]);
 		King blackKing = new King(CHESS_BOARD.getPieces()[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.BLACK,CHESS_BOARD.getPieces())]);
@@ -90,6 +114,9 @@ public class Game{
 		//System.out.println("White( check:" + whiteKing.getCheck() + " checkmate:" + whiteKing.getCheckMate() + ") Black( check:" + blackKing.getCheck() + " checkmate:" + blackKing.getCheckMate() + ")");
 	}
 
+	/**
+	 * Tests checkmate logic given a series of moves that result in checkmate
+	 */
 	private static void testCheckmate(){
 		ChessBoard chessBoard = new ChessBoard();
 		chessBoard.print();
@@ -117,9 +144,12 @@ public class Game{
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.H);
 			testMove(chessBoard,test,testMove);
 		}
-		Game.checkChecks(chessBoard);
+		Game.checkChecks(chessBoard);//white loses
 	}
 
+	/**
+	 * Prompts users to input the necessary information and manages their chess game
+	 */
 	private static void play(){//TODO: take in user inputs and stuff
 		ChessBoard chessBoard = new ChessBoard();
 		while(!chessBoard.getGameOver()){
@@ -149,6 +179,9 @@ public class Game{
 		System.out.println("Game over");
 	}
 
+	/**
+	 * Tests copy-by-value methods
+	 */
 	public static void testCopy(){
 		{
 			Pawn a = new Pawn(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D), ChessPiece.Color.WHITE);
@@ -168,6 +201,9 @@ public class Game{
 		}
 	}
 
+	/**
+	 * Tests a single move that is valid
+	 */
 	public static void testSingleMove(){
 		ChessBoard chessBoard = new ChessBoard();
 		{
@@ -177,6 +213,10 @@ public class Game{
 		}
 	}
 
+	/**
+	 * The primary method that tests the chess system and instantiates a new game
+	 * @param args user arguments (no effect)
+	 */
 	public static void main(String[] args){
 		//testMovement();
 		//testInput();

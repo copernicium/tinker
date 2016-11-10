@@ -1,3 +1,3 @@
 1. Create a game io
-2. Add game over logic and check/checkmate stuff
+2. Finish check/checkmate logic (only allow moves that move you out of it)
 3. AI?
