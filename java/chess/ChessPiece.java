@@ -5,10 +5,17 @@ import java.util.Vector;
  */
 public class ChessPiece
 {
+	/**
+	 * Represents the types of chess pieces
+	 */
     public enum Type{
 		UNASSIGNED,PAWN,ROOK,KNIGHT,BISHOP,QUEEN,KING
     }
-    public enum Color{
+
+	/**
+	 * Represents the color of a chess piece
+	 */
+	public enum Color{
 		WHITE,BLACK;
 
 		public static Color not(Color a){
@@ -26,29 +33,53 @@ public class ChessPiece
     protected ChessPosition position;
     protected boolean alive;
 	protected Type type;
-    
+
+	/**
+	 * Fetches the status of the current piece
+	 * @return true if the piece has not been captured
+	 */
 	public boolean getAlive(){
 		return alive;
 	}
 
+	/**
+	 * Kills the piece
+	 */
 	public void capture(){
 		if(!alive) MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 		alive = false;
 	}
 
+	/**
+	 * Assembles the information stored by the piece into a string
+	 * @return the string of information
+	 */
 	@Override
     public String toString(){
         return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " alive:" + this.alive + ")";
     }
 
+	/**
+	 * The symbol to print given the type
+	 * @return the letter representing this chess piece
+	 */
 	public String print(){
 		return "U";
-	}
+	}//TODO; move all of them here (switch type)
 
+	/**
+	 * Fetches the color of the piece
+	 * @return the color of the piece
+	 */
 	public Color getColor(){
         return color;
     }
-	
+
+	/**
+	 * Checks for equality by value with a given piece
+	 * @param b the piece to be compared to
+	 * @return true if the pieces are equal by value
+	 */
 	public boolean equals(ChessPiece b){
 		if(this.getType() != b.getType()) return false;
 		if(this.getColor() != b.getColor()) return false;
@@ -57,6 +88,11 @@ public class ChessPiece
 		return true;
 	}
 
+	/**
+	 * Uses more sophisticated logic to test for equality given the type, as pieces have different instance variables
+	 * @param a the piece to compare to
+	 * @return true if the two pieces are equal
+	 */
 	public boolean equalsByType(ChessPiece a){
 		switch(this.getType()){
 			case PAWN:{
@@ -72,15 +108,31 @@ public class ChessPiece
 		}
 	}
 
+	/**
+	 * Calculates all the positions this piece can move to
+	 * @param chessPieces an array of pieces representing a chess board
+	 * @return a vector of chess positions that this piece can be moved to
+	 */
     protected Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
       	MySystem.error("This is not a valid chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
        	return new Vector<>(0);
     }
-    
-    public void move(ChessPosition position, ChessPiece[] chessPieces){
+
+	/**
+	 * Moves this chess pieces
+	 * @param position the position to move this piece to
+	 * @param chessPieces an array of pieces representing a chess board
+	 */
+	public void move(ChessPosition position, ChessPiece[] chessPieces){
        MySystem.error("This is not a valid chess piece.", MySystem.getFileName(),MySystem.getLineNumber());
     }
 
+	/**
+	 * Checks to see if this piece can move to a given position
+	 * @param CHECK_MOVE the position to check to see if this piece can move to
+	 * @param CHESS_PIECES an array of pieces representing a chess board
+	 * @return true if this piece can move to that position
+	 */
     public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPiece[] CHESS_PIECES){
 		MySystem.myAssert((ChessBoard.checkExists(this,CHESS_PIECES)),MySystem.getFileName(),MySystem.getLineNumber());
 		for(ChessPosition possiblePosition: this.getNewPositions(CHESS_PIECES)){
@@ -88,20 +140,21 @@ public class ChessPiece
 		}
 		return false;
 	}
-    
-    public Type getType(){
+
+	/**
+	 * Fetches the type of this piece
+	 * @return the type of this piece
+	 */
+	public Type getType(){
         return type;
     }
-    
-    public ChessPosition getPosition(){
+
+	/**
+	 * Fetches the position of this chess piece
+	 * @return the position of this chess piece
+	 */
+	public ChessPosition getPosition(){
         return position;
-    }
-    
-    public ChessPiece(){
-        position = new ChessPosition();
-        color = Color.WHITE;
-        alive = true;
-		this.type = Type.UNASSIGNED;
     }
 
     public static ChessPiece[] makePieces(final ChessPiece[] CHESS_PIECES){
@@ -160,11 +213,12 @@ public class ChessPiece
 		return new ChessPiece();
 	}
 
+	public ChessPiece(){
+		this(new ChessPosition(), Color.WHITE);
+	}
+
 	public ChessPiece(ChessPiece toCopy){
-		this.position = new ChessPosition(toCopy.getPosition());
-		this.color = toCopy.color;
-		this.type = toCopy.type;
-		this.alive = toCopy.alive;
+		this(new ChessPosition(toCopy.getPosition()),Color.WHITE);
 	}
 
     public ChessPiece(ChessPosition position,Color color){
