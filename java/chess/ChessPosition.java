@@ -122,13 +122,17 @@ public class ChessPosition{
 		final int COLUMN_LOC = 0, ROW_LOC = 1;
 		char testColumn = Character.toUpperCase(INPUT.charAt(COLUMN_LOC));
 		final char[] VALID_COLUMNS = {'A','B','C','D','E','F','G','H'};
-		boolean a = (char test, char[] VALIDS) -> {
-			if(test == VALIDS[0]) return false;
-			return true;
+		for(int i = 0; i < VALID_COLUMNS.length; i++){
+			if(testColumn == VALID_COLUMNS[i]) break;
+			if(i == VALID_COLUMNS.length-1) return false;
 		}
-		//if(!contains(testColumn,VALID_COLUMNS) return false;
+		char testRow = Character.toUpperCase(INPUT.charAt(COLUMN_LOC));
 		final char[] VALID_ROWS = {'1','2','3','4','5','6','7','8'};
-		return false;
+		for(int i = 0; i < VALID_ROWS.length; i++){
+			if(testRow == VALID_COLUMNS[i]) break;
+			if(i == VALID_ROWS.length-1) return false;
+		}
+		return true;
 	}
 
 	private static Column toColumn(final char INPUT){

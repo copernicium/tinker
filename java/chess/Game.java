@@ -7,8 +7,13 @@ public class Game{
 	private static ChessPosition getInput(){
 		Scanner scanner = new Scanner(System.in);
 		String input = scanner.next();
-		{
-
+		if(input.contains("quit") || input.contains("exit")){
+			System.out.println("Quitting from user input.");
+			System.exit(0);
+		}
+		while(!ChessPosition.testConversion(input)){
+			System.out.println("Please input a valid position: ");
+			input = scanner.next();
 		}
 		return  ChessPosition.toChessPosition(input);
 	}
