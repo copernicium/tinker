@@ -157,7 +157,12 @@ public class ChessPiece
         return position;
     }
 
-    public static ChessPiece[] makePieces(final ChessPiece[] CHESS_PIECES){
+	/**
+	 * Used to copy an array of pieces by value
+	 * @param CHESS_PIECES the array to copy
+	 * @return the new array
+	 */
+	public static ChessPiece[] makePieces(final ChessPiece[] CHESS_PIECES){
 		ChessPiece[] newPieces = new ChessPiece[CHESS_PIECES.length];
 		for(int i = 0; i < CHESS_PIECES.length; i++){
 			newPieces[i] = ChessPiece.makePiece(CHESS_PIECES[i]);

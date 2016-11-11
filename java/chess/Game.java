@@ -109,8 +109,8 @@ public class Game{
 		whiteKing.update(CHESS_BOARD.getPieces());
 		blackKing.update(CHESS_BOARD.getPieces());
 
-		if(whiteKing.getCheckMate()) System.out.println("Game over. " + ChessPiece.Color.not(whiteKing.getColor()).toString() + " wins.");
-		else if(blackKing.getCheckMate()) System.out.println("Game over. " + ChessPiece.Color.not(blackKing.getColor()).toString() + " wins.");
+		if(whiteKing.getCheckmate()) System.out.println("Game over. " + ChessPiece.Color.not(whiteKing.getColor()).toString() + " wins.");
+		else if(blackKing.getCheckmate()) System.out.println("Game over. " + ChessPiece.Color.not(blackKing.getColor()).toString() + " wins.");
 		//System.out.println("White( check:" + whiteKing.getCheck() + " checkmate:" + whiteKing.getCheckMate() + ") Black( check:" + blackKing.getCheck() + " checkmate:" + blackKing.getCheckMate() + ")");
 	}
 
@@ -221,12 +221,12 @@ public class Game{
 		//tests
 		//testMovement();
 		//testInput();
-		//testCheckmate();
+		testCheckmate();
 		//testSingleMove();
 		//testCopy();
 
 		//the actual game
-		play();
+		//play();
 		MySystem.println("\n\n\nGAME OVER\n\n\n",MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }

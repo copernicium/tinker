@@ -72,7 +72,7 @@ public class ChessBoard
 	 * @param pieces all of the pieces to check
 	 * @return true if a given position is occupied by a piece of a given color
 	 */
-	public static boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color,ChessPiece[] pieces){
+	public static boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color,ChessPiece[] pieces){//TODO: move to ChessPiece.java ?
 		for(ChessPiece a: pieces){
 			if(!a.getAlive() || a.getType() == ChessPiece.Type.UNASSIGNED) continue;
 			if(color == a.getColor() && checkPosition.equals(a.getPosition()))return true;
@@ -227,7 +227,7 @@ public class ChessBoard
 		King whiteKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.WHITE,pieces)]);
 		King blackKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.BLACK,pieces)]);
 
-		gameOver = (blackKing.getCheckMate() || whiteKing.getCheckMate());
+		gameOver = (blackKing.getCheckmate() || whiteKing.getCheckmate());
 	}
 
 	/**
