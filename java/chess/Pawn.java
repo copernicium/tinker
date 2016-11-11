@@ -7,6 +7,13 @@ public class Pawn extends ChessPiece
 {
     private boolean firstMove;//pawns can move differently on their first move
 
+	private static final Type type = Type.PAWN;
+
+	@Override
+	public Type getType(){
+		return Pawn.type;
+	}
+
 	@Override
 	public String toString(){
 		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " alive:" + this.alive + " firstMove:" + this.firstMove + ")";
@@ -86,13 +93,11 @@ public class Pawn extends ChessPiece
 		this.position = new ChessPosition(toCopy.position);
 		this.alive = toCopy.alive;
 		this.color = toCopy.color;
-		this.type = toCopy.type;
 		this.firstMove = toCopy.firstMove;
 	}
 
     public Pawn(){
         super();
-        type = Type.PAWN;
         firstMove = true;
     }
 	public Pawn(ChessPiece chessPiece){
@@ -100,7 +105,6 @@ public class Pawn extends ChessPiece
 	}
     public Pawn(ChessPosition position,Color color){
         super(position,color);
-        this.type = Type.PAWN;
         this.firstMove = true;
     }
 }

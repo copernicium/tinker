@@ -32,7 +32,7 @@ public class ChessPiece
     protected Color color;
     protected ChessPosition position;
     protected boolean alive;
-	protected Type type;
+	private final static Type type = Type.UNASSIGNED;
 
 	/**
 	 * Fetches the status of the current piece
@@ -146,7 +146,7 @@ public class ChessPiece
 	 * @return the type of this piece
 	 */
 	public Type getType(){
-        return type;
+        return ChessPiece.type;
     }
 
 	/**
@@ -277,7 +277,6 @@ public class ChessPiece
     public ChessPiece(ChessPosition position,Color color){
         this.position = position;
         this.color = color;
-		this.type = Type.UNASSIGNED;
         alive = true;
     }
 }

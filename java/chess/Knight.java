@@ -6,6 +6,12 @@ import java.util.Vector;
  */
 public class Knight extends ChessPiece
 {
+	private static final Type type = Type.KNIGHT;
+
+	@Override
+	public Type getType(){
+		return Knight.type;
+	}
 	@Override
     public String print(){
         return "N";
@@ -49,17 +55,14 @@ public class Knight extends ChessPiece
 		this.position = new ChessPosition(toCopy.position);
 		this.alive = toCopy.alive;
 		this.color = toCopy.color;
-		this.type = toCopy.type;
 	}
     public Knight(){
         super();
-        type = Type.KNIGHT;
     }
     public Knight(ChessPiece chessPiece){
 		this(chessPiece.getPosition(),chessPiece.getColor());
 	}
     public Knight(ChessPosition position, Color color){
         super(position,color);
-        this.type = Type.KNIGHT;
     }
 }

@@ -6,6 +6,13 @@ import java.util.Vector;
  */
 public class Bishop extends ChessPiece
 {
+	private static final Type type = Type.BISHOP;
+
+	@Override
+	public Type getType(){
+		return Bishop.type;
+	}
+
 	@Override
     public String print(){
         return "B";
@@ -45,18 +52,15 @@ public class Bishop extends ChessPiece
 		this.position = new ChessPosition(toCopy.position);
 		this.alive = toCopy.alive;
 		this.color = toCopy.color;
-		this.type = toCopy.type;
 	}
 
     public Bishop(){
         super();
-        type = Type.BISHOP;
     }
     public Bishop(ChessPiece chessPiece){
 		this(chessPiece.getPosition(),chessPiece.getColor());
 	}
     public Bishop(ChessPosition position, Color color){
         super(position,color);
-        this.type = Type.BISHOP;
     }
 }

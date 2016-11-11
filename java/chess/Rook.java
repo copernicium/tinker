@@ -7,6 +7,12 @@ import java.util.Vector;
  */
 public class Rook extends ChessPiece
 {
+	private static final Type type = Type.ROOK;
+
+	@Override
+	public Type getType(){
+		return Rook.type;
+	}
 	@Override
     public String print(){
         return "R";
@@ -50,18 +56,15 @@ public class Rook extends ChessPiece
 		this.position = new ChessPosition(toCopy.position);
 		this.alive = toCopy.alive;
 		this.color = toCopy.color;
-		this.type = toCopy.type;
 	}
 
     public Rook(){
         super();
-        type = Type.ROOK;
     }
     public Rook(ChessPiece chessPiece){
 		this(chessPiece.getPosition(),chessPiece.getColor());
 	}
     public Rook(ChessPosition position, Color color){
         super(position,color);
-        this.type = Type.ROOK;
     }
 }

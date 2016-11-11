@@ -10,6 +10,13 @@ public class King extends ChessPiece
 	private boolean check;
 	private boolean checkMate;
 
+	private static final Type type = Type.KING;
+
+	@Override
+	public Type getType(){
+		return King.type;
+	}
+
 	private void updateCheck(final ChessPiece[] CHESS_PIECES){
 		for(ChessPiece enemyPiece: CHESS_PIECES){
 			if(enemyPiece.getColor() == Color.not(this.color)){//if it's an enemy piece
@@ -36,7 +43,6 @@ public class King extends ChessPiece
 				this.position = new ChessPosition(original.position);
 				this.alive = original.alive;
 				this.color = original.color;
-				this.type = original.type;
 				this.check = original.check;
 				this.checkMate = original.checkMate;
 			}
@@ -118,7 +124,6 @@ public class King extends ChessPiece
 	}
     public King(){
         super();
-        type = Type.KING;
 		check = false;
 		checkMate = false;
     }
@@ -126,7 +131,6 @@ public class King extends ChessPiece
 		this.position = new ChessPosition(toCopy.position);
 		this.alive = toCopy.alive;
 		this.color = toCopy.color;
-		this.type = toCopy.type;
 		this.check = toCopy.check;
 		this.checkMate = toCopy.checkMate;
 	}
@@ -136,7 +140,6 @@ public class King extends ChessPiece
 	}
     public King(ChessPosition position, Color color){
         super(position,color);
-        this.type = Type.KING;
 		check = false;
 		checkMate = false;
     }

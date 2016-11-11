@@ -221,7 +221,7 @@ public class Game{
 		//tests
 		//testMovement();
 		//testInput();
-		//testCheckmate();
+		testCheckmate();
 		//testSingleMove();
 		//testCopy();
 
