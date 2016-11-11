@@ -226,6 +226,6 @@ public class Game{
 		//testCopy();
 
 		//the actual game
-		play();
+		//play();
 	}
 }

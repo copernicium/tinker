@@ -12,6 +12,10 @@ public class King extends ChessPiece
 
 	private static final Type type = Type.KING;
 
+	/**
+	 * Fetches the type of this piece
+	 * @return the type of this piece
+	 */
 	@Override
 	public Type getType(){
 		return King.type;
@@ -32,8 +36,17 @@ public class King extends ChessPiece
 	}
 
 	private boolean checkMyMoves(final ChessPiece[] CHESS_PIECES){
+		/*ChessPiece[] temp_pieces;
+		{
+			ChessBoard temp = new ChessBoard(ORIGINAL_PIECES);
+			temp.checkIfGameOver();
+			temp_pieces = temp.getPieces();
+		}
+		final ChessPiece[] CHESS_PIECES = ChessPiece.makePieces(temp_pieces);*/
 		King original = new King(this);
 		for(final ChessPosition POSSIBLE_MOVE: this.getNewPositions(CHESS_PIECES)){
+		//	final ChessPiece[] TEST_PIECES = ChessPiece.makePieces(CHESS_PIECES);
+			//System.out.println("CALLED FROM " + MySystem.getFileName() + ":" + MySystem.getLineNumber());
 			ChessPiece[] postMovePieces = ChessBoard.testMove(this,POSSIBLE_MOVE,CHESS_PIECES);
 			this.move(POSSIBLE_MOVE,CHESS_PIECES);
 			this.updateCheck(postMovePieces);
@@ -63,6 +76,7 @@ public class King extends ChessPiece
 			final ChessPiece DEFENDING_PIECE = ChessPiece.makePiece(CHESS_PIECES[i]);
 			if(DEFENDING_PIECE.getColor() == this.color && !DEFENDING_PIECE.equalsByType(this)){
 				for(final ChessPosition POSSIBLE_MOVE : DEFENDING_PIECE.getNewPositions(CHESS_PIECES)){
+					//System.out.println("CALLED FROM " + MySystem.getFileName() + ":" + MySystem.getLineNumber());
 					ChessPiece[] postMovePieces = ChessBoard.testMove(DEFENDING_PIECE,POSSIBLE_MOVE,CHESS_PIECES);
 					{
 						this.updateCheck(postMovePieces);
@@ -88,6 +102,10 @@ public class King extends ChessPiece
 		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " check:" + this.check + " checkmate:" + this.checkMate + " )";
 	}
 
+	/**
+	 * The symbol to print given the type
+	 * @return the letter representing this chess piece
+	 */
    	@Override
     public String print(){
         return "K";
@@ -105,6 +123,25 @@ public class King extends ChessPiece
 		}
         return possibleMoves;
     }
+
+	/**
+	 * Checks for equality by value with a given piece
+	 * @param b the piece to be compared to
+	 * @return true if the pieces are equal by value
+	 */
+	@Override
+	public boolean equals(final ChessPiece b){
+		if(!(b instanceof King)) return false;
+		King testPiece = (King)b;
+		if(this.getType() != testPiece.getType()) return false;
+		if(this.getColor()!=testPiece.getColor()) return false;
+		if(!this.getPosition().equals(testPiece.getPosition())) return false;
+		if(this.getAlive() != testPiece.getAlive()) return false;
+		if(this.getCheck() != testPiece.getCheck()) return  false;
+		if(this.getCheckMate() != testPiece.getCheckMate()) return  false;
+		return true;
+	}
+
     @Override
     public void move(ChessPosition newPosition, ChessPiece[] chessPieces){
         for(ChessPosition a: getNewPositions(chessPieces)){
@@ -113,7 +150,7 @@ public class King extends ChessPiece
                 return;
             }
         }
-        System.err.println("Move failed. Not a valid move.");
+		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 	}
 	public boolean getCheck(){

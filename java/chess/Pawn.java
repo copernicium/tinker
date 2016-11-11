@@ -9,6 +9,10 @@ public class Pawn extends ChessPiece
 
 	private static final Type type = Type.PAWN;
 
+	/**
+	 * Fetches the type of this piece
+	 * @return the type of this piece
+	 */
 	@Override
 	public Type getType(){
 		return Pawn.type;
@@ -19,6 +23,10 @@ public class Pawn extends ChessPiece
 		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " alive:" + this.alive + " firstMove:" + this.firstMove + ")";
 	}
 
+	/**
+	 * The symbol to print given the type
+	 * @return the letter representing this chess piece
+	 */
 	@Override
     public String print(){
         return "P";
@@ -64,6 +72,12 @@ public class Pawn extends ChessPiece
     public boolean getFirstMove(){
 		return this.firstMove;
 	}
+
+	/**
+	 * Checks for equality by value with a given piece
+	 * @param b the piece to be compared to
+	 * @return true if the pieces are equal by value
+	 */
     @Override
 	public boolean equals(final ChessPiece b){
 		if(!(b instanceof Pawn)) return false;
@@ -85,7 +99,7 @@ public class Pawn extends ChessPiece
                 return;
             }
         }
-		MySystem.error("Move failed. Not a valid move.",MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 	}
 
 	public Pawn(Pawn toCopy) {

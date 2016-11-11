@@ -8,11 +8,19 @@ public class Bishop extends ChessPiece
 {
 	private static final Type type = Type.BISHOP;
 
+	/**
+	 * Fetches the type of this piece
+	 * @return the type of this piece
+	 */
 	@Override
 	public Type getType(){
 		return Bishop.type;
 	}
 
+	/**
+	 * The symbol to print given the type
+	 * @return the letter representing this chess piece
+	 */
 	@Override
     public String print(){
         return "B";
@@ -45,7 +53,7 @@ public class Bishop extends ChessPiece
                 return;
             }
         }
-        System.err.println("Move failed. Not a valid move.");
+		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 	}
 	public Bishop(Bishop toCopy) {

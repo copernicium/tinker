@@ -85,8 +85,6 @@ public class ChessBoard
 	 * @param PIECES the pieces to print
 	 */
 	public static void print(final ChessPiece[] PIECES){
-		//ChessBoard chessBoard = new ChessBoard(PIECES);
-		//chessBoard.print();
 		String[][] board = new String[ChessPosition.Row.DIMENSION][ChessPosition.Column.DIMENSION];
 		for(int i = 0; i < board.length; i++){
 			for(int j = 0; j < board[i].length; j++){
@@ -130,6 +128,7 @@ public class ChessBoard
 			if(!a.getAlive()) continue;
 			if(TEST_PIECE.equalsByType(a)) return true;
 		}
+		System.out.println("TEST_PIECE:" + TEST_PIECE.toString());
 		return false;
 	}
 
@@ -208,14 +207,26 @@ public class ChessBoard
 	}
 
 	/**
-	 * Asks both kings if they are in checkmate. If one is, then it ends the game.
+	 * Takes in an array of pieces, finds the kings, and then updates their check and checkmate statuses
+	 * @param ORIGINAL_PIECES the pieces to update
+	 * @return the updated array of pieces
 	 */
-	private void checkIfGameOver(){
+	private static ChessPiece[] updateKings(ChessPiece[] ORIGINAL_PIECES){
+		ChessPiece[] pieces = ChessPiece.makePieces(ORIGINAL_PIECES);
 		King whiteKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.WHITE,pieces)]);
 		King blackKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.BLACK,pieces)]);
 
 		whiteKing.update(pieces);
 		blackKing.update(pieces);
+		return pieces;
+	}
+	/**
+	 * Asks both kings if they are in checkmate. If one is, then it ends the game.
+	 */
+	public void checkIfGameOver(){//TODO:
+		this.pieces = ChessBoard.updateKings(this.pieces);
+		King whiteKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.WHITE,pieces)]);
+		King blackKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.BLACK,pieces)]);
 
 		gameOver = (blackKing.getCheckMate() || whiteKing.getCheckMate());
 	}
@@ -234,6 +245,7 @@ public class ChessBoard
 				int position = ChessBoard.find(CHESS_PIECE,postMovePieces);
 				if(ChessBoard.isOccupied(MOVE_TO_POS, ChessPiece.Color.not(CHESS_PIECE.getColor()),postMovePieces)) postMovePieces = ChessBoard.capture(MOVE_TO_POS,postMovePieces);
 				postMovePieces[position].move(MOVE_TO_POS,postMovePieces);
+				//postMovePieces = ChessBoard.updateKings(postMovePieces);//TODO
 				return postMovePieces;
 			} else {
 				MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());
@@ -309,8 +321,8 @@ public class ChessBoard
 	 * @return an array of the four duplicated (including the original) pieces
 	 */
 	private static ChessPiece[] makeFour(ChessPiece pos1){
-		final int NUMBEROFCORNERS = 4;
-		ChessPiece[] fourPositions = new ChessPiece[NUMBEROFCORNERS];
+		final int NUMBER_OF_CORNERS = 4;
+		ChessPiece[] fourPositions = new ChessPiece[NUMBER_OF_CORNERS ];
 		fourPositions[0] = pos1;
 		fourPositions[1] = new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),ChessPosition.mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE);
 		fourPositions[2] = new ChessPiece(new ChessPosition(ChessPosition.mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK);
