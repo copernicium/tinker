@@ -74,8 +74,8 @@ public class ChessBoard
 	 */
 	public static boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color,ChessPiece[] pieces){
 		for(ChessPiece a: pieces){
-			if(!a.getAlive()) continue;
-			if(color == a.getColor() && checkPosition.equals(a.getPosition())) return true;
+			if(!a.getAlive() || a.getType() == ChessPiece.Type.UNASSIGNED) continue;
+			if(color == a.getColor() && checkPosition.equals(a.getPosition()))return true;
 		}
         return false;
     }
@@ -249,6 +249,7 @@ public class ChessBoard
 	 * @param moveThere the position to move the piece to
 	 */
     public void move(ChessPiece chessPiece,ChessPosition moveThere){
+		//TODO: if in check, then only allow movement out of it
 		MySystem.myAssert(!this.gameOver && chessPiece.getColor() == playerTurn && checkExists(chessPiece,this.pieces),MySystem.getFileName(),MySystem.getLineNumber());
 		if(chessPiece.checkMove(moveThere,pieces)){
 			int position = ChessBoard.find(chessPiece,this.pieces);
@@ -318,42 +319,54 @@ public class ChessBoard
 	}
 
 	/**
+	 * Checks to make sure that position being a assigned a piece is not already occupied any other piece
+	 * @param pieces the array of pieces to check and assign the piece into
+	 * @param PIECE the piece to be assigned into the array
+	 * @return the array after the piece has been added to it
+	 */
+	private static ChessPiece[] setNextPiece(ChessPiece[] pieces, final ChessPiece PIECE){
+		MySystem.myAssert(!ChessBoard.isOccupied(PIECE.getPosition(),PIECE.getColor(),pieces),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(!ChessBoard.isOccupied(PIECE.getPosition(), ChessPiece.Color.not(PIECE.getColor()),pieces),MySystem.getFileName(),MySystem.getLineNumber());
+		pieces[findNextUnassigned(pieces)] = ChessPiece.makePiece(PIECE.getPosition(), PIECE.getColor(), PIECE.getType());
+		return pieces;
+	}
+
+	/**
 	 * Creates an array of pieces representing all the chess pieces at the beginnning of a game
 	 * @return an array of chess pieces representing the start of a game
 	 */
     private static ChessPiece[] fillBoard(){
-		//TODO: do not allow assignment of pieces to locations occupied by any other piece or something
 		ChessPiece[] chessPieces = new ChessPiece[NumbersOfPieces.Total.TOTAL];
 		for(int i = 0; i < NumbersOfPieces.Total.TOTAL; i++){
 			chessPieces[i] = new ChessPiece();
 		}
 		{
 			for(int i = 0; i < NumbersOfPieces.Half.PAWNS; i++){
-				chessPieces[findNextUnassigned(chessPieces)] = new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE);
-				chessPieces[findNextUnassigned(chessPieces)] = new Pawn(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK);
+				chessPieces = setNextPiece(chessPieces, new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE));
+				chessPieces = setNextPiece(chessPieces, new Pawn(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK));
 			}
 			{
 				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE))){
-					chessPieces[findNextUnassigned(chessPieces)] = new Rook(a);
+					chessPieces = setNextPiece(chessPieces, new Rook(a));
 				}
 			}
 			{
 				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KNIGHT), ChessPiece.Color.WHITE))){
-					chessPieces[findNextUnassigned(chessPieces)] = new Knight(a);
+					chessPieces = setNextPiece(chessPieces, new Knight(a));
 				}
 			}
 			{
 				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.BISHOP), ChessPiece.Color.WHITE))){
-					chessPieces[findNextUnassigned(chessPieces)] = new Bishop(a);
+					chessPieces = setNextPiece(chessPieces,new Bishop(a));
 				}
 			}
 			{
-				chessPieces[findNextUnassigned(chessPieces)] = new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE);
-				chessPieces[findNextUnassigned(chessPieces)] = new Queen(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK);
+				chessPieces = setNextPiece(chessPieces,new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE));
+				chessPieces = setNextPiece(chessPieces,new Queen(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK));
 			}
 			{
-				chessPieces[findNextUnassigned(chessPieces)] = new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE);
-				chessPieces[findNextUnassigned(chessPieces)] = new King(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK);
+				chessPieces = setNextPiece(chessPieces,new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE));
+				chessPieces = setNextPiece(chessPieces,new King(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK));
 			}
 		}
         return ChessPiece.makePieces(chessPieces);

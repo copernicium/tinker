@@ -150,7 +150,7 @@ public class Game{
 	/**
 	 * Prompts users to input the necessary information and manages their chess game
 	 */
-	private static void play(){//TODO: take in user inputs and stuff
+	private static void play(){//TODO: finish
 		ChessBoard chessBoard = new ChessBoard();
 		while(!chessBoard.getGameOver()){
 			chessBoard.print();
@@ -218,13 +218,14 @@ public class Game{
 	 * @param args user arguments (no effect)
 	 */
 	public static void main(String[] args){
+		//tests
 		//testMovement();
 		//testInput();
 		//testCheckmate();
 		//testSingleMove();
 		//testCopy();
+
+		//the actual game
 		play();
-		System.out.println("END OF GAME");//used to move the nyi to the bottom of the print outs
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }
