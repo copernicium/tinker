@@ -165,6 +165,11 @@ public class ChessPiece
 		return newPieces;
 	}
 
+	/**
+	 * Used to copy chess pieces by value
+	 * @param chessPiece the piece to copy
+	 * @return a new instance with the same values
+	 */
     public static ChessPiece makePiece(ChessPiece chessPiece){
 		switch(chessPiece.getType()){
 			case KING:
@@ -187,6 +192,13 @@ public class ChessPiece
 		return new ChessPiece();
 	}
 
+	/**
+	 * Used to copy an chess piece from an array that matches a set of criteria
+	 * @param position the position of the piece to copy
+	 * @param color the color of the piece to copy
+	 * @param chessPieces the array of pieces to search through
+	 * @return a new instance of the chess piece
+	 */
 	public static ChessPiece makePiece(ChessPosition position, Color color, ChessPiece[] chessPieces){
 		for(ChessPiece a: chessPieces){
 			if(a.getPosition().equals(position) && a.getColor().equals(color)){
@@ -213,14 +225,26 @@ public class ChessPiece
 		return new ChessPiece();
 	}
 
+	/**
+	 * Creates a new instance of a chess piece
+	 */
 	public ChessPiece(){
 		this(new ChessPosition(), Color.WHITE);
 	}
 
+	/**
+	 * Used to copy a chess piece by value
+	 * @param toCopy the chess piece to copy
+	 */
 	public ChessPiece(ChessPiece toCopy){
 		this(new ChessPosition(toCopy.getPosition()),Color.WHITE);
 	}
 
+	/**
+	 * Create a new instance of a chess piece given some values
+	 * @param position the position of the piece
+	 * @param color the color of the piece
+	 */
     public ChessPiece(ChessPosition position,Color color){
         this.position = position;
         this.color = color;
