@@ -28,16 +28,16 @@ public class Rook extends ChessPiece
     }
 
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
+    public Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		{
 			int direction = -1, row = 1, column = 0;
 			for(int j = 0; j < 4; j++){
 				for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
 					ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + (i * direction * row), this.position.getColumn().get() + (i * direction * column));
-					if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition), this.color, chessPieces)){
+					if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
 						possibleMoves.addElement(new ChessPosition(testPosition));
-						if(ChessBoard.isOccupied(new ChessPosition(testPosition), Color.not(this.color), chessPieces)) break;//if it will capture a piece, stop it there
+						if(chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color))) break;//if it will capture a piece, stop it there
 					} else break;
 				}
 				direction *= -1;//switch direction each time to cover both directions of rows and columns
@@ -50,7 +50,7 @@ public class Rook extends ChessPiece
         return possibleMoves;
     }
     @Override
-    public void move(ChessPosition newPosition, ChessPiece[] chessPieces){
+    public void move(ChessPosition newPosition, ChessPieces chessPieces){
         for(ChessPosition a: getNewPositions(chessPieces)){
             if(newPosition.equals(a)){
                 this.position = newPosition;

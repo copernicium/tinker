@@ -1,5 +1,6 @@
 package chess;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Vector;
 
 /**
@@ -21,8 +22,8 @@ public class King extends ChessPiece
 		return King.type;
 	}
 
-	private void updateCheck(final ChessPiece[] CHESS_PIECES){
-		for(ChessPiece enemyPiece: CHESS_PIECES){
+	private void updateCheck(final ChessPieces CHESS_PIECES){
+		for(ChessPiece enemyPiece: CHESS_PIECES.toArray()){
 			if(enemyPiece.getColor() == Color.not(this.color)){//if it's an enemy piece
 				for(ChessPosition possiblePosition : enemyPiece.getNewPositions(CHESS_PIECES)){
 					if(possiblePosition.equals(this.position)){//if it can take this piece (the king)
@@ -35,12 +36,12 @@ public class King extends ChessPiece
 		check = false;
 	}
 
-	private boolean checkMyMoves(final ChessPiece[] CHESS_PIECES){
+	private boolean checkMyMoves(final ChessPieces CHESS_PIECES){
 		MySystem.myAssert(this.getCheck(),MySystem.getFileName(),MySystem.getLineNumber());
 		final King original = new King(this);
 		for(final ChessPosition POSSIBLE_MOVE: this.getNewPositions(CHESS_PIECES)){
-			final ChessPiece[] TEST_PIECES = ChessPiece.makePieces(CHESS_PIECES);
-			ChessPiece[] postMovePieces = ChessBoard.testMove(this,POSSIBLE_MOVE,TEST_PIECES);
+			final ChessPieces TEST_PIECES = ChessPieces.makePieces(CHESS_PIECES);
+			ChessPieces postMovePieces = ChessBoard.testMove(this,POSSIBLE_MOVE,TEST_PIECES);
 			this.move(POSSIBLE_MOVE,TEST_PIECES);
 			this.updateCheck(postMovePieces);
 			boolean leftCheck = !this.check;//did the king move out of check
@@ -58,21 +59,21 @@ public class King extends ChessPiece
 		return true;
 	}
 
-	private void updateCheckmate(final ChessPiece[] CHESS_PIECES){
+	private void updateCheckmate(final ChessPieces CHESS_PIECES){
 		this.updateCheck(CHESS_PIECES);//TODO: should this be here?
 		if(!this.check){
 			this.checkmate = false;
 			return;//if it's not in check, then it doesn't need to check if it's in checkmate
 		}
-		for(int i = 0; i < CHESS_PIECES.length; i++){
-			final ChessPiece DEFENDING_PIECE = ChessPiece.makePiece(CHESS_PIECES[i]);
+		for(final ChessPiece DEFENDING_PIECE : ChessPieces.makePieces(CHESS_PIECES).toArray()){
 			if(DEFENDING_PIECE.getColor() == this.color && !DEFENDING_PIECE.equalsByType(this)){
 				for(final ChessPosition POSSIBLE_MOVE : DEFENDING_PIECE.getNewPositions(CHESS_PIECES)){
-					ChessPiece[] postMovePieces = ChessBoard.testMove(DEFENDING_PIECE,POSSIBLE_MOVE,CHESS_PIECES);
+					ChessPieces postMovePieces = ChessBoard.testMove(DEFENDING_PIECE,POSSIBLE_MOVE,CHESS_PIECES);
 					{
 						this.updateCheck(postMovePieces);
 
 						if(!this.check){//if a move moves it out of check, then it isn't in checkmate
+							MySystem.println("Moving out of check with" + DEFENDING_PIECE.toString() + " moving to " + POSSIBLE_MOVE.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 							this.checkmate = false;
 							return;
 						}
@@ -83,11 +84,11 @@ public class King extends ChessPiece
 		this.checkmate = this.checkMyMoves(CHESS_PIECES);
 	}
 
-	public void update(final ChessPiece[] ORIGINAL_PIECES){
-		ChessPiece[] chessPieces = ChessPiece.makePieces(ORIGINAL_PIECES);
-		int index = ChessBoard.find(this,chessPieces);
+	public void update(final ChessPieces ORIGINAL_PIECES){
+		ChessPieces chessPieces = new ChessPieces(ORIGINAL_PIECES);
+		int index = chessPieces.getIndexOf(this);
 		updateCheck(chessPieces);
-		chessPieces[index] = this;
+		chessPieces.set(index, this);
 		updateCheckmate(chessPieces);
 	}
 
@@ -105,12 +106,12 @@ public class King extends ChessPiece
         return "K";
     }
 	@Override
-    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
+    public Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		for(int y = -1; y <= 1; y++){
 			for(int x = -1; x <= 1; x++){
 				ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + x, this.position.getColumn().get() + y);
-				if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition), this.color, chessPieces)){
+				if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
 					possibleMoves.addElement(new ChessPosition(testPosition));
 				}
 			}
@@ -137,7 +138,7 @@ public class King extends ChessPiece
 	}
 
     @Override
-    public void move(ChessPosition newPosition, ChessPiece[] chessPieces){
+    public void move(ChessPosition newPosition, ChessPieces chessPieces){
         for(ChessPosition a: getNewPositions(chessPieces)){
             if(newPosition.equals(a)){
                 this.position = newPosition;

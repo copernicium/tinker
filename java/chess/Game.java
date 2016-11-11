@@ -42,6 +42,7 @@ public class Game{
 		chessBoard.move(test, testMove);
 		System.out.println("---------------------");
 		chessBoard.print();
+		Game.handelStatus(chessBoard);
 		return chessBoard;
 	}
 
@@ -99,19 +100,31 @@ public class Game{
 	}
 
 	/**
-	 * Tests to see if the game has ended due to checkmate and prints the appropriate information if it has
-	 * @param CHESS_BOARD the board to check for checkmate
+	 * Checks the game's status to see if it should be continued
+	 * @param board the board to check
+	 * @return true if the game should be continued
 	 */
-	private static void checkChecks(final ChessBoard CHESS_BOARD){
-		King whiteKing = new King(CHESS_BOARD.getPieces()[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.WHITE,CHESS_BOARD.getPieces())]);
-		King blackKing = new King(CHESS_BOARD.getPieces()[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.BLACK,CHESS_BOARD.getPieces())]);
+	private static boolean continueGame(ChessBoard board){
+		return board.getStatus() == ChessBoard.Status.IN_PROGRESS;
+	}
 
-		whiteKing.update(CHESS_BOARD.getPieces());
-		blackKing.update(CHESS_BOARD.getPieces());
-
-		if(whiteKing.getCheckmate()) System.out.println("Game over. " + ChessPiece.Color.not(whiteKing.getColor()).toString() + " wins.");
-		else if(blackKing.getCheckmate()) System.out.println("Game over. " + ChessPiece.Color.not(blackKing.getColor()).toString() + " wins.");
-		//System.out.println("White( check:" + whiteKing.getCheck() + " checkmate:" + whiteKing.getCheckMate() + ") Black( check:" + blackKing.getCheck() + " checkmate:" + blackKing.getCheckMate() + ")");
+	private static void handelStatus(ChessBoard board){
+		switch(board.getStatus()){
+			case BLACK_WIN:
+				System.out.println("Game over. Black wins.");
+				break;
+			case WHITE_WIN:
+				System.out.println("Game over. White wins.");
+				break;
+			case IN_PROGRESS:
+				break;
+			default:
+				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		}
+		if(!Game.continueGame(board)){
+			System.out.println("Thanks for playing.");
+			System.exit(1);
+		}
 	}
 
 	/**
@@ -120,31 +133,26 @@ public class Game{
 	private static void testCheckmate(){
 		ChessBoard chessBoard = new ChessBoard();
 		chessBoard.print();
-		Game.checkChecks(chessBoard);
 		{
 			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.F), ChessPiece.Color.WHITE, chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.F);
 			testMove(chessBoard,test,testMove);
 		}
-		Game.checkChecks(chessBoard);
 		{
 			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.E), ChessPiece.Color.BLACK, chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.E);
 			testMove(chessBoard,test,testMove);
 		}
-		Game.checkChecks(chessBoard);
 		{
 			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.G), ChessPiece.Color.WHITE, chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.G);
 			testMove(chessBoard,test,testMove);
 		}
-		Game.checkChecks(chessBoard);
 		{
 			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._8, ChessPosition.Column.D), ChessPiece.Color.BLACK, chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.H);
 			testMove(chessBoard,test,testMove);
 		}
-		Game.checkChecks(chessBoard);//white loses
 	}
 
 	/**
@@ -152,7 +160,7 @@ public class Game{
 	 */
 	private static void play(){//TODO: finish
 		ChessBoard chessBoard = new ChessBoard();
-		while(!chessBoard.getGameOver()){
+		while(Game.continueGame(chessBoard)){
 			chessBoard.print();
 			System.out.println("It is " + chessBoard.getPlayerTurn() + "'s turn.");
 			System.out.println("Available pieces to move are: " + chessBoard.getMoveablePositionsByPlayer().toString());
@@ -187,17 +195,17 @@ public class Game{
 			Pawn a = new Pawn(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D), ChessPiece.Color.WHITE);
 
 			ChessPiece b = new Pawn(a);
-			a.move(new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.D), new ChessPiece[0]);
+			a.move(new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.D), new ChessPieces(0));
 			System.out.println("a(" + a.toString() + ") b(" + b.toString() + ")");
 			System.out.println("==:" + (a == b) + " .equals():" + b.equalsByType(a));
 		}
 		System.out.print("\n");
 		{
-			ChessPiece[] a = new ChessBoard().getPieces();
-			ChessPiece[] b = ChessPiece.makePieces(a);
-			System.out.println((a[0]==b[0]) + " " + (a[0].equals(b[0])));
-			a[0].move(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.A),a);
-			System.out.println((a[0]==b[0]) + " " + (a[0].equals(b[0])));
+			ChessPieces a = new ChessBoard().getPieces();
+			ChessPieces b = ChessPieces.makePieces(a);
+			System.out.println((a.getPieceAt(0)==b.getPieceAt(0)) + " " + (a.getPieceAt(0).equals(b.getPieceAt(0))));
+			a.getPieceAt(0).move(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.A),a);
+			System.out.println((a.getPieceAt(0)==b.getPieceAt(0)) + " " + (a.getPieceAt(0).equals(b.getPieceAt(0))));
 		}
 	}
 
@@ -214,6 +222,28 @@ public class Game{
 	}
 
 	/**
+	 * Tests movements that lead to a pawn capture
+	 */
+	public static void testCapture(){
+		ChessBoard chessBoard = new ChessBoard();
+		{
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.D), ChessPiece.Color.WHITE, chessBoard.getPieces());
+			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D);
+			testMove(chessBoard,test,testMove);
+		}
+		{
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.E), ChessPiece.Color.BLACK, chessBoard.getPieces());
+			ChessPosition testMove = new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.E);
+			testMove(chessBoard,test,testMove);
+		}
+		{
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D), ChessPiece.Color.WHITE, chessBoard.getPieces());
+			ChessPosition testMove = new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.E);
+			testMove(chessBoard,test,testMove);
+		}
+	}
+
+	/**
 	 * The primary method that tests the chess system and instantiates a new game
 	 * @param args user arguments (no effect)
 	 */
@@ -221,12 +251,13 @@ public class Game{
 		//tests
 		//testMovement();
 		//testInput();
-		testCheckmate();
+		//testCheckmate();
 		//testSingleMove();
 		//testCopy();
+		//testCapture();
 
 		//the actual game
-		//play();
-		MySystem.println("\n\n\nGAME OVER\n\n\n",MySystem.getFileName(),MySystem.getLineNumber());
+		play();
+		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n",MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }

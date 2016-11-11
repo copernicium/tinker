@@ -26,16 +26,16 @@ public class Bishop extends ChessPiece
         return "B";
     }
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
+    public Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		{
 			int rowDirection = -1, columnDirection = -1;
 			for(int j = 0; j < 4; j++){
 				for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
 					ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + (i * rowDirection), this.position.getColumn().get() + (i * columnDirection));
-					if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition), this.color, chessPieces)){
+					if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
 						possibleMoves.addElement(new ChessPosition(testPosition));
-						if(ChessBoard.isOccupied(new ChessPosition(testPosition), Color.not(this.color), chessPieces))
+						if(chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color)))
 							break;//if it will capture a piece, stop it there
 					} else break;
 				}
@@ -46,7 +46,7 @@ public class Bishop extends ChessPiece
         return possibleMoves;
     }
     @Override
-    public void move(ChessPosition newPosition, ChessPiece[] chessPieces){
+    public void move(ChessPosition newPosition, ChessPieces chessPieces){
         for(ChessPosition a: getNewPositions(chessPieces)){
             if(newPosition.equals(a)){
                 this.position = newPosition;

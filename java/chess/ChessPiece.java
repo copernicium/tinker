@@ -113,7 +113,7 @@ public class ChessPiece
 	 * @param chessPieces an array of pieces representing a chess board
 	 * @return a vector of chess positions that this piece can be moved to
 	 */
-    protected Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
+    protected Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
       	MySystem.error("This is not a valid chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
        	return new Vector<>(0);
     }
@@ -123,7 +123,7 @@ public class ChessPiece
 	 * @param position the position to move this piece to
 	 * @param chessPieces an array of pieces representing a chess board
 	 */
-	public void move(ChessPosition position, ChessPiece[] chessPieces){
+	public void move(ChessPosition position, ChessPieces chessPieces){
        MySystem.error("This is not a valid chess piece.", MySystem.getFileName(),MySystem.getLineNumber());
     }
 
@@ -133,8 +133,8 @@ public class ChessPiece
 	 * @param CHESS_PIECES an array of pieces representing a chess board
 	 * @return true if this piece can move to that position
 	 */
-    public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPiece[] CHESS_PIECES){
-		MySystem.myAssert((ChessBoard.checkExists(this,CHESS_PIECES)),MySystem.getFileName(),MySystem.getLineNumber());
+    public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
+		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
 		for(ChessPosition possiblePosition: this.getNewPositions(CHESS_PIECES)){
 			if(CHECK_MOVE.equals(possiblePosition)) return true;
 		}
@@ -156,19 +156,6 @@ public class ChessPiece
 	public ChessPosition getPosition(){
         return position;
     }
-
-	/**
-	 * Used to copy an array of pieces by value
-	 * @param CHESS_PIECES the array to copy
-	 * @return the new array
-	 */
-	public static ChessPiece[] makePieces(final ChessPiece[] CHESS_PIECES){
-		ChessPiece[] newPieces = new ChessPiece[CHESS_PIECES.length];
-		for(int i = 0; i < CHESS_PIECES.length; i++){
-			newPieces[i] = ChessPiece.makePiece(CHESS_PIECES[i]);
-		}
-		return newPieces;
-	}
 
 	/**
 	 * Used to copy chess pieces by value
@@ -233,8 +220,8 @@ public class ChessPiece
 	 * @param chessPieces the array of pieces to search through
 	 * @return a new instance of the chess piece
 	 */
-	public static ChessPiece makePiece(ChessPosition position, Color color, ChessPiece[] chessPieces){
-		for(ChessPiece a: chessPieces){
+	public static ChessPiece makePiece(ChessPosition position, Color color, ChessPieces chessPieces){
+		for(ChessPiece a: chessPieces.toArray()){
 			if(a.getPosition().equals(position) && a.getColor().equals(color)){
 				switch(a.getType()){
 					case KING:

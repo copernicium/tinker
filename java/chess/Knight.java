@@ -35,22 +35,22 @@ public class Knight extends ChessPiece
 		return corners;
 	}
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPiece[] chessPieces){
+    public Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		for(ChessPosition.Tester testPosition: getCorners(-2,1)){
-			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition), this.color, chessPieces)){
+			if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}
 		for(ChessPosition.Tester testPosition: getCorners(-1,2)){
-			if(ChessPosition.inBounds(testPosition) && !ChessBoard.isOccupied(new ChessPosition(testPosition), this.color, chessPieces)){
+			if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}
         return possibleMoves;
     }
     @Override
-    public void move(ChessPosition newPosition, ChessPiece[] chessPieces){
+    public void move(ChessPosition newPosition, ChessPieces chessPieces){
         for(ChessPosition a: getNewPositions(chessPieces)){
             if(newPosition.equals(a)){
                 this.position = newPosition;

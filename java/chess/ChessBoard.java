@@ -40,7 +40,7 @@ public class ChessBoard
 	/**
 	 * Stores the starting positions of different types of chess pieces at start
 	 */
-	private static abstract class PiecePlacement{//placement of pieces on the white and left side.
+	public static abstract class PiecePlacement{//placement of pieces on the white and left side.
 		public static abstract class Row{
 			public static final ChessPosition.Row ALL = new ChessPosition.Row(ChessPosition.Row._1);
 			public static final ChessPosition.Row PAWN= new ChessPosition.Row(ChessPosition.Row._2);//pawns are in their own rows
@@ -53,9 +53,12 @@ public class ChessBoard
 			public static final ChessPosition.Column KING = new ChessPosition.Column(ChessPosition.Column.E);
 		}
 	}
-    private ChessPiece[] pieces;
+
+	public enum Status{IN_PROGRESS,WHITE_WIN,BLACK_WIN};
+
+    private ChessPieces pieces;
 	private ChessPiece.Color playerTurn;
-	private boolean gameOver;
+	private Status status;
 
 	/**
 	 * Fetches the current player whose turn it is
@@ -65,20 +68,6 @@ public class ChessBoard
 		return playerTurn;
 	}
 
-	/**
-	 * Checks to see if a current position is occupied (unavailable) by a given color
-	 * @param checkPosition the position that is checked for occupancy
-	 * @param color the color of the occupying piece must be
-	 * @param pieces all of the pieces to check
-	 * @return true if a given position is occupied by a piece of a given color
-	 */
-	public static boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color,ChessPiece[] pieces){//TODO: move to ChessPiece.java ?
-		for(ChessPiece a: pieces){
-			if(!a.getAlive() || a.getType() == ChessPiece.Type.UNASSIGNED) continue;
-			if(color == a.getColor() && checkPosition.equals(a.getPosition()))return true;
-		}
-        return false;
-    }
 
 	/**
 	 * prints a new chess board given a set of pieces
@@ -106,7 +95,7 @@ public class ChessBoard
 	 * Prints the current chess board
 	 */
 	public void print(){
-		ChessBoard.print(this.pieces);
+		ChessBoard.print(this.pieces.toArray());
 	}
 
 	/**
@@ -117,54 +106,10 @@ public class ChessBoard
 	}
 
 	/**
-	 * Checks if a given piece exists in an array of pieces
-	 * @param TEST_PIECE the piece which is checked for existence
-	 * @param CHESS_PIECES the array of pieces to check
-	 * @return true if the piece exists in the array
-	 */
-	public static boolean checkExists(final ChessPiece TEST_PIECE,final ChessPiece[] CHESS_PIECES){
-		if(!TEST_PIECE.getAlive()) return false;
-		for(ChessPiece a: CHESS_PIECES){
-			if(!a.getAlive()) continue;
-			if(TEST_PIECE.equalsByType(a)) return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Finds the location of a piece that meets certain criteria in an array. It crashes if it cannot be found.
-	 * @param type the type of piece
-	 * @param color the color of the piece
-	 * @param CHESS_PIECES the array of pieces to check
-	 * @return the index of the piece if it exits
-	 */
-	public static int find(ChessPiece.Type type, ChessPiece.Color color, final ChessPiece[] CHESS_PIECES){
-		for(int i = 0; i < CHESS_PIECES.length; i++){
-			if(type == CHESS_PIECES[i].getType() && color == CHESS_PIECES[i].getColor()) return i;
-		}
-		MySystem.error("Piece not found in array",MySystem.getFileName(),MySystem.getLineNumber());
-		return -1;
-	}
-
-	/**
-	 * Returns the index of a piece in an array which occupies a given position. It crashes if it cannot be found.
-	 * @param chessPosition the position to look for
-	 * @param chessPieces the array of pieces to check
-	 * @return the index of the piece if it exits
-	 */
-	public static int find(ChessPosition chessPosition, ChessPiece[] chessPieces){
-		for(int i = 0; i < chessPieces.length; i++){
-			if(chessPosition.equals(chessPieces[i].getPosition())) return i;
-		}
-		MySystem.error("Piece not found in array",MySystem.getFileName(),MySystem.getLineNumber());
-		return -1;
-	}
-
-	/**
 	 * Fetches all of the pieces on the chess board
 	 * @return the array of all the chess pieces
 	 */
-	public ChessPiece[] getPieces(){
+	public ChessPieces getPieces(){
 		return pieces;
 	}
 
@@ -174,7 +119,7 @@ public class ChessBoard
 	 */
 	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
 		Vector<ChessPiece> moveablePieces = new Vector<>();
-		for(ChessPiece chessPiece: pieces){
+		for(ChessPiece chessPiece: pieces.toArray()){
 			if(chessPiece.getNewPositions(pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
 		}
 		return moveablePieces;
@@ -192,66 +137,40 @@ public class ChessBoard
 	}
 
 	/**
-	 * Finds the index of a chess piece in an array, crashing if it cannot be found.
-	 * @param FIND_ME the piece to find
-	 * @param CHESS_PIECES the array of pieces to search through
-	 * @return the index to the piece in the array
-	 */
-	public static int find(final ChessPiece FIND_ME, final ChessPiece[] CHESS_PIECES){
-		for(int i =0; i < CHESS_PIECES.length; i++){
-			if(FIND_ME.equalsByType(CHESS_PIECES[i]))return i;
-		}
-		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
-		return -1;
-	}
-
-	/**
-	 * Takes in an array of pieces, finds the kings, and then updates their check and checkmate statuses
-	 * @param ORIGINAL_PIECES the pieces to update
-	 * @return the updated array of pieces
-	 */
-	private static ChessPiece[] updateKings(final ChessPiece[] ORIGINAL_PIECES){
-		ChessPiece[] pieces = ChessPiece.makePieces(ORIGINAL_PIECES);
-		King whiteKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.WHITE,pieces)]);
-		King blackKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.BLACK,pieces)]);
-
-		whiteKing.update(pieces);
-		blackKing.update(pieces);
-		return pieces;
-	}
-	/**
 	 * Asks both kings if they are in checkmate. If one is, then it ends the game.
 	 */
-	public void checkIfGameOver(){
-		this.pieces = ChessBoard.updateKings(this.pieces);
-		King whiteKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.WHITE,pieces)]);
-		King blackKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.BLACK,pieces)]);
+	public void updateStatus(){
+		this.pieces.updateKings();
 
-		gameOver = (blackKing.getCheckmate() || whiteKing.getCheckmate());
+		if((this.pieces.getKing(ChessPiece.Color.BLACK)).getCheckmate()) status = Status.WHITE_WIN;
+		else if((this.pieces.getKing(ChessPiece.Color.WHITE)).getCheckmate()) status = Status.BLACK_WIN;
+		else status = Status.IN_PROGRESS;
 	}
 
 	/**
 	 * Tests a move on an array of chess pieces
-	 * @param CHESS_PIECE the chess piece to mvoe
+	 * @param chessPiece the chess piece to mvoe
 	 * @param MOVE_TO_POS the position to move the chess piece to
 	 * @param CHESS_PIECES the array of chess pieces representing the borad
 	 * @return the updated array of pieces
 	 */
-	public static ChessPiece[] testMove(final ChessPiece CHESS_PIECE,final ChessPosition MOVE_TO_POS, final ChessPiece[] CHESS_PIECES){
-		ChessPiece[] postMovePieces = ChessPiece.makePieces(CHESS_PIECES);
-		MySystem.myAssert(checkExists(CHESS_PIECE,postMovePieces),MySystem.getFileName(),MySystem.getLineNumber());
-		int position = ChessBoard.find(CHESS_PIECE,postMovePieces);
+	public static ChessPieces testMove(final ChessPiece CHESS_PIECE,final ChessPosition MOVE_TO_POS, final ChessPieces CHESS_PIECES){
+		ChessPiece chessPiece = ChessPiece.makePiece(CHESS_PIECE);
+		ChessPieces postMovePieces = new ChessPieces(CHESS_PIECES);
+		MySystem.myAssert(postMovePieces.checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
+		int position = postMovePieces.getIndexOf(chessPiece);
 		{
-			if(postMovePieces[position].checkMove(MOVE_TO_POS,CHESS_PIECES)){
-				if(ChessBoard.isOccupied(MOVE_TO_POS, ChessPiece.Color.not(postMovePieces[position].getColor()),postMovePieces)) postMovePieces = ChessBoard.capture(MOVE_TO_POS,postMovePieces);
-				postMovePieces[position].move(MOVE_TO_POS,postMovePieces);
+			if(postMovePieces.getPieceAt(position).checkMove(MOVE_TO_POS,CHESS_PIECES)){
+				if(postMovePieces.isOccupied(MOVE_TO_POS, ChessPiece.Color.not(postMovePieces.getPieceAt(position).getColor()))) postMovePieces.capture(MOVE_TO_POS);
+				chessPiece.move(MOVE_TO_POS,postMovePieces);
+				postMovePieces.set(position,chessPiece);
 				return postMovePieces;
 			} else {
 				MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());
 			}
 		}
 		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
-		return new ChessPiece[0];
+		return new ChessPieces(0);
 	}
 
 	/**
@@ -261,15 +180,18 @@ public class ChessBoard
 	 */
     public void move(ChessPiece chessPiece,ChessPosition moveThere){
 		//TODO: if in check, then only allow movement out of it
-		MySystem.myAssert(!this.gameOver && chessPiece.getColor() == playerTurn && checkExists(chessPiece,this.pieces),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(this.status == Status.IN_PROGRESS,MySystem.getFileName(), MySystem.getLineNumber());
+		MySystem.myAssert(chessPiece.getColor() == playerTurn,MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(pieces.checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
 		if(chessPiece.checkMove(moveThere,pieces)){
-			int position = ChessBoard.find(chessPiece,this.pieces);
-			pieces[position].move(moveThere,pieces);
-			if(isOccupied(pieces[position].getPosition(), ChessPiece.Color.not(chessPiece.getColor()),pieces)) capture(moveThere);
+			int position = pieces.getIndexOf(chessPiece);
+			chessPiece.move(moveThere,pieces);
+			pieces.set(position,chessPiece);
+			if(pieces.isOccupied(pieces.getPieceAt(position).getPosition(), ChessPiece.Color.not(chessPiece.getColor()))) capture(moveThere);
 		} else {
-			MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());//user inputs invalid move
+			MySystem.error("Error: trying to move piece to invalid location: piece:" + chessPiece.toString() + " cannot move to " + moveThere.toString(),MySystem.getFileName(),MySystem.getLineNumber());//user inputs invalid move
 		}
-		checkIfGameOver();
+		this.updateStatus();
 		playerTurn = ChessPiece.Color.not(playerTurn);
     }
 
@@ -277,9 +199,9 @@ public class ChessBoard
 	 * Checks if the game is over
 	 * @return true if the game has ended
 	 */
-	public boolean getGameOver(){
-		checkIfGameOver();
-		return this.gameOver;
+	public Status getStatus(){
+		this.updateStatus();
+		return this.status;
 	}
 
 	/**
@@ -287,19 +209,10 @@ public class ChessBoard
 	 * @param chessPosition the position of the piece to be killed
 	 */
 	private void capture(ChessPosition chessPosition){
-		this.pieces = ChessBoard.capture(chessPosition, this.pieces);
+		int index = this.pieces.getIndexOf(chessPosition);
+		this.pieces.captureAt(index);
+		//this.pieces = ChessBoard.capture(chessPosition, this.pieces);
     }
-
-	/**
-	 * Updates an array of pieces by killing one of them
-	 * @param chessPosition the position of the piece to be killed
-	 * @param chessPieces the array of pieces to be updated
-	 * @return the updated array
-	 */
-	public static ChessPiece[] capture(ChessPosition chessPosition, ChessPiece[] chessPieces){
-		chessPieces[ChessBoard.find(chessPosition,chessPieces)].capture();
-		return chessPieces;
-	}
 
 	/**
 	 * Find the index of the first chess piece in an array that hasn't been assigned an identity
@@ -330,57 +243,41 @@ public class ChessBoard
 	}
 
 	/**
-	 * Checks to make sure that position being a assigned a piece is not already occupied any other piece
-	 * @param pieces the array of pieces to check and assign the piece into
-	 * @param PIECE the piece to be assigned into the array
-	 * @return the array after the piece has been added to it
-	 */
-	private static ChessPiece[] setNextPiece(ChessPiece[] pieces, final ChessPiece PIECE){
-		MySystem.myAssert(!ChessBoard.isOccupied(PIECE.getPosition(),PIECE.getColor(),pieces),MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(!ChessBoard.isOccupied(PIECE.getPosition(), ChessPiece.Color.not(PIECE.getColor()),pieces),MySystem.getFileName(),MySystem.getLineNumber());
-		pieces[findNextUnassigned(pieces)] = ChessPiece.makePiece(PIECE.getPosition(), PIECE.getColor(), PIECE.getType());
-		return pieces;
-	}
-
-	/**
 	 * Creates an array of pieces representing all the chess pieces at the beginnning of a game
 	 * @return an array of chess pieces representing the start of a game
 	 */
-    private static ChessPiece[] fillBoard(){
-		ChessPiece[] chessPieces = new ChessPiece[NumbersOfPieces.Total.TOTAL];
-		for(int i = 0; i < NumbersOfPieces.Total.TOTAL; i++){
-			chessPieces[i] = new ChessPiece();
-		}
-		{
+    private static ChessPieces fillBoard(){
+		ChessPieces chessPieces = new ChessPieces(NumbersOfPieces.Total.TOTAL);
+			{
 			for(int i = 0; i < NumbersOfPieces.Half.PAWNS; i++){
-				chessPieces = setNextPiece(chessPieces, new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE));
-				chessPieces = setNextPiece(chessPieces, new Pawn(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK));
+				chessPieces.setNextPiece(new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE));
+				chessPieces.setNextPiece(new Pawn(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK));
 			}
 			{
 				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE))){
-					chessPieces = setNextPiece(chessPieces, new Rook(a));
+					chessPieces.setNextPiece(new Rook(a));
 				}
 			}
 			{
 				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KNIGHT), ChessPiece.Color.WHITE))){
-					chessPieces = setNextPiece(chessPieces, new Knight(a));
+					chessPieces.setNextPiece(new Knight(a));
 				}
 			}
 			{
 				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.BISHOP), ChessPiece.Color.WHITE))){
-					chessPieces = setNextPiece(chessPieces,new Bishop(a));
+					chessPieces.setNextPiece(new Bishop(a));
 				}
 			}
 			{
-				chessPieces = setNextPiece(chessPieces,new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE));
-				chessPieces = setNextPiece(chessPieces,new Queen(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK));
+				chessPieces.setNextPiece(new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE));
+				chessPieces.setNextPiece(new Queen(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK));
 			}
 			{
-				chessPieces = setNextPiece(chessPieces,new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE));
-				chessPieces = setNextPiece(chessPieces,new King(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK));
+				chessPieces.setNextPiece(new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE));
+				chessPieces.setNextPiece(new King(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK));
 			}
 		}
-        return ChessPiece.makePieces(chessPieces);
+        return new ChessPieces(chessPieces);
     }
 
 	/**
@@ -394,7 +291,7 @@ public class ChessBoard
 	 * Creates a chess board given an array of pieces instead of creating one itself
 	 * @param pieces the pieces to be used in place of the default
 	 */
-	public ChessBoard(ChessPiece[] pieces){
+	public ChessBoard(ChessPieces pieces){
 		this(pieces,ChessPiece.Color.WHITE);
 	}
 	/**
@@ -402,9 +299,9 @@ public class ChessBoard
 	 * @param pieces the pieces to be used in place of the default
 	 * @param playerTurn the color that the player's turn should be set to
 	 */
-    public ChessBoard(ChessPiece[] pieces, ChessPiece.Color playerTurn){
-		this.pieces = pieces;
+    public ChessBoard(ChessPieces pieces, ChessPiece.Color playerTurn){
+		this.pieces = new ChessPieces(pieces);
 		this.playerTurn = playerTurn;
-		this.gameOver = false;
+		this.status = Status.IN_PROGRESS;
 	}
 }
