@@ -221,11 +221,12 @@ public class Game{
 		//tests
 		//testMovement();
 		//testInput();
-		testCheckmate();
+		//testCheckmate();
 		//testSingleMove();
 		//testCopy();
 
 		//the actual game
-		//play();
+		play();
+		MySystem.println("\n\n\nGAME OVER\n\n\n",MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }

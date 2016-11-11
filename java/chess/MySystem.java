@@ -38,6 +38,24 @@ public class MySystem{
 		System.exit(1);
 	}
 	/**
+	 * Prints a given string like System.out.println along with the file name and line number it is called from
+	 * @param string the string to print
+	 * @param fileName the file it's called from
+	 * @param lineNumber the line number it's called from
+	 */
+	public static void println(String string, String fileName,int lineNumber){//TODO: move newline character and spaces or something before
+		System.out.println(fileName + ":" + lineNumber + ":" + string);
+	}
+	/**
+	 * Prints a given string like System.out.print along with the file name and line number it is called from
+	 * @param string the string to print
+	 * @param fileName the file it's called from
+	 * @param lineNumber the line number it's called from
+	 */
+	public static void print(String string, String fileName,int lineNumber){
+		System.out.print(fileName + ":" + lineNumber + ":" + string);
+	}
+	/**
 	 * Exits the process
 	 * @param fileName the name of the file calling the assert function
 	 * @param lineNumber the line number this function is called on

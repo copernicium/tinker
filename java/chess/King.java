@@ -36,22 +36,14 @@ public class King extends ChessPiece
 	}
 
 	private boolean checkMyMoves(final ChessPiece[] CHESS_PIECES){
-		/*ChessPiece[] temp_pieces;
-		{
-			ChessBoard temp = new ChessBoard(ORIGINAL_PIECES);
-			temp.checkIfGameOver();
-			temp_pieces = temp.getPieces();
-		}
-		final ChessPiece[] CHESS_PIECES = ChessPiece.makePieces(temp_pieces);*/
-		King original = new King(this);
+		MySystem.myAssert(this.getCheck(),MySystem.getFileName(),MySystem.getLineNumber());
+		final King original = new King(this);
 		for(final ChessPosition POSSIBLE_MOVE: this.getNewPositions(CHESS_PIECES)){
-		//	final ChessPiece[] TEST_PIECES = ChessPiece.makePieces(CHESS_PIECES);
-			//System.out.println("CALLED FROM " + MySystem.getFileName() + ":" + MySystem.getLineNumber());
-			ChessPiece[] postMovePieces = ChessBoard.testMove(this,POSSIBLE_MOVE,CHESS_PIECES);
-			this.move(POSSIBLE_MOVE,CHESS_PIECES);
+			final ChessPiece[] TEST_PIECES = ChessPiece.makePieces(CHESS_PIECES);
+			ChessPiece[] postMovePieces = ChessBoard.testMove(this,POSSIBLE_MOVE,TEST_PIECES);
+			this.move(POSSIBLE_MOVE,TEST_PIECES);
 			this.updateCheck(postMovePieces);
-			boolean leftCheck = false;
-			leftCheck = !this.check;
+			boolean leftCheck = !this.check;//did the king move out of check
 			{//reset king to start
 				this.position = new ChessPosition(original.position);
 				this.alive = original.alive;
@@ -67,7 +59,7 @@ public class King extends ChessPiece
 	}
 
 	private void updateCheckMate(final ChessPiece[] CHESS_PIECES){
-		this.updateCheck(CHESS_PIECES);
+		this.updateCheck(CHESS_PIECES);//TODO: should this be here?
 		if(!this.check){
 			this.checkMate = false;
 			return;//if it's not in check, then it doesn't need to check if it's in checkmate
@@ -76,7 +68,6 @@ public class King extends ChessPiece
 			final ChessPiece DEFENDING_PIECE = ChessPiece.makePiece(CHESS_PIECES[i]);
 			if(DEFENDING_PIECE.getColor() == this.color && !DEFENDING_PIECE.equalsByType(this)){
 				for(final ChessPosition POSSIBLE_MOVE : DEFENDING_PIECE.getNewPositions(CHESS_PIECES)){
-					//System.out.println("CALLED FROM " + MySystem.getFileName() + ":" + MySystem.getLineNumber());
 					ChessPiece[] postMovePieces = ChessBoard.testMove(DEFENDING_PIECE,POSSIBLE_MOVE,CHESS_PIECES);
 					{
 						this.updateCheck(postMovePieces);
@@ -92,8 +83,11 @@ public class King extends ChessPiece
 		this.checkMate = this.checkMyMoves(CHESS_PIECES);
 	}
 
-	public void update(ChessPiece[] chessPieces){
+	public void update(final ChessPiece[] ORIGINAL_PIECES){
+		ChessPiece[] chessPieces = ChessPiece.makePieces(ORIGINAL_PIECES);
+		int index = ChessBoard.find(this,chessPieces);
 		updateCheck(chessPieces);
+		chessPieces[index] = this;
 		updateCheckMate(chessPieces);
 	}
 
@@ -132,7 +126,7 @@ public class King extends ChessPiece
 	@Override
 	public boolean equals(final ChessPiece b){
 		if(!(b instanceof King)) return false;
-		King testPiece = (King)b;
+		King testPiece = new King(b);
 		if(this.getType() != testPiece.getType()) return false;
 		if(this.getColor()!=testPiece.getColor()) return false;
 		if(!this.getPosition().equals(testPiece.getPosition())) return false;
@@ -174,6 +168,14 @@ public class King extends ChessPiece
 
     public King(ChessPiece chessPiece){
 		this(chessPiece.getPosition(),chessPiece.getColor());
+		if(chessPiece instanceof King){
+			King toCopy = (King)chessPiece;
+			this.position = new ChessPosition(toCopy.position);
+			this.alive = toCopy.alive;
+			this.color = toCopy.color;
+			this.check = toCopy.check;
+			this.checkMate = toCopy.checkMate;
+		}
 	}
     public King(ChessPosition position, Color color){
         super(position,color);

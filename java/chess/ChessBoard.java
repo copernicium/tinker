@@ -128,7 +128,6 @@ public class ChessBoard
 			if(!a.getAlive()) continue;
 			if(TEST_PIECE.equalsByType(a)) return true;
 		}
-		System.out.println("TEST_PIECE:" + TEST_PIECE.toString());
 		return false;
 	}
 
@@ -211,7 +210,7 @@ public class ChessBoard
 	 * @param ORIGINAL_PIECES the pieces to update
 	 * @return the updated array of pieces
 	 */
-	private static ChessPiece[] updateKings(ChessPiece[] ORIGINAL_PIECES){
+	private static ChessPiece[] updateKings(final ChessPiece[] ORIGINAL_PIECES){
 		ChessPiece[] pieces = ChessPiece.makePieces(ORIGINAL_PIECES);
 		King whiteKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.WHITE,pieces)]);
 		King blackKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.BLACK,pieces)]);
@@ -223,7 +222,7 @@ public class ChessBoard
 	/**
 	 * Asks both kings if they are in checkmate. If one is, then it ends the game.
 	 */
-	public void checkIfGameOver(){//TODO:
+	public void checkIfGameOver(){
 		this.pieces = ChessBoard.updateKings(this.pieces);
 		King whiteKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.WHITE,pieces)]);
 		King blackKing = new King(pieces[ChessBoard.find(ChessPiece.Type.KING, ChessPiece.Color.BLACK,pieces)]);
@@ -240,12 +239,12 @@ public class ChessBoard
 	 */
 	public static ChessPiece[] testMove(final ChessPiece CHESS_PIECE,final ChessPosition MOVE_TO_POS, final ChessPiece[] CHESS_PIECES){
 		ChessPiece[] postMovePieces = ChessPiece.makePieces(CHESS_PIECES);
+		MySystem.myAssert(checkExists(CHESS_PIECE,postMovePieces),MySystem.getFileName(),MySystem.getLineNumber());
+		int position = ChessBoard.find(CHESS_PIECE,postMovePieces);
 		{
-			if(CHESS_PIECE.checkMove(MOVE_TO_POS,CHESS_PIECES)){
-				int position = ChessBoard.find(CHESS_PIECE,postMovePieces);
-				if(ChessBoard.isOccupied(MOVE_TO_POS, ChessPiece.Color.not(CHESS_PIECE.getColor()),postMovePieces)) postMovePieces = ChessBoard.capture(MOVE_TO_POS,postMovePieces);
+			if(postMovePieces[position].checkMove(MOVE_TO_POS,CHESS_PIECES)){
+				if(ChessBoard.isOccupied(MOVE_TO_POS, ChessPiece.Color.not(postMovePieces[position].getColor()),postMovePieces)) postMovePieces = ChessBoard.capture(MOVE_TO_POS,postMovePieces);
 				postMovePieces[position].move(MOVE_TO_POS,postMovePieces);
-				//postMovePieces = ChessBoard.updateKings(postMovePieces);//TODO
 				return postMovePieces;
 			} else {
 				MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());

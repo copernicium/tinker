@@ -65,6 +65,7 @@ public class Pawn extends ChessPiece
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}
+		if(!original.equalsByType(this)) MySystem.error("orignal:" + original.toString() + " this:" + this.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(original.equalsByType(this),MySystem.getFileName(),MySystem.getLineNumber());
         return possibleMoves;
     }
@@ -116,6 +117,13 @@ public class Pawn extends ChessPiece
     }
 	public Pawn(ChessPiece chessPiece){
 		this(chessPiece.getPosition(),chessPiece.getColor());
+		if(chessPiece instanceof Pawn){
+			Pawn toCopy = (Pawn)chessPiece;
+			this.position = new ChessPosition(toCopy.position);
+			this.alive = toCopy.alive;
+			this.color = toCopy.color;
+			this.firstMove = toCopy.firstMove;
+		}
 	}
     public Pawn(ChessPosition position,Color color){
         super(position,color);
