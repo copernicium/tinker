@@ -28,11 +28,13 @@ ChessPosition.class: ChessPosition.java
 	javac ChessPosition.java
 
 ChessBoard.class: ChessBoard.java
-	javac ChessBoard.java Pawn.java Queen.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
+	javac ChessBoard.java Pawn.java ChessPieces.java Queen.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
 
 Game.class: Game.java
-	javac Game.java ChessBoard.java Queen.java  Pawn.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
+	javac Game.java ChessBoard.java Queen.java ChessPieces.java Pawn.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
 
+ChessPieces.class: ChessPieces.java 
+	javac ChessPieces.java ChessBoard.java Queen.java Game.java Pawn.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
 .PHONY: clean
 clean:
 	find -name \*.class |xargs rm;
