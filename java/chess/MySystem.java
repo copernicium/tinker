@@ -1,4 +1,8 @@
 package chess;
+
+import java.util.IntSummaryStatistics;
+import java.util.Vector;
+
 public class MySystem{
 	/**
 	 * Get the line number of the line where this method is used
@@ -39,21 +43,43 @@ public class MySystem{
 	}
 	/**
 	 * Prints a given string like System.out.println along with the file name and line number it is called from
-	 * @param string the string to print
+	 * @param STRING the string to print
 	 * @param fileName the file it's called from
 	 * @param lineNumber the line number it's called from
 	 */
-	public static void println(String string, String fileName,int lineNumber){//TODO: move newline character and spaces or something before
-		System.out.println(fileName + ":" + lineNumber + ":" + string);
+	public static void println(final String STRING, String fileName,int lineNumber){
+		String front = "";
+		int startAt = 0;
+		for(int i = 0; i < STRING.length(); i++){
+			if(STRING.charAt(i) == '\t') front += '\t';
+			else if(STRING.charAt(i) == '\n') front += '\n';
+			else{
+				startAt = i;
+				break;
+			}
+		}
+		String back = STRING.substring(startAt);
+		System.out.println(front + fileName + ":" + lineNumber + ":" + back);
 	}
 	/**
 	 * Prints a given string like System.out.print along with the file name and line number it is called from
-	 * @param string the string to print
+	 * @param STRING the string to print
 	 * @param fileName the file it's called from
 	 * @param lineNumber the line number it's called from
 	 */
-	public static void print(String string, String fileName,int lineNumber){
-		System.out.print(fileName + ":" + lineNumber + ":" + string);
+	public static void print(String STRING, String fileName,int lineNumber){
+		String front = "";
+		int startAt = 0;
+		for(int i = 0; i < STRING.length(); i++){
+			if(STRING.charAt(i) == '\t') front += '\t';
+			else if(STRING.charAt(i) == '\n') front += '\n';
+			else{
+				startAt = i;
+				break;
+			}
+		}
+		String back = STRING.substring(startAt);
+		System.out.print(front + fileName + ":" + lineNumber + ":" + back);
 	}
 	/**
 	 * Exits the process
