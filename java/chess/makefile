@@ -33,6 +33,8 @@ ChessBoard.class: ChessBoard.java
 Game.class: Game.java
 	javac Game.java ChessBoard.java Queen.java ChessPieces.java Pawn.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
 
+ChessPieces.class: ChessPieces.java 
+	javac ChessPieces.java ChessBoard.java Queen.java Game.java Pawn.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
 .PHONY: clean
 clean:
 	find -name \*.class |xargs rm;
