@@ -128,6 +128,23 @@ public class ChessPiece
     }
 
 	/**
+	 * Checks to see if this color's king is in check and limits the possible moves to those which move it out of check
+	 * @param possibleMoves all of the possible moves
+	 * @param chessPieces all of the pieces
+	 * @return all of the allowed moves
+	 */
+    public Vector<ChessPosition> limitMovesToLeavingCheck(Vector<ChessPosition> possibleMoves, ChessPieces chessPieces){
+		if(chessPieces.getKing(this.getColor()).getCheck()){
+			Vector<ChessPosition> newMoves = new Vector<>(0);
+			for(ChessPosition move: possibleMoves){
+
+			}
+			return newMoves;
+		}
+		return possibleMoves;
+	}
+
+	/**
 	 * Checks to see if this piece can move to a given position
 	 * @param CHECK_MOVE the position to check to see if this piece can move to
 	 * @param CHESS_PIECES an array of pieces representing a chess board
