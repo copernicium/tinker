@@ -93,7 +93,7 @@ public class Pawn extends ChessPiece
 
     @Override
     public void move(ChessPosition newPosition, ChessPieces chessPieces){
-        for(ChessPosition a: getNewPositions(chessPieces)){
+        for(ChessPosition a: this.getNewPositions(chessPieces)){
             if(newPosition.equals(a)){
                 this.position = newPosition;
                 this.firstMove = false;

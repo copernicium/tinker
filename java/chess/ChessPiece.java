@@ -109,6 +109,26 @@ public class ChessPiece
 	}
 
 	/**
+	 *
+	 * @param chessPiece
+	 * @param chessPieces
+	 * @return
+	 */
+	public static Vector<ChessPosition> limitMovesToLeavingCheck(ChessPiece chessPiece, ChessPieces chessPieces){//TODO
+		Vector<ChessPosition> newMoves = new Vector<>(0);
+		for(ChessPosition testMove: chessPiece.getNewPositions(chessPieces)){
+			ChessPieces testPieces = ChessPieces.makePieces(chessPieces);
+			ChessPiece testPiece = ChessPiece.makePiece(chessPiece);
+			int position = testPieces.getIndexOf(testPiece);
+			testPiece.move(testMove,testPieces);
+			testPieces.set(position,testPiece);
+			testPieces.getKing(testPiece.getColor()).update(testPieces);
+			if(!testPieces.getKing(testPiece.getColor()).getCheck()) newMoves.add(testMove);
+		}
+		return newMoves;
+	}
+
+	/**
 	 * Calculates all the positions this piece can move to
 	 * @param chessPieces an array of pieces representing a chess board
 	 * @return a vector of chess positions that this piece can be moved to
@@ -128,20 +148,17 @@ public class ChessPiece
     }
 
 	/**
-	 * Checks to see if this color's king is in check and limits the possible moves to those which move it out of check
-	 * @param possibleMoves all of the possible moves
-	 * @param chessPieces all of the pieces
-	 * @return all of the allowed moves
+	 * Checks to see if this piece can move to a given position
+	 * @param CHECK_MOVE the position to check to see if this piece can move to
+	 * @param CHESS_PIECES an array of pieces representing a chess board
+	 * @return true if this piece can move to that position
 	 */
-    public Vector<ChessPosition> limitMovesToLeavingCheck(Vector<ChessPosition> possibleMoves, ChessPieces chessPieces){
-		if(chessPieces.getKing(this.getColor()).getCheck()){
-			Vector<ChessPosition> newMoves = new Vector<>(0);
-			for(ChessPosition move: possibleMoves){
-
-			}
-			return newMoves;
+	public boolean checkMoveDeep(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
+		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
+		for(ChessPosition possiblePosition: this.limitMovesToLeavingCheck(this,CHESS_PIECES)){
+			if(CHECK_MOVE.equals(possiblePosition)) return true;
 		}
-		return possibleMoves;
+		return false;
 	}
 
 	/**
@@ -152,7 +169,7 @@ public class ChessPiece
 	 */
     public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
 		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
-		for(ChessPosition possiblePosition: this.getNewPositions(CHESS_PIECES)){
+		for(ChessPosition possiblePosition: this.getNewPositions(CHESS_PIECES)){//TODO: limit?
 			if(CHECK_MOVE.equals(possiblePosition)) return true;
 		}
 		return false;

@@ -73,7 +73,7 @@ public class King extends ChessPiece
 						this.updateCheck(postMovePieces);
 
 						if(!this.check){//if a move moves it out of check, then it isn't in checkmate
-							MySystem.println("Moving out of check with" + DEFENDING_PIECE.toString() + " moving to " + POSSIBLE_MOVE.toString(),MySystem.getFileName(),MySystem.getLineNumber());
+							//MySystem.println("Moving out of check with" + DEFENDING_PIECE.toString() + " moving to " + POSSIBLE_MOVE.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 							this.checkmate = false;
 							return;
 						}

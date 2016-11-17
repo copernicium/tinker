@@ -156,6 +156,20 @@ public class Game{
 	}
 
 	/**
+	 * Tests check logic given a series of moves that result in check
+	 */
+	private static void testCheck(){
+		ChessBoard chessBoard = new ChessBoard();
+		chessBoard.print();
+		{
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.F), ChessPiece.Color.WHITE, chessBoard.getPieces());
+			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.F);
+			testMove(chessBoard,test,testMove);
+		}
+	}
+
+
+	/**
 	 * Prompts users to input the necessary information and manages their chess game
 	 */
 	private static void play(){//TODO: finish
@@ -173,11 +187,11 @@ public class Game{
 				}
 				//MySystem.myAssert(checkIfPieceIsValid,MySystem.getFileName(),MySystem.getLineNumber());
 			}
-			System.out.print("Input the location to move that piece to (available positions are " + chessPiece.getNewPositions(chessBoard.getPieces())+ ": ");
+			System.out.print("Input the location to move that piece to (available positions are " + ChessPiece.limitMovesToLeavingCheck(chessPiece,chessBoard.getPieces())+ ": ");
 			ChessPosition chessPosition = Game.getInput();
 			{
 				boolean checkIfMoveIsValid = false;
-				for(ChessPosition a : chessPiece.getNewPositions(chessBoard.getPieces())){
+				for(ChessPosition a : ChessPiece.limitMovesToLeavingCheck(chessPiece,chessBoard.getPieces())){
 					if(chessPosition.equals(a))checkIfMoveIsValid = true;
 				}
 				MySystem.myAssert(checkIfMoveIsValid,MySystem.getFileName(),MySystem.getLineNumber());
@@ -252,6 +266,7 @@ public class Game{
 		//testMovement();
 		//testInput();
 		//testCheckmate();
+		//testCheck();
 		//testSingleMove();
 		//testCopy();
 		//testCapture();
@@ -261,3 +276,93 @@ public class Game{
 		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n",MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }
+/*"C:\Program Files\BlueJ\jdk\bin\java" -Didea.launcher.port=7534 "-Didea.launcher.bin.path=C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2016.2.5\bin" -Dfile.encoding=UTF-8 -classpath "C:\Program Files\BlueJ\jdk\jre\lib\charsets.jar;C:\Program Files\BlueJ\jdk\jre\lib\deploy.jar;C:\Program Files\BlueJ\jdk\jre\lib\ext\access-bridge-32.jar;C:\Program Files\BlueJ\jdk\jre\lib\ext\cldrdata.jar;C:\Program Files\BlueJ\jdk\jre\lib\ext\dnsns.jar;C:\Program Files\BlueJ\jdk\jre\lib\ext\jaccess.jar;C:\Program Files\BlueJ\jdk\jre\lib\ext\jfxrt.jar;C:\Program Files\BlueJ\jdk\jre\lib\ext\localedata.jar;C:\Program Files\BlueJ\jdk\jre\lib\ext\nashorn.jar;C:\Program Files\BlueJ\jdk\jre\lib\ext\sunec.jar;C:\Program Files\BlueJ\jdk\jre\lib\ext\sunjce_provider.jar;C:\Program Files\BlueJ\jdk\jre\lib\ext\sunmscapi.jar;C:\Program Files\BlueJ\jdk\jre\lib\ext\sunpkcs11.jar;C:\Program Files\BlueJ\jdk\jre\lib\ext\zipfs.jar;C:\Program Files\BlueJ\jdk\jre\lib\javaws.jar;C:\Program Files\BlueJ\jdk\jre\lib\jce.jar;C:\Program Files\BlueJ\jdk\jre\lib\jfr.jar;C:\Program Files\BlueJ\jdk\jre\lib\jfxswt.jar;C:\Program Files\BlueJ\jdk\jre\lib\jsse.jar;C:\Program Files\BlueJ\jdk\jre\lib\management-agent.jar;C:\Program Files\BlueJ\jdk\jre\lib\plugin.jar;C:\Program Files\BlueJ\jdk\jre\lib\resources.jar;C:\Program Files\BlueJ\jdk\jre\lib\rt.jar;C:\Documents and Settings\Administrator\IdeaProjects\tinkerbell\out;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2016.2.5\lib\idea_rt.jar" com.intellij.rt.execution.application.AppMain chess.Game
+RNBQKBNR
+PPPPPPPP
+
+
+
+
+PPPPPPPP
+RNBQKBNR
+It is WHITE's turn.
+Available pieces to move are: [A2, B2, C2, D2, E2, F2, G2, H2, B1, G1]
+Input a piece to move (the piece's location): E2
+Input the location to move that piece to (available positions are [E4, E3]: E4
+RNBQKBNR
+PPPPPPPP
+
+
+    P
+
+PPPP PPP
+RNBQKBNR
+It is BLACK's turn.
+Available pieces to move are: [A7, B7, C7, D7, E7, F7, G7, H7, B8, G8]
+Input a piece to move (the piece's location): D7
+Input the location to move that piece to (available positions are [D5, D6]: D5
+RNBQKBNR
+PPP PPPP
+
+   P
+    P
+
+PPPP PPP
+RNBQKBNR
+It is WHITE's turn.
+Available pieces to move are: [A2, B2, C2, D2, E4, F2, G2, H2, B1, G1, F1, D1, E1]
+Input a piece to move (the piece's location): E1
+Input the location to move that piece to (available positions are [E2]: E2
+RNBQKBNR
+PPP PPPP
+
+   P
+    P
+
+PPPPKPPP
+RNBQ BNR
+It is BLACK's turn.
+Available pieces to move are: [A7, B7, C7, D5, E7, F7, G7, H7, B8, G8, C8, D8, E8]
+Input a piece to move (the piece's location): D8
+Input the location to move that piece to (available positions are [D7, D6]: D6
+RNB KBNR
+PPP PPPP
+   Q
+   P
+    P
+
+PPPPKPPP
+RNBQ BNR
+It is WHITE's turn.
+Available pieces to move are: [A2, B2, C2, D2, E4, F2, G2, H2, B1, G1, D1, E2]
+Input a piece to move (the piece's location): E2
+Input the location to move that piece to (available positions are [D3, E1, E3, F3]: F3
+RNB KBNR
+PPP PPPP
+   Q
+   P
+    P
+     K
+PPPP PPP
+RNBQ BNR
+It is BLACK's turn.
+King.java:76:Moving out of check withChessPiece( type:PAWN color:WHITE position:E4 alive:true firstMove:false) moving to E5
+King.java:76:Moving out of check withChessPiece( type:PAWN color:WHITE position:E4 alive:true firstMove:false) moving to E5
+Available pieces to move are: [A7, B7, C7, D5, E7, F7, G7, H7, B8, G8, C8, D6, E8]
+Input a piece to move (the piece's location): D6
+King.java:76:Moving out of check withChessPiece( type:PAWN color:WHITE position:E4 alive:true firstMove:false) moving to E5
+King.java:76:Moving out of check withChessPiece( type:PAWN color:WHITE position:E4 alive:true firstMove:false) moving to E5
+Input the location to move that piece to (available positions are [C5, B4, A3, E5, F4, G3, H2, D7, D8, C6, B6, A6, E6, F6, G6, H6]: F4
+RNB KBNR
+PPP PPPP
+
+   P
+    PQ
+     K
+PPPP PPP
+RNBQ BNR
+It is WHITE's turn.
+Pawn.java:103: Move failed: Not a valid move: trying to move from C4 to D5
+
+Process finished with exit code 1
+*/

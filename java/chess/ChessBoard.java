@@ -120,7 +120,7 @@ public class ChessBoard
 	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
 		Vector<ChessPiece> moveablePieces = new Vector<>();
 		for(ChessPiece chessPiece: pieces.toArray()){
-			if(chessPiece.getNewPositions(pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
+			if(ChessPiece.limitMovesToLeavingCheck(chessPiece,pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
 		}
 		return moveablePieces;
 	}
@@ -149,7 +149,7 @@ public class ChessBoard
 
 	/**
 	 * Tests a move on an array of chess pieces
-	 * @param chessPiece the chess piece to mvoe
+	 * @param CHESS_PIECE the chess piece to mvoe
 	 * @param MOVE_TO_POS the position to move the chess piece to
 	 * @param CHESS_PIECES the array of chess pieces representing the borad
 	 * @return the updated array of pieces
@@ -183,7 +183,7 @@ public class ChessBoard
 		MySystem.myAssert(this.status == Status.IN_PROGRESS,MySystem.getFileName(), MySystem.getLineNumber());
 		MySystem.myAssert(chessPiece.getColor() == playerTurn,MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(pieces.checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
-		if(chessPiece.checkMove(moveThere,pieces)){
+		if(chessPiece.checkMoveDeep(moveThere,pieces)){
 			int position = pieces.getIndexOf(chessPiece);
 			chessPiece.move(moveThere,pieces);
 			pieces.set(position,chessPiece);
