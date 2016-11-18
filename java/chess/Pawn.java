@@ -35,8 +35,21 @@ public class Pawn extends ChessPiece
     public Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){//TODO: en passant and maybe promotion
 		ChessPiece original = ChessPiece.makePiece(this);
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
-		int direction = (this.color == ChessPiece.Color.WHITE) ? 1 : -1;
-		
+		int direction = (this.getColor() == ChessPiece.Color.WHITE) ? 1 : -1;
+		{
+			final int DIAGONALDIST = 1;
+			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + DIAGONALDIST,this.position.getColumn().get()+(DIAGONALDIST*direction));
+			if(ChessPosition.inBounds(testPosition) && chessPieces.isOccupied(new ChessPosition(testPosition),Color.not(this.color))){
+				possibleMoves.addElement(new ChessPosition(testPosition));
+			}
+		}
+		{
+			final int DIAGONALDIST = -1;
+			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + DIAGONALDIST,this.position.getColumn().get()+(DIAGONALDIST*direction));
+			if(ChessPosition.inBounds(testPosition) && chessPieces.isOccupied(new ChessPosition(testPosition),Color.not(this.color))){
+				possibleMoves.addElement(new ChessPosition(testPosition));
+			}
+		}
 		if(this.getFirstMove()){
 			final int INITIALTWOSQUAREADVANCE = 2;
 			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(INITIALTWOSQUAREADVANCE * direction),this.position.getColumn().get());
@@ -48,20 +61,6 @@ public class Pawn extends ChessPiece
 			final int REGULARMOVEMENT = 1;
 			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(REGULARMOVEMENT*direction),this.position.getColumn().get());
 			if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition),this.color)){
-				possibleMoves.addElement(new ChessPosition(testPosition));
-			}
-		}
-		{
-			final int DIAGONALDIST = 1;
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + DIAGONALDIST,this.position.getColumn().get()+(DIAGONALDIST*direction));
-			if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition),this.color) && chessPieces.isOccupied(new ChessPosition(testPosition),Color.not(this.color))){
-				possibleMoves.addElement(new ChessPosition(testPosition));
-			}
-		}
-		{
-			final int DIAGONALDIST = -1;
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + DIAGONALDIST,this.position.getColumn().get()+(DIAGONALDIST*direction));
-			if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition),this.color) && chessPieces.isOccupied(new ChessPosition(testPosition),Color.not(this.color))){
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}

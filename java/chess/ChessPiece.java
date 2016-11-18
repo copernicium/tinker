@@ -110,15 +110,17 @@ public class ChessPiece
 
 	/**
 	 *
-	 * @param chessPiece
-	 * @param chessPieces
+	 * @param CHESS_PIECE
+	 * @param CHESS_PIECES
 	 * @return
 	 */
-	public static Vector<ChessPosition> limitMovesToLeavingCheck(ChessPiece chessPiece, ChessPieces chessPieces){//TODO
+	public static Vector<ChessPosition> limitMovesToLeavingCheck(final ChessPiece CHESS_PIECE, final ChessPieces CHESS_PIECES){//TODO
 		Vector<ChessPosition> newMoves = new Vector<>(0);
-		for(ChessPosition testMove: chessPiece.getNewPositions(chessPieces)){
-			ChessPieces testPieces = ChessPieces.makePieces(chessPieces);
-			ChessPiece testPiece = ChessPiece.makePiece(chessPiece);
+		Vector<ChessPosition> allPossible = ChessPiece.makePiece(CHESS_PIECE).getNewPositions(ChessPieces.makePieces(CHESS_PIECES));
+		for(ChessPosition testMove: allPossible){
+			ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
+			ChessPiece testPiece = ChessPiece.makePiece(CHESS_PIECE);
+			MySystem.println("Trying to move " + testPiece.toString() + " to " + testMove.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 			int position = testPieces.getIndexOf(testPiece);
 			testPiece.move(testMove,testPieces);
 			testPieces.set(position,testPiece);
@@ -188,7 +190,7 @@ public class ChessPiece
 	 * @return the position of this chess piece
 	 */
 	public ChessPosition getPosition(){
-        return position;
+        return new ChessPosition(position);
     }
 
 	/**

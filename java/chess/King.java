@@ -39,12 +39,14 @@ public class King extends ChessPiece
 	private boolean checkMyMoves(final ChessPieces CHESS_PIECES){
 		MySystem.myAssert(this.getCheck(),MySystem.getFileName(),MySystem.getLineNumber());
 		final King original = new King(this);
-		for(final ChessPosition POSSIBLE_MOVE: this.getNewPositions(CHESS_PIECES)){
-			final ChessPieces TEST_PIECES = ChessPieces.makePieces(CHESS_PIECES);
-			ChessPieces postMovePieces = ChessBoard.testMove(this,POSSIBLE_MOVE,TEST_PIECES);
-			this.move(POSSIBLE_MOVE,TEST_PIECES);
-			this.updateCheck(postMovePieces);
-			boolean leftCheck = !this.check;//did the king move out of check
+		for(ChessPosition possibleMove: this.getNewPositions(CHESS_PIECES)){
+			ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
+			King testMe = new King(this);
+			int index = postMovePieces.getIndexOf(testMe);
+			testMe.move(possibleMove,postMovePieces);
+			postMovePieces.set(index,testMe);
+			testMe.updateCheck(postMovePieces);
+			boolean leftCheck = !testMe.getCheck();//did the king move out of check
 			{//reset king to start
 				this.position = new ChessPosition(original.position);
 				this.alive = original.alive;
@@ -58,6 +60,28 @@ public class King extends ChessPiece
 		}
 		return true;
 	}
+/*
+	/**
+	 * Tests a move on an array of chess pieces
+	 * @param CHESS_PIECE the chess piece to mvoe
+	 * @param MOVE_TO_POS the position to move the chess piece to
+	 * @param CHESS_PIECES the array of chess pieces representing the borad
+	 * @return the updated array of pieces
+	 */
+	/*private static ChessPieces testMove(final ChessPiece CHESS_PIECE,final ChessPosition MOVE_TO_POS, final ChessPieces CHESS_PIECES){
+		{
+			if(postMovePieces.getPieceAt(position).checkMove(MOVE_TO_POS,CHESS_PIECES)){
+				if(postMovePieces.isOccupied(MOVE_TO_POS, ChessPiece.Color.not(postMovePieces.getPieceAt(position).getColor()))) postMovePieces.capture(MOVE_TO_POS);
+				chessPiece.move(MOVE_TO_POS,postMovePieces);
+				postMovePieces.set(position,chessPiece);
+				return postMovePieces;
+			} else {
+				MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());
+			}
+		}
+		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		return new ChessPieces(0);
+	}*/
 
 	private void updateCheckmate(final ChessPieces CHESS_PIECES){
 		this.updateCheck(CHESS_PIECES);//TODO: should this be here?
@@ -65,10 +89,22 @@ public class King extends ChessPiece
 			this.checkmate = false;
 			return;//if it's not in check, then it doesn't need to check if it's in checkmate
 		}
-		for(final ChessPiece DEFENDING_PIECE : ChessPieces.makePieces(CHESS_PIECES).toArray()){
-			if(DEFENDING_PIECE.getColor() == this.color && !DEFENDING_PIECE.equalsByType(this)){
-				for(final ChessPosition POSSIBLE_MOVE : DEFENDING_PIECE.getNewPositions(CHESS_PIECES)){
-					ChessPieces postMovePieces = ChessBoard.testMove(DEFENDING_PIECE,POSSIBLE_MOVE,CHESS_PIECES);
+		for(ChessPiece defendingPiece : ChessPieces.makePieces(CHESS_PIECES).toArray()){
+			if(defendingPiece.getColor() == this.color && !defendingPiece.equalsByType(this)){
+				for(ChessPosition possibleMove : defendingPiece.getNewPositions(ChessPieces.makePieces(CHESS_PIECES))){
+					ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
+					{
+						ChessPiece testPiece = ChessPiece.makePiece(defendingPiece);
+						MySystem.myAssert(postMovePieces.checkExists(testPiece),MySystem.getFileName(),MySystem.getLineNumber());
+						int position = postMovePieces.getIndexOf(testPiece);
+						if(postMovePieces.getPieceAt(position).checkMove(possibleMove,postMovePieces)){
+							if(postMovePieces.isOccupied(possibleMove, ChessPiece.Color.not(postMovePieces.getPieceAt(position).getColor()))) postMovePieces.capture(possibleMove);
+							testPiece.move(possibleMove,postMovePieces);
+							postMovePieces.set(position,testPiece);
+						} else {
+							MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());
+						}
+					}
 					{
 						this.updateCheck(postMovePieces);
 
