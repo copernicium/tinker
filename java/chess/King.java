@@ -60,28 +60,6 @@ public class King extends ChessPiece
 		}
 		return true;
 	}
-/*
-	/**
-	 * Tests a move on an array of chess pieces
-	 * @param CHESS_PIECE the chess piece to mvoe
-	 * @param MOVE_TO_POS the position to move the chess piece to
-	 * @param CHESS_PIECES the array of chess pieces representing the borad
-	 * @return the updated array of pieces
-	 */
-	/*private static ChessPieces testMove(final ChessPiece CHESS_PIECE,final ChessPosition MOVE_TO_POS, final ChessPieces CHESS_PIECES){
-		{
-			if(postMovePieces.getPieceAt(position).checkMove(MOVE_TO_POS,CHESS_PIECES)){
-				if(postMovePieces.isOccupied(MOVE_TO_POS, ChessPiece.Color.not(postMovePieces.getPieceAt(position).getColor()))) postMovePieces.capture(MOVE_TO_POS);
-				chessPiece.move(MOVE_TO_POS,postMovePieces);
-				postMovePieces.set(position,chessPiece);
-				return postMovePieces;
-			} else {
-				MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());
-			}
-		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
-		return new ChessPieces(0);
-	}*/
 
 	private void updateCheckmate(final ChessPieces CHESS_PIECES){
 		this.updateCheck(CHESS_PIECES);//TODO: should this be here?
