@@ -119,8 +119,9 @@ public class ChessBoard
 	 */
 	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
 		Vector<ChessPiece> moveablePieces = new Vector<>();
+		//ChessPiece[] allPieces = pieces.toArray();
 		for(ChessPiece chessPiece: pieces.toArray()){
-			if(ChessPiece.limitMovesToLeavingCheck(chessPiece,pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
+			if(chessPiece.getColor().equals(this.playerTurn) && ChessPiece.limitMovesToLeavingCheck(chessPiece,ChessPieces.makePieces(pieces)).size() > 0) moveablePieces.addElement(chessPiece);
 		}
 		return moveablePieces;
 	}

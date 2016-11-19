@@ -191,7 +191,7 @@ public class Game{
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.F);
 			testMove(chessBoard,test,testMove);
 		}
-		System.out.println("Available moves: " + chessBoard.getMoveablePositionsByPlayer().toString() + " out of " + chessBoard.getMoveablePiecesByPlayer().toString());
+		System.out.println("Available moves: " + chessBoard.getMoveablePositionsByPlayer().toString() + " out of " + chessBoard.getMoveablePiecesByPlayer().toString() + " to " +  ChessPiece.limitMovesToLeavingCheck(chessBoard.getMoveablePiecesByPlayer().elementAt(0),chessBoard.getPieces()).toString());
 	}
 
 
@@ -292,13 +292,13 @@ public class Game{
 		//testMovement();
 		//testInput();
 		//testCheckmate();
-		testCheck();
+		//testCheck();
 		//testSingleMove();
 		//testCopy();
 		//testCapture();
 
 		//the actual game
-		//play();
+		play();
 		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n",MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }

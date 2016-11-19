@@ -57,6 +57,13 @@ public class ChessPieces{
 		return newPieces;
 	}
 
+	boolean equals(ChessPieces b){
+		if(b.toArray().length != this.toArray().length) return false;
+		for(int i = 0; i<this.toArray().length; i++){
+			if(!b.toArray()[i].equalsByType(this.toArray()[i]))return false;
+		}
+		return true;
+	}
 	/**
 	 * Finds the index of a chess piece in an array, crashing if it cannot be found.
 	 * @param FIND_ME the piece to find
@@ -136,6 +143,21 @@ public class ChessPieces{
 	}
 
 	/**
+	 * Finds the kings and then updates just their check statuses
+	 * @return the updated array of pieces
+	 */
+	public void updateKingChecks(){
+		King updatedWhiteKing = getKing(ChessPiece.Color.WHITE);
+		King updatedBlackKing = getKing(ChessPiece.Color.BLACK);
+
+		updatedWhiteKing.updateCheck(ChessPieces.makePieces(this));
+		updatedBlackKing.updateCheck(ChessPieces.makePieces(this));
+
+		this.set(this.getIndexOf(ChessPiece.Type.KING, ChessPiece.Color.WHITE), updatedWhiteKing);
+		this.set(this.getIndexOf(ChessPiece.Type.KING, ChessPiece.Color.BLACK), updatedBlackKing);
+	}
+
+	/**
 	 * Finds the kings and then updates their check and checkmate statuses
 	 * @return the updated array of pieces
 	 */
@@ -143,11 +165,11 @@ public class ChessPieces{
 		King updatedWhiteKing = getKing(ChessPiece.Color.WHITE);
 		King updatedBlackKing = getKing(ChessPiece.Color.BLACK);
 
-		updatedWhiteKing.update(this);
-		updatedBlackKing.update(this);
+		updatedWhiteKing.update(ChessPieces.makePieces(this));
+		updatedBlackKing.update(ChessPieces.makePieces(this));
 
-		this.pieces[this.getIndexOf(ChessPiece.Type.KING, ChessPiece.Color.WHITE)] = updatedWhiteKing;
-		this.pieces[this.getIndexOf(ChessPiece.Type.KING, ChessPiece.Color.BLACK)] = updatedBlackKing;
+		this.set(this.getIndexOf(ChessPiece.Type.KING, ChessPiece.Color.WHITE), updatedWhiteKing);
+		this.set(this.getIndexOf(ChessPiece.Type.KING, ChessPiece.Color.BLACK), updatedBlackKing);
 	}
 
 	/**

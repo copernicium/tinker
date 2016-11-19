@@ -66,7 +66,7 @@ public class Pawn extends ChessPiece
 		}
 		if(!original.equalsByType(this)) MySystem.error("orignal:" + original.toString() + " this:" + this.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(original.equalsByType(this),MySystem.getFileName(),MySystem.getLineNumber());
-        return possibleMoves;
+		return possibleMoves;
     }
 
     public boolean getFirstMove(){
