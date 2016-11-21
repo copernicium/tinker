@@ -59,6 +59,7 @@ public class ChessBoard
     private ChessPieces pieces;
 	private ChessPiece.Color playerTurn;
 	private Status status;
+	private ConditionStorage conditions;
 
 	/**
 	 * Fetches the current player whose turn it is
@@ -259,7 +260,7 @@ public class ChessBoard
 	 * Creates a new chess board ready to be used
 	 */
 	public ChessBoard(){
-		this(ChessBoard.fillBoard(),ChessPiece.Color.WHITE);
+		this(ChessBoard.fillBoard(),ChessPiece.Color.WHITE,new ConditionStorage(ChessBoard.fillBoard()));
     }
 
 	/**
@@ -267,16 +268,17 @@ public class ChessBoard
 	 * @param pieces the pieces to be used in place of the default
 	 */
 	public ChessBoard(ChessPieces pieces){
-		this(pieces,ChessPiece.Color.WHITE);
+		this(pieces,ChessPiece.Color.WHITE,new ConditionStorage(pieces));
 	}
 	/**
 	 * Creates a chess board given an array of pieces instead of creating one itself and the current player's turn
 	 * @param pieces the pieces to be used in place of the default
 	 * @param playerTurn the color that the player's turn should be set to
 	 */
-    public ChessBoard(ChessPieces pieces, ChessPiece.Color playerTurn){
+    public ChessBoard(ChessPieces pieces, ChessPiece.Color playerTurn,ConditionStorage conditions){
 		this.pieces = new ChessPieces(pieces);
 		this.playerTurn = playerTurn;
 		this.status = Status.IN_PROGRESS;
+		this.conditions = conditions;
 	}
 }
