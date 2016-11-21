@@ -19,7 +19,7 @@ public class ConditionStorage{
 		}
 		public void update(ChessPiece piece, ChessPieces pieces){
 			this.piece = piece;
-			this.possibleMoves = ChessPiece.limitMovesToLeavingCheck(this.piece,pieces);
+			this.possibleMoves = this.piece.limitMovesToLeavingCheck(pieces);
 			if(this.piece instanceof King){
 				King k = new King(this.piece);
 				k.update(pieces);
@@ -42,9 +42,9 @@ public class ConditionStorage{
 		return ChessPiece.makePiece(this.possibleMoveStorage[INDEX].getPiece());
 	}
 
-	public void update(ChessPieces pieces){
+	public void update(ChessPieces pieces,boolean force){
 		MySystem.myAssert(pieces.length() == this.pieces.getLast().length() && pieces.length() == this.possibleMoveStorage.length,MySystem.getFileName(),MySystem.getLineNumber());
-		if(this.pieces.changed(pieces)){
+		if(this.pieces.changed(pieces) || force){
 			this.pieces.updatePieces(pieces);
 			for(int i = 0; i < this.possibleMoveStorage.length; i++){
 				possibleMoveStorage[i].update(pieces.getPieceAt(i),this.pieces.getLast());
@@ -52,13 +52,20 @@ public class ConditionStorage{
 		}
 	}
 
-	public PiecesStorage getPieces(){
-		return new PiecesStorage(this.pieces);
+	public boolean changed(ChessPieces pieces){
+		return this.pieces.changed(pieces);
+	}
+
+	public ChessPieces getPieces(){
+		return new ChessPieces(this.pieces.getLast());
 	}
 
 	public ConditionStorage(ChessPieces pieces){
-		//this.pieces = new PiecesStorage(pieces);
+		this.pieces = new PiecesStorage(pieces);
 		this.possibleMoveStorage = new PossibleMoveStorage[pieces.length()];
-		this.update(pieces);
+		for(int i = 0; i < this.possibleMoveStorage.length; i++){
+			this.possibleMoveStorage[i] = new PossibleMoveStorage();
+		}
+		this.update(pieces,true);
 	}
 }

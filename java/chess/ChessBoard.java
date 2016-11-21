@@ -121,8 +121,10 @@ public class ChessBoard
 	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
 		Vector<ChessPiece> moveablePieces = new Vector<>();
 		//ChessPiece[] allPieces = pieces.toArray();
-		for(ChessPiece chessPiece: pieces.toArray()){
-			if(chessPiece.getColor().equals(this.playerTurn) && ChessPiece.limitMovesToLeavingCheck(chessPiece,ChessPieces.makePieces(pieces)).size() > 0) moveablePieces.addElement(chessPiece);
+		this.conditions.update(this.pieces,false);
+		for(int i = 0; i < pieces.toArray().length; i++){
+			ChessPiece chessPiece = pieces.toArray()[i];
+			if(chessPiece.getColor().equals(this.playerTurn) && this.conditions.getMovesAt(i).size() > 0) moveablePieces.addElement(chessPiece);
 		}
 		return moveablePieces;
 	}
@@ -159,7 +161,7 @@ public class ChessBoard
 		MySystem.myAssert(this.status == Status.IN_PROGRESS,MySystem.getFileName(), MySystem.getLineNumber());
 		MySystem.myAssert(chessPiece.getColor() == playerTurn,MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(pieces.checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
-		if(chessPiece.checkMoveDeep(moveThere,pieces)){
+		if(chessPiece.checkMoveDeep(moveThere,pieces,this.conditions)){
 			int position = pieces.getIndexOf(chessPiece);
 			chessPiece.move(moveThere,pieces);
 			pieces.set(position,chessPiece);
@@ -167,16 +169,26 @@ public class ChessBoard
 		} else {
 			MySystem.error("Error: trying to move piece to invalid location: piece:" + chessPiece.toString() + " cannot move to " + moveThere.toString(),MySystem.getFileName(),MySystem.getLineNumber());//user inputs invalid move
 		}
-		this.updateStatus();
+		if(this.conditions.changed(this.pieces)){
+			this.conditions.update(this.pieces,false);
+			this.updateStatus();
+		}
 		playerTurn = ChessPiece.Color.not(playerTurn);
     }
+
+    public ConditionStorage getConditions(){
+		return this.conditions;
+	}
 
 	/**
 	 * Checks if the game is over
 	 * @return true if the game has ended
 	 */
 	public Status getStatus(){
-		this.updateStatus();
+		if(this.conditions.changed(this.pieces)){
+			this.conditions.update(this.pieces,false);
+			this.updateStatus();
+		}
 		return this.status;
 	}
 
@@ -260,7 +272,10 @@ public class ChessBoard
 	 * Creates a new chess board ready to be used
 	 */
 	public ChessBoard(){
-		this(ChessBoard.fillBoard(),ChessPiece.Color.WHITE,new ConditionStorage(ChessBoard.fillBoard()));
+		this.pieces = new ChessPieces(ChessBoard.fillBoard());
+		this.playerTurn = ChessPiece.Color.WHITE;
+		this.status = Status.IN_PROGRESS;
+		this.conditions = new ConditionStorage(this.pieces);
     }
 
 	/**

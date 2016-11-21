@@ -191,7 +191,7 @@ public class Game{
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.F);
 			testMove(chessBoard,test,testMove);
 		}
-		System.out.println("Available moves: " + chessBoard.getMoveablePositionsByPlayer().toString() + " out of " + chessBoard.getMoveablePiecesByPlayer().toString() + " to " +  ChessPiece.limitMovesToLeavingCheck(chessBoard.getMoveablePiecesByPlayer().elementAt(0),chessBoard.getPieces()).toString());
+		System.out.println("Available moves: " + chessBoard.getMoveablePositionsByPlayer().toString() + " out of " + chessBoard.getMoveablePiecesByPlayer().toString() + " to " +  chessBoard.getMoveablePiecesByPlayer().elementAt(0).limitMovesToLeavingCheck(chessBoard.getPieces()).toString());
 	}
 
 
@@ -211,13 +211,13 @@ public class Game{
 				for(ChessPiece a : chessBoard.getMoveablePiecesByPlayer()){
 					if(chessPiece.equals(a))checkIfPieceIsValid = true;
 				}
-				//MySystem.myAssert(checkIfPieceIsValid,MySystem.getFileName(),MySystem.getLineNumber());
+				MySystem.myAssert(checkIfPieceIsValid,MySystem.getFileName(),MySystem.getLineNumber());
 			}
-			System.out.print("Input the location to move that piece to (available positions are " + ChessPiece.limitMovesToLeavingCheck(chessPiece,chessBoard.getPieces())+ ": ");
+			System.out.print("Input the location to move that piece to (available positions are " + chessBoard.getConditions().getMovesAt(chessBoard.getPieces().getIndexOf(chessPiece)).toString()+ ": ");
 			ChessPosition chessPosition = Game.getInput();
 			{
 				boolean checkIfMoveIsValid = false;
-				for(ChessPosition a : ChessPiece.limitMovesToLeavingCheck(chessPiece,chessBoard.getPieces())){
+				for(ChessPosition a : chessBoard.getConditions().getMovesAt(chessBoard.getPieces().getIndexOf(chessPiece))){
 					if(chessPosition.equals(a))checkIfMoveIsValid = true;
 				}
 				MySystem.myAssert(checkIfMoveIsValid,MySystem.getFileName(),MySystem.getLineNumber());
