@@ -56,9 +56,9 @@ public class ChessBoard
 
 	public enum Status{IN_PROGRESS,WHITE_WIN,BLACK_WIN};
 
+	private ChessPieces pieces;
 	private ChessPiece.Color playerTurn;
 	private Status status;
-	private ConditionStorage conditions;
 
 	/**
 	 * Fetches the current player whose turn it is
@@ -95,7 +95,7 @@ public class ChessBoard
 	 * Prints the current chess board
 	 */
 	public void print(){
-		ChessBoard.print(this.conditions.getLast().toArray());
+		ChessBoard.print(this.pieces.toArray());
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class ChessBoard
 	 * @return the array of all the chess pieces
 	 */
 	public ChessPieces getPieces(){
-		return this.conditions.getLast();
+		return this.pieces;
 	}
 
 	/**
@@ -119,12 +119,8 @@ public class ChessBoard
 	 */
 	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
 		Vector<ChessPiece> moveablePieces = new Vector<>();
-		for(ChessPiece chessPiece: pieces.toArray()){
-<<<<<<< HEAD
-			if(chessPiece.limitMovesToLeavingCheck(pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
-=======
-			if(ChessPiece.limitMovesToLeavingCheck(chessPiece,pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
->>>>>>> parent of 3c2205d... Get limiting moves to those which leave check to work
+		for(ChessPiece chessPiece: this.pieces.toArray()){
+			if(chessPiece.limitMovesToLeavingCheck(this.pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
 		}
 		return moveablePieces;
 	}
@@ -144,10 +140,10 @@ public class ChessBoard
 	 * Asks both kings if they are in checkmate. If one is, then it ends the game.
 	 */
 	public void updateStatus(){
-		this.conditions.updateKings();
+		this.pieces.updateKings();
 
-		if((this.conditions.getLast().getKing(ChessPiece.Color.BLACK)).getCheckmate()) status = Status.WHITE_WIN;
-		else if((this.conditions.getLast().getKing(ChessPiece.Color.WHITE)).getCheckmate()) status = Status.BLACK_WIN;
+		if((this.pieces.getKing(ChessPiece.Color.BLACK)).getCheckmate()) status = Status.WHITE_WIN;
+		else if((this.pieces.getKing(ChessPiece.Color.WHITE)).getCheckmate()) status = Status.BLACK_WIN;
 		else status = Status.IN_PROGRESS;
 	}
 
@@ -157,12 +153,11 @@ public class ChessBoard
 	 * @param moveThere the position to move the piece to
 	 */
     public void move(ChessPiece chessPiece,ChessPosition moveThere){
-		ChessPieces pieces = ChessPieces.makePieces(this.conditions.getLast());
 		//TODO: if in check, then only allow movement out of it
 		MySystem.myAssert(this.status == Status.IN_PROGRESS,MySystem.getFileName(), MySystem.getLineNumber());
 		MySystem.myAssert(chessPiece.getColor() == playerTurn,MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(pieces.checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
-		if(chessPiece.checkMoveDeep(moveThere,pieces,this.conditions)){
+		if(chessPiece.checkMoveDeep(moveThere,pieces)){
 			int position = pieces.getIndexOf(chessPiece);
 			chessPiece.move(moveThere,pieces);
 			pieces.set(position,chessPiece);
@@ -170,16 +165,9 @@ public class ChessBoard
 		} else {
 			MySystem.error("Error: trying to move piece to invalid location: piece:" + chessPiece.toString() + " cannot move to " + moveThere.toString(),MySystem.getFileName(),MySystem.getLineNumber());//user inputs invalid move
 		}
-		if(this.conditions.changed(pieces)){
-			this.conditions.update(pieces,false);
-			this.updateStatus();
-		}
+		this.updateStatus();
 		playerTurn = ChessPiece.Color.not(playerTurn);
     }
-
-    public ConditionStorage getConditions(){
-		return this.conditions;
-	}
 
 	/**
 	 * Checks if the game is over
@@ -260,10 +248,9 @@ public class ChessBoard
 	 * Creates a new chess board ready to be used
 	 */
 	public ChessBoard(){
-		ChessPieces pieces = new ChessPieces(ChessBoard.fillBoard());
+		this.pieces = new ChessPieces(ChessBoard.fillBoard());
 		this.playerTurn = ChessPiece.Color.WHITE;
 		this.status = Status.IN_PROGRESS;
-		this.conditions = new ConditionStorage(pieces);
     }
 
 	/**
@@ -271,15 +258,15 @@ public class ChessBoard
 	 * @param pieces the pieces to be used in place of the default
 	 */
 	public ChessBoard(ChessPieces pieces){
-		this(ChessPiece.Color.WHITE,new ConditionStorage(pieces));
+		this(pieces,ChessPiece.Color.WHITE);
 	}
 	/**
 	 * Creates a chess board given an array of pieces instead of creating one itself and the current player's turn
 	 * @param playerTurn the color that the player's turn should be set to
 	 */
-    public ChessBoard(ChessPiece.Color playerTurn,ConditionStorage conditions){
+    public ChessBoard(ChessPieces pieces,ChessPiece.Color playerTurn){
+		this.pieces = ChessPieces.makePieces(pieces);
 		this.playerTurn = playerTurn;
 		this.status = Status.IN_PROGRESS;
-		this.conditions = conditions;
 	}
 }

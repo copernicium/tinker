@@ -8,9 +8,9 @@ public class ChessPiece
 	/**
 	 * Represents the types of chess pieces
 	 */
-    public enum Type{
+	public enum Type{
 		UNASSIGNED,PAWN,ROOK,KNIGHT,BISHOP,QUEEN,KING
-    }
+	}
 
 	/**
 	 * Represents the color of a chess piece
@@ -20,7 +20,7 @@ public class ChessPiece
 
 		public static Color not(Color a){
 			switch(a){
-				case WHITE: 
+				case WHITE:
 					return BLACK;
 				case BLACK:
 					return WHITE;
@@ -29,9 +29,9 @@ public class ChessPiece
 			return WHITE;
 		}
 	}
-    protected Color color;
-    protected ChessPosition position;
-    protected boolean alive;
+	protected Color color;
+	protected ChessPosition position;
+	protected boolean alive;
 	private final static Type type = Type.UNASSIGNED;
 
 	/**
@@ -55,9 +55,9 @@ public class ChessPiece
 	 * @return the string of information
 	 */
 	@Override
-    public String toString(){
-        return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " alive:" + this.alive + ")";
-    }
+	public String toString(){
+		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " alive:" + this.alive + ")";
+	}
 
 	/**
 	 * The symbol to print given the type
@@ -72,8 +72,8 @@ public class ChessPiece
 	 * @return the color of the piece
 	 */
 	public Color getColor(){
-        return color;
-    }
+		return color;
+	}
 
 	/**
 	 * Checks for equality by value with a given piece
@@ -109,35 +109,20 @@ public class ChessPiece
 	}
 
 	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
 	 * Limits the possible moves to a those which do not result the king being in check
 	 * @param CHESS_PIECES all of the pieces
 	 * @returnvthe possible moves which do not result the king being in check
 	 */
 	public Vector<ChessPosition> limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){//TODO: make faster
-=======
-	 *
-	 * @param CHESS_PIECE
-	 * @param CHESS_PIECES
-	 * @return
-	 */
-	public static Vector<ChessPosition> limitMovesToLeavingCheck(final ChessPiece CHESS_PIECE, final ChessPieces CHESS_PIECES){//TODO
->>>>>>> parent of 3c2205d... Get limiting moves to those which leave check to work
 		Vector<ChessPosition> newMoves = new Vector<>(0);
 		Vector<ChessPosition> allPossible = ChessPiece.makePiece(this).getNewPositions(ChessPieces.makePieces(CHESS_PIECES));
 		for(ChessPosition testMove: allPossible){
 			ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
-<<<<<<< HEAD
 			ChessPiece testPiece = ChessPiece.makePiece(this);
-=======
-			ChessPiece testPiece = ChessPiece.makePiece(CHESS_PIECE);
-			MySystem.println("Trying to move " + testPiece.toString() + " to " + testMove.toString(),MySystem.getFileName(),MySystem.getLineNumber());
->>>>>>> parent of 3c2205d... Get limiting moves to those which leave check to work
 			int position = testPieces.getIndexOf(testPiece);
 			testPiece.move(testMove,testPieces);
 			testPieces.set(position,testPiece);
-			testPieces.getKing(testPiece.getColor()).update(testPieces);
+			testPieces.updateKingChecks();
 			if(!testPieces.getKing(testPiece.getColor()).getCheck()) newMoves.add(testMove);
 		}
 		return newMoves;
@@ -148,10 +133,10 @@ public class ChessPiece
 	 * @param chessPieces an array of pieces representing a chess board
 	 * @return a vector of chess positions that this piece can be moved to
 	 */
-    protected Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
-      	MySystem.error("This is not a valid chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
-       	return new Vector<>(0);
-    }
+	protected Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
+		MySystem.error("This is not a valid chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
+		return new Vector<>(0);
+	}
 
 	/**
 	 * Moves this chess pieces
@@ -159,28 +144,8 @@ public class ChessPiece
 	 * @param chessPieces an array of pieces representing a chess board
 	 */
 	public void move(ChessPosition position, ChessPieces chessPieces){
-       MySystem.error("This is not a valid chess piece.", MySystem.getFileName(),MySystem.getLineNumber());
-    }
-
-    private static boolean myContains(Vector<ChessPosition> all, ChessPosition a){
-		for(ChessPosition b: all){
-			if(a.equals(b)) return true;
-		}
-		return false;
+		MySystem.error("This is not a valid chess piece.", MySystem.getFileName(),MySystem.getLineNumber());
 	}
-
-	/**
-	 * Checks to see if this piece can move to a given position
-	 * @param CHECK_MOVE the position to check to see if this piece can move to
-	 * @param CHESS_PIECES an array of pieces representing a chess board
-	 * @param last the last conditions
-	 * @return true if this piece can move to that position
-	 */
-	/*public boolean checkMoveDeep(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES,final ConditionStorage last){
-		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
-		last.update(CHESS_PIECES,false);
-		return myContains(last.getMovesAt(last.getLast().getIndexOf(this)),CHECK_MOVE);
-	}*/
 
 	/**
 	 * Checks to see if this piece can move to a given position
@@ -193,22 +158,22 @@ public class ChessPiece
 		return myContains(this.limitMovesToLeavingCheck(CHESS_PIECES),CHECK_MOVE);
 	}
 
+	private static boolean myContains(Vector<ChessPosition> all, ChessPosition a){
+		for(ChessPosition b: all){
+			if(a.equals(b)) return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Checks to see if this piece can move to a given position
-	 * @param CHECK_MOVE the position to check to see if this piece can move to
+	 * @param CHECK_MOVE the position to check to see if this piece can move to1
 	 * @param CHESS_PIECES an array of pieces representing a chess board
 	 * @return true if this piece can move to that position
 	 */
-    public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
+	public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
 		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
-<<<<<<< HEAD
 		return myContains(this.getNewPositions(CHESS_PIECES),CHECK_MOVE);
-=======
-		for(ChessPosition possiblePosition: this.getNewPositions(CHESS_PIECES)){//TODO: limit?
-			if(CHECK_MOVE.equals(possiblePosition)) return true;
-		}
-		return false;
->>>>>>> parent of 3c2205d... Get limiting moves to those which leave check to work
 	}
 
 	/**
@@ -216,23 +181,23 @@ public class ChessPiece
 	 * @return the type of this piece
 	 */
 	public Type getType(){
-        return ChessPiece.type;
-    }
+		return ChessPiece.type;
+	}
 
 	/**
 	 * Fetches the position of this chess piece
 	 * @return the position of this chess piece
 	 */
 	public ChessPosition getPosition(){
-        return new ChessPosition(position);
-    }
+		return new ChessPosition(position);
+	}
 
 	/**
 	 * Used to copy chess pieces by value
 	 * @param chessPiece the piece to copy
 	 * @return a new instance with the same values
 	 */
-    public static ChessPiece makePiece(ChessPiece chessPiece){
+	public static ChessPiece makePiece(ChessPiece chessPiece){
 		switch(chessPiece.getType()){
 			case KING:
 				return new King(chessPiece);
@@ -336,9 +301,9 @@ public class ChessPiece
 	 * @param position the position of the piece
 	 * @param color the color of the piece
 	 */
-    public ChessPiece(ChessPosition position,Color color){
-        this.position = position;
-        this.color = color;
-        alive = true;
-    }
+	public ChessPiece(ChessPosition position,Color color){
+		this.position = position;
+		this.color = color;
+		alive = true;
+	}
 }

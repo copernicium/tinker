@@ -22,7 +22,7 @@ public class King extends ChessPiece
 		return King.type;
 	}
 
-	private void updateCheck(final ChessPieces CHESS_PIECES){
+	public void updateCheck(final ChessPieces CHESS_PIECES){
 		for(ChessPiece enemyPiece: CHESS_PIECES.toArray()){
 			if(enemyPiece.getColor() == Color.not(this.color)){//if it's an enemy piece
 				for(ChessPosition possiblePosition : enemyPiece.getNewPositions(CHESS_PIECES)){
@@ -67,9 +67,11 @@ public class King extends ChessPiece
 			this.checkmate = false;
 			return;//if it's not in check, then it doesn't need to check if it's in checkmate
 		}
-		for(ChessPiece defendingPiece : ChessPieces.makePieces(CHESS_PIECES).toArray()){
-			if(defendingPiece.getColor() == this.color && !defendingPiece.equalsByType(this)){
-				for(ChessPosition possibleMove : defendingPiece.getNewPositions(ChessPieces.makePieces(CHESS_PIECES))){
+		ChessPiece[] allPieces = ChessPieces.makePieces(CHESS_PIECES).toArray();
+		for(ChessPiece defendingPiece : allPieces){
+			if(defendingPiece.getColor() == this.getColor() && !defendingPiece.equalsByType(this)){
+				Vector<ChessPosition> possibleMoves = defendingPiece.getNewPositions(ChessPieces.makePieces(CHESS_PIECES));
+				for(ChessPosition possibleMove : possibleMoves){
 					ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
 					{
 						ChessPiece testPiece = ChessPiece.makePiece(defendingPiece);
@@ -87,7 +89,6 @@ public class King extends ChessPiece
 						this.updateCheck(postMovePieces);
 
 						if(!this.check){//if a move moves it out of check, then it isn't in checkmate
-							//MySystem.println("Moving out of check with" + DEFENDING_PIECE.toString() + " moving to " + POSSIBLE_MOVE.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 							this.checkmate = false;
 							return;
 						}
@@ -115,12 +116,12 @@ public class King extends ChessPiece
 	 * The symbol to print given the type
 	 * @return the letter representing this chess piece
 	 */
-   	@Override
-    public String print(){
-        return "K";
-    }
 	@Override
-    public Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
+	public String print(){
+		return "K";
+	}
+	@Override
+	public Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		for(int y = -1; y <= 1; y++){
 			for(int x = -1; x <= 1; x++){
@@ -130,8 +131,8 @@ public class King extends ChessPiece
 				}
 			}
 		}
-        return possibleMoves;
-    }
+		return possibleMoves;
+	}
 
 	/**
 	 * Checks for equality by value with a given piece
@@ -151,14 +152,14 @@ public class King extends ChessPiece
 		return true;
 	}
 
-    @Override
-    public void move(ChessPosition newPosition, ChessPieces chessPieces){
-        for(ChessPosition a: getNewPositions(chessPieces)){
-            if(newPosition.equals(a)){
-                this.position = newPosition;
-                return;
-            }
-        }
+	@Override
+	public void move(ChessPosition newPosition, ChessPieces chessPieces){
+		for(ChessPosition a: getNewPositions(chessPieces)){
+			if(newPosition.equals(a)){
+				this.position = newPosition;
+				return;
+			}
+		}
 		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 	}
@@ -168,11 +169,11 @@ public class King extends ChessPiece
 	public boolean getCheckmate(){
 		return checkmate;
 	}
-    public King(){
-        super();
+	public King(){
+		super();
 		check = false;
 		checkmate = false;
-    }
+	}
 	public King(King toCopy) {
 		this.position = new ChessPosition(toCopy.position);
 		this.alive = toCopy.alive;
@@ -181,7 +182,7 @@ public class King extends ChessPiece
 		this.checkmate = toCopy.checkmate;
 	}
 
-    public King(ChessPiece chessPiece){
+	public King(ChessPiece chessPiece){
 		this(chessPiece.getPosition(),chessPiece.getColor());
 		if(chessPiece instanceof King){
 			King toCopy = (King)chessPiece;
@@ -192,9 +193,9 @@ public class King extends ChessPiece
 			this.checkmate = toCopy.checkmate;
 		}
 	}
-    public King(ChessPosition position, Color color){
-        super(position,color);
+	public King(ChessPosition position, Color color){
+		super(position,color);
 		check = false;
 		checkmate = false;
-    }
+	}
 }

@@ -191,11 +191,7 @@ public class Game{
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.F);
 			testMove(chessBoard,test,testMove);
 		}
-<<<<<<< HEAD
 		System.out.println("Available moves: " + chessBoard.getMoveablePositionsByPlayer().toString() + " out of these pieces " + chessBoard.getMoveablePiecesByPlayer().toString() + " to these locations " +  chessBoard.getMoveablePiecesByPlayer().elementAt(0).limitMovesToLeavingCheck(chessBoard.getPieces()).toString());
-=======
-		System.out.println("Available moves: " + chessBoard.getMoveablePositionsByPlayer().toString() + " out of " + chessBoard.getMoveablePiecesByPlayer().toString());
->>>>>>> parent of 3c2205d... Get limiting moves to those which leave check to work
 	}
 
 
@@ -217,11 +213,11 @@ public class Game{
 				}
 				MySystem.myAssert(checkIfPieceIsValid,MySystem.getFileName(),MySystem.getLineNumber());
 			}
-			System.out.print("Input the location to move that piece to (available positions are " + chessBoard.getConditions().getMovesAt(chessBoard.getPieces().getIndexOf(chessPiece)).toString()+ ": ");
+			System.out.print("Input the location to move that piece to (available positions are " +  chessPiece.limitMovesToLeavingCheck(chessBoard.getPieces()).toString() + ": ");
 			ChessPosition chessPosition = Game.getInput();
 			{
 				boolean checkIfMoveIsValid = false;
-				for(ChessPosition a : chessBoard.getConditions().getMovesAt(chessBoard.getPieces().getIndexOf(chessPiece))){
+				for(ChessPosition a : chessPiece.limitMovesToLeavingCheck(chessBoard.getPieces())){
 					if(chessPosition.equals(a))checkIfMoveIsValid = true;
 				}
 				MySystem.myAssert(checkIfMoveIsValid,MySystem.getFileName(),MySystem.getLineNumber());
