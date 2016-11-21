@@ -22,7 +22,7 @@ public class King extends ChessPiece
 		return King.type;
 	}
 
-	public void updateCheck(final ChessPieces CHESS_PIECES){
+	private void updateCheck(final ChessPieces CHESS_PIECES){
 		for(ChessPiece enemyPiece: CHESS_PIECES.toArray()){
 			if(enemyPiece.getColor() == Color.not(this.color)){//if it's an enemy piece
 				for(ChessPosition possiblePosition : enemyPiece.getNewPositions(CHESS_PIECES)){
@@ -67,11 +67,9 @@ public class King extends ChessPiece
 			this.checkmate = false;
 			return;//if it's not in check, then it doesn't need to check if it's in checkmate
 		}
-		ChessPiece[] allPieces = ChessPieces.makePieces(CHESS_PIECES).toArray();
-		for(ChessPiece defendingPiece : allPieces){
-			if(defendingPiece.getColor() == this.getColor() && !defendingPiece.equalsByType(this)){
-				Vector<ChessPosition> possibleMoves = defendingPiece.getNewPositions(ChessPieces.makePieces(CHESS_PIECES));
-				for(ChessPosition possibleMove : possibleMoves){
+		for(ChessPiece defendingPiece : ChessPieces.makePieces(CHESS_PIECES).toArray()){
+			if(defendingPiece.getColor() == this.color && !defendingPiece.equalsByType(this)){
+				for(ChessPosition possibleMove : defendingPiece.getNewPositions(ChessPieces.makePieces(CHESS_PIECES))){
 					ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
 					{
 						ChessPiece testPiece = ChessPiece.makePiece(defendingPiece);
@@ -89,6 +87,7 @@ public class King extends ChessPiece
 						this.updateCheck(postMovePieces);
 
 						if(!this.check){//if a move moves it out of check, then it isn't in checkmate
+							//MySystem.println("Moving out of check with" + DEFENDING_PIECE.toString() + " moving to " + POSSIBLE_MOVE.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 							this.checkmate = false;
 							return;
 						}

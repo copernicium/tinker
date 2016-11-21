@@ -119,10 +119,15 @@ public class ChessBoard
 	 */
 	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
 		Vector<ChessPiece> moveablePieces = new Vector<>();
+<<<<<<< HEAD
 		//ChessPiece[] allPieces = pieces.toArray();
 		for(int i = 0; i < this.conditions.getLast().toArray().length; i++){
 			ChessPiece chessPiece = this.conditions.getLast().toArray()[i];
 			if(chessPiece.getColor().equals(this.playerTurn) && this.conditions.getMovesAt(i).size() > 0) moveablePieces.addElement(chessPiece);
+=======
+		for(ChessPiece chessPiece: pieces.toArray()){
+			if(ChessPiece.limitMovesToLeavingCheck(chessPiece,pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
+>>>>>>> parent of 3c2205d... Get limiting moves to those which leave check to work
 		}
 		return moveablePieces;
 	}
