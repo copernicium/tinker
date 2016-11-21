@@ -164,7 +164,7 @@ public class ChessPiece
 	public boolean checkMoveDeep(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES,final ConditionStorage last){
 		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
 		last.update(CHESS_PIECES,false);
-		return myContains(last.getMovesAt(last.getPieces().getIndexOf(this)),CHECK_MOVE);
+		return myContains(last.getMovesAt(last.getLast().getIndexOf(this)),CHECK_MOVE);
 	}
 
 	/**

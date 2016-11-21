@@ -95,7 +95,7 @@ public class ChessBoard
 	 * Prints the current chess board
 	 */
 	public void print(){
-		ChessBoard.print(this.conditions.getPieces().toArray());
+		ChessBoard.print(this.conditions.getLast().toArray());
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class ChessBoard
 	 * @return the array of all the chess pieces
 	 */
 	public ChessPieces getPieces(){
-		return this.conditions.getPieces();
+		return this.conditions.getLast();
 	}
 
 	/**
@@ -120,8 +120,8 @@ public class ChessBoard
 	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
 		Vector<ChessPiece> moveablePieces = new Vector<>();
 		//ChessPiece[] allPieces = pieces.toArray();
-		for(int i = 0; i < this.conditions.getPieces().toArray().length; i++){
-			ChessPiece chessPiece = this.conditions.getPieces().toArray()[i];
+		for(int i = 0; i < this.conditions.getLast().toArray().length; i++){
+			ChessPiece chessPiece = this.conditions.getLast().toArray()[i];
 			if(chessPiece.getColor().equals(this.playerTurn) && this.conditions.getMovesAt(i).size() > 0) moveablePieces.addElement(chessPiece);
 		}
 		return moveablePieces;
@@ -142,10 +142,10 @@ public class ChessBoard
 	 * Asks both kings if they are in checkmate. If one is, then it ends the game.
 	 */
 	public void updateStatus(){
-		this.conditions.update();
+		this.conditions.updateKings();
 
-		if((this.conditions.getPieces().getKing(ChessPiece.Color.BLACK)).getCheckmate()) status = Status.WHITE_WIN;
-		else if((this.conditions.getPieces().getKing(ChessPiece.Color.WHITE)).getCheckmate()) status = Status.BLACK_WIN;
+		if((this.conditions.getLast().getKing(ChessPiece.Color.BLACK)).getCheckmate()) status = Status.WHITE_WIN;
+		else if((this.conditions.getLast().getKing(ChessPiece.Color.WHITE)).getCheckmate()) status = Status.BLACK_WIN;
 		else status = Status.IN_PROGRESS;
 	}
 
@@ -155,7 +155,7 @@ public class ChessBoard
 	 * @param moveThere the position to move the piece to
 	 */
     public void move(ChessPiece chessPiece,ChessPosition moveThere){
-		ChessPieces pieces = ChessPieces.makePieces(this.conditions.getPieces());
+		ChessPieces pieces = ChessPieces.makePieces(this.conditions.getLast());
 		//TODO: if in check, then only allow movement out of it
 		MySystem.myAssert(this.status == Status.IN_PROGRESS,MySystem.getFileName(), MySystem.getLineNumber());
 		MySystem.myAssert(chessPiece.getColor() == playerTurn,MySystem.getFileName(),MySystem.getLineNumber());
