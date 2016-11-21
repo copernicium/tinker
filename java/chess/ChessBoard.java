@@ -56,7 +56,6 @@ public class ChessBoard
 
 	public enum Status{IN_PROGRESS,WHITE_WIN,BLACK_WIN};
 
-    private ChessPieces pieces;
 	private ChessPiece.Color playerTurn;
 	private Status status;
 	private ConditionStorage conditions;
@@ -96,7 +95,7 @@ public class ChessBoard
 	 * Prints the current chess board
 	 */
 	public void print(){
-		ChessBoard.print(this.pieces.toArray());
+		ChessBoard.print(this.conditions.getPieces().toArray());
 	}
 
 	/**
@@ -111,7 +110,7 @@ public class ChessBoard
 	 * @return the array of all the chess pieces
 	 */
 	public ChessPieces getPieces(){
-		return pieces;
+		return this.conditions.getPieces();
 	}
 
 	/**
@@ -121,9 +120,8 @@ public class ChessBoard
 	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
 		Vector<ChessPiece> moveablePieces = new Vector<>();
 		//ChessPiece[] allPieces = pieces.toArray();
-		this.conditions.update(this.pieces,false);
-		for(int i = 0; i < pieces.toArray().length; i++){
-			ChessPiece chessPiece = pieces.toArray()[i];
+		for(int i = 0; i < this.conditions.getPieces().toArray().length; i++){
+			ChessPiece chessPiece = this.conditions.getPieces().toArray()[i];
 			if(chessPiece.getColor().equals(this.playerTurn) && this.conditions.getMovesAt(i).size() > 0) moveablePieces.addElement(chessPiece);
 		}
 		return moveablePieces;
@@ -144,10 +142,10 @@ public class ChessBoard
 	 * Asks both kings if they are in checkmate. If one is, then it ends the game.
 	 */
 	public void updateStatus(){
-		this.pieces.updateKings();
+		this.conditions.update();
 
-		if((this.pieces.getKing(ChessPiece.Color.BLACK)).getCheckmate()) status = Status.WHITE_WIN;
-		else if((this.pieces.getKing(ChessPiece.Color.WHITE)).getCheckmate()) status = Status.BLACK_WIN;
+		if((this.conditions.getPieces().getKing(ChessPiece.Color.BLACK)).getCheckmate()) status = Status.WHITE_WIN;
+		else if((this.conditions.getPieces().getKing(ChessPiece.Color.WHITE)).getCheckmate()) status = Status.BLACK_WIN;
 		else status = Status.IN_PROGRESS;
 	}
 
@@ -157,6 +155,7 @@ public class ChessBoard
 	 * @param moveThere the position to move the piece to
 	 */
     public void move(ChessPiece chessPiece,ChessPosition moveThere){
+		ChessPieces pieces = ChessPieces.makePieces(this.conditions.getPieces());
 		//TODO: if in check, then only allow movement out of it
 		MySystem.myAssert(this.status == Status.IN_PROGRESS,MySystem.getFileName(), MySystem.getLineNumber());
 		MySystem.myAssert(chessPiece.getColor() == playerTurn,MySystem.getFileName(),MySystem.getLineNumber());
@@ -165,12 +164,12 @@ public class ChessBoard
 			int position = pieces.getIndexOf(chessPiece);
 			chessPiece.move(moveThere,pieces);
 			pieces.set(position,chessPiece);
-			if(pieces.isOccupied(pieces.getPieceAt(position).getPosition(), ChessPiece.Color.not(chessPiece.getColor()))) capture(moveThere);
+			if(pieces.isOccupied(pieces.getPieceAt(position).getPosition(), ChessPiece.Color.not(chessPiece.getColor()))) pieces.captureAt(pieces.getIndexOf(moveThere));
 		} else {
 			MySystem.error("Error: trying to move piece to invalid location: piece:" + chessPiece.toString() + " cannot move to " + moveThere.toString(),MySystem.getFileName(),MySystem.getLineNumber());//user inputs invalid move
 		}
-		if(this.conditions.changed(this.pieces)){
-			this.conditions.update(this.pieces,false);
+		if(this.conditions.changed(pieces)){
+			this.conditions.update(pieces,false);
 			this.updateStatus();
 		}
 		playerTurn = ChessPiece.Color.not(playerTurn);
@@ -185,22 +184,9 @@ public class ChessBoard
 	 * @return true if the game has ended
 	 */
 	public Status getStatus(){
-		if(this.conditions.changed(this.pieces)){
-			this.conditions.update(this.pieces,false);
-			this.updateStatus();
-		}
+		this.updateStatus();
 		return this.status;
 	}
-
-	/**
-	 * Kills the piece occuppying a given chess positon
-	 * @param chessPosition the position of the piece to be killed
-	 */
-	private void capture(ChessPosition chessPosition){
-		int index = this.pieces.getIndexOf(chessPosition);
-		this.pieces.captureAt(index);
-		//this.pieces = ChessBoard.capture(chessPosition, this.pieces);
-    }
 
 	/**
 	 * Find the index of the first chess piece in an array that hasn't been assigned an identity
@@ -272,10 +258,10 @@ public class ChessBoard
 	 * Creates a new chess board ready to be used
 	 */
 	public ChessBoard(){
-		this.pieces = new ChessPieces(ChessBoard.fillBoard());
+		ChessPieces pieces = new ChessPieces(ChessBoard.fillBoard());
 		this.playerTurn = ChessPiece.Color.WHITE;
 		this.status = Status.IN_PROGRESS;
-		this.conditions = new ConditionStorage(this.pieces);
+		this.conditions = new ConditionStorage(pieces);
     }
 
 	/**
@@ -283,15 +269,13 @@ public class ChessBoard
 	 * @param pieces the pieces to be used in place of the default
 	 */
 	public ChessBoard(ChessPieces pieces){
-		this(pieces,ChessPiece.Color.WHITE,new ConditionStorage(pieces));
+		this(ChessPiece.Color.WHITE,new ConditionStorage(pieces));
 	}
 	/**
 	 * Creates a chess board given an array of pieces instead of creating one itself and the current player's turn
-	 * @param pieces the pieces to be used in place of the default
 	 * @param playerTurn the color that the player's turn should be set to
 	 */
-    public ChessBoard(ChessPieces pieces, ChessPiece.Color playerTurn,ConditionStorage conditions){
-		this.pieces = new ChessPieces(pieces);
+    public ChessBoard(ChessPiece.Color playerTurn,ConditionStorage conditions){
 		this.playerTurn = playerTurn;
 		this.status = Status.IN_PROGRESS;
 		this.conditions = conditions;

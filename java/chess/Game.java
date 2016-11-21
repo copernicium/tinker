@@ -191,7 +191,7 @@ public class Game{
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.F);
 			testMove(chessBoard,test,testMove);
 		}
-		System.out.println("Available moves: " + chessBoard.getMoveablePositionsByPlayer().toString() + " out of " + chessBoard.getMoveablePiecesByPlayer().toString() + " to " +  chessBoard.getMoveablePiecesByPlayer().elementAt(0).limitMovesToLeavingCheck(chessBoard.getPieces()).toString());
+		System.out.println("Available moves: " + chessBoard.getMoveablePositionsByPlayer().toString() + " out of these pieces " + chessBoard.getMoveablePiecesByPlayer().toString() + " to these locations " +  chessBoard.getMoveablePiecesByPlayer().elementAt(0).limitMovesToLeavingCheck(chessBoard.getPieces()).toString());
 	}
 
 

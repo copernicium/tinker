@@ -42,6 +42,10 @@ public class ConditionStorage{
 		return ChessPiece.makePiece(this.possibleMoveStorage[INDEX].getPiece());
 	}
 
+	public void update(){
+		this.pieces.update();
+	}
+
 	public void update(ChessPieces pieces,boolean force){
 		MySystem.myAssert(pieces.length() == this.pieces.getLast().length() && pieces.length() == this.possibleMoveStorage.length,MySystem.getFileName(),MySystem.getLineNumber());
 		if(this.pieces.changed(pieces) || force){

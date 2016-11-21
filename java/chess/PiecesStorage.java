@@ -7,7 +7,7 @@ public class PiecesStorage{
 	private ChessPieces last;
 
 	public String toString(){
-		return "ConditionStorage(" + this.getLast().toString() + ")";
+		return "PiecesStorage(" + this.getLast().toString() + ")";
 	}
 
 	public boolean equals(PiecesStorage b){
@@ -20,6 +20,10 @@ public class PiecesStorage{
 
 	public boolean changed(ChessPieces newPieces){
 		return !last.equals(newPieces);
+	}
+
+	public void update(){
+		this.last.updateKings();
 	}
 
 	public void updatePieces(ChessPieces newPieces){
