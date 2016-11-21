@@ -110,16 +110,30 @@ public class ChessPiece
 
 	/**
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * Limits the possible moves to a those which do not result the king being in check
 	 * @param CHESS_PIECES all of the pieces
 	 * @returnvthe possible moves which do not result the king being in check
 	 */
 	public Vector<ChessPosition> limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){//TODO: make faster
+=======
+	 *
+	 * @param CHESS_PIECE
+	 * @param CHESS_PIECES
+	 * @return
+	 */
+	public static Vector<ChessPosition> limitMovesToLeavingCheck(final ChessPiece CHESS_PIECE, final ChessPieces CHESS_PIECES){//TODO
+>>>>>>> parent of 3c2205d... Get limiting moves to those which leave check to work
 		Vector<ChessPosition> newMoves = new Vector<>(0);
 		Vector<ChessPosition> allPossible = ChessPiece.makePiece(this).getNewPositions(ChessPieces.makePieces(CHESS_PIECES));
 		for(ChessPosition testMove: allPossible){
 			ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
+<<<<<<< HEAD
 			ChessPiece testPiece = ChessPiece.makePiece(this);
+=======
+			ChessPiece testPiece = ChessPiece.makePiece(CHESS_PIECE);
+			MySystem.println("Trying to move " + testPiece.toString() + " to " + testMove.toString(),MySystem.getFileName(),MySystem.getLineNumber());
+>>>>>>> parent of 3c2205d... Get limiting moves to those which leave check to work
 			int position = testPieces.getIndexOf(testPiece);
 			testPiece.move(testMove,testPieces);
 			testPieces.set(position,testPiece);
@@ -187,7 +201,14 @@ public class ChessPiece
 	 */
     public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
 		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
+<<<<<<< HEAD
 		return myContains(this.getNewPositions(CHESS_PIECES),CHECK_MOVE);
+=======
+		for(ChessPosition possiblePosition: this.getNewPositions(CHESS_PIECES)){//TODO: limit?
+			if(CHECK_MOVE.equals(possiblePosition)) return true;
+		}
+		return false;
+>>>>>>> parent of 3c2205d... Get limiting moves to those which leave check to work
 	}
 
 	/**

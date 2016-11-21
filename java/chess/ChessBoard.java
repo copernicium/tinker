@@ -120,7 +120,11 @@ public class ChessBoard
 	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
 		Vector<ChessPiece> moveablePieces = new Vector<>();
 		for(ChessPiece chessPiece: pieces.toArray()){
+<<<<<<< HEAD
 			if(chessPiece.limitMovesToLeavingCheck(pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
+=======
+			if(ChessPiece.limitMovesToLeavingCheck(chessPiece,pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
+>>>>>>> parent of 3c2205d... Get limiting moves to those which leave check to work
 		}
 		return moveablePieces;
 	}
