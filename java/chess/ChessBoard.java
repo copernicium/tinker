@@ -120,7 +120,7 @@ public class ChessBoard
 	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
 		Vector<ChessPiece> moveablePieces = new Vector<>();
 		for(ChessPiece chessPiece: this.pieces.toArray()){
-			if(chessPiece.getLimitedMoves().size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
+			if(chessPiece.getColor().equals(this.playerTurn) && chessPiece.getLimitedMoves().size() > 0) moveablePieces.addElement(chessPiece);
 		}
 		return moveablePieces;
 	}
@@ -156,7 +156,7 @@ public class ChessBoard
 		MySystem.myAssert(this.status == Status.IN_PROGRESS,MySystem.getFileName(), MySystem.getLineNumber());
 		MySystem.myAssert(PIECE_TO_MOVE.getColor() == playerTurn,MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(pieces.checkExists(PIECE_TO_MOVE),MySystem.getFileName(),MySystem.getLineNumber());
-		ChessPiece chessPiece = this.pieces.getPieceAt(this.pieces.getIndexOf(PIECE_TO_MOVE));
+		ChessPiece chessPiece = this.pieces.getPieceAt(PIECE_TO_MOVE);
 		//chessPiece.limitMovesToLeavingCheck(this.pieces);
 		if(chessPiece.checkMoveDeep(moveThere,pieces)){
 			int position = pieces.getIndexOf(chessPiece);
@@ -207,9 +207,9 @@ public class ChessBoard
 		final int NUMBER_OF_CORNERS = 4;
 		ChessPiece[] fourPositions = new ChessPiece[NUMBER_OF_CORNERS ];
 		fourPositions[0] = pos1;
-		fourPositions[1] = new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0));
-		fourPositions[2] = new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0));
-		fourPositions[3] = new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0));
+		fourPositions[1] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)));
+		fourPositions[2] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0)));
+		fourPositions[3] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0)));
 		return fourPositions;
 	}
 
@@ -217,26 +217,24 @@ public class ChessBoard
 	 * Creates an array of pieces representing all the chess pieces at the beginnning of a game
 	 * @return an array of chess pieces representing the start of a game
 	 */
-    private static ChessPieces fillBoard(){//TODO condense stuff
+    private static ChessPieces fillBoard(){
 		ChessPieces chessPieces = new ChessPieces(NumbersOfPieces.Total.TOTAL);
 			{
-			for(int i = 0; i < NumbersOfPieces.Half.PAWNS; i++){
-				chessPieces.setNextPiece(new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)));
-				chessPieces.setNextPiece(new Pawn(new ChessPosition(mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0)));
-			}
-			{
-				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)))){
-					chessPieces.setNextPiece(new Rook(a));
+				for(int i = 0; i < NumbersOfPieces.Half.PAWNS; i++){
+					chessPieces.setNextPiece(new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)));
+					chessPieces.setNextPiece(new Pawn(new ChessPosition(mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0)));
 				}
-			}
 			{
-				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KNIGHT), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)))){
-					chessPieces.setNextPiece(new Knight(a));
-				}
-			}
-			{
-				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.BISHOP), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)))){
-					chessPieces.setNextPiece(new Bishop(a));
+				final ChessPiece[] PIECES_IN_CORNERS = {
+						new Rook(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE, new Vector<>(0), new Vector<>(0)),
+						new Knight(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.KNIGHT), ChessPiece.Color.WHITE, new Vector<>(0), new Vector<>(0)),
+						new Bishop(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.BISHOP), ChessPiece.Color.WHITE, new Vector<>(0), new Vector<>(0))
+
+				};
+				for(ChessPiece original : PIECES_IN_CORNERS){
+					for(ChessPiece a : makeFour(original)){
+						chessPieces.setNextPiece(a);
+					}
 				}
 			}
 			{

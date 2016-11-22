@@ -1,9 +1,15 @@
 package chess;
 
-import java.util.IntSummaryStatistics;
 import java.util.Vector;
 
 public class MySystem{
+	public static boolean myContains(Vector<ChessPosition> all, ChessPosition a){
+		for(ChessPosition b: all){
+			if(a.equals(b)) return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Get the line number of the line where this method is used
 	 * @return the line number of where the method is called

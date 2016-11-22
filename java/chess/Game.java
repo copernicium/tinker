@@ -55,47 +55,47 @@ public class Game{
 		ChessBoard chessBoard = new ChessBoard();
 		chessBoard.print();
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.A),chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.A));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.A);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.H),chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.H));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.H);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._1,ChessPosition.Column.A),chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._1,ChessPosition.Column.A));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3,ChessPosition.Column.A);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.G),chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.G));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.G);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.D), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.D);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.F),chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.F));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.F);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._3,ChessPosition.Column.A),chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._3,ChessPosition.Column.A));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3,ChessPosition.Column.C);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._8,ChessPosition.Column.B),chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._8,ChessPosition.Column.B));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6,ChessPosition.Column.C);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.C), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.C));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.C);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
@@ -136,22 +136,22 @@ public class Game{
 		ChessBoard chessBoard = new ChessBoard();
 		chessBoard.print();
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.F), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.F));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.F);
 			testMove(chessBoard,test,testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.E), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.E));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.E);
 			testMove(chessBoard,test,testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.G), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.G));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.G);
 			testMove(chessBoard,test,testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._8, ChessPosition.Column.D), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._8, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.H);
 			testMove(chessBoard,test,testMove);
 		}
@@ -164,35 +164,36 @@ public class Game{
 		ChessBoard chessBoard = new ChessBoard();
 		chessBoard.print();
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.E), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.E));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.E);
 			testMove(chessBoard,test,testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.D), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.D);
 			testMove(chessBoard,test,testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._1, ChessPosition.Column.E), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._1, ChessPosition.Column.E));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.E);
 			testMove(chessBoard,test,testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._8, ChessPosition.Column.D), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._8, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.D);
 			testMove(chessBoard,test,testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.E), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.E));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.F);
 			testMove(chessBoard,test,testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.D), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.F);
 			testMove(chessBoard,test,testMove);
 		}
+		System.out.println("Finishing with status " + chessBoard.getStatus().toString());
 		System.out.print("Available moves: " + chessBoard.getMoveablePositionsByPlayer().toString() + " out of these pieces " + chessBoard.getMoveablePiecesByPlayer().toString() + " to these locations ");
 		try {
 			System.out.print(chessBoard.getMoveablePiecesByPlayer().elementAt(0).getLimitedMoves().toString());
@@ -217,7 +218,7 @@ public class Game{
 				boolean checkIfPieceIsValid = false;
 				while(!checkIfPieceIsValid){
 					System.out.print("Input a piece to move (the piece's location): ");
-					inputPiece = ChessPiece.makePiece(Game.getInput(),chessBoard.getPieces());
+					inputPiece = chessBoard.getPieces().getPieceAt(Game.getInput());
 					for(ChessPiece a : chessBoard.getMoveablePiecesByPlayer()){
 						if(inputPiece.equals(a))checkIfPieceIsValid = true;
 					}
@@ -269,7 +270,7 @@ public class Game{
 	public static void testSingleMove(){
 		ChessBoard chessBoard = new ChessBoard();
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.A), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.A));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.A);
 			testMove(chessBoard,test,testMove);
 		}
@@ -281,17 +282,17 @@ public class Game{
 	public static void testCapture(){
 		ChessBoard chessBoard = new ChessBoard();
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.D), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D);
 			testMove(chessBoard,test,testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.E), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.E));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.E);
 			testMove(chessBoard,test,testMove);
 		}
 		{
-			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D), chessBoard.getPieces());
+			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.E);
 			testMove(chessBoard,test,testMove);
 		}

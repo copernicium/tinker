@@ -120,7 +120,7 @@ public class ChessPiece
 	 */
 	public void limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){//TODO: make faster
 		Vector<ChessPosition> newMoves = new Vector<>(0);
-		for(ChessPosition testMove: this.possibleMoves){
+		for(ChessPosition testMove: this.getPossibleMoves()){
 			ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
 			ChessPiece testPiece = ChessPiece.makePiece(this);
 			int position = testPieces.getIndexOf(testPiece);
@@ -171,18 +171,11 @@ public class ChessPiece
 	 */
 	public boolean checkMoveDeep(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
 		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
-		if(!myContains(this.getLimitedMoves(),CHECK_MOVE)){
+		if(!MySystem.myContains(this.getLimitedMoves(),CHECK_MOVE)){
 			MySystem.println("possible" + this.getLimitedMoves().toString() + " but " + CHECK_MOVE.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 			return false;
 		}
 		return true;
-	}
-
-	private static boolean myContains(Vector<ChessPosition> all, ChessPosition a){
-		for(ChessPosition b: all){
-			if(a.equals(b)) return true;
-		}
-		return false;
 	}
 
 	/**
@@ -193,7 +186,7 @@ public class ChessPiece
 	 */
 	public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
 		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
-		return myContains(this.getPossibleMoves(),CHECK_MOVE);
+		return MySystem.myContains(this.getPossibleMoves(),CHECK_MOVE);
 	}
 
 	/**
@@ -210,6 +203,33 @@ public class ChessPiece
 	 */
 	public ChessPosition getPosition(){
 		return new ChessPosition(position);
+	}
+
+	/**
+	 * Used to copy chess pieces by value
+	 * @param chessPiece the piece to copy
+	 * @return a new instance with the same values
+	 */
+	public static ChessPiece makePiece(Type type,ChessPiece chessPiece){
+		switch(type){
+			case KING:
+				return new King(chessPiece);
+			case KNIGHT:
+				return new Knight(chessPiece);
+			case QUEEN:
+				return new Queen(chessPiece);
+			case ROOK:
+				return new Rook(chessPiece);
+			case PAWN:
+				return new Pawn(chessPiece);
+			case BISHOP:
+				return new Bishop(chessPiece);
+			case UNASSIGNED:
+				return new ChessPiece(chessPiece);
+			default: MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		}
+		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		return new ChessPiece();
 	}
 
 	/**
@@ -245,31 +265,13 @@ public class ChessPiece
 	 * @param chessPieces the array of pieces to search through
 	 * @return a new instance of the chess piece
 	 */
-	public static ChessPiece makePiece(ChessPosition position, ChessPieces chessPieces){
+	/*public static ChessPiece makePiece(ChessPosition position, ChessPieces chessPieces){
 		for(ChessPiece a: chessPieces.toArray()){
-			if(a.getPosition().equals(position)){
-				switch(a.getType()){
-					case KING:
-						return new King(a);
-					case KNIGHT:
-						return new Knight(a);
-					case QUEEN:
-						return new Queen(a);
-					case ROOK:
-						return new Rook(a);
-					case PAWN:
-						return new Pawn(a);
-					case BISHOP:
-						return new Bishop(a);
-					case UNASSIGNED:
-						return new ChessPiece(a);
-					default: MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
-				}
-			}
+			if(a.getPosition().equals(position)) return a;
 		}
 		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 		return new ChessPiece();
-	}
+	}*/
 
 	/**
 	 * Creates a new instance of a chess piece

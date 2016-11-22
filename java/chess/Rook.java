@@ -32,7 +32,8 @@ public class Rook extends ChessPiece
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		{
 			int direction = -1, row = 1, column = 0;
-			for(int j = 0; j < 4; j++){
+			final int NUMBER_OF_DIRECTIONS = 4;
+			for(int j = 0; j < NUMBER_OF_DIRECTIONS ; j++){
 				for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
 					ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + (i * direction * row), this.position.getColumn().get() + (i * direction * column));
 					if(testPosition.inBounds() && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
@@ -51,11 +52,9 @@ public class Rook extends ChessPiece
     }
     @Override
     public void move(ChessPosition newPosition, ChessPieces chessPieces){
-        for(ChessPosition a: this.getPossibleMoves()){
-            if(newPosition.equals(a)){
-                this.position = newPosition;
-                return;
-            }
+        if(MySystem.myContains(this.getPossibleMoves(),newPosition)){
+            this.position = newPosition;
+            return;
         }
 		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());

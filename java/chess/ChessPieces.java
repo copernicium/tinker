@@ -33,8 +33,7 @@ public class ChessPieces{
 	 */
 	public boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color){
 		for(ChessPiece a: this.pieces){
-			if(!a.getAlive() || a.getType() == ChessPiece.Type.UNASSIGNED) continue;
-			if(color == a.getColor() && checkPosition.equals(a.getPosition()))return true;
+			if(a.getAlive() && a.getType() != ChessPiece.Type.UNASSIGNED && color == a.getColor() && checkPosition.equals(a.getPosition())) return true;
 		}
 		return false;
 	}
@@ -45,8 +44,7 @@ public class ChessPieces{
 	 */
 	public boolean isOccupied(ChessPosition checkPosition){
 		for(ChessPiece a: this.pieces){
-			if(!a.getAlive() || a.getType() == ChessPiece.Type.UNASSIGNED) continue;
-			if(checkPosition.equals(a.getPosition()))return true;
+			if(a.getAlive() && a.getType() != ChessPiece.Type.UNASSIGNED && checkPosition.equals(a.getPosition()))return true;
 		}
 		return false;
 	}
@@ -69,10 +67,8 @@ public class ChessPieces{
 	public boolean checkExists(final ChessPiece TEST_PIECE){
 		if(!TEST_PIECE.getAlive()) return false;
 		for(ChessPiece a: this.pieces){
-			if(!a.getAlive()) continue;
-			if(TEST_PIECE.equalsByType(a)) return true;
+			if(a.getAlive() && TEST_PIECE.equalsByType(a)) return true;
 		}
-		MySystem.println("TEST_PIECE:" + TEST_PIECE.getPossibleMoves().toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		return false;
 	}
 
@@ -103,9 +99,9 @@ public class ChessPieces{
 	 */
 	public int getIndexOf(final ChessPiece FIND_ME){
 		for(int i =0; i < this.pieces.length; i++){
-			if(FIND_ME.equalsByType(this.pieces[i]))return i;
+			if(FIND_ME.equalsByType(this.getPieceAt(i))) return i;
 		}
-		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("Error: Unable to get index of " + FIND_ME.toString() + " in " + this.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		return -1;
 	}
 
@@ -116,6 +112,7 @@ public class ChessPieces{
 	 */
 	private int getIndexOfKing(ChessPiece.Color color){
 		for(int i = 0; i < this.pieces.length; i++){
+			ChessPiece piece = this.pieces[i];
 			if(this.pieces[i].getType() == ChessPiece.Type.KING && color == this.pieces[i].getColor()) return i;
 		}
 		MySystem.error("Piece not found in array",MySystem.getFileName(),MySystem.getLineNumber());
@@ -146,6 +143,14 @@ public class ChessPieces{
 
 	public ChessPiece getPieceAt(final int INDEX){
 		return this.pieces[INDEX];
+	}
+
+	public ChessPiece getPieceAt(final ChessPosition POSITION){
+		return this.getPieceAt(this.getIndexOf(POSITION));
+	}
+
+	public ChessPiece getPieceAt(final ChessPiece PIECE){
+		return this.getPieceAt(this.getIndexOf(PIECE));
 	}
 
 	/**

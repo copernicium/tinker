@@ -95,13 +95,10 @@ public class Pawn extends ChessPiece
 
     @Override
     public void move(ChessPosition newPosition, ChessPieces chessPieces){
-		for(ChessPosition a: this.getPossibleMoves()){
-            if(newPosition.equals(a)){
-                this.position = newPosition;
-                this.firstMove = false;
-                return;
-            }
-        }
+		if(MySystem.myContains(this.getPossibleMoves(),newPosition)){
+			this.position = newPosition;
+			return;
+		}
 		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 	}
 
@@ -124,7 +121,7 @@ public class Pawn extends ChessPiece
 			this.position = new ChessPosition(toCopy.position);
 			this.alive = toCopy.alive;
 			this.color = toCopy.color;
-			this.firstMove = toCopy.firstMove;
+			this.firstMove = toCopy.getFirstMove();
 			this.possibleMoves = toCopy.getPossibleMoves();
 			this.limitedMoves = toCopy.getLimitedMoves();
 		}
