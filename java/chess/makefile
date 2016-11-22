@@ -1,4 +1,4 @@
-all: ChessBoard.class ChessPieces.java ChessPosition.class ChessPiece.class Pawn.class Game.class MySystem.class Bishop.class King.class Knight.class Queen.class Rook.class ConditionStorage.class 
+all: ChessBoard.class ChessPieces.java ChessPosition.class ChessPiece.class Pawn.class Game.class MySystem.class Bishop.class King.class Knight.class Queen.class Rook.class 
 
 Queen.class: Queen.java
 	javac Queen.java ChessPieces.java ChessBoard.java Pawn.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
@@ -28,13 +28,10 @@ ChessPosition.class: ChessPosition.java
 	javac ChessPosition.java
 
 ChessBoard.class: ChessBoard.java
-	javac ChessBoard.java ConditionStorage.java Pawn.java Queen.java ChessPieces.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
+	javac ChessBoard.java Pawn.java Queen.java ChessPieces.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
 
 Game.class: Game.java
-	javac Game.java ConditionStorage.java ChessBoard.java Queen.java ChessPieces.java Pawn.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
-	
-ConditionStorage.class: ConditionStorage.java
-	javac ConditionStorage.java ChessPosition.java ChessPiece.java ChessPieces.java
+	javac Game.java ChessBoard.java Queen.java ChessPieces.java Pawn.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
 	
 ChessPieces.class: ChessPieces.java 
 	javac ChessPieces.java ChessBoard.java Queen.java Game.java Pawn.java Rook.java King.java Knight.java Bishop.java MySystem.java ChessPiece.java ChessPosition.java
