@@ -26,7 +26,7 @@ public class Bishop extends ChessPiece
         return "B";
     }
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
+    public void updatePossibleMoves(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		{
 			int rowDirection = -1, columnDirection = -1;
@@ -43,11 +43,11 @@ public class Bishop extends ChessPiece
 				if(j == 1) columnDirection *= -1;//switch column direction for every two switches of the row direction so all diagonals are covered
 			}
 		}
-        return possibleMoves;
+        this.possibleMoves = possibleMoves;
     }
     @Override
     public void move(ChessPosition newPosition, ChessPieces chessPieces){
-        for(ChessPosition a: getNewPositions(chessPieces)){
+        for(ChessPosition a: this.getPossibleMoves()){
             if(newPosition.equals(a)){
                 this.position = newPosition;
                 return;
@@ -60,15 +60,16 @@ public class Bishop extends ChessPiece
 		this.position = new ChessPosition(toCopy.position);
 		this.alive = toCopy.alive;
 		this.color = toCopy.color;
+		this.limitedMoves = toCopy.limitedMoves;
 	}
 
     public Bishop(){
         super();
     }
     public Bishop(ChessPiece chessPiece){
-		this(chessPiece.getPosition(),chessPiece.getColor());
+		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
 	}
-    public Bishop(ChessPosition position, Color color){
-        super(position,color);
+    public Bishop(ChessPosition position, Color color,Vector<ChessPosition> possibleMoves,Vector<ChessPosition> limitedMoves){
+        super(position,color,possibleMoves,limitedMoves);
     }
 }

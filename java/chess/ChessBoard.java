@@ -1,5 +1,6 @@
 package chess;
 
+import java.time.Year;
 import java.util.Vector;
 
 /**
@@ -119,7 +120,7 @@ public class ChessBoard
 	public Vector<ChessPiece> getMoveablePiecesByPlayer(){
 		Vector<ChessPiece> moveablePieces = new Vector<>();
 		for(ChessPiece chessPiece: this.pieces.toArray()){
-			if(chessPiece.limitMovesToLeavingCheck(this.pieces).size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
+			if(chessPiece.getLimitedMoves().size() > 0 && chessPiece.getColor().equals(this.playerTurn)) moveablePieces.addElement(chessPiece);
 		}
 		return moveablePieces;
 	}
@@ -148,22 +149,25 @@ public class ChessBoard
 
 	/**
 	 * Update the chess board given a chess piece and the position to move it to
-	 * @param chessPiece the chess piece to move
+	 * @param PIECE_TO_MOVE the chess piece to move
 	 * @param moveThere the position to move the piece to
 	 */
-    public void move(ChessPiece chessPiece,ChessPosition moveThere){
-		//TODO: if in check, then only allow movement out of it
+    public void move(final ChessPiece PIECE_TO_MOVE,ChessPosition moveThere){
 		MySystem.myAssert(this.status == Status.IN_PROGRESS,MySystem.getFileName(), MySystem.getLineNumber());
-		MySystem.myAssert(chessPiece.getColor() == playerTurn,MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(pieces.checkExists(chessPiece),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(PIECE_TO_MOVE.getColor() == playerTurn,MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(pieces.checkExists(PIECE_TO_MOVE),MySystem.getFileName(),MySystem.getLineNumber());
+		ChessPiece chessPiece = this.pieces.getPieceAt(this.pieces.getIndexOf(PIECE_TO_MOVE));
+		//chessPiece.limitMovesToLeavingCheck(this.pieces);
 		if(chessPiece.checkMoveDeep(moveThere,pieces)){
 			int position = pieces.getIndexOf(chessPiece);
 			chessPiece.move(moveThere,pieces);
 			pieces.set(position,chessPiece);
 			if(pieces.isOccupied(pieces.getPieceAt(position).getPosition(), ChessPiece.Color.not(chessPiece.getColor()))) pieces.capture(moveThere);
 		} else {
-			MySystem.error("Error: trying to move piece to invalid location: piece:" + chessPiece.toString() + " cannot move to " + moveThere.toString(),MySystem.getFileName(),MySystem.getLineNumber());//user inputs invalid move
+			MySystem.error("Error: trying to move piece to invalid location: piece:" + chessPiece.toString() + " cannot move to " + moveThere.toString() + " from possible " + chessPiece.getPossibleMoves().toString(),MySystem.getFileName(),MySystem.getLineNumber());//user inputs invalid move
 		}
+		this.pieces.updatePossibleMoves(ChessPiece.Color.not(this.playerTurn));//only update the necessary half to save time
+		this.pieces.limitMoves(ChessPiece.Color.not(this.playerTurn));//only update the necessary half to save time
 		this.updateStatus();
 		playerTurn = ChessPiece.Color.not(playerTurn);
     }
@@ -173,7 +177,6 @@ public class ChessBoard
 	 * @return true if the game has ended
 	 */
 	public Status getStatus(){
-		this.updateStatus();
 		return this.status;
 	}
 
@@ -204,9 +207,9 @@ public class ChessBoard
 		final int NUMBER_OF_CORNERS = 4;
 		ChessPiece[] fourPositions = new ChessPiece[NUMBER_OF_CORNERS ];
 		fourPositions[0] = pos1;
-		fourPositions[1] = new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE);
-		fourPositions[2] = new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK);
-		fourPositions[3] = new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK);
+		fourPositions[1] = new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0));
+		fourPositions[2] = new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0));
+		fourPositions[3] = new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0));
 		return fourPositions;
 	}
 
@@ -214,35 +217,35 @@ public class ChessBoard
 	 * Creates an array of pieces representing all the chess pieces at the beginnning of a game
 	 * @return an array of chess pieces representing the start of a game
 	 */
-    private static ChessPieces fillBoard(){
+    private static ChessPieces fillBoard(){//TODO condense stuff
 		ChessPieces chessPieces = new ChessPieces(NumbersOfPieces.Total.TOTAL);
 			{
 			for(int i = 0; i < NumbersOfPieces.Half.PAWNS; i++){
-				chessPieces.setNextPiece(new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE));
-				chessPieces.setNextPiece(new Pawn(new ChessPosition(mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK));
+				chessPieces.setNextPiece(new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)));
+				chessPieces.setNextPiece(new Pawn(new ChessPosition(mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0)));
 			}
 			{
-				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE))){
+				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)))){
 					chessPieces.setNextPiece(new Rook(a));
 				}
 			}
 			{
-				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KNIGHT), ChessPiece.Color.WHITE))){
+				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KNIGHT), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)))){
 					chessPieces.setNextPiece(new Knight(a));
 				}
 			}
 			{
-				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.BISHOP), ChessPiece.Color.WHITE))){
+				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.BISHOP), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)))){
 					chessPieces.setNextPiece(new Bishop(a));
 				}
 			}
 			{
-				chessPieces.setNextPiece(new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE));
-				chessPieces.setNextPiece(new Queen(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK));
+				chessPieces.setNextPiece(new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)));
+				chessPieces.setNextPiece(new Queen(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0)));
 			}
 			{
-				chessPieces.setNextPiece(new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE));
-				chessPieces.setNextPiece(new King(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK));
+				chessPieces.setNextPiece(new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)));
+				chessPieces.setNextPiece(new King(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0)));
 			}
 		}
         return new ChessPieces(chessPieces);
@@ -268,6 +271,7 @@ public class ChessBoard
 	 */
     public ChessBoard(ChessPieces pieces,ChessPiece.Color playerTurn){
 		this.pieces = ChessPieces.makePieces(pieces);
+		this.pieces.updateAllMoves();
 		this.playerTurn = playerTurn;
 		this.status = Status.IN_PROGRESS;
 	}

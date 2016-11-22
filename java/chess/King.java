@@ -25,7 +25,8 @@ public class King extends ChessPiece
 	public void updateCheck(final ChessPieces CHESS_PIECES){
 		for(ChessPiece enemyPiece: CHESS_PIECES.toArray()){
 			if(enemyPiece.getColor() == Color.not(this.color)){//if it's an enemy piece
-				for(ChessPosition possiblePosition : enemyPiece.getNewPositions(CHESS_PIECES)){
+				enemyPiece.updatePossibleMoves(CHESS_PIECES);
+				for(ChessPosition possiblePosition : enemyPiece.getPossibleMoves()){
 					if(possiblePosition.equals(this.position)){//if it can take this piece (the king)
 						check = true;
 						return;
@@ -39,9 +40,10 @@ public class King extends ChessPiece
 	private boolean checkMyMoves(final ChessPieces CHESS_PIECES){
 		MySystem.myAssert(this.getCheck(),MySystem.getFileName(),MySystem.getLineNumber());
 		final King original = new King(this);
-		for(ChessPosition possibleMove: this.getNewPositions(CHESS_PIECES)){
+		this.updatePossibleMoves(CHESS_PIECES);
+		for(ChessPosition possibleMove: this.getPossibleMoves()){
 			ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
-			King testMe = new King(this);
+			King testMe = new King(CHESS_PIECES.getPieceAt(CHESS_PIECES.getIndexOf(this)));
 			int index = postMovePieces.getIndexOf(testMe);
 			testMe.move(possibleMove,postMovePieces);
 			postMovePieces.set(index,testMe);
@@ -70,7 +72,8 @@ public class King extends ChessPiece
 		ChessPiece[] allPieces = ChessPieces.makePieces(CHESS_PIECES).toArray();
 		for(ChessPiece defendingPiece : allPieces){
 			if(defendingPiece.getColor() == this.getColor() && !defendingPiece.equalsByType(this)){
-				Vector<ChessPosition> possibleMoves = defendingPiece.getNewPositions(ChessPieces.makePieces(CHESS_PIECES));
+				defendingPiece.updatePossibleMoves(ChessPieces.makePieces(CHESS_PIECES));
+				Vector<ChessPosition> possibleMoves = defendingPiece.getPossibleMoves();
 				for(ChessPosition possibleMove : possibleMoves){
 					ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
 					{
@@ -126,7 +129,7 @@ public class King extends ChessPiece
 		return "K";
 	}
 	@Override
-	public Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
+	public void updatePossibleMoves(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		for(int y = -1; y <= 1; y++){
 			for(int x = -1; x <= 1; x++){
@@ -136,7 +139,7 @@ public class King extends ChessPiece
 				}
 			}
 		}
-		return possibleMoves;
+		this.possibleMoves = possibleMoves;
 	}
 
 	/**
@@ -154,18 +157,19 @@ public class King extends ChessPiece
 		if(this.getAlive() != testPiece.getAlive()) return false;
 		if(this.getCheck() != testPiece.getCheck()) return  false;
 		if(this.getCheckmate() != testPiece.getCheckmate()) return  false;
+		//if(!this.getPossibleMoves().equals(testPiece.getPossibleMoves())) return false;
 		return true;
 	}
 
 	@Override
 	public void move(ChessPosition newPosition, ChessPieces chessPieces){
-		for(ChessPosition a: getNewPositions(chessPieces)){
+		for(ChessPosition a: this.getPossibleMoves()){
 			if(newPosition.equals(a)){
 				this.position = newPosition;
 				return;
 			}
 		}
-		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString() + " out of " + this.getPossibleMoves().toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 	}
 	public boolean getCheck(){
@@ -188,18 +192,20 @@ public class King extends ChessPiece
 	}
 
 	public King(ChessPiece chessPiece){
-		this(chessPiece.getPosition(),chessPiece.getColor());
+		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
 		if(chessPiece instanceof King){
 			King toCopy = (King)chessPiece;
-			this.position = new ChessPosition(toCopy.position);
+			this.position = new ChessPosition(toCopy.position);//TODO: redundant?
 			this.alive = toCopy.alive;
 			this.color = toCopy.color;
 			this.check = toCopy.check;
 			this.checkmate = toCopy.checkmate;
+			this.possibleMoves = toCopy.getPossibleMoves();
+			this.limitedMoves = toCopy.getLimitedMoves();
 		}
 	}
-	public King(ChessPosition position, Color color){
-		super(position,color);
+	public King(ChessPosition position, Color color,Vector<ChessPosition> possibleMoves,Vector<ChessPosition> limitedMoves){
+		super(position,color,possibleMoves,limitedMoves);
 		check = false;
 		checkmate = false;
 	}

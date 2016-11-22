@@ -6,6 +6,25 @@ package chess;
 public class ChessPieces{
 	private ChessPiece[] pieces;
 
+	public void limitMoves(ChessPiece.Color color){
+		for(int i = 0; i < this.pieces.length; i++){
+			if(this.pieces[i].getColor() == color) this.pieces[i].limitMovesToLeavingCheck(this);
+		}
+	}
+
+	public void updatePossibleMoves(ChessPiece.Color color){
+		for(int i = 0; i < this.pieces.length; i++){
+			if(this.pieces[i].getColor() == color) this.pieces[i].updatePossibleMoves(this);
+		}
+	}
+
+	public void updateAllMoves(){
+		for(int i = 0; i < this.pieces.length; i++){
+			this.pieces[i].updatePossibleMoves(this);
+			this.pieces[i].limitMovesToLeavingCheck(this);
+		}
+	}
+
 	/**
 	 * Checks to see if a current position is occupied (unavailable) by a given color
 	 * @param checkPosition the position that is checked for occupancy
@@ -53,6 +72,7 @@ public class ChessPieces{
 			if(!a.getAlive()) continue;
 			if(TEST_PIECE.equalsByType(a)) return true;
 		}
+		MySystem.println("TEST_PIECE:" + TEST_PIECE.getPossibleMoves().toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		return false;
 	}
 

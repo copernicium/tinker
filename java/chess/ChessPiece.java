@@ -33,6 +33,8 @@ public class ChessPiece
 	protected ChessPosition position;
 	protected boolean alive;
 	private final static Type type = Type.UNASSIGNED;
+	protected Vector<ChessPosition> possibleMoves;//TODO add into equals?
+	protected Vector<ChessPosition> limitedMoves;//TODO add into equals?
 
 	/**
 	 * Fetches the status of the current piece
@@ -81,10 +83,12 @@ public class ChessPiece
 	 * @return true if the pieces are equal by value
 	 */
 	public boolean equals(ChessPiece b){
+		if(b == null) return false;
 		if(this.getType() != b.getType()) return false;
 		if(this.getColor() != b.getColor()) return false;
 		if(!this.getPosition().equals(b.getPosition())) return false;
 		if(this.getAlive() != b.getAlive()) return false;
+		//if(!this.possibleMoves.equals(b.getPossibleMoves())) return false;
 		return true;
 	}
 
@@ -113,10 +117,9 @@ public class ChessPiece
 	 * @param CHESS_PIECES all of the pieces
 	 * @returnvthe possible moves which do not result the king being in check
 	 */
-	public Vector<ChessPosition> limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){//TODO: make faster
+	public void limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){//TODO: make faster
 		Vector<ChessPosition> newMoves = new Vector<>(0);
-		Vector<ChessPosition> allPossible = ChessPiece.makePiece(this).getNewPositions(ChessPieces.makePieces(CHESS_PIECES));
-		for(ChessPosition testMove: allPossible){
+		for(ChessPosition testMove: this.possibleMoves){
 			ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
 			ChessPiece testPiece = ChessPiece.makePiece(this);
 			int position = testPieces.getIndexOf(testPiece);
@@ -125,7 +128,20 @@ public class ChessPiece
 			testPieces.updateKingChecks();
 			if(!testPieces.getKing(testPiece.getColor()).getCheck()) newMoves.add(testMove);
 		}
-		return newMoves;
+		this.limitedMoves = newMoves;
+	}
+
+	public Vector<ChessPosition> getLimitedMoves(){
+		return this.limitedMoves;
+	}
+
+	/**
+	 * Fetches all the positions this piece can move to
+	 * @return a vector of chess positions that this piece can be moved to
+	 */
+	public Vector<ChessPosition> getPossibleMoves(){
+		//MySystem.error("This is not a valid chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
+		return this.possibleMoves;
 	}
 
 	/**
@@ -133,9 +149,8 @@ public class ChessPiece
 	 * @param chessPieces an array of pieces representing a chess board
 	 * @return a vector of chess positions that this piece can be moved to
 	 */
-	protected Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
+	public void updatePossibleMoves(ChessPieces chessPieces){
 		MySystem.error("This is not a valid chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
-		return new Vector<>(0);
 	}
 
 	/**
@@ -155,7 +170,11 @@ public class ChessPiece
 	 */
 	public boolean checkMoveDeep(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
 		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
-		return myContains(this.limitMovesToLeavingCheck(CHESS_PIECES),CHECK_MOVE);
+		if(!myContains(this.getLimitedMoves(),CHECK_MOVE)){
+			MySystem.println("possible" + this.getLimitedMoves().toString() + " but " + CHECK_MOVE.toString(),MySystem.getFileName(),MySystem.getLineNumber());
+			return false;
+		}
+		return true;
 	}
 
 	private static boolean myContains(Vector<ChessPosition> all, ChessPosition a){
@@ -173,7 +192,7 @@ public class ChessPiece
 	 */
 	public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
 		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
-		return myContains(this.getNewPositions(CHESS_PIECES),CHECK_MOVE);
+		return myContains(this.getPossibleMoves(),CHECK_MOVE);
 	}
 
 	/**
@@ -228,22 +247,21 @@ public class ChessPiece
 	public static ChessPiece makePiece(ChessPosition position, ChessPieces chessPieces){
 		for(ChessPiece a: chessPieces.toArray()){
 			if(a.getPosition().equals(position)){
-				Color color = a.getColor();
 				switch(a.getType()){
 					case KING:
-						return new King(position,color);
+						return new King(a);
 					case KNIGHT:
-						return new Knight(position,color);
+						return new Knight(a);
 					case QUEEN:
-						return new Queen(position,color);
+						return new Queen(a);
 					case ROOK:
-						return new Rook(position,color);
+						return new Rook(a);
 					case PAWN:
-						return new Pawn(position,color);
+						return new Pawn(a);
 					case BISHOP:
-						return new Bishop(position,color);
+						return new Bishop(a);
 					case UNASSIGNED:
-						return new ChessPiece(position,color);
+						return new ChessPiece(a);
 					default: MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 				}
 			}
@@ -256,7 +274,7 @@ public class ChessPiece
 	 * Creates a new instance of a chess piece
 	 */
 	public ChessPiece(){
-		this(new ChessPosition(), Color.WHITE);
+		this(new ChessPosition(), Color.WHITE,new Vector<>(0),new Vector<>(0));
 	}
 
 	/**
@@ -264,7 +282,7 @@ public class ChessPiece
 	 * @param toCopy the chess piece to copy
 	 */
 	public ChessPiece(ChessPiece toCopy){
-		this(new ChessPosition(toCopy.getPosition()),Color.WHITE);
+		this(new ChessPosition(toCopy.getPosition()),Color.WHITE,toCopy.getPossibleMoves(),toCopy.getLimitedMoves());
 	}
 
 	/**
@@ -272,9 +290,11 @@ public class ChessPiece
 	 * @param position the position of the piece
 	 * @param color the color of the piece
 	 */
-	public ChessPiece(ChessPosition position,Color color){
+	public ChessPiece(ChessPosition position,Color color,Vector<ChessPosition> possibleMoves,Vector<ChessPosition> limitedMoves){
 		this.position = position;
 		this.color = color;
-		alive = true;
+		this.alive = true;
+		this.possibleMoves = possibleMoves;
+		this.limitedMoves = limitedMoves;
 	}
 }

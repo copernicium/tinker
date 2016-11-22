@@ -1,4 +1,5 @@
 package chess;
+
 import java.util.Vector;
 /**
  * A pawn piece
@@ -32,7 +33,7 @@ public class Pawn extends ChessPiece
         return "P";
     }
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){//TODO: en passant and maybe promotion
+    public void updatePossibleMoves(ChessPieces chessPieces){//TODO: en passant and maybe promotion
 		ChessPiece original = ChessPiece.makePiece(this);
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		int direction = (this.getColor() == ChessPiece.Color.WHITE) ? 1 : -1;
@@ -64,10 +65,10 @@ public class Pawn extends ChessPiece
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}
-		if(!original.equalsByType(this)) MySystem.error("orignal:" + original.toString() + " this:" + this.toString(),MySystem.getFileName(),MySystem.getLineNumber());
+		if(!original.equalsByType(this)) MySystem.error("orignal:" + original.toString() + " this:" + this.toString(),MySystem.getFileName(),MySystem.getLineNumber());//TODO: remove or expand this test
 		MySystem.myAssert(original.equalsByType(this),MySystem.getFileName(),MySystem.getLineNumber());
-        return possibleMoves;
-    }
+        this.possibleMoves = possibleMoves;
+	}
 
     public boolean getFirstMove(){
 		return this.firstMove;
@@ -87,12 +88,13 @@ public class Pawn extends ChessPiece
 		if(!this.getPosition().equals(testPiece.getPosition())) return false;
 		if(this.getAlive() != testPiece.getAlive()) return false;
 		if(this.getFirstMove() != testPiece.getFirstMove()) return  false;
+		//if(!this.getPossibleMoves().equals(testPiece.getPossibleMoves())) return false;
 		return true;
 	}
 
     @Override
     public void move(ChessPosition newPosition, ChessPieces chessPieces){
-        for(ChessPosition a: this.getNewPositions(chessPieces)){
+		for(ChessPosition a: this.getPossibleMoves()){
             if(newPosition.equals(a)){
                 this.position = newPosition;
                 this.firstMove = false;
@@ -115,17 +117,19 @@ public class Pawn extends ChessPiece
         firstMove = true;
     }
 	public Pawn(ChessPiece chessPiece){
-		this(chessPiece.getPosition(),chessPiece.getColor());
+		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
 		if(chessPiece instanceof Pawn){
 			Pawn toCopy = (Pawn)chessPiece;
 			this.position = new ChessPosition(toCopy.position);
 			this.alive = toCopy.alive;
 			this.color = toCopy.color;
 			this.firstMove = toCopy.firstMove;
+			this.possibleMoves = toCopy.getPossibleMoves();
+			this.limitedMoves = toCopy.getLimitedMoves();
 		}
 	}
-    public Pawn(ChessPosition position,Color color){
-        super(position,color);
+    public Pawn(ChessPosition position,Color color,Vector<ChessPosition> possibleMoves,Vector<ChessPosition> limitedMoves){
+        super(position,color,possibleMoves,limitedMoves);
 		this.firstMove = (position.getRow().equals(ChessBoard.PiecePlacement.Row.PAWN )|| position.getRow().equals(ChessBoard.mirror(ChessBoard.PiecePlacement.Row.PAWN)));
     }
 }

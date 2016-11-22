@@ -1,5 +1,7 @@
 package chess;
 import java.util.Scanner;
+import java.util.Vector;
+
 /**
  * Runs a chess game
  */
@@ -53,47 +55,47 @@ public class Game{
 		ChessBoard chessBoard = new ChessBoard();
 		chessBoard.print();
 		{
-			ChessPiece test = new Pawn(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.A), ChessPiece.Color.WHITE);
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.A),chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.A);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = new Pawn(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.H), ChessPiece.Color.BLACK);
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.H),chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.H);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = new Rook(new ChessPosition(ChessPosition.Row._1,ChessPosition.Column.A),ChessPiece.Color.WHITE);
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._1,ChessPosition.Column.A),chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3,ChessPosition.Column.A);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = new Pawn(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.G), ChessPiece.Color.BLACK);
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.G),chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.G);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = new Pawn(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.D), ChessPiece.Color.WHITE);
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.D), chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.D);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = new Pawn(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.F), ChessPiece.Color.BLACK);
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.F),chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.F);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = new Rook(new ChessPosition(ChessPosition.Row._3,ChessPosition.Column.A),ChessPiece.Color.WHITE);
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._3,ChessPosition.Column.A),chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3,ChessPosition.Column.C);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = new Knight(new ChessPosition(ChessPosition.Row._8,ChessPosition.Column.B),ChessPiece.Color.BLACK);
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._8,ChessPosition.Column.B),chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6,ChessPosition.Column.C);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
 		{
-			ChessPiece test = new Rook(new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.C), ChessPiece.Color.WHITE);
+			ChessPiece test = ChessPiece.makePiece(new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.C), chessBoard.getPieces());
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.C);
 			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
 		}
@@ -191,7 +193,13 @@ public class Game{
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.F);
 			testMove(chessBoard,test,testMove);
 		}
-		System.out.println("Available moves: " + chessBoard.getMoveablePositionsByPlayer().toString() + " out of these pieces " + chessBoard.getMoveablePiecesByPlayer().toString() + " to these locations " +  chessBoard.getMoveablePiecesByPlayer().elementAt(0).limitMovesToLeavingCheck(chessBoard.getPieces()).toString());
+		System.out.print("Available moves: " + chessBoard.getMoveablePositionsByPlayer().toString() + " out of these pieces " + chessBoard.getMoveablePiecesByPlayer().toString() + " to these locations ");
+		try {
+			System.out.print(chessBoard.getMoveablePiecesByPlayer().elementAt(0).getLimitedMoves().toString());
+		} catch(ArrayIndexOutOfBoundsException e){
+			System.out.print("[]");
+		}
+		System.out.print("\n");
 	}
 
 
@@ -204,25 +212,31 @@ public class Game{
 			chessBoard.print();
 			System.out.println("It is " + chessBoard.getPlayerTurn() + "'s turn.");
 			System.out.println("Available pieces to move are: " + chessBoard.getMoveablePositionsByPlayer().toString());
-			System.out.print("Input a piece to move (the piece's location): ");
-			ChessPiece chessPiece = ChessPiece.makePiece(Game.getInput(),chessBoard.getPieces());
-			{//TODO: make user input valid things
+			ChessPiece inputPiece = new ChessPiece();
+			{
 				boolean checkIfPieceIsValid = false;
-				for(ChessPiece a : chessBoard.getMoveablePiecesByPlayer()){
-					if(chessPiece.equals(a))checkIfPieceIsValid = true;
+				while(!checkIfPieceIsValid){
+					System.out.print("Input a piece to move (the piece's location): ");
+					inputPiece = ChessPiece.makePiece(Game.getInput(),chessBoard.getPieces());
+					for(ChessPiece a : chessBoard.getMoveablePiecesByPlayer()){
+						if(inputPiece.equals(a))checkIfPieceIsValid = true;
+					}
 				}
-				MySystem.myAssert(checkIfPieceIsValid,MySystem.getFileName(),MySystem.getLineNumber());
+				inputPiece = chessBoard.getPieces().getPieceAt(chessBoard.getPieces().getIndexOf(inputPiece));
 			}
-			System.out.print("Input the location to move that piece to (available positions are " +  chessPiece.limitMovesToLeavingCheck(chessBoard.getPieces()).toString() + ": ");
-			ChessPosition chessPosition = Game.getInput();
+			ChessPosition moveTarget = new ChessPosition();
 			{
 				boolean checkIfMoveIsValid = false;
-				for(ChessPosition a : chessPiece.limitMovesToLeavingCheck(chessBoard.getPieces())){
-					if(chessPosition.equals(a))checkIfMoveIsValid = true;
+				while(!checkIfMoveIsValid){
+					System.out.print("Input the location to move that piece to (available positions are " +  inputPiece.getLimitedMoves().toString() + ": ");
+					moveTarget = Game.getInput();
+					for(ChessPosition a : inputPiece.getLimitedMoves()){
+						if(moveTarget.equals(a)) checkIfMoveIsValid = true;
+					}
 				}
 				MySystem.myAssert(checkIfMoveIsValid,MySystem.getFileName(),MySystem.getLineNumber());
 			}
-			chessBoard.move(chessPiece,chessPosition);
+			chessBoard.move(inputPiece,moveTarget);
 		}
 		System.out.println("Game over");
 	}
@@ -232,7 +246,7 @@ public class Game{
 	 */
 	public static void testCopy(){
 		{
-			Pawn a = new Pawn(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D), ChessPiece.Color.WHITE);
+			Pawn a = new Pawn(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0));
 
 			ChessPiece b = new Pawn(a);
 			a.move(new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.D), new ChessPieces(0));

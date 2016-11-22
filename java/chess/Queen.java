@@ -26,7 +26,7 @@ public class Queen extends ChessPiece
         return "Q";
     }
     @Override
-    public Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
+    public void updatePossibleMoves(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		{
 			{//Bishop movement
@@ -62,11 +62,11 @@ public class Queen extends ChessPiece
 				}
 			}
 		}
-        return possibleMoves;
+        this.possibleMoves = possibleMoves;
     }
     @Override
     public void move(ChessPosition newPosition, ChessPieces chessPieces){
-        for(ChessPosition a: getNewPositions(chessPieces)){
+        for(ChessPosition a: this.getPossibleMoves()){
             if(newPosition.equals(a)){
                 this.position = newPosition;
                 return;
@@ -79,14 +79,15 @@ public class Queen extends ChessPiece
 		this.position = new ChessPosition(toCopy.position);
 		this.alive = toCopy.alive;
 		this.color = toCopy.color;
+		this.limitedMoves = toCopy.getLimitedMoves();
 	}
     public Queen(){
         super();
     }
     public Queen(ChessPiece chessPiece){
-		this(chessPiece.getPosition(),chessPiece.getColor());
+		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
 	}
-    public Queen(ChessPosition position, Color color){
-        super(position,color);
+    public Queen(ChessPosition position, Color color,Vector<ChessPosition> possibleMoves,Vector<ChessPosition> limitedMoves){
+        super(position,color,possibleMoves,limitedMoves);
     }
 }
