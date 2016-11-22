@@ -38,12 +38,12 @@ public class Knight extends ChessPiece
     public Vector<ChessPosition> getNewPositions(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		for(ChessPosition.Tester testPosition: getCorners(-2,1)){
-			if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
+			if(testPosition.inBounds() && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}
 		for(ChessPosition.Tester testPosition: getCorners(-1,2)){
-			if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
+			if(testPosition.inBounds() && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}

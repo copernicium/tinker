@@ -46,7 +46,7 @@ public class ChessPiece
 	 * Kills the piece
 	 */
 	public void capture(){
-		if(!alive) MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		if(!alive) MySystem.error("Error: trying to capture an already captured piece",MySystem.getFileName(),MySystem.getLineNumber());
 		alive = false;
 	}
 
@@ -220,44 +220,15 @@ public class ChessPiece
 	}
 
 	/**
-	 * Used to create a new chess piece that matches a set of criteria
-	 * @param position the position of the piece to use
-	 * @param color the color of the piece to use
-	 * @param type the type of piece to use
-	 * @return a new instance of the chess piece
-	 */
-	public static ChessPiece makePiece(ChessPosition position, Color color,Type type){
-		switch(type){
-			case KING:
-				return new King(position,color);
-			case KNIGHT:
-				return new Knight(position,color);
-			case QUEEN:
-				return new Queen(position,color);
-			case ROOK:
-				return new Rook(position,color);
-			case PAWN:
-				return new Pawn(position,color);
-			case BISHOP:
-				return new Bishop(position,color);
-			//case UNASSIGNED:
-			//	return new ChessPiece(position,color);
-			default: MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
-		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
-		return new ChessPiece();
-	}
-
-	/**
 	 * Used to copy an chess piece from an array that matches a set of criteria
 	 * @param position the position of the piece to copy
-	 * @param color the color of the piece to copy
 	 * @param chessPieces the array of pieces to search through
 	 * @return a new instance of the chess piece
 	 */
-	public static ChessPiece makePiece(ChessPosition position, Color color, ChessPieces chessPieces){
+	public static ChessPiece makePiece(ChessPosition position, ChessPieces chessPieces){
 		for(ChessPiece a: chessPieces.toArray()){
-			if(a.getPosition().equals(position) && a.getColor().equals(color)){
+			if(a.getPosition().equals(position)){
+				Color color = a.getColor();
 				switch(a.getType()){
 					case KING:
 						return new King(position,color);

@@ -1,4 +1,4 @@
-	package chess;
+package chess;
 
 import java.util.Vector;
 
@@ -67,7 +67,6 @@ public class ChessBoard
 	public ChessPiece.Color getPlayerTurn(){
 		return playerTurn;
 	}
-
 
 	/**
 	 * prints a new chess board given a set of pieces
@@ -161,7 +160,7 @@ public class ChessBoard
 			int position = pieces.getIndexOf(chessPiece);
 			chessPiece.move(moveThere,pieces);
 			pieces.set(position,chessPiece);
-			if(pieces.isOccupied(pieces.getPieceAt(position).getPosition(), ChessPiece.Color.not(chessPiece.getColor()))) pieces.captureAt(pieces.getIndexOf(moveThere));
+			if(pieces.isOccupied(pieces.getPieceAt(position).getPosition(), ChessPiece.Color.not(chessPiece.getColor()))) pieces.capture(moveThere);
 		} else {
 			MySystem.error("Error: trying to move piece to invalid location: piece:" + chessPiece.toString() + " cannot move to " + moveThere.toString(),MySystem.getFileName(),MySystem.getLineNumber());//user inputs invalid move
 		}
@@ -179,16 +178,21 @@ public class ChessBoard
 	}
 
 	/**
-	 * Find the index of the first chess piece in an array that hasn't been assigned an identity
-	 * @param chessPieces an array of pieces to check
-	 * @return the index of the next unassigned piece
+	 * Mirrors a column across the center of the chess board
+	 * @param column the column to mirror
+	 * @return the mirrored position
 	 */
-    private static int findNextUnassigned(ChessPiece[] chessPieces){
-		for(int i = 0; i < chessPieces.length; i++){
-			if(chessPieces[i].getType() == ChessPiece.Type.UNASSIGNED) return i;
-		}
-		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
-		return -1;
+	public static ChessPosition.Column mirror(ChessPosition.Column column){
+		return new ChessPosition.Column(ChessPosition.Column.H - column.get());
+	}
+
+	/**
+	 * Mirrors a row across the center of the chess board
+	 * @param row the row to mirror
+	 * @return the mirrored position
+	 */
+	public static ChessPosition.Row mirror(ChessPosition.Row row){
+		return new ChessPosition.Row(ChessPosition.Row._8 - row.get());
 	}
 
 	/**
@@ -200,9 +204,9 @@ public class ChessBoard
 		final int NUMBER_OF_CORNERS = 4;
 		ChessPiece[] fourPositions = new ChessPiece[NUMBER_OF_CORNERS ];
 		fourPositions[0] = pos1;
-		fourPositions[1] = new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),ChessPosition.mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE);
-		fourPositions[2] = new ChessPiece(new ChessPosition(ChessPosition.mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK);
-		fourPositions[3] = new ChessPiece(new ChessPosition(ChessPosition.mirror(pos1.getPosition().getRow()),ChessPosition.mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK);
+		fourPositions[1] = new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE);
+		fourPositions[2] = new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK);
+		fourPositions[3] = new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK);
 		return fourPositions;
 	}
 
@@ -215,7 +219,7 @@ public class ChessBoard
 			{
 			for(int i = 0; i < NumbersOfPieces.Half.PAWNS; i++){
 				chessPieces.setNextPiece(new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE));
-				chessPieces.setNextPiece(new Pawn(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK));
+				chessPieces.setNextPiece(new Pawn(new ChessPosition(mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK));
 			}
 			{
 				for(ChessPiece a: makeFour(new ChessPiece(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE))){
@@ -234,11 +238,11 @@ public class ChessBoard
 			}
 			{
 				chessPieces.setNextPiece(new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE));
-				chessPieces.setNextPiece(new Queen(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK));
+				chessPieces.setNextPiece(new Queen(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK));
 			}
 			{
 				chessPieces.setNextPiece(new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE));
-				chessPieces.setNextPiece(new King(new ChessPosition(ChessPosition.mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK));
+				chessPieces.setNextPiece(new King(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK));
 			}
 		}
         return new ChessPieces(chessPieces);
@@ -248,9 +252,7 @@ public class ChessBoard
 	 * Creates a new chess board ready to be used
 	 */
 	public ChessBoard(){
-		this.pieces = new ChessPieces(ChessBoard.fillBoard());
-		this.playerTurn = ChessPiece.Color.WHITE;
-		this.status = Status.IN_PROGRESS;
+		this(new ChessPieces(ChessBoard.fillBoard()), ChessPiece.Color.WHITE);
     }
 
 	/**

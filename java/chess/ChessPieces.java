@@ -19,6 +19,18 @@ public class ChessPieces{
 		}
 		return false;
 	}
+	/**
+	 * Checks to see if a current position is occupied (unavailable)
+	 * @param checkPosition the position that is checked for occupancy
+	 * @return true if a given position is occupied by a piece of a given color
+	 */
+	public boolean isOccupied(ChessPosition checkPosition){
+		for(ChessPiece a: this.pieces){
+			if(!a.getAlive() || a.getType() == ChessPiece.Type.UNASSIGNED) continue;
+			if(checkPosition.equals(a.getPosition()))return true;
+		}
+		return false;
+	}
 
 	@Override
 	public String toString(){
@@ -58,7 +70,7 @@ public class ChessPieces{
 	}
 
 	boolean equals(ChessPieces b){
-		if(b.toArray().length != this.toArray().length) return false;
+		if(b.toArray().length != this.toArray().length || b == null) return false;
 		for(int i = 0; i<this.toArray().length; i++){
 			if(!b.toArray()[i].equalsByType(this.toArray()[i]))return false;
 		}
@@ -79,13 +91,12 @@ public class ChessPieces{
 
 	/**
 	 * Finds the location of a piece that meets certain criteria in an array. It crashes if it cannot be found.
-	 * @param type the type of piece
 	 * @param color the color of the piece
 	 * @return the index of the piece if it exits
 	 */
-	public int getIndexOf(ChessPiece.Type type, ChessPiece.Color color){
+	private int getIndexOfKing(ChessPiece.Color color){
 		for(int i = 0; i < this.pieces.length; i++){
-			if(type == this.pieces[i].getType() && color == this.pieces[i].getColor()) return i;
+			if(this.pieces[i].getType() == ChessPiece.Type.KING && color == this.pieces[i].getColor()) return i;
 		}
 		MySystem.error("Piece not found in array",MySystem.getFileName(),MySystem.getLineNumber());
 		return -1;
@@ -98,14 +109,6 @@ public class ChessPieces{
 	 */
 	public void set(final int INDEX,final ChessPiece CHESS_PIECE){
 		this.pieces[INDEX] = CHESS_PIECE;
-	}
-
-	/**
-	 * Captures the piece at a given index
-	 * @param INDEX the index of the piece to capture
-	 */
-	public void captureAt(final int INDEX){
-		this.pieces[INDEX].capture();
 	}
 
 	/**
@@ -139,7 +142,7 @@ public class ChessPieces{
 	 * @return the king piece of the given color
 	 */
 	public King getKing(ChessPiece.Color color){
-		return new King(this.getPieceAt(this.getIndexOf(ChessPiece.Type.KING, color)));
+		return new King(this.getPieceAt(this.getIndexOfKing(color)));
 	}
 
 	/**
@@ -153,8 +156,8 @@ public class ChessPieces{
 		updatedWhiteKing.updateCheck(ChessPieces.makePieces(this));
 		updatedBlackKing.updateCheck(ChessPieces.makePieces(this));
 
-		this.set(this.getIndexOf(ChessPiece.Type.KING, ChessPiece.Color.WHITE), updatedWhiteKing);
-		this.set(this.getIndexOf(ChessPiece.Type.KING, ChessPiece.Color.BLACK), updatedBlackKing);
+		this.set(this.getIndexOfKing(ChessPiece.Color.WHITE), updatedWhiteKing);
+		this.set(this.getIndexOfKing(ChessPiece.Color.BLACK), updatedBlackKing);
 	}
 
 	/**
@@ -168,8 +171,8 @@ public class ChessPieces{
 		updatedWhiteKing.update(ChessPieces.makePieces(this));
 		updatedBlackKing.update(ChessPieces.makePieces(this));
 
-		this.set(this.getIndexOf(ChessPiece.Type.KING, ChessPiece.Color.WHITE), updatedWhiteKing);
-		this.set(this.getIndexOf(ChessPiece.Type.KING, ChessPiece.Color.BLACK), updatedBlackKing);
+		this.set(this.getIndexOfKing(ChessPiece.Color.WHITE), updatedWhiteKing);
+		this.set(this.getIndexOfKing(ChessPiece.Color.BLACK), updatedBlackKing);
 	}
 
 	/**
@@ -184,7 +187,7 @@ public class ChessPieces{
 	 * Find the index of the first chess piece in an array that hasn't been assigned an identity
 	 * @return the index of the next unassigned piece
 	 */
-	public int findNextUnassigned(){
+	private int findNextUnassigned(){
 		for(int i = 0; i < this.pieces.length; i++){
 			if(this.pieces[i].getType() == ChessPiece.Type.UNASSIGNED) return i;
 		}
@@ -198,9 +201,9 @@ public class ChessPieces{
 	 * @return the array after the piece has been added to it
 	 */
 	public void setNextPiece(final ChessPiece PIECE){
-		MySystem.myAssert(!this.isOccupied(PIECE.getPosition(),PIECE.getColor()),MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(!this.isOccupied(PIECE.getPosition(), ChessPiece.Color.not(PIECE.getColor())),MySystem.getFileName(),MySystem.getLineNumber());
-		this.pieces[this.findNextUnassigned()] = ChessPiece.makePiece(PIECE.getPosition(), PIECE.getColor(), PIECE.getType());
+		MySystem.myAssert(!this.isOccupied(PIECE.getPosition()),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(!this.isOccupied(PIECE.getPosition()),MySystem.getFileName(),MySystem.getLineNumber());
+		this.pieces[this.findNextUnassigned()] = ChessPiece.makePiece(PIECE);
 	}
 
 	/**
@@ -210,7 +213,6 @@ public class ChessPieces{
 	public int length(){
 		return this.pieces.length;
 	}
-
 
 	public ChessPieces(){
 		this(0);
@@ -227,7 +229,7 @@ public class ChessPieces{
 		this.pieces = pieces;
 	}
 
-	public ChessPieces(ChessPieces pieces){
-		this.pieces = (ChessPieces.makePieces(pieces)).toArray();
+	public ChessPieces(ChessPieces toCopy){
+		this.pieces = ChessPieces.makePieces(toCopy).toArray();
 	}
 }

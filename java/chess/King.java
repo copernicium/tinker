@@ -112,6 +112,11 @@ public class King extends ChessPiece
 		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " check:" + this.check + " checkmate:" + this.checkmate + " )";
 	}
 
+	@Override
+	public void capture(){
+		MySystem.error("Error: Kings can never be captured",MySystem.getFileName(),MySystem.getLineNumber());
+	}
+
 	/**
 	 * The symbol to print given the type
 	 * @return the letter representing this chess piece
@@ -126,7 +131,7 @@ public class King extends ChessPiece
 		for(int y = -1; y <= 1; y++){
 			for(int x = -1; x <= 1; x++){
 				ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + x, this.position.getColumn().get() + y);
-				if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
+				if(testPosition.inBounds() && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
 					possibleMoves.addElement(new ChessPosition(testPosition));
 				}
 			}

@@ -34,7 +34,7 @@ public class Queen extends ChessPiece
 				for(int j = 0; j < 4; j++){
 					for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
 						ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + (i * rowDirection), this.position.getColumn().get() + (i * columnDirection));
-						if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
+						if(testPosition.inBounds() && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
 							possibleMoves.addElement(new ChessPosition(testPosition));
 							if(chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color)))
 								break;//if it will capture a piece, stop it there
@@ -49,7 +49,7 @@ public class Queen extends ChessPiece
 				for(int j = 0; j < 4; j++){
 					for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
 						ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + (i * direction * row), this.position.getColumn().get() + (i * direction * column));
-						if(ChessPosition.inBounds(testPosition) && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
+						if(testPosition.inBounds() && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
 							possibleMoves.addElement(new ChessPosition(testPosition));
 							if(chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color))) break;//if it will capture a piece, stop it there
 						} else break;

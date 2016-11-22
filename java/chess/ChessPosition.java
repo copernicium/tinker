@@ -91,6 +91,35 @@ public class ChessPosition{
 		}
 
 		/**
+		 * Converts a character to a column
+		 * @param INPUT the character to convert
+		 * @return a column set to the appropriate value
+		 */
+		private static Column toColumn(final char INPUT){
+			switch(Character.toUpperCase(INPUT)){
+				case 'A':
+					return new Column(Column.A);
+				case 'B':
+					return new Column(Column.B);
+				case 'C':
+					return new Column(Column.C);
+				case 'D':
+					return new Column(Column.D);
+				case 'E':
+					return new Column(Column.E);
+				case 'F':
+					return new Column(Column.F);
+				case 'G':
+					return new Column(Column.G);
+				case 'H':
+					return new Column(Column.H);
+				default:
+					MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+			}
+			return new Column();
+		}
+
+		/**
 		 * Creates a new Column
 		 */
         public Column(){
@@ -134,6 +163,35 @@ public class ChessPosition{
 			final String[] ROWNAMES = {"1","2","3","4","5","6","7","8","DIMENSION"};
 			return ROWNAMES[get()];
 		}
+
+		/**
+		 * Converts a character to a row
+		 * @param INPUT the character to convert
+		 * @return a row set to the appropriate value
+		 */
+		private static Row toRow(final char INPUT){
+			switch(Character.toUpperCase(INPUT)){
+				case '1':
+					return new Row(Row._1);
+				case '2':
+					return new Row(Row._2);
+				case '3':
+					return new Row(Row._3);
+				case '4':
+					return new Row(Row._4);
+				case '5':
+					return new Row(Row._5);
+				case '6':
+					return  new Row(Row._6);
+				case '7':
+					return new Row(Row._7);
+				case '8':
+					return new Row(Row._8);
+				default: MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+			}
+			return new Row();
+		}
+
 		/**
 		 * Creates a new Row given a value
 		 */
@@ -173,6 +231,14 @@ public class ChessPosition{
 		}
 
 		/**
+		 * Checks to see if a given position (Tester) is within the bounds of the chess board
+		 * @return true if it within bounds
+		 */
+		public boolean inBounds(){
+			return ChessPosition.inBounds(this.getRow(),this.getColumn());
+		}
+
+		/**
 		 * Checks for equality by value
 		 * @param b the Tester to compare to
 		 * @return true it they are equal
@@ -204,100 +270,31 @@ public class ChessPosition{
 	}
 
 	/**
-	 * Mirrors a column across the center of the chess board
-	 * @param column the column to mirror
-	 * @return the mirrored position
-	 */
-	public static ChessPosition.Column mirror(ChessPosition.Column column){
-		return new ChessPosition.Column(ChessPosition.Column.H - column.get());
-	}
-
-	/**
-	 * Mirros a row across the center of the chess board
-	 * @param row the row to mirror
-	 * @return the mirrored position
-	 */
-	public static ChessPosition.Row mirror(ChessPosition.Row row){
-		return new ChessPosition.Row(ChessPosition.Row._8 - row.get());
-	}
-
-	/**
 	 * Tests conversion of a String to a ChessPosition
 	 * @param INPUT the String to check
 	 * @return true if the String can be converted
 	 */
 	public static boolean testConversion(final String INPUT){
 		if(INPUT.length() != 2) return false;
-		final int COLUMN_LOC = 0, ROW_LOC = 1;
-		char testColumn = Character.toUpperCase(INPUT.charAt(COLUMN_LOC));
-		final char[] VALID_COLUMNS = {'A','B','C','D','E','F','G','H'};
-		for(int i = 0; i < VALID_COLUMNS.length; i++){
-			if(testColumn == VALID_COLUMNS[i]) break;
-			if(i == VALID_COLUMNS.length-1) return false;
+		{
+			final int COLUMN_LOC = 0;
+			char testColumn = Character.toUpperCase(INPUT.charAt(COLUMN_LOC));
+			final char[] VALID_COLUMNS = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+			for(int i = 0; i < VALID_COLUMNS.length; i++){
+				if(testColumn == VALID_COLUMNS[i]) break;
+				if(i == VALID_COLUMNS.length - 1) return false;
+			}
 		}
-		char testRow = Character.toUpperCase(INPUT.charAt(COLUMN_LOC));
-		final char[] VALID_ROWS = {'1','2','3','4','5','6','7','8'};
-		for(int i = 0; i < VALID_ROWS.length; i++){
-			if(testRow == VALID_COLUMNS[i]) break;
-			if(i == VALID_ROWS.length-1) return false;
+		{
+			final int ROW_LOC = 1;
+			char testRow = INPUT.charAt(ROW_LOC);
+			final char[] VALID_ROWS = {'1', '2', '3', '4', '5', '6', '7', '8'};
+			for(int i = 0; i < VALID_ROWS.length; i++){
+				if(testRow == VALID_ROWS[i]) break;
+				if(i == VALID_ROWS.length - 1) return false;
+			}
 		}
 		return true;
-	}
-
-	/**
-	 * Converts a character to a column
-	 * @param INPUT the character to convert
-	 * @return a column set to the appropriate value
-	 */
-	private static Column toColumn(final char INPUT){
-		switch(Character.toUpperCase(INPUT)){
-			case 'A':
-				return new Column(Column.A);
-			case 'B':
-				return new Column(Column.B);
-			case 'C':
-				return new Column(Column.C);
-			case 'D':
-				return new Column(Column.D);
-			case 'E':
-				return new Column(Column.E);
-			case 'F':
-				return new Column(Column.F);
-			case 'G':
-				return new Column(Column.G);
-			case 'H':
-				return new Column(Column.H);
-			default:
-				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
-		}
-		return new Column();
-	}
-	/**
-	 * Converts a character to a row
-	 * @param INPUT the character to convert
-	 * @return a row set to the appropriate value
-	 */
-	private static Row toRow(final char INPUT){
-		switch(Character.toUpperCase(INPUT)){
-			case '1':
-				return new Row(Row._1);
-			case '2':
-				return new Row(Row._2);
-			case '3':
-				return new Row(Row._3);
-			case '4':
-				return new Row(Row._4);
-			case '5':
-				return new Row(Row._5);
-			case '6':
-				return  new Row(Row._6);
-			case '7':
-				return new Row(Row._7);
-			case '8':
-				return new Row(Row._8);
-			default: MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
-		}
-		return new Row();
 	}
 
 	/**
@@ -308,7 +305,7 @@ public class ChessPosition{
 	public static ChessPosition toChessPosition(String input){
 		MySystem.myAssert(input.length() == 2, MySystem.getFileName(),MySystem.getLineNumber());//make sure its only two characters
 		final int COLUMN_LOC = 0, ROW_LOC = 1;
-		return new ChessPosition(toRow(input.charAt(ROW_LOC)),toColumn(input.charAt(COLUMN_LOC)));
+		return new ChessPosition(Row.toRow(input.charAt(ROW_LOC)),Column.toColumn(input.charAt(COLUMN_LOC)));
 	}
 
 	/**Checks for equality by value
@@ -331,15 +328,6 @@ public class ChessPosition{
         if(column >= ChessPosition.Column.DIMENSION || column < 0) return false;
         if(row >= ChessPosition.Row.DIMENSION || row < 0) return false;
         return true;
-    }
-
-	/**
-	 * Checks to see if a given position (Tester) is within the bounds of the chess board
-	 * @param tester the test position
-	 * @return true if it within bounds
-	 */
-	public static boolean inBounds(Tester tester){
-		return inBounds(tester.getRow(),tester.getColumn());
     }
 
 	/**
