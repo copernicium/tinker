@@ -88,7 +88,8 @@ public class Pawn extends ChessPiece
 		if(!this.getPosition().equals(testPiece.getPosition())) return false;
 		if(this.getAlive() != testPiece.getAlive()) return false;
 		if(this.getFirstMove() != testPiece.getFirstMove()) return  false;
-		//if(!this.getPossibleMoves().equals(testPiece.getPossibleMoves())) return false;
+		if(!this.getPossibleMoves().equals(testPiece.getPossibleMoves())) return false;
+		if(!this.getLimitedMoves().equals(testPiece.getLimitedMoves())) return false;
 		return true;
 	}
 

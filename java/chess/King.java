@@ -72,7 +72,6 @@ public class King extends ChessPiece
 		ChessPiece[] allPieces = ChessPieces.makePieces(CHESS_PIECES).toArray();
 		for(ChessPiece defendingPiece : allPieces){
 			if(defendingPiece.getColor() == this.getColor() && !defendingPiece.equalsByType(this)){
-				defendingPiece.updatePossibleMoves(ChessPieces.makePieces(CHESS_PIECES));
 				Vector<ChessPosition> possibleMoves = defendingPiece.getPossibleMoves();
 				for(ChessPosition possibleMove : possibleMoves){
 					ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
@@ -157,7 +156,8 @@ public class King extends ChessPiece
 		if(this.getAlive() != testPiece.getAlive()) return false;
 		if(this.getCheck() != testPiece.getCheck()) return  false;
 		if(this.getCheckmate() != testPiece.getCheckmate()) return  false;
-		//if(!this.getPossibleMoves().equals(testPiece.getPossibleMoves())) return false;
+		if(!this.getPossibleMoves().equals(testPiece.getPossibleMoves())) return false;
+		if(!this.getLimitedMoves().equals(testPiece.getLimitedMoves())) return false;
 		return true;
 	}
 

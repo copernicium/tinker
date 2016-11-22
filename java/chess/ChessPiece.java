@@ -33,8 +33,8 @@ public class ChessPiece
 	protected ChessPosition position;
 	protected boolean alive;
 	private final static Type type = Type.UNASSIGNED;
-	protected Vector<ChessPosition> possibleMoves;//TODO add into equals?
-	protected Vector<ChessPosition> limitedMoves;//TODO add into equals?
+	protected Vector<ChessPosition> possibleMoves;
+	protected Vector<ChessPosition> limitedMoves;
 
 	/**
 	 * Fetches the status of the current piece
@@ -88,7 +88,8 @@ public class ChessPiece
 		if(this.getColor() != b.getColor()) return false;
 		if(!this.getPosition().equals(b.getPosition())) return false;
 		if(this.getAlive() != b.getAlive()) return false;
-		//if(!this.possibleMoves.equals(b.getPossibleMoves())) return false;
+		if(!this.possibleMoves.equals(b.getPossibleMoves())) return false;
+		if(!this.getLimitedMoves().equals(b.getLimitedMoves())) return false;
 		return true;
 	}
 
