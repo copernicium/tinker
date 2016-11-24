@@ -150,13 +150,13 @@ bool file_exists(string file_name) {
 }
 
 ostream& operator<<(ostream& o,const Board a){
-	for(unsigned int row=0; row<3; row++){
+	for(unsigned int r = 0; row < Row::ROW; row++){
 		o<<"   |   |   \n";
 		#define X(ROW,COLUMN) " "<<(a.get({ROW,COLUMN}))<<" "
-		o<<X(row,0)<<"|"<<X(row,1)<<"|"<<X(row,2)<<"\n";
+		o<<X(row,Column::LEFT)<<"|"<<X(row,Column::CENTER)<<"|"<<X(row,Column::RIGHT)<<"\n";
 		#undef X
 		o<<"   |   |   \n";
-		if(row<2)o<<"===========\n";
+		/**if(row < 2)*/o<<"===========\n";
 	}
 	return o;
 }
