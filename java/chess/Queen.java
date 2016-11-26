@@ -28,6 +28,10 @@ public class Queen extends ChessPiece
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
+		if(!this.getAlive()){
+			this.possibleMoves = possibleMoves;
+			return;
+		}
 		ChessPosition.Tester testPosition = new ChessPosition.Tester();
 		{
 			final int NUMBER_OF_DIRECTIONS = 4;

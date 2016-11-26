@@ -35,6 +35,10 @@ public class Pawn extends ChessPiece
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){//TODO: en passant and maybe promotion
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
+		if(!this.getAlive()){
+			this.possibleMoves = possibleMoves;
+			return;
+		}
 		int direction = (this.getColor() == ChessPiece.Color.WHITE) ? 1 : -1;
 		ChessPosition.Tester testPosition = new ChessPosition.Tester();
 		final int ADVANCE_DISTANCE = 1;

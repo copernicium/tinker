@@ -37,6 +37,10 @@ public class Knight extends ChessPiece
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
+		if(!this.getAlive()){
+			this.possibleMoves = possibleMoves;
+			return;
+		}
 		for(ChessPosition.Tester testPosition: getCorners(-2,1)){
 			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
 				possibleMoves.addElement(new ChessPosition(testPosition));

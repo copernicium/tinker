@@ -30,6 +30,10 @@ public class Rook extends ChessPiece
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
+		if(!this.getAlive()){
+			this.possibleMoves = possibleMoves;
+			return;
+		}
 		ChessPosition.Tester testPosition = new ChessPosition.Tester();
 		{
 			int direction = -1, row = 1, column = 0;

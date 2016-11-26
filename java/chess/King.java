@@ -114,6 +114,10 @@ public class King extends ChessPiece
 	@Override
 	public void updatePossibleMoves(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
+		if(!this.getAlive()){
+			this.possibleMoves = possibleMoves;
+			return;
+		}
 		final int MOVEMENT_DISTANCE = 1;
 		ChessPosition.Tester testPosition = new ChessPosition.Tester();
 		for(int y = -MOVEMENT_DISTANCE ; y <= MOVEMENT_DISTANCE ; y++){
