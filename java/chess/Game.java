@@ -200,6 +200,13 @@ public class Game{
 		}
 		System.out.print("\n");
 		System.out.println("Expected: Position F3 can be moved to E2 and F4");
+		final ChessPosition EXPECTED_MOVEABLE_POS = ChessPosition.toChessPosition("F3");
+		final Vector<ChessPosition> EXPECTED_POSSIBLE_MOVES = new Vector<>(0);
+		EXPECTED_POSSIBLE_MOVES.addElement(ChessPosition.toChessPosition("E2"));
+		EXPECTED_POSSIBLE_MOVES.addElement(ChessPosition.toChessPosition("F4"));
+		MySystem.myAssert(EXPECTED_MOVEABLE_POS.equals(chessBoard.getMoveablePositionsByPlayer().elementAt(0)),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(EXPECTED_POSSIBLE_MOVES.size() == chessBoard.getMoveablePiecesByPlayer().elementAt(0).getLimitedMoves().size(),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(EXPECTED_POSSIBLE_MOVES.elementAt(0).equals(chessBoard.getMoveablePiecesByPlayer().elementAt(0).getLimitedMoves().elementAt(0)),MySystem.getFileName(),MySystem.getLineNumber());
 	}
 
 
@@ -307,11 +314,11 @@ public class Game{
 		//testCopy();
 		//testSingleMove();
 		//testCapture();
-		//testCheck();
+		testCheck();
 		//testCheckmate();
 
 		//This is the actual game
-		play();
+		//play();
 		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n",MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }

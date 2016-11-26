@@ -164,7 +164,7 @@ public class ChessBoard
 		} else {
 			MySystem.error("Error: trying to move piece to invalid location: piece:" + chessPiece.toString() + " cannot move to " + moveThere.toString() + " from possible " + chessPiece.getPossibleMoves().toString(),MySystem.getFileName(),MySystem.getLineNumber());//user inputs invalid move
 		}
-		this.pieces.updateAllMoves();
+		this.pieces.updateAllMoves();//TODO: this can be undone to speed it up
 		//this.pieces.updatePossibleMoves(ChessPiece.Color.not(this.playerTurn));//only update the necessary half to save time
 		//this.pieces.limitMoves(ChessPiece.Color.not(this.playerTurn));//only update the necessary half to save time
 		this.updateStatus();

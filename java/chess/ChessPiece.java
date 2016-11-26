@@ -118,6 +118,10 @@ public class ChessPiece
 	 * @param CHESS_PIECES all of the pieces
 	 */
 	public void limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){//TODO: make faster
+		if(!this.getAlive()){
+			this.limitedMoves = new Vector<>(0);
+			return;
+		}
 		Vector<ChessPosition> newMoves = new Vector<>(0);
 		ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
 		for(ChessPosition testMove: this.getPossibleMoves()){
