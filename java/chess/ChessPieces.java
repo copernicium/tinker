@@ -18,6 +18,15 @@ public class ChessPieces{
 		}
 	}
 
+	public void updateAllMoves(ChessPiece.Color color){
+		for(ChessPiece chessPiece: this.pieces){
+			if(chessPiece.getColor() == color){
+				chessPiece.updatePossibleMoves(this);
+				chessPiece.limitMovesToLeavingCheck(this);
+			}
+		}
+	}
+
 	public void updateAllMoves(){
 		for(ChessPiece chessPiece: this.pieces){
 			chessPiece.updatePossibleMoves(this);
@@ -169,17 +178,14 @@ public class ChessPieces{
 	}
 
 	/**
-	 * Finds the kings and then updates just their check statuses
+	 * Finds a king and then updates just its check status
 	 */
-	public void updateKingChecks(){
-		King updatedWhiteKing = getKing(ChessPiece.Color.WHITE);
-		King updatedBlackKing = getKing(ChessPiece.Color.BLACK);
+	public void updateKingCheck(ChessPiece.Color color){
+		King updatedKing = getKing(color);
 
-		updatedWhiteKing.updateCheck(this);
-		updatedBlackKing.updateCheck(this);
+		updatedKing.updateCheck(this);
 
-		this.set(this.getIndexOfKing(ChessPiece.Color.WHITE), updatedWhiteKing);
-		this.set(this.getIndexOfKing(ChessPiece.Color.BLACK), updatedBlackKing);
+		this.set(this.getIndexOfKing(color), updatedKing);
 	}
 
 	/**

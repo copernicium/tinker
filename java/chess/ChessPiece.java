@@ -117,7 +117,7 @@ public class ChessPiece
 	 * Limits the possible moves to a those which do not result the king being in check
 	 * @param CHESS_PIECES all of the pieces
 	 */
-	public void limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){//TODO: make faster
+	public void limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){
 		Vector<ChessPosition> newMoves = new Vector<>(0);
 		if(!this.getAlive()){
 			this.limitedMoves = newMoves;
@@ -129,7 +129,8 @@ public class ChessPiece
 			int index = testPieces.getIndexOf(testPiece);
 			testPiece.move(testMove);
 			testPieces.set(index,testPiece);
-			testPieces.updateKingChecks();
+			testPieces.updatePossibleMoves(Color.not(this.getColor()));
+			testPieces.updateKingCheck(testPiece.getColor());
 			if(!testPieces.getKing(testPiece.getColor()).getCheck()) newMoves.add(testMove);
 			testPieces.set(index,this);
 		}

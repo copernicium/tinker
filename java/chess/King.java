@@ -24,7 +24,6 @@ public class King extends ChessPiece
 	public void updateCheck(final ChessPieces CHESS_PIECES){
 		for(ChessPiece enemyPiece: CHESS_PIECES.toArray()){
 			if(enemyPiece.getColor() == Color.not(this.color)){//if it's an enemy piece
-				enemyPiece.updatePossibleMoves(CHESS_PIECES);//TODO: note: this is slowing things down the most
 				if(MySystem.myContains(enemyPiece.getPossibleMoves(),this.getPosition())){//if it can take this piece (the king)
 					check = true;
 					return;
@@ -43,6 +42,7 @@ public class King extends ChessPiece
 			King testMe = new King(CHESS_PIECES.getPieceAt(index));
 			testMe.move(possibleMove);
 			postMovePieces.set(index,testMe);
+			postMovePieces.updateAllMoves(Color.not(testMe.getColor()));
 			testMe.updateCheck(postMovePieces);
 			if(!testMe.getCheck()){//could the king itself move out of check
 				return false;
@@ -71,6 +71,7 @@ public class King extends ChessPiece
 						postMovePieces.set(i,testPiece);
 					}
 					{
+						postMovePieces.updateAllMoves(Color.not(this.getColor()));
 						this.updateCheck(postMovePieces);
 
 						if(!this.check){//if a move moves it out of check, then it isn't in checkmate

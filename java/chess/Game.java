@@ -308,6 +308,7 @@ public class Game{
 	 * @param args user arguments (no effect)
 	 */
 	public static void main(String[] args){
+		System.out.println("Starting Game");
 		//These are the tests:
 		//testMovement();
 		//testInput();
