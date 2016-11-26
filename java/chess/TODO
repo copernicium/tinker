@@ -1,6 +1,4 @@
-1. Make it faster!!! (use a profiler)
-    - updatePossibleMoves() especially Pawn
-    - updateCheck()
+1. Make it faster!!! (King: updateCheck, needs to update enemy possible moves every time)
 2. Update JavaDocs
 3. Create a game io
     - Print captured pieces

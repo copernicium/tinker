@@ -24,7 +24,8 @@ public class King extends ChessPiece
 	public void updateCheck(final ChessPieces CHESS_PIECES){
 		for(ChessPiece enemyPiece: CHESS_PIECES.toArray()){
 			if(enemyPiece.getColor() == Color.not(this.color)){//if it's an enemy piece
-				if(MySystem.myContains(enemyPiece.getLimitedMoves(),this.getPosition())){//if it can take this piece (the king)
+				enemyPiece.updatePossibleMoves(CHESS_PIECES);//TODO: note: this is slowing things down the most
+				if(MySystem.myContains(enemyPiece.getPossibleMoves(),this.getPosition())){//if it can take this piece (the king)
 					check = true;
 					return;
 				}

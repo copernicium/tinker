@@ -307,11 +307,11 @@ public class Game{
 		//testCopy();
 		//testSingleMove();
 		//testCapture();
-		testCheck();
+		//testCheck();
 		//testCheckmate();
 
 		//This is the actual game
-		//play();
+		play();
 		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n",MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }
