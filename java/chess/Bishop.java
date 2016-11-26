@@ -1,5 +1,5 @@
 package chess;
-import java.util.Vector;
+import java.util.TreeSet;
 
 /**
  * A bishop piece
@@ -27,7 +27,7 @@ public class Bishop extends ChessPiece
     }
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){
-		Vector<ChessPosition> possibleMoves = new Vector<>(0);
+		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();
 		if(!this.getAlive()){
 			this.possibleMoves = possibleMoves;
 			return;
@@ -40,7 +40,7 @@ public class Bishop extends ChessPiece
 				for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
 					testPosition.set(this.position.getRow().get() + (i * rowDirection), this.position.getColumn().get() + (i * columnDirection));
 					if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
-						possibleMoves.addElement(new ChessPosition(testPosition));
+						possibleMoves.add(new ChessPosition(testPosition));
 						if(chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color))) break;//if it will capture a piece, stop it there
 					} else break;
 				}
@@ -71,7 +71,7 @@ public class Bishop extends ChessPiece
     public Bishop(ChessPiece chessPiece){
 		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
 	}
-    public Bishop(ChessPosition position, Color color,Vector<ChessPosition> possibleMoves,Vector<ChessPosition> limitedMoves){
+    public Bishop(ChessPosition position, Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
         super(position,color,possibleMoves,limitedMoves);
     }
 }

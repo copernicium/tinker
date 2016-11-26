@@ -1,5 +1,8 @@
 package chess;
-import java.util.Vector;
+import sun.reflect.generics.tree.Tree;
+
+import java.util.TreeSet;
+
 /**
  * A class to represent a basic chess piece
  */
@@ -33,8 +36,8 @@ public class ChessPiece
 	protected ChessPosition position;
 	protected boolean alive;
 	private final static Type type = Type.UNASSIGNED;
-	protected Vector<ChessPosition> possibleMoves;
-	protected Vector<ChessPosition> limitedMoves;
+	protected TreeSet<ChessPosition> possibleMoves;
+	protected TreeSet<ChessPosition> limitedMoves;
 
 	/**
 	 * Fetches the status of the current piece
@@ -88,8 +91,8 @@ public class ChessPiece
 		if(this.getColor() != b.getColor()) return false;
 		if(!this.getPosition().equals(b.getPosition())) return false;
 		if(this.getAlive() != b.getAlive()) return false;
-		if(!this.possibleMoves.equals(b.getPossibleMoves())) return false;
-		if(!this.getLimitedMoves().equals(b.getLimitedMoves())) return false;
+		if(!MySystem.myTreeSetEquals(this.getPossibleMoves(),b.getPossibleMoves())) return false;
+		if(!MySystem.myTreeSetEquals(this.getLimitedMoves(),b.getLimitedMoves())) return false;
 		return true;
 	}
 
@@ -118,7 +121,7 @@ public class ChessPiece
 	 * @param CHESS_PIECES all of the pieces
 	 */
 	public void limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){
-		Vector<ChessPosition> newMoves = new Vector<>(0);
+		TreeSet<ChessPosition> newMoves = new TreeSet<>();
 		if(!this.getAlive()){
 			this.limitedMoves = newMoves;
 			return;
@@ -131,13 +134,13 @@ public class ChessPiece
 			testPieces.set(index,testPiece);
 			testPieces.updatePossibleMoves(Color.not(this.getColor()));
 			testPieces.updateKingCheck(testPiece.getColor());
-			if(!testPieces.getKing(testPiece.getColor()).getCheck()) newMoves.add(testMove);
+			if(!testPieces.getKing(this.getColor()).getCheck()) newMoves.add(testMove);
 			testPieces.set(index,this);
 		}
 		this.limitedMoves = newMoves;
 	}
 
-	public Vector<ChessPosition> getLimitedMoves(){
+	public TreeSet<ChessPosition> getLimitedMoves(){
 		return this.limitedMoves;
 	}
 
@@ -145,7 +148,7 @@ public class ChessPiece
 	 * Fetches all the positions this piece can move to
 	 * @return a vector of chess positions that this piece can be moved to
 	 */
-	public Vector<ChessPosition> getPossibleMoves(){
+	public TreeSet<ChessPosition> getPossibleMoves(){
 		//MySystem.error("This is not a valid chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
 		return this.possibleMoves;
 	}
@@ -277,7 +280,7 @@ public class ChessPiece
 	 * Creates a new instance of a chess piece
 	 */
 	public ChessPiece(){
-		this(new ChessPosition(), Color.WHITE,new Vector<>(0),new Vector<>(0));
+		this(new ChessPosition(), Color.WHITE,new TreeSet<>(),new TreeSet<>());
 	}
 
 	/**
@@ -293,7 +296,7 @@ public class ChessPiece
 	 * @param position the position of the piece
 	 * @param color the color of the piece
 	 */
-	public ChessPiece(ChessPosition position,Color color,Vector<ChessPosition> possibleMoves,Vector<ChessPosition> limitedMoves){
+	public ChessPiece(ChessPosition position,Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
 		this.position = position;
 		this.color = color;
 		this.alive = true;

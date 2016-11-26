@@ -1,5 +1,5 @@
 package chess;
-import java.util.Vector;
+import java.util.TreeSet;
 
 /**
  * A Knight piece
@@ -36,19 +36,19 @@ public class Knight extends ChessPiece
 	}
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){
-		Vector<ChessPosition> possibleMoves = new Vector<>(0);
+		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();
 		if(!this.getAlive()){
 			this.possibleMoves = possibleMoves;
 			return;
 		}
 		for(ChessPosition.Tester testPosition: getCorners(-2,1)){
 			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
-				possibleMoves.addElement(new ChessPosition(testPosition));
+				possibleMoves.add(new ChessPosition(testPosition));
 			}
 		}
 		for(ChessPosition.Tester testPosition: getCorners(-1,2)){
 			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
-				possibleMoves.addElement(new ChessPosition(testPosition));
+				possibleMoves.add(new ChessPosition(testPosition));
 			}
 		}
         this.possibleMoves = possibleMoves;
@@ -73,7 +73,7 @@ public class Knight extends ChessPiece
     public Knight(ChessPiece chessPiece){
 		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
 	}
-    public Knight(ChessPosition position, Color color,Vector<ChessPosition> possibleMoves,Vector<ChessPosition> limitedMoves){
+    public Knight(ChessPosition position, Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
         super(position,color,possibleMoves,limitedMoves);
     }
 }

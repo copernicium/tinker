@@ -3,13 +3,18 @@ package chess;
 /**
  * Represents a position of the chess board
  */
-public class ChessPosition{
+public class ChessPosition implements Comparable<ChessPosition>	{
 	/**
 	 * The template used in creation of the Column and Row classes
 	 */
-    private static abstract class Dimension{
+    private static abstract class Dimension implements Comparable<Dimension>{
         protected int value;
         public static final int DIMENSION=8;
+
+		@Override
+		public int compareTo(Dimension b){
+			return Integer.compare(this.get(),b.get());
+		}
 
 		/**
 		 * Fetches the value of the Dimension
@@ -302,6 +307,12 @@ public class ChessPosition{
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public int compareTo(ChessPosition b){
+		if(this.getColumn().compareTo(b.getColumn()) != 0 ) return this.getColumn().compareTo(b.getColumn());
+		return this.getRow().compareTo(b.getRow());
 	}
 
 	/**

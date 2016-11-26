@@ -1,5 +1,5 @@
 package chess;
-import java.util.Vector;
+import java.util.TreeSet;
 
 /**
  * A queen piece
@@ -27,7 +27,7 @@ public class Queen extends ChessPiece
     }
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){
-		Vector<ChessPosition> possibleMoves = new Vector<>(0);
+		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();
 		if(!this.getAlive()){
 			this.possibleMoves = possibleMoves;
 			return;
@@ -41,7 +41,7 @@ public class Queen extends ChessPiece
 					for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
 						testPosition.set(this.position.getRow().get() + (i * rowDirection), this.position.getColumn().get() + (i * columnDirection));
 						if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
-							possibleMoves.addElement(new ChessPosition(testPosition));
+							possibleMoves.add(new ChessPosition(testPosition));
 							if(chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color)))
 								break;//if it will capture a piece, stop it there
 						} else break;
@@ -56,7 +56,7 @@ public class Queen extends ChessPiece
 					for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
 						testPosition.set(this.position.getRow().get() + (i * direction * row), this.position.getColumn().get() + (i * direction * column));
 						if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
-							possibleMoves.addElement(new ChessPosition(testPosition));
+							possibleMoves.add(new ChessPosition(testPosition));
 							if(chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color))) break;//if it will capture a piece, stop it there
 						} else break;
 					}
@@ -90,7 +90,7 @@ public class Queen extends ChessPiece
     public Queen(ChessPiece chessPiece){
 		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
 	}
-    public Queen(ChessPosition position, Color color,Vector<ChessPosition> possibleMoves,Vector<ChessPosition> limitedMoves){
+    public Queen(ChessPosition position, Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
         super(position,color,possibleMoves,limitedMoves);
     }
 }

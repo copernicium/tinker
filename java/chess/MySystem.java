@@ -1,8 +1,26 @@
 package chess;
 
+import java.util.Iterator;
+import java.util.TreeSet;
 import java.util.Vector;
 
 public class MySystem{
+	public static boolean myTreeSetEquals(TreeSet<ChessPosition> a, TreeSet<ChessPosition> b){
+		if(a.size() != b.size()) return false;
+		Iterator<ChessPosition> aIterator = a.iterator();
+		Iterator<ChessPosition> bIterator = b.iterator();
+		while(aIterator.hasNext() && bIterator.hasNext()){
+			if(!aIterator.next().equals(bIterator.next())) return false;
+		}
+		return true;
+	}
+	public static boolean myContains(TreeSet<ChessPosition> all, ChessPosition a){
+		for(ChessPosition b: all){
+			if(a.equals(b)) return true;
+		}
+		return false;
+	}
+
 	public static boolean myContains(Vector<ChessPosition> all, ChessPosition a){
 		for(ChessPosition b: all){
 			if(a.equals(b)) return true;

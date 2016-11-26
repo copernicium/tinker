@@ -1,6 +1,6 @@
 package chess;
 
-import java.util.Vector;
+import java.util.TreeSet;
 /**
  * A pawn piece
  */
@@ -34,7 +34,7 @@ public class Pawn extends ChessPiece
     }
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){//TODO: en passant and maybe promotion
-		Vector<ChessPosition> possibleMoves = new Vector<>(0);
+		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();
 		if(!this.getAlive()){
 			this.possibleMoves = possibleMoves;
 			return;
@@ -47,28 +47,28 @@ public class Pawn extends ChessPiece
 			{
 				testPosition.set(this.position.getRow().get() + CAPTURE_DISTANCE, this.position.getColumn().get() + (ADVANCE_DISTANCE * direction));
 				if(testPosition.inBounds() && chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color))){
-					possibleMoves.addElement(new ChessPosition(testPosition));
+					possibleMoves.add(new ChessPosition(testPosition));
 				}
 			}
 			{//if it can capture a piece
 				final int DIAGONAL_DISTANCE = -1;
 				testPosition.set(this.position.getRow().get() - CAPTURE_DISTANCE, this.position.getColumn().get() + (DIAGONAL_DISTANCE * direction));
 				if(testPosition.inBounds() && chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color))){
-					possibleMoves.addElement(new ChessPosition(testPosition));
+					possibleMoves.add(new ChessPosition(testPosition));
 				}
 			}
 		}
 		{
 			testPosition.set(this.position.getRow().get()+(ADVANCE_DISTANCE*direction),this.position.getColumn().get());
 			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition),this.color)){
-				possibleMoves.addElement(new ChessPosition(testPosition));
+				possibleMoves.add(new ChessPosition(testPosition));
 			}
 		}
 		if(this.getFirstMove()){
 			final int INITIAL_TWO_SQUARE_ADVANCE = 2;
 			testPosition.set(this.position.getRow().get()+(INITIAL_TWO_SQUARE_ADVANCE * direction),this.position.getColumn().get());
 			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition),this.color)){//always true
-				possibleMoves.addElement(new ChessPosition(testPosition));
+				possibleMoves.add(new ChessPosition(testPosition));
 			}
 		}
         this.possibleMoves = possibleMoves;
@@ -92,8 +92,8 @@ public class Pawn extends ChessPiece
 		if(!this.getPosition().equals(testPiece.getPosition())) return false;
 		if(this.getAlive() != testPiece.getAlive()) return false;
 		if(this.getFirstMove() != testPiece.getFirstMove()) return  false;
-		if(!this.getPossibleMoves().equals(testPiece.getPossibleMoves())) return false;
-		if(!this.getLimitedMoves().equals(testPiece.getLimitedMoves())) return false;
+		if(!MySystem.myTreeSetEquals(this.getPossibleMoves(),testPiece.getPossibleMoves())) return false;
+		if(!MySystem.myTreeSetEquals(this.getLimitedMoves(),testPiece.getLimitedMoves())) return false;
 		return true;
 	}
 
@@ -130,7 +130,7 @@ public class Pawn extends ChessPiece
 			this.limitedMoves = toCopy.getLimitedMoves();
 		}
 	}
-    public Pawn(ChessPosition position,Color color,Vector<ChessPosition> possibleMoves,Vector<ChessPosition> limitedMoves){
+    public Pawn(ChessPosition position,Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
         super(position,color,possibleMoves,limitedMoves);
 		this.firstMove = (position.getRow().equals(ChessBoard.PiecePlacement.Row.PAWN )|| position.getRow().equals(ChessBoard.mirror(ChessBoard.PiecePlacement.Row.PAWN)));
     }

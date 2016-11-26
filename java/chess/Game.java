@@ -1,6 +1,7 @@
 package chess;
 import java.util.Scanner;
-import java.util.Vector;
+import java.util.TreeSet;
+import java.util.Iterator;
 
 /**
  * Runs a chess game
@@ -192,21 +193,20 @@ public class Game{
 			testMove(chessBoard,test,testMove);
 		}
 		System.out.println("Finishing with status " + chessBoard.getStatus().toString());
-		System.out.print("Positions of pieces that can be moved: " + chessBoard.getMoveablePositionsByPlayer().toString() + " first piece in that array can be moved to  ");
-		try {
-			System.out.print(chessBoard.getMoveablePiecesByPlayer().elementAt(0).getLimitedMoves().toString());
-		} catch(ArrayIndexOutOfBoundsException e){
-			System.out.print("[]");
-		}
-		System.out.print("\n");
-		System.out.println("Expected: Position F3 can be moved to E2 and F4");
+
+		System.out.print("Positions of pieces that can be moved: " + chessBoard.getMoveablePositionsByPlayer().toString() + " first piece in that array can be moved to ");
+		Iterator<ChessPiece> firstPieceIt = chessBoard.getMoveablePiecesByPlayer().iterator();
+		ChessPiece firstPiece = firstPieceIt.next();
+		System.out.print(firstPiece.getLimitedMoves().toString() + "\n");
+
 		final ChessPosition EXPECTED_MOVEABLE_POS = ChessPosition.toChessPosition("F3");
-		final Vector<ChessPosition> EXPECTED_POSSIBLE_MOVES = new Vector<>(0);
-		EXPECTED_POSSIBLE_MOVES.addElement(ChessPosition.toChessPosition("E2"));
-		EXPECTED_POSSIBLE_MOVES.addElement(ChessPosition.toChessPosition("F4"));
-		MySystem.myAssert(EXPECTED_MOVEABLE_POS.equals(chessBoard.getMoveablePositionsByPlayer().elementAt(0)),MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(EXPECTED_POSSIBLE_MOVES.size() == chessBoard.getMoveablePiecesByPlayer().elementAt(0).getLimitedMoves().size(),MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(EXPECTED_POSSIBLE_MOVES.elementAt(0).equals(chessBoard.getMoveablePiecesByPlayer().elementAt(0).getLimitedMoves().elementAt(0)),MySystem.getFileName(),MySystem.getLineNumber());
+		final TreeSet<ChessPosition> EXPECTED_POSSIBLE_MOVES = new TreeSet<>();
+		EXPECTED_POSSIBLE_MOVES.add(ChessPosition.toChessPosition("E2"));
+		EXPECTED_POSSIBLE_MOVES.add(ChessPosition.toChessPosition("F4"));
+		System.out.println("Expected: Position (of first piece, but there's only one) " + EXPECTED_MOVEABLE_POS.toString() + " can be moved to " + EXPECTED_POSSIBLE_MOVES.toString());
+
+		MySystem.myAssert(EXPECTED_MOVEABLE_POS.equals(firstPiece.getPosition()),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(MySystem.myTreeSetEquals(EXPECTED_POSSIBLE_MOVES,firstPiece.getLimitedMoves()),MySystem.getFileName(),MySystem.getLineNumber());
 	}
 
 
@@ -252,7 +252,7 @@ public class Game{
 	 */
 	public static void testCopy(){
 		{
-			Pawn a = new Pawn(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0));
+			Pawn a = new Pawn(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D), ChessPiece.Color.WHITE, new TreeSet<>(),new TreeSet<>());
 
 			ChessPiece b = new Pawn(a);
 			a.move(new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.D));
@@ -316,10 +316,10 @@ public class Game{
 		//testSingleMove();
 		//testCapture();
 		//testCheck();
-		testCheckmate();
+		//testCheckmate();
 
 		//This is the actual game
-		//play();
+		play();
 		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n",MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }

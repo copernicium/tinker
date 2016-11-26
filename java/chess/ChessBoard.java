@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Vector;
+import java.util.TreeSet;
 
 /**
  * A representation of a chess board
@@ -127,10 +128,10 @@ public class ChessBoard
 	 * Given the current player, finds all of the positions of pieces they can move
 	 * @return an array of the positions of the moveable pieces
 	 */
-	public Vector<ChessPosition> getMoveablePositionsByPlayer(){
-		Vector<ChessPosition> moveablePositions = new Vector<>();
+	public TreeSet<ChessPosition> getMoveablePositionsByPlayer(){
+		TreeSet<ChessPosition> moveablePositions = new TreeSet<>();
 		for(ChessPiece chessPiece: getMoveablePiecesByPlayer()){
-			moveablePositions.addElement(chessPiece.getPosition());
+			moveablePositions.add(chessPiece.getPosition());
 		}
 		return moveablePositions;
 	}
@@ -164,7 +165,7 @@ public class ChessBoard
 		} else {
 			MySystem.error("Error: trying to move piece to invalid location: piece:" + chessPiece.toString() + " cannot move to " + moveThere.toString() + " from possible " + chessPiece.getPossibleMoves().toString(),MySystem.getFileName(),MySystem.getLineNumber());//user inputs invalid move
 		}
-		this.pieces.updateAllMoves(ChessPiece.Color.not(this.playerTurn));//only update the necessary half of pieces (color) to save time
+		this.pieces.updateAllMoves();//TODO: consider only updating one king in meaning you only have to update half of pieces (color) to save time
 		this.updateStatus();
 		playerTurn = ChessPiece.Color.not(playerTurn);
     }
@@ -204,9 +205,9 @@ public class ChessBoard
 		final int NUMBER_OF_CORNERS = 4;
 		ChessPiece[] fourPositions = new ChessPiece[NUMBER_OF_CORNERS ];
 		fourPositions[0] = pos1;
-		fourPositions[1] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)));
-		fourPositions[2] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0)));
-		fourPositions[3] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0)));
+		fourPositions[1] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE, new TreeSet<>(),new TreeSet<>()));
+		fourPositions[2] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK, new TreeSet<>(),new TreeSet<>()));
+		fourPositions[3] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK, new TreeSet<>(),new TreeSet<>()));
 		return fourPositions;
 	}
 
@@ -218,14 +219,14 @@ public class ChessBoard
 		ChessPieces chessPieces = new ChessPieces(NumbersOfPieces.Total.TOTAL);
 			{
 				for(int i = 0; i < NumbersOfPieces.Half.PAWNS; i++){
-					chessPieces.setNextPiece(new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)));
-					chessPieces.setNextPiece(new Pawn(new ChessPosition(mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0)));
+					chessPieces.setNextPiece(new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE, new TreeSet<>(),new TreeSet<>()));
+					chessPieces.setNextPiece(new Pawn(new ChessPosition(mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK, new TreeSet<>(),new TreeSet<>()));
 				}
 			{
 				final ChessPiece[] PIECES_IN_CORNERS = {
-						new Rook(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE, new Vector<>(0), new Vector<>(0)),
-						new Knight(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.KNIGHT), ChessPiece.Color.WHITE, new Vector<>(0), new Vector<>(0)),
-						new Bishop(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.BISHOP), ChessPiece.Color.WHITE, new Vector<>(0), new Vector<>(0))
+						new Rook(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE, new TreeSet<>(), new TreeSet<>()),
+						new Knight(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.KNIGHT), ChessPiece.Color.WHITE, new TreeSet<>(), new TreeSet<>()),
+						new Bishop(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.BISHOP), ChessPiece.Color.WHITE, new TreeSet<>(), new TreeSet<>())
 
 				};
 				for(ChessPiece original : PIECES_IN_CORNERS){
@@ -235,12 +236,12 @@ public class ChessBoard
 				}
 			}
 			{
-				chessPieces.setNextPiece(new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)));
-				chessPieces.setNextPiece(new Queen(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0)));
+				chessPieces.setNextPiece(new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE, new TreeSet<>(),new TreeSet<>()));
+				chessPieces.setNextPiece(new Queen(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK, new TreeSet<>(),new TreeSet<>()));
 			}
 			{
-				chessPieces.setNextPiece(new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0)));
-				chessPieces.setNextPiece(new King(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK, new Vector<>(0),new Vector<>(0)));
+				chessPieces.setNextPiece(new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE, new TreeSet<>(),new TreeSet<>()));
+				chessPieces.setNextPiece(new King(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK, new TreeSet<>(),new TreeSet<>()));
 			}
 		}
         return new ChessPieces(chessPieces);

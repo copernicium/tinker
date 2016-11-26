@@ -1,6 +1,6 @@
 package chess;
 
-import java.util.Vector;
+import java.util.TreeSet;
 
 /**
  * A king piece
@@ -42,7 +42,7 @@ public class King extends ChessPiece
 			King testMe = new King(CHESS_PIECES.getPieceAt(index));
 			testMe.move(possibleMove);
 			postMovePieces.set(index,testMe);
-			postMovePieces.updateAllMoves(Color.not(testMe.getColor()));
+			postMovePieces.updatePossibleMoves(Color.not(this.getColor()));
 			testMe.updateCheck(postMovePieces);
 			if(!testMe.getCheck()){//could the king itself move out of check
 				return false;
@@ -71,7 +71,7 @@ public class King extends ChessPiece
 						postMovePieces.set(i,testPiece);
 					}
 					{
-						postMovePieces.updateAllMoves(Color.not(this.getColor()));
+						postMovePieces.updatePossibleMoves(Color.not(this.getColor()));
 						this.updateCheck(postMovePieces);
 
 						if(!this.check){//if a move moves it out of check, then it isn't in checkmate
@@ -114,7 +114,7 @@ public class King extends ChessPiece
 	}
 	@Override
 	public void updatePossibleMoves(ChessPieces chessPieces){
-		Vector<ChessPosition> possibleMoves = new Vector<>(0);
+		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();
 		if(!this.getAlive()){
 			this.possibleMoves = possibleMoves;
 			return;
@@ -125,7 +125,7 @@ public class King extends ChessPiece
 			for(int x = -MOVEMENT_DISTANCE ; x <= MOVEMENT_DISTANCE ; x++){
 				testPosition.set(this.position.getRow().get() + x, this.position.getColumn().get() + y);
 				if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
-					possibleMoves.addElement(new ChessPosition(testPosition));
+					possibleMoves.add(new ChessPosition(testPosition));
 				}
 			}
 		}
@@ -147,8 +147,8 @@ public class King extends ChessPiece
 		if(this.getAlive() != testPiece.getAlive()) return false;
 		if(this.getCheck() != testPiece.getCheck()) return  false;
 		if(this.getCheckmate() != testPiece.getCheckmate()) return  false;
-		if(!this.getPossibleMoves().equals(testPiece.getPossibleMoves())) return false;
-		if(!this.getLimitedMoves().equals(testPiece.getLimitedMoves())) return false;
+		if(!MySystem.myTreeSetEquals(this.getPossibleMoves(),testPiece.getPossibleMoves())) return false;
+		if(!MySystem.myTreeSetEquals(this.getLimitedMoves(),testPiece.getLimitedMoves())) return false;
 		return true;
 	}
 
@@ -192,7 +192,7 @@ public class King extends ChessPiece
 			this.limitedMoves = toCopy.getLimitedMoves();
 		}
 	}
-	public King(ChessPosition position, Color color,Vector<ChessPosition> possibleMoves,Vector<ChessPosition> limitedMoves){
+	public King(ChessPosition position, Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
 		super(position,color,possibleMoves,limitedMoves);
 		check = false;
 		checkmate = false;
