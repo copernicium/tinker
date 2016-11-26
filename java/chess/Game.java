@@ -315,8 +315,8 @@ public class Game{
 		//testCopy();
 		//testSingleMove();
 		//testCapture();
-		testCheck();
-		//testCheckmate();
+		//testCheck();
+		testCheckmate();
 
 		//This is the actual game
 		//play();
