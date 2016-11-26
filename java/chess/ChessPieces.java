@@ -212,7 +212,7 @@ public class ChessPieces{
 		for(int i = 0; i < this.pieces.length; i++){
 			if(this.pieces[i].getType() == ChessPiece.Type.UNASSIGNED) return i;
 		}
-		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("Error: Unable to find index of the next unassigned piece, array full",MySystem.getFileName(),MySystem.getLineNumber());
 		return -1;
 	}
 
@@ -221,7 +221,6 @@ public class ChessPieces{
 	 * @param PIECE the piece to be assigned into the array
 	 */
 	public void setNextPiece(final ChessPiece PIECE){
-		MySystem.myAssert(this.isUnoccupied(PIECE.getPosition()),MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(this.isUnoccupied(PIECE.getPosition()),MySystem.getFileName(),MySystem.getLineNumber());
 		this.pieces[this.findNextUnassigned()] = ChessPiece.makePiece(PIECE);
 	}

@@ -247,6 +247,13 @@ public class ChessPosition{
 			return this.row == b.getRow() && this.column == b.getColumn();
 		}
 
+		public void set(int row,int column){
+			this.row = row;
+			this.column = column;
+		}
+		public Tester(){
+			this(0,0);
+		}
 		/**
 		 * Creates a new Tester given a row and column
 		 * @param row the row to initialize Tester with
@@ -387,6 +394,6 @@ public class ChessPosition{
 	 * @param tester the Tester to convert to a ChessPosition
 	 */
 	public ChessPosition(ChessPosition.Tester tester){
-		this(new Row(tester.getRow()),new Column(tester.getColumn()));
+		this(tester.getRow(),tester.getColumn());
 	}
 }

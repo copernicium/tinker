@@ -56,7 +56,6 @@ public class Knight extends ChessPiece
 			return;
         }
 		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(),MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 	}
 	public Knight(Knight toCopy) {
 		this.position = new ChessPosition(toCopy.position);

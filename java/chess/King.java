@@ -24,8 +24,7 @@ public class King extends ChessPiece
 	public void updateCheck(final ChessPieces CHESS_PIECES){
 		for(ChessPiece enemyPiece: CHESS_PIECES.toArray()){
 			if(enemyPiece.getColor() == Color.not(this.color)){//if it's an enemy piece
-				enemyPiece.updatePossibleMoves(CHESS_PIECES);//TODO: this should not have to be here
-				if(MySystem.myContains(enemyPiece.getPossibleMoves(),this.getPosition())){//if it can take this piece (the king)
+				if(MySystem.myContains(enemyPiece.getLimitedMoves(),this.getPosition())){//if it can take this piece (the king)
 					check = true;
 					return;
 				}
@@ -39,7 +38,7 @@ public class King extends ChessPiece
 		this.updatePossibleMoves(CHESS_PIECES);
 		int index = CHESS_PIECES.getIndexOf(this);
 		ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
-		for(ChessPosition possibleMove: this.getPossibleMoves()){
+		for(ChessPosition possibleMove: this.getLimitedMoves()){
 			King testMe = new King(CHESS_PIECES.getPieceAt(index));
 			testMe.move(possibleMove);
 			postMovePieces.set(index,testMe);
@@ -61,11 +60,11 @@ public class King extends ChessPiece
 		for(int i = 0; i < CHESS_PIECES.length(); i++){//TODO: make foreach?
 			ChessPiece defendingPiece = ChessPiece.makePiece(CHESS_PIECES.getPieceAt(i));
 			if(defendingPiece.getColor() == this.getColor() && !defendingPiece.equalsByType(this)){
-				for(ChessPosition possibleMove : defendingPiece.getPossibleMoves()){
+				for(ChessPosition possibleMove : defendingPiece.getLimitedMoves()){
 					{
 						ChessPiece testPiece = ChessPiece.makePiece(defendingPiece);
-						if(!postMovePieces.checkExists(testPiece)) MySystem.error("Piece does not exist",MySystem.getFileName(),MySystem.getLineNumber());//TODO: comment-out after done tinkering with kings
-						if(!testPiece.checkMove(possibleMove,postMovePieces)) MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());//TODO: comment-out after done tinkering with kings
+						//if(!postMovePieces.checkExists(testPiece)) MySystem.error("Piece does not exist",MySystem.getFileName(),MySystem.getLineNumber());//useful when tinkering with kings
+						//if(!testPiece.checkMove(possibleMove,postMovePieces)) MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());//useful when tinkering with kings
 						if(postMovePieces.isOccupied(possibleMove, ChessPiece.Color.not(postMovePieces.getPieceAt(i).getColor()))) postMovePieces.capture(possibleMove);
 						testPiece.move(possibleMove);
 						postMovePieces.set(i,testPiece);
@@ -115,9 +114,10 @@ public class King extends ChessPiece
 	public void updatePossibleMoves(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		final int MOVEMENT_DISTANCE = 1;
+		ChessPosition.Tester testPosition = new ChessPosition.Tester();
 		for(int y = -MOVEMENT_DISTANCE ; y <= MOVEMENT_DISTANCE ; y++){
 			for(int x = -MOVEMENT_DISTANCE ; x <= MOVEMENT_DISTANCE ; x++){
-				ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + x, this.position.getColumn().get() + y);
+				testPosition.set(this.position.getRow().get() + x, this.position.getColumn().get() + y);
 				if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
 					possibleMoves.addElement(new ChessPosition(testPosition));
 				}
@@ -148,12 +148,11 @@ public class King extends ChessPiece
 
 	@Override
 	public void move(ChessPosition newPosition){
-		if(MySystem.myContains(this.getPossibleMoves(),newPosition)){
+		if(MySystem.myContains(this.getPossibleMoves(),newPosition)){//TODO: make out of limited moves instead of possible moves?
 			this.position = newPosition;
 			return;
 		}
 		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString() + " out of " + this.getPossibleMoves().toString(),MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 	}
 	public boolean getCheck(){
 		return check;

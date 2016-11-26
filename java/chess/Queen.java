@@ -28,13 +28,14 @@ public class Queen extends ChessPiece
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
+		ChessPosition.Tester testPosition = new ChessPosition.Tester();
 		{
 			final int NUMBER_OF_DIRECTIONS = 4;
 			{//Bishop movement
 				int rowDirection = -1, columnDirection = -1;
 				for(int j = 0; j < NUMBER_OF_DIRECTIONS ; j++){
 					for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
-						ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + (i * rowDirection), this.position.getColumn().get() + (i * columnDirection));
+						testPosition.set(this.position.getRow().get() + (i * rowDirection), this.position.getColumn().get() + (i * columnDirection));
 						if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
 							possibleMoves.addElement(new ChessPosition(testPosition));
 							if(chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color)))
@@ -49,7 +50,7 @@ public class Queen extends ChessPiece
 				int direction = -1, row = 1, column = 0;
 				for(int j = 0; j < NUMBER_OF_DIRECTIONS; j++){
 					for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
-						ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + (i * direction * row), this.position.getColumn().get() + (i * direction * column));
+						testPosition.set(this.position.getRow().get() + (i * direction * row), this.position.getColumn().get() + (i * direction * column));
 						if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
 							possibleMoves.addElement(new ChessPosition(testPosition));
 							if(chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color))) break;//if it will capture a piece, stop it there
@@ -72,7 +73,6 @@ public class Queen extends ChessPiece
 			return;
 		}
 		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(),MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 	}
 	public Queen(Queen toCopy) {
 		this.position = new ChessPosition(toCopy.position);

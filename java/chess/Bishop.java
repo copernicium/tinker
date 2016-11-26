@@ -28,12 +28,13 @@ public class Bishop extends ChessPiece
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
+		ChessPosition.Tester testPosition = new ChessPosition.Tester();
 		{
 			int rowDirection = -1, columnDirection = -1;
 			final int NUMBER_OF_DIAGONALS = 4;
 			for(int j = 0; j < NUMBER_OF_DIAGONALS ; j++){
 				for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
-					ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + (i * rowDirection), this.position.getColumn().get() + (i * columnDirection));
+					testPosition.set(this.position.getRow().get() + (i * rowDirection), this.position.getColumn().get() + (i * columnDirection));
 					if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
 						possibleMoves.addElement(new ChessPosition(testPosition));
 						if(chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color))) break;//if it will capture a piece, stop it there
@@ -52,7 +53,6 @@ public class Bishop extends ChessPiece
 			return;
 		}
 		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(),MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
 	}
 	public Bishop(Bishop toCopy) {
 		this.position = new ChessPosition(toCopy.position);

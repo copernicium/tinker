@@ -34,39 +34,39 @@ public class Pawn extends ChessPiece
     }
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){//TODO: en passant and maybe promotion
-		ChessPiece original = ChessPiece.makePiece(this);
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		int direction = (this.getColor() == ChessPiece.Color.WHITE) ? 1 : -1;
-		{
-			final int DIAGONAL_DISTANCE = 1;
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + DIAGONAL_DISTANCE,this.position.getColumn().get()+(DIAGONAL_DISTANCE*direction));
-			if(testPosition.inBounds() && chessPieces.isOccupied(new ChessPosition(testPosition),Color.not(this.color))){
-				possibleMoves.addElement(new ChessPosition(testPosition));
+		ChessPosition.Tester testPosition = new ChessPosition.Tester();
+		final int ADVANCE_DISTANCE = 1;
+		{//if it can capture a piece
+			final int CAPTURE_DISTANCE = 1;
+			{
+				testPosition.set(this.position.getRow().get() + CAPTURE_DISTANCE, this.position.getColumn().get() + (ADVANCE_DISTANCE * direction));
+				if(testPosition.inBounds() && chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color))){
+					possibleMoves.addElement(new ChessPosition(testPosition));
+				}
+			}
+			{//if it can capture a piece
+				final int DIAGONAL_DISTANCE = -1;
+				testPosition.set(this.position.getRow().get() - CAPTURE_DISTANCE, this.position.getColumn().get() + (DIAGONAL_DISTANCE * direction));
+				if(testPosition.inBounds() && chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color))){
+					possibleMoves.addElement(new ChessPosition(testPosition));
+				}
 			}
 		}
 		{
-			final int DIAGONAL_DISTANCE = -1;
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + DIAGONAL_DISTANCE,this.position.getColumn().get()+(DIAGONAL_DISTANCE*direction));
-			if(testPosition.inBounds() && chessPieces.isOccupied(new ChessPosition(testPosition),Color.not(this.color))){
+			testPosition.set(this.position.getRow().get()+(ADVANCE_DISTANCE*direction),this.position.getColumn().get());
+			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition),this.color)){
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}
 		if(this.getFirstMove()){
 			final int INITIAL_TWO_SQUARE_ADVANCE = 2;
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(INITIAL_TWO_SQUARE_ADVANCE * direction),this.position.getColumn().get());
-			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition),this.color)){
+			testPosition.set(this.position.getRow().get()+(INITIAL_TWO_SQUARE_ADVANCE * direction),this.position.getColumn().get());
+			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition),this.color)){//always true
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}
-		{
-			final int REGULAR_MOVEMENT = 1;
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(REGULAR_MOVEMENT*direction),this.position.getColumn().get());
-			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition),this.color)){
-				possibleMoves.addElement(new ChessPosition(testPosition));
-			}
-		}
-		if(!original.equalsByType(this)) MySystem.error("original:" + original.toString() + " this:" + this.toString(),MySystem.getFileName(),MySystem.getLineNumber());//TODO: remove or expand this test
-		MySystem.myAssert(original.equalsByType(this),MySystem.getFileName(),MySystem.getLineNumber());
         this.possibleMoves = possibleMoves;
 	}
 
