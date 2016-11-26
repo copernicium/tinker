@@ -57,10 +57,10 @@ public class King extends ChessPiece
 			this.checkmate = false;
 			return;//if it's not in check, then it doesn't need to check if it's in checkmate
 		}
-		for(int i = 0; i < CHESS_PIECES.length(); i++){
+		ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
+		for(int i = 0; i < CHESS_PIECES.length(); i++){//TODO: make foreach?
 			ChessPiece defendingPiece = ChessPiece.makePiece(CHESS_PIECES.getPieceAt(i));
 			if(defendingPiece.getColor() == this.getColor() && !defendingPiece.equalsByType(this)){
-				ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
 				for(ChessPosition possibleMove : defendingPiece.getPossibleMoves()){
 					{
 						ChessPiece testPiece = ChessPiece.makePiece(defendingPiece);

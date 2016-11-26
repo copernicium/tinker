@@ -119,14 +119,15 @@ public class ChessPiece
 	 */
 	public void limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){//TODO: make faster
 		Vector<ChessPosition> newMoves = new Vector<>(0);
+		ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
 		for(ChessPosition testMove: this.getPossibleMoves()){
-			ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
 			ChessPiece testPiece = ChessPiece.makePiece(this);
-			int position = testPieces.getIndexOf(testPiece);
+			int index = testPieces.getIndexOf(testPiece);
 			testPiece.move(testMove);
-			testPieces.set(position,testPiece);
+			testPieces.set(index,testPiece);
 			testPieces.updateKingChecks();
 			if(!testPieces.getKing(testPiece.getColor()).getCheck()) newMoves.add(testMove);
+			testPieces.set(index,this);
 		}
 		this.limitedMoves = newMoves;
 	}

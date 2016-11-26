@@ -122,7 +122,7 @@ public class ChessPieces{
 	 * @param INDEX the index of the piece to set
 	 * @param CHESS_PIECE the piece to set it to
 	 */
-	public void set(final int INDEX,final ChessPiece CHESS_PIECE){
+	public void set(final int INDEX,final ChessPiece CHESS_PIECE){//TODO add a way to undo the last (most recent) move
 		this.pieces[INDEX] = CHESS_PIECE;
 	}
 
@@ -175,8 +175,8 @@ public class ChessPieces{
 		King updatedWhiteKing = getKing(ChessPiece.Color.WHITE);
 		King updatedBlackKing = getKing(ChessPiece.Color.BLACK);
 
-		updatedWhiteKing.updateCheck(ChessPieces.makePieces(this));
-		updatedBlackKing.updateCheck(ChessPieces.makePieces(this));
+		updatedWhiteKing.updateCheck(this);
+		updatedBlackKing.updateCheck(this);
 
 		this.set(this.getIndexOfKing(ChessPiece.Color.WHITE), updatedWhiteKing);
 		this.set(this.getIndexOfKing(ChessPiece.Color.BLACK), updatedBlackKing);
@@ -189,8 +189,8 @@ public class ChessPieces{
 		King updatedWhiteKing = getKing(ChessPiece.Color.WHITE);
 		King updatedBlackKing = getKing(ChessPiece.Color.BLACK);
 
-		updatedWhiteKing.update(ChessPieces.makePieces(this));
-		updatedBlackKing.update(ChessPieces.makePieces(this));
+		updatedWhiteKing.update(this);
+		updatedBlackKing.update(this);
 
 		this.set(this.getIndexOfKing(ChessPiece.Color.WHITE), updatedWhiteKing);
 		this.set(this.getIndexOfKing(ChessPiece.Color.BLACK), updatedBlackKing);

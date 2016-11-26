@@ -156,12 +156,11 @@ public class ChessBoard
 		MySystem.myAssert(PIECE_TO_MOVE.getColor() == playerTurn,MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(pieces.checkExists(PIECE_TO_MOVE),MySystem.getFileName(),MySystem.getLineNumber());
 		ChessPiece chessPiece = this.pieces.getPieceAt(PIECE_TO_MOVE);
-		//chessPiece.limitMovesToLeavingCheck(this.pieces);
 		if(chessPiece.checkMoveDeep(moveThere,pieces)){
-			int position = pieces.getIndexOf(chessPiece);
+			int index = pieces.getIndexOf(chessPiece);
 			chessPiece.move(moveThere);
-			pieces.set(position,chessPiece);
-			if(pieces.isOccupied(pieces.getPieceAt(position).getPosition(), ChessPiece.Color.not(chessPiece.getColor()))) pieces.capture(moveThere);
+			pieces.set(index,chessPiece);
+			if(pieces.isOccupied(pieces.getPieceAt(index).getPosition(), ChessPiece.Color.not(chessPiece.getColor()))) pieces.capture(moveThere);
 		} else {
 			MySystem.error("Error: trying to move piece to invalid location: piece:" + chessPiece.toString() + " cannot move to " + moveThere.toString() + " from possible " + chessPiece.getPossibleMoves().toString(),MySystem.getFileName(),MySystem.getLineNumber());//user inputs invalid move
 		}

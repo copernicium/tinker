@@ -192,13 +192,14 @@ public class Game{
 			testMove(chessBoard,test,testMove);
 		}
 		System.out.println("Finishing with status " + chessBoard.getStatus().toString());
-		System.out.print("Available moves: " + chessBoard.getMoveablePositionsByPlayer().toString() + " out of these pieces " + chessBoard.getMoveablePiecesByPlayer().toString() + " to these locations ");
+		System.out.print("Positions of pieces that can be moved: " + chessBoard.getMoveablePositionsByPlayer().toString() + " first piece in that array can be moved to  ");
 		try {
 			System.out.print(chessBoard.getMoveablePiecesByPlayer().elementAt(0).getLimitedMoves().toString());
 		} catch(ArrayIndexOutOfBoundsException e){
 			System.out.print("[]");
 		}
 		System.out.print("\n");
+		System.out.println("Expected: Position F3 can be moved to E2 and F4");
 	}
 
 
@@ -307,10 +308,10 @@ public class Game{
 		//testSingleMove();
 		//testCapture();
 		//testCheck();
-		//testCheckmate();
+		testCheckmate();
 
 		//This is the actual game
-		play();
+		//play();
 		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n",MySystem.getFileName(),MySystem.getLineNumber());
 	}
 }
