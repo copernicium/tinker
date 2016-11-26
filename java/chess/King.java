@@ -148,7 +148,7 @@ public class King extends ChessPiece
 
 	@Override
 	public void move(ChessPosition newPosition){
-		if(MySystem.myContains(this.getPossibleMoves(),newPosition)){//TODO: make out of limited moves instead of possible moves?
+		if(MySystem.myContains(this.getPossibleMoves(),newPosition)){//TODO: make out of limited moves instead of p
 			this.position = newPosition;
 			return;
 		}

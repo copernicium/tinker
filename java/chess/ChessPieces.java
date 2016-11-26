@@ -113,7 +113,7 @@ public class ChessPieces{
 		for(int i = 0; i < this.pieces.length; i++){
 			if(this.pieces[i].getType() == ChessPiece.Type.KING && color == this.pieces[i].getColor()) return i;
 		}
-		MySystem.error("Piece not found in array",MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("King of color " + color.toString() + " not found in array",MySystem.getFileName(),MySystem.getLineNumber());
 		return -1;
 	}
 
