@@ -1,6 +1,5 @@
 package chess;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Vector;
 
 /**
@@ -42,7 +41,7 @@ public class King extends ChessPiece
 		ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
 		for(ChessPosition possibleMove: this.getPossibleMoves()){
 			King testMe = new King(CHESS_PIECES.getPieceAt(index));
-			testMe.move(possibleMove,postMovePieces);
+			testMe.move(possibleMove);
 			postMovePieces.set(index,testMe);
 			testMe.updateCheck(postMovePieces);
 			if(!testMe.getCheck()){//could the king itself move out of check
@@ -68,7 +67,7 @@ public class King extends ChessPiece
 						if(!postMovePieces.checkExists(testPiece)) MySystem.error("Piece does not exist",MySystem.getFileName(),MySystem.getLineNumber());//TODO: comment-out after done tinkering with kings
 						if(!testPiece.checkMove(possibleMove,postMovePieces)) MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());//TODO: comment-out after done tinkering with kings
 						if(postMovePieces.isOccupied(possibleMove, ChessPiece.Color.not(postMovePieces.getPieceAt(i).getColor()))) postMovePieces.capture(possibleMove);
-						testPiece.move(possibleMove,postMovePieces);
+						testPiece.move(possibleMove);
 						postMovePieces.set(i,testPiece);
 					}
 					{
@@ -119,7 +118,7 @@ public class King extends ChessPiece
 		for(int y = -MOVEMENT_DISTANCE ; y <= MOVEMENT_DISTANCE ; y++){
 			for(int x = -MOVEMENT_DISTANCE ; x <= MOVEMENT_DISTANCE ; x++){
 				ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + x, this.position.getColumn().get() + y);
-				if(testPosition.inBounds() && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
+				if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
 					possibleMoves.addElement(new ChessPosition(testPosition));
 				}
 			}
@@ -148,7 +147,7 @@ public class King extends ChessPiece
 	}
 
 	@Override
-	public void move(ChessPosition newPosition, ChessPieces chessPieces){
+	public void move(ChessPosition newPosition){
 		if(MySystem.myContains(this.getPossibleMoves(),newPosition)){
 			this.position = newPosition;
 			return;

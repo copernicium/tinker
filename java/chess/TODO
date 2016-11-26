@@ -1,5 +1,5 @@
-1. Make it faster!!!
-2. Update Javadocs
+1. Make it faster!!! (use a profiler)
+2. Update JavaDocs
 3. Create a game io
     - Print captured pieces
     - Pretty graphics?

@@ -86,8 +86,8 @@ public class ChessPosition{
 		 */
 		@Override 
 		public String toString(){
-			final String[] COLUMNNAMES = {"A","B","C","D","E","F","G","H","DIMENSION"};
-			return COLUMNNAMES[get()];
+			final String[] COLUMN_NAMES = {"A","B","C","D","E","F","G","H","DIMENSION"};
+			return COLUMN_NAMES[get()];
 		}
 
 		/**
@@ -160,8 +160,8 @@ public class ChessPosition{
 		 * @return the number of the row
 		 */
 		public String toString(){
-			final String[] ROWNAMES = {"1","2","3","4","5","6","7","8","DIMENSION"};
-			return ROWNAMES[get()];
+			final String[] ROW_NAMES = {"1","2","3","4","5","6","7","8","DIMENSION"};
+			return ROW_NAMES[get()];
 		}
 
 		/**
@@ -324,7 +324,7 @@ public class ChessPosition{
 	 * @param column the column of the position to check
 	 * @return true if it is within bounds
 	 */
-	public static boolean inBounds(int row, int column){
+	private static boolean inBounds(int row, int column){
         if(column >= ChessPosition.Column.DIMENSION || column < 0) return false;
         if(row >= ChessPosition.Row.DIMENSION || row < 0) return false;
         return true;

@@ -27,7 +27,7 @@ public class MySystem{
 	}
 
 	/**
-	 * Exit the process if the a argument evaluates to flalse
+	 * Exit the process if the a argument evaluates to false
 	 * @param a the argument to check
 	 * @param fileName the name of the file calling the assert function
 	 * @param lineNumber the line number this function is called on

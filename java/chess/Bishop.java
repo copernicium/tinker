@@ -34,7 +34,7 @@ public class Bishop extends ChessPiece
 			for(int j = 0; j < NUMBER_OF_DIAGONALS ; j++){
 				for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
 					ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + (i * rowDirection), this.position.getColumn().get() + (i * columnDirection));
-					if(testPosition.inBounds() && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
+					if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
 						possibleMoves.addElement(new ChessPosition(testPosition));
 						if(chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color))) break;//if it will capture a piece, stop it there
 					} else break;
@@ -46,7 +46,7 @@ public class Bishop extends ChessPiece
         this.possibleMoves = possibleMoves;
     }
     @Override
-    public void move(ChessPosition newPosition, ChessPieces chessPieces){
+    public void move(ChessPosition newPosition){
         if(MySystem.myContains(this.getPossibleMoves(),newPosition)){
 			this.position = newPosition;
 			return;

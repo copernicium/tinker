@@ -36,7 +36,7 @@ public class Rook extends ChessPiece
 			for(int j = 0; j < NUMBER_OF_DIRECTIONS ; j++){
 				for(int i = 1; i <= ChessPosition.Row.DIMENSION; i++){
 					ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + (i * direction * row), this.position.getColumn().get() + (i * direction * column));
-					if(testPosition.inBounds() && !chessPieces.isOccupied(new ChessPosition(testPosition), this.color)){
+					if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
 						possibleMoves.addElement(new ChessPosition(testPosition));
 						if(chessPieces.isOccupied(new ChessPosition(testPosition), Color.not(this.color))) break;//if it will capture a piece, stop it there
 					} else break;
@@ -51,7 +51,7 @@ public class Rook extends ChessPiece
         this.possibleMoves = possibleMoves;
     }
     @Override
-    public void move(ChessPosition newPosition, ChessPieces chessPieces){
+    public void move(ChessPosition newPosition){
         if(MySystem.myContains(this.getPossibleMoves(),newPosition)){
             this.position = newPosition;
             return;

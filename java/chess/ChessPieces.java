@@ -7,46 +7,45 @@ public class ChessPieces{
 	private ChessPiece[] pieces;
 
 	public void limitMoves(ChessPiece.Color color){
-		for(int i = 0; i < this.pieces.length; i++){
-			if(this.pieces[i].getColor() == color) this.pieces[i].limitMovesToLeavingCheck(this);
+		for(ChessPiece chessPiece : this.pieces){
+			if(chessPiece.getColor() == color) chessPiece.limitMovesToLeavingCheck(this);
 		}
 	}
 
 	public void updatePossibleMoves(ChessPiece.Color color){
-		for(int i = 0; i < this.pieces.length; i++){
-			if(this.pieces[i].getColor() == color) this.pieces[i].updatePossibleMoves(this);
+		for(ChessPiece chessPiece: this.pieces){
+			if(chessPiece.getColor() == color) chessPiece.updatePossibleMoves(this);
 		}
 	}
 
 	public void updateAllMoves(){
-		for(int i = 0; i < this.pieces.length; i++){
-			this.pieces[i].updatePossibleMoves(this);
-			this.pieces[i].limitMovesToLeavingCheck(this);
+		for(ChessPiece chessPiece: this.pieces){
+			chessPiece.updatePossibleMoves(this);
+			chessPiece.limitMovesToLeavingCheck(this);
 		}
 	}
 
-	/**
-	 * Checks to see if a current position is occupied (unavailable) by a given color
-	 * @param checkPosition the position that is checked for occupancy
-	 * @param color the color of the occupying piece must be
-	 * @return true if a given position is occupied by a piece of a given color
-	 */
-	public boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color){
+	public boolean isUnoccupied(ChessPosition checkPosition,ChessPiece.Color color){
 		for(ChessPiece a: this.pieces){
-			if(a.getAlive() && a.getType() != ChessPiece.Type.UNASSIGNED && color == a.getColor() && checkPosition.equals(a.getPosition())) return true;
+			if(a.getAlive() && a.getType() != ChessPiece.Type.UNASSIGNED && color == a.getColor() && checkPosition.equals(a.getPosition())) return false;
 		}
-		return false;
+		return true;
 	}
-	/**
-	 * Checks to see if a current position is occupied (unavailable)
-	 * @param checkPosition the position that is checked for occupancy
-	 * @return true if a given position is occupied by a piece of a given color
-	 */
-	public boolean isOccupied(ChessPosition checkPosition){
+
+	public boolean isUnoccupied(ChessPosition checkPosition){
 		for(ChessPiece a: this.pieces){
-			if(a.getAlive() && a.getType() != ChessPiece.Type.UNASSIGNED && checkPosition.equals(a.getPosition()))return true;
+			if(a.getAlive() && a.getType() != ChessPiece.Type.UNASSIGNED && checkPosition.equals(a.getPosition())) return false;
 		}
-		return false;
+		return true;
+	}
+
+	public boolean isOccupied(ChessPosition checkPosition){
+		return !this.isUnoccupied(checkPosition);
+	}
+
+
+	public boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color){
+		return !this.isUnoccupied(checkPosition,color);
 	}
 
 	@Override
@@ -86,7 +85,7 @@ public class ChessPieces{
 	}
 
 	boolean equals(ChessPieces b){
-		if(b.toArray().length != this.toArray().length || b == null) return false;
+		if(b == null || b.toArray().length != this.toArray().length) return false;
 		for(int i = 0; i<this.toArray().length; i++){
 			if(!b.toArray()[i].equalsByType(this.toArray()[i]))return false;
 		}
@@ -112,7 +111,6 @@ public class ChessPieces{
 	 */
 	private int getIndexOfKing(ChessPiece.Color color){
 		for(int i = 0; i < this.pieces.length; i++){
-			ChessPiece piece = this.pieces[i];
 			if(this.pieces[i].getType() == ChessPiece.Type.KING && color == this.pieces[i].getColor()) return i;
 		}
 		MySystem.error("Piece not found in array",MySystem.getFileName(),MySystem.getLineNumber());
@@ -172,7 +170,6 @@ public class ChessPieces{
 
 	/**
 	 * Finds the kings and then updates just their check statuses
-	 * @return the updated array of pieces
 	 */
 	public void updateKingChecks(){
 		King updatedWhiteKing = getKing(ChessPiece.Color.WHITE);
@@ -187,7 +184,6 @@ public class ChessPieces{
 
 	/**
 	 * Finds the kings and then updates their check and checkmate statuses
-	 * @return the updated array of pieces
 	 */
 	public void updateKings(){
 		King updatedWhiteKing = getKing(ChessPiece.Color.WHITE);
@@ -201,7 +197,7 @@ public class ChessPieces{
 	}
 
 	/**
-	 * Kills the piece occuppying a given chess positon
+	 * Kills the piece occupying a given chess position
 	 * @param chessPosition the position of the piece to be killed
 	 */
 	public void capture(ChessPosition chessPosition){
@@ -223,11 +219,10 @@ public class ChessPieces{
 	/**
 	 * Checks to make sure that position being a assigned a piece is not already occupied any other piece
 	 * @param PIECE the piece to be assigned into the array
-	 * @return the array after the piece has been added to it
 	 */
 	public void setNextPiece(final ChessPiece PIECE){
-		MySystem.myAssert(!this.isOccupied(PIECE.getPosition()),MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(!this.isOccupied(PIECE.getPosition()),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(this.isUnoccupied(PIECE.getPosition()),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(this.isUnoccupied(PIECE.getPosition()),MySystem.getFileName(),MySystem.getLineNumber());
 		this.pieces[this.findNextUnassigned()] = ChessPiece.makePiece(PIECE);
 	}
 

@@ -1,6 +1,5 @@
 package chess;
 
-import java.time.Year;
 import java.util.Vector;
 
 /**
@@ -55,7 +54,7 @@ public class ChessBoard
 		}
 	}
 
-	public enum Status{IN_PROGRESS,WHITE_WIN,BLACK_WIN};
+	public enum Status{IN_PROGRESS,WHITE_WIN,BLACK_WIN}
 
 	private ChessPieces pieces;
 	private ChessPiece.Color playerTurn;
@@ -73,7 +72,7 @@ public class ChessBoard
 	 * prints a new chess board given a set of pieces
 	 * @param PIECES the pieces to print
 	 */
-	public static void print(final ChessPiece[] PIECES){
+	private static void print(final ChessPiece[] PIECES){
 		String[][] board = new String[ChessPosition.Row.DIMENSION][ChessPosition.Column.DIMENSION];
 		for(int i = 0; i < board.length; i++){
 			for(int j = 0; j < board[i].length; j++){
@@ -99,7 +98,7 @@ public class ChessBoard
 	}
 
 	/**
-	 * unimplemented: will be a graphical representation of the chess baord
+	 * unimplemented: will be a graphical representation of the chess board
 	 */
 	public void draw(){//TODO
 		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
@@ -139,7 +138,7 @@ public class ChessBoard
 	/**
 	 * Asks both kings if they are in checkmate. If one is, then it ends the game.
 	 */
-	public void updateStatus(){
+	private void updateStatus(){
 		this.pieces.updateKings();
 
 		if((this.pieces.getKing(ChessPiece.Color.BLACK)).getCheckmate()) status = Status.WHITE_WIN;
@@ -160,7 +159,7 @@ public class ChessBoard
 		//chessPiece.limitMovesToLeavingCheck(this.pieces);
 		if(chessPiece.checkMoveDeep(moveThere,pieces)){
 			int position = pieces.getIndexOf(chessPiece);
-			chessPiece.move(moveThere,pieces);
+			chessPiece.move(moveThere);
 			pieces.set(position,chessPiece);
 			if(pieces.isOccupied(pieces.getPieceAt(position).getPosition(), ChessPiece.Color.not(chessPiece.getColor()))) pieces.capture(moveThere);
 		} else {
@@ -214,7 +213,7 @@ public class ChessBoard
 	}
 
 	/**
-	 * Creates an array of pieces representing all the chess pieces at the beginnning of a game
+	 * Creates an array of pieces representing all the chess pieces at the beginning of a game
 	 * @return an array of chess pieces representing the start of a game
 	 */
     private static ChessPieces fillBoard(){
@@ -253,7 +252,7 @@ public class ChessBoard
 	 * Creates a new chess board ready to be used
 	 */
 	public ChessBoard(){
-		this(new ChessPieces(ChessBoard.fillBoard()), ChessPiece.Color.WHITE);
+		this(new ChessPieces(ChessBoard.fillBoard()));
     }
 
 	/**
@@ -261,16 +260,9 @@ public class ChessBoard
 	 * @param pieces the pieces to be used in place of the default
 	 */
 	public ChessBoard(ChessPieces pieces){
-		this(pieces,ChessPiece.Color.WHITE);
-	}
-	/**
-	 * Creates a chess board given an array of pieces instead of creating one itself and the current player's turn
-	 * @param playerTurn the color that the player's turn should be set to
-	 */
-    public ChessBoard(ChessPieces pieces,ChessPiece.Color playerTurn){
 		this.pieces = ChessPieces.makePieces(pieces);
 		this.pieces.updateAllMoves();
-		this.playerTurn = playerTurn;
+		this.playerTurn = ChessPiece.Color.WHITE;
 		this.status = Status.IN_PROGRESS;
 	}
 }

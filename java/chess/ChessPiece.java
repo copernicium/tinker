@@ -116,7 +116,6 @@ public class ChessPiece
 	/**
 	 * Limits the possible moves to a those which do not result the king being in check
 	 * @param CHESS_PIECES all of the pieces
-	 * @returnvthe possible moves which do not result the king being in check
 	 */
 	public void limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){//TODO: make faster
 		Vector<ChessPosition> newMoves = new Vector<>(0);
@@ -124,7 +123,7 @@ public class ChessPiece
 			ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
 			ChessPiece testPiece = ChessPiece.makePiece(this);
 			int position = testPieces.getIndexOf(testPiece);
-			testPiece.move(testMove,testPieces);
+			testPiece.move(testMove);
 			testPieces.set(position,testPiece);
 			testPieces.updateKingChecks();
 			if(!testPieces.getKing(testPiece.getColor()).getCheck()) newMoves.add(testMove);
@@ -148,8 +147,7 @@ public class ChessPiece
 	/**
 	 * Calculates all the positions this piece can move to
 	 * @param chessPieces an array of pieces representing a chess board
-	 * @return a vector of chess positions that this piece can be moved to
-	 */
+	*/
 	public void updatePossibleMoves(ChessPieces chessPieces){
 		MySystem.error("This is not a valid chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
 	}
@@ -157,9 +155,8 @@ public class ChessPiece
 	/**
 	 * Moves this chess pieces
 	 * @param position the position to move this piece to
-	 * @param chessPieces an array of pieces representing a chess board
 	 */
-	public void move(ChessPosition position, ChessPieces chessPieces){
+	public void move(ChessPosition position){
 		MySystem.error("This is not a valid chess piece.", MySystem.getFileName(),MySystem.getLineNumber());
 	}
 
@@ -259,7 +256,7 @@ public class ChessPiece
 		return new ChessPiece();
 	}
 
-	/**
+	/*/**
 	 * Used to copy an chess piece from an array that matches a set of criteria
 	 * @param position the position of the piece to copy
 	 * @param chessPieces the array of pieces to search through

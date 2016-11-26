@@ -38,34 +38,34 @@ public class Pawn extends ChessPiece
 		Vector<ChessPosition> possibleMoves = new Vector<>(0);
 		int direction = (this.getColor() == ChessPiece.Color.WHITE) ? 1 : -1;
 		{
-			final int DIAGONALDIST = 1;
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + DIAGONALDIST,this.position.getColumn().get()+(DIAGONALDIST*direction));
+			final int DIAGONAL_DISTANCE = 1;
+			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + DIAGONAL_DISTANCE,this.position.getColumn().get()+(DIAGONAL_DISTANCE*direction));
 			if(testPosition.inBounds() && chessPieces.isOccupied(new ChessPosition(testPosition),Color.not(this.color))){
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}
 		{
-			final int DIAGONALDIST = -1;
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + DIAGONALDIST,this.position.getColumn().get()+(DIAGONALDIST*direction));
+			final int DIAGONAL_DISTANCE = -1;
+			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get() + DIAGONAL_DISTANCE,this.position.getColumn().get()+(DIAGONAL_DISTANCE*direction));
 			if(testPosition.inBounds() && chessPieces.isOccupied(new ChessPosition(testPosition),Color.not(this.color))){
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}
 		if(this.getFirstMove()){
-			final int INITIALTWOSQUAREADVANCE = 2;
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(INITIALTWOSQUAREADVANCE * direction),this.position.getColumn().get());
-			if(testPosition.inBounds() && !chessPieces.isOccupied(new ChessPosition(testPosition),this.color)){
+			final int INITIAL_TWO_SQUARE_ADVANCE = 2;
+			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(INITIAL_TWO_SQUARE_ADVANCE * direction),this.position.getColumn().get());
+			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition),this.color)){
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}
 		{
-			final int REGULARMOVEMENT = 1;
-			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(REGULARMOVEMENT*direction),this.position.getColumn().get());
-			if(testPosition.inBounds() && !chessPieces.isOccupied(new ChessPosition(testPosition),this.color)){
+			final int REGULAR_MOVEMENT = 1;
+			ChessPosition.Tester testPosition = new ChessPosition.Tester(this.position.getRow().get()+(REGULAR_MOVEMENT*direction),this.position.getColumn().get());
+			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition),this.color)){
 				possibleMoves.addElement(new ChessPosition(testPosition));
 			}
 		}
-		if(!original.equalsByType(this)) MySystem.error("orignal:" + original.toString() + " this:" + this.toString(),MySystem.getFileName(),MySystem.getLineNumber());//TODO: remove or expand this test
+		if(!original.equalsByType(this)) MySystem.error("original:" + original.toString() + " this:" + this.toString(),MySystem.getFileName(),MySystem.getLineNumber());//TODO: remove or expand this test
 		MySystem.myAssert(original.equalsByType(this),MySystem.getFileName(),MySystem.getLineNumber());
         this.possibleMoves = possibleMoves;
 	}
@@ -94,7 +94,7 @@ public class Pawn extends ChessPiece
 	}
 
     @Override
-    public void move(ChessPosition newPosition, ChessPieces chessPieces){
+    public void move(ChessPosition newPosition){
 		if(MySystem.myContains(this.getPossibleMoves(),newPosition)){
 			this.position = newPosition;
 			return;

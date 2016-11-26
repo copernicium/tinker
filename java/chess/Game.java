@@ -38,14 +38,12 @@ public class Game{
 	 * @param chessBoard the board to update
 	 * @param test the piece to move
 	 * @param testMove the position to move the piece to
-	 * @return the updated chess board
 	 */
-	private static ChessBoard testMove(ChessBoard chessBoard,ChessPiece test, ChessPosition testMove){
+	private static void testMove(ChessBoard chessBoard,ChessPiece test, ChessPosition testMove){
 		chessBoard.move(test, testMove);
 		System.out.println("---------------------");
 		chessBoard.print();
 		Game.handelStatus(chessBoard);
-		return chessBoard;
 	}
 
 	/**
@@ -235,7 +233,6 @@ public class Game{
 						if(moveTarget.equals(a)) checkIfMoveIsValid = true;
 					}
 				}
-				MySystem.myAssert(checkIfMoveIsValid,MySystem.getFileName(),MySystem.getLineNumber());
 			}
 			chessBoard.move(inputPiece,moveTarget);
 		}
@@ -250,7 +247,7 @@ public class Game{
 			Pawn a = new Pawn(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D), ChessPiece.Color.WHITE, new Vector<>(0),new Vector<>(0));
 
 			ChessPiece b = new Pawn(a);
-			a.move(new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.D), new ChessPieces(0));
+			a.move(new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.D));
 			System.out.println("a(" + a.toString() + ") b(" + b.toString() + ")");
 			System.out.println("==:" + (a == b) + " .equals():" + b.equalsByType(a));
 		}
@@ -259,7 +256,7 @@ public class Game{
 			ChessPieces a = new ChessBoard().getPieces();
 			ChessPieces b = ChessPieces.makePieces(a);
 			System.out.println((a.getPieceAt(0)==b.getPieceAt(0)) + " " + (a.getPieceAt(0).equals(b.getPieceAt(0))));
-			a.getPieceAt(0).move(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.A),a);
+			a.getPieceAt(0).move(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.A));
 			System.out.println((a.getPieceAt(0)==b.getPieceAt(0)) + " " + (a.getPieceAt(0).equals(b.getPieceAt(0))));
 		}
 	}
