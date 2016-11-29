@@ -1,4 +1,5 @@
 package chess;
+import MySystem.*;
 
 /**
  * Represents a position of the chess board
@@ -44,7 +45,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 		 * @param value the value to set the Dimension to
 		 */
 		public void set(int value){
-            MySystem.myAssert(value < DIMENSION && value >= 0,MySystem.getFileName(),MySystem.getLineNumber());
+            MySystem.myAssert(value < DIMENSION && value >= 0, MySystem.getFileName(), MySystem.getLineNumber());
             this.value = value;
         }
 
@@ -119,7 +120,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 				case 'H':
 					return new Column(Column.H);
 				default:
-					MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+					MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 			}
 			return new Column();
 		}
@@ -192,7 +193,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 					return new Row(Row._7);
 				case '8':
 					return new Row(Row._8);
-				default: MySystem.myAssert(false,MySystem.getFileName(),MySystem.getLineNumber());
+				default: MySystem.myAssert(false, MySystem.getFileName(), MySystem.getLineNumber());
 			}
 			return new Row();
 		}
@@ -321,7 +322,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 	 * @return the corresponding ChessPosition
 	 */
 	public static ChessPosition toChessPosition(String input){
-		MySystem.myAssert(input.length() == 2, MySystem.getFileName(),MySystem.getLineNumber());//make sure its only two characters
+		MySystem.myAssert(input.length() == 2, MySystem.getFileName(), MySystem.getLineNumber());//make sure its only two characters
 		final int COLUMN_LOC = 0, ROW_LOC = 1;
 		return new ChessPosition(Row.toRow(input.charAt(ROW_LOC)),Column.toColumn(input.charAt(COLUMN_LOC)));
 	}
@@ -395,7 +396,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 	 * @param column the column to instantiate it with
 	 */
 	public ChessPosition(int row,int column){
-		MySystem.myAssert(inBounds(row,column),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(inBounds(row,column), MySystem.getFileName(), MySystem.getLineNumber());
 		this.column = new Column(column);
 		this.row = new Row(row);
 	}

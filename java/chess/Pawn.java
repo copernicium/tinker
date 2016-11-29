@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.TreeSet;
+import MySystem.*;
 /**
  * A pawn piece
  */
@@ -92,18 +93,18 @@ public class Pawn extends ChessPiece
 		if(!this.getPosition().equals(testPiece.getPosition())) return false;
 		if(this.getAlive() != testPiece.getAlive()) return false;
 		if(this.getFirstMove() != testPiece.getFirstMove()) return  false;
-		if(!MySystem.myTreeSetEquals(this.getPossibleMoves(),testPiece.getPossibleMoves())) return false;
-		if(!MySystem.myTreeSetEquals(this.getLimitedMoves(),testPiece.getLimitedMoves())) return false;
+		if(!MySystem.treeSetEquals(this.getPossibleMoves(),testPiece.getPossibleMoves())) return false;
+		if(!MySystem.treeSetEquals(this.getLimitedMoves(),testPiece.getLimitedMoves())) return false;
 		return true;
 	}
 
     @Override
     public void move(ChessPosition newPosition){
-		if(MySystem.myContains(this.getPossibleMoves(),newPosition)){
+		if(MySystem.contains(this.getPossibleMoves(),newPosition)){
 			this.position = newPosition;
 			return;
 		}
-		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
 	public Pawn(Pawn toCopy) {

@@ -1,5 +1,7 @@
 package chess;
 
+import MySystem.*;
+
 /**
  * Stores an array of pieces and useful methods associated with them
  */
@@ -109,7 +111,7 @@ public class ChessPieces{
 		for(int i =0; i < this.pieces.length; i++){
 			if(FIND_ME.equalsByType(this.getPieceAt(i))) return i;
 		}
-		MySystem.error("Error: Unable to get index of " + FIND_ME.toString() + " in " + this.toString(),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("Error: Unable to get index of " + FIND_ME.toString() + " in " + this.toString(), MySystem.getFileName(), MySystem.getLineNumber());
 		return -1;
 	}
 
@@ -122,7 +124,7 @@ public class ChessPieces{
 		for(int i = 0; i < this.pieces.length; i++){
 			if(this.pieces[i].getType() == ChessPiece.Type.KING && color == this.pieces[i].getColor()) return i;
 		}
-		MySystem.error("King of color " + color.toString() + " not found in array",MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("King of color " + color.toString() + " not found in array", MySystem.getFileName(), MySystem.getLineNumber());
 		return -1;
 	}
 
@@ -144,7 +146,7 @@ public class ChessPieces{
 		for(int i = 0; i < this.pieces.length; i++){
 			if(chessPosition.equals(this.pieces[i].getPosition())) return i;
 		}
-		MySystem.error("Piece not found in array",MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("Piece not found in array", MySystem.getFileName(), MySystem.getLineNumber());
 		return -1;
 	}
 
@@ -218,7 +220,7 @@ public class ChessPieces{
 		for(int i = 0; i < this.pieces.length; i++){
 			if(this.pieces[i].getType() == ChessPiece.Type.UNASSIGNED) return i;
 		}
-		MySystem.error("Error: Unable to find index of the next unassigned piece, array full",MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("Error: Unable to find index of the next unassigned piece, array full", MySystem.getFileName(), MySystem.getLineNumber());
 		return -1;
 	}
 
@@ -227,7 +229,7 @@ public class ChessPieces{
 	 * @param PIECE the piece to be assigned into the array
 	 */
 	public void setNextPiece(final ChessPiece PIECE){
-		MySystem.myAssert(this.isUnoccupied(PIECE.getPosition()),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(this.isUnoccupied(PIECE.getPosition()), MySystem.getFileName(), MySystem.getLineNumber());
 		this.pieces[this.findNextUnassigned()] = ChessPiece.makePiece(PIECE);
 	}
 

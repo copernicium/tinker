@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.TreeSet;
+import MySystem.*;
 
 /**
  * A class to represent a basic chess piece
@@ -26,7 +27,7 @@ public class ChessPiece
 					return BLACK;
 				case BLACK:
 					return WHITE;
-				default: MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+				default: MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 			}
 			return WHITE;
 		}
@@ -50,7 +51,7 @@ public class ChessPiece
 	 * Kills the piece
 	 */
 	public void capture(){
-		if(!alive) MySystem.error("Error: trying to capture an already captured piece",MySystem.getFileName(),MySystem.getLineNumber());
+		if(!alive) MySystem.error("Error: trying to capture an already captured piece", MySystem.getFileName(), MySystem.getLineNumber());
 		alive = false;
 	}
 
@@ -90,8 +91,8 @@ public class ChessPiece
 		if(this.getColor() != b.getColor()) return false;
 		if(!this.getPosition().equals(b.getPosition())) return false;
 		if(this.getAlive() != b.getAlive()) return false;
-		if(!MySystem.myTreeSetEquals(this.getPossibleMoves(),b.getPossibleMoves())) return false;
-		if(!MySystem.myTreeSetEquals(this.getLimitedMoves(),b.getLimitedMoves())) return false;
+		if(!MySystem.treeSetEquals(this.getPossibleMoves(),b.getPossibleMoves())) return false;
+		if(!MySystem.treeSetEquals(this.getLimitedMoves(),b.getLimitedMoves())) return false;
 		return true;
 	}
 
@@ -157,7 +158,7 @@ public class ChessPiece
 	 * @param chessPieces an array of pieces representing a chess board
 	*/
 	public void updatePossibleMoves(ChessPieces chessPieces){
-		MySystem.error("This is not a valid chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("This is not a valid chess piece.", MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
 	/**
@@ -165,7 +166,7 @@ public class ChessPiece
 	 * @param position the position to move this piece to
 	 */
 	public void move(ChessPosition position){
-		MySystem.error("This is not a valid chess piece.", MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("This is not a valid chess piece.", MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
 	/**
@@ -175,8 +176,8 @@ public class ChessPiece
 	 * @return true if this piece can move to that position
 	 */
 	public boolean checkMoveDeep(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
-		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
-		if(!MySystem.myContains(this.getLimitedMoves(),CHECK_MOVE)) return false;
+		MySystem.myAssert((CHESS_PIECES.checkExists(this)), MySystem.getFileName(), MySystem.getLineNumber());
+		if(!MySystem.contains(this.getLimitedMoves(),CHECK_MOVE)) return false;
 		return true;
 	}
 
@@ -187,8 +188,8 @@ public class ChessPiece
 	 * @return true if this piece can move to that position
 	 */
 	public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
-		MySystem.myAssert((CHESS_PIECES.checkExists(this)),MySystem.getFileName(),MySystem.getLineNumber());
-		return MySystem.myContains(this.getPossibleMoves(),CHECK_MOVE);
+		MySystem.myAssert((CHESS_PIECES.checkExists(this)), MySystem.getFileName(), MySystem.getLineNumber());
+		return MySystem.contains(this.getPossibleMoves(),CHECK_MOVE);
 	}
 
 	/**
@@ -228,9 +229,9 @@ public class ChessPiece
 				return new Bishop(chessPiece);
 			case UNASSIGNED:
 				return new ChessPiece(chessPiece);
-			default: MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+			default: MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 		return new ChessPiece();
 	}
 
@@ -255,9 +256,9 @@ public class ChessPiece
 				return new Bishop(chessPiece);
 			case UNASSIGNED:
 				return new ChessPiece(chessPiece);
-			default: MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+			default: MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 		return new ChessPiece();
 	}
 

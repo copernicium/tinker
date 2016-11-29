@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.TreeSet;
+import MySystem.*;
 
 /**
  * A rook piece
@@ -57,11 +58,11 @@ public class Rook extends ChessPiece
     }
     @Override
     public void move(ChessPosition newPosition){
-        if(MySystem.myContains(this.getPossibleMoves(),newPosition)){
+        if(MySystem.contains(this.getPossibleMoves(),newPosition)){
             this.position = newPosition;
             return;
         }
-		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
 	public Rook(Rook toCopy) {

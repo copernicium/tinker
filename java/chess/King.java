@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.TreeSet;
+import MySystem.*;
 
 /**
  * A king piece
@@ -24,7 +25,7 @@ public class King extends ChessPiece
 	public void updateCheck(final ChessPieces CHESS_PIECES){
 		for(ChessPiece enemyPiece: CHESS_PIECES.toArray()){
 			if(enemyPiece.getColor() == Color.not(this.color)){//if it's an enemy piece
-				if(MySystem.myContains(enemyPiece.getPossibleMoves(),this.getPosition())){//if it can take this piece (the king)
+				if(MySystem.contains(enemyPiece.getPossibleMoves(),this.getPosition())){//if it can take this piece (the king)
 					check = true;
 					return;
 				}
@@ -34,7 +35,7 @@ public class King extends ChessPiece
 	}
 
 	private boolean checkMyMoves(final ChessPieces CHESS_PIECES){
-		MySystem.myAssert(this.getCheck(),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(this.getCheck(), MySystem.getFileName(), MySystem.getLineNumber());
 		this.updatePossibleMoves(CHESS_PIECES);
 		int index = CHESS_PIECES.getIndexOf(this);
 		ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
@@ -101,7 +102,7 @@ public class King extends ChessPiece
 
 	@Override
 	public void capture(){
-		MySystem.error("Error: Kings can never be captured",MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("Error: Kings can never be captured", MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
 	/**
@@ -147,18 +148,18 @@ public class King extends ChessPiece
 		if(this.getAlive() != testPiece.getAlive()) return false;
 		if(this.getCheck() != testPiece.getCheck()) return  false;
 		if(this.getCheckmate() != testPiece.getCheckmate()) return  false;
-		if(!MySystem.myTreeSetEquals(this.getPossibleMoves(),testPiece.getPossibleMoves())) return false;
-		if(!MySystem.myTreeSetEquals(this.getLimitedMoves(),testPiece.getLimitedMoves())) return false;
+		if(!MySystem.treeSetEquals(this.getPossibleMoves(),testPiece.getPossibleMoves())) return false;
+		if(!MySystem.treeSetEquals(this.getLimitedMoves(),testPiece.getLimitedMoves())) return false;
 		return true;
 	}
 
 	@Override
 	public void move(ChessPosition newPosition){
-		if(MySystem.myContains(this.getPossibleMoves(),newPosition)){//TODO: make out of limited moves instead of p
+		if(MySystem.contains(this.getPossibleMoves(),newPosition)){//TODO: make out of limited moves instead of p
 			this.position = newPosition;
 			return;
 		}
-		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString() + " out of " + this.getPossibleMoves().toString(),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString() + " out of " + this.getPossibleMoves().toString(), MySystem.getFileName(), MySystem.getLineNumber());
 	}
 	public boolean getCheck(){
 		return check;

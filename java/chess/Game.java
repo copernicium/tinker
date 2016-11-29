@@ -1,7 +1,9 @@
 package chess;
+
 import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.Iterator;
+import MySystem.*;
 
 /**
  * Runs a chess game
@@ -120,7 +122,7 @@ public class Game{
 			case IN_PROGRESS:
 				break;
 			default:
-				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+				MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 		}
 		if(!Game.continueGame(board)){
 			System.out.println("Thanks for playing.");
@@ -205,8 +207,8 @@ public class Game{
 		EXPECTED_POSSIBLE_MOVES.add(ChessPosition.toChessPosition("F4"));
 		System.out.println("Expected: Position (of first piece, but there's only one) " + EXPECTED_MOVEABLE_POS.toString() + " can be moved to " + EXPECTED_POSSIBLE_MOVES.toString());
 
-		MySystem.myAssert(EXPECTED_MOVEABLE_POS.equals(firstPiece.getPosition()),MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(MySystem.myTreeSetEquals(EXPECTED_POSSIBLE_MOVES,firstPiece.getLimitedMoves()),MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.myAssert(EXPECTED_MOVEABLE_POS.equals(firstPiece.getPosition()), MySystem.getFileName(), MySystem.getLineNumber());
+		MySystem.myAssert(MySystem.treeSetEquals(EXPECTED_POSSIBLE_MOVES,firstPiece.getLimitedMoves()), MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
 
@@ -320,6 +322,6 @@ public class Game{
 
 		//This is the actual game
 		play();
-		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n",MySystem.getFileName(),MySystem.getLineNumber());
+		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n", MySystem.getFileName(), MySystem.getLineNumber());
 	}
 }
