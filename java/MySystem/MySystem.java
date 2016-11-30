@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.Vector;
 
+/**
+ * A series of useful methods I've defined to use in other projects
+ */
 public class MySystem{
 	public static <T extends Object> boolean treeSetEquals(TreeSet<T> a, TreeSet<T> b){
 		if(a.size() != b.size()) return false;
