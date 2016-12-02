@@ -72,14 +72,14 @@ public class UnitConversion{
 
 	public void getInput(){
 		Scanner input = new Scanner(System.in);
-		System.out.print("Input your starting unit (ex: gal): ");
+		System.out.print("Input your starting unit (ex: mm): ");
 		String startingUnit = input.nextLine().trim();
 		this.startUnit = toUnit(startingUnit);
 		System.out.print("Input your the value: ");
 		String userValue = input.next();
 		input.nextLine();//used to consume the newline character excluded by next()
 		this.value = Double.parseDouble(userValue);
-		System.out.print("Input your ending unit (ex: liter): ");
+		System.out.print("Input your ending unit (ex: cm): ");
 		String endingUnit = input.nextLine().trim();
 		this.endUnit = toUnit(endingUnit);
 	}
@@ -154,6 +154,7 @@ public class UnitConversion{
 			default:
 				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 		}
+		MySystem.error("Conversion failed",MySystem.getFileName(),MySystem.getLineNumber());
 		return 0;
 	}
 
@@ -188,7 +189,7 @@ public class UnitConversion{
 
 	private double convert(){
 		if(this.startUnit.getClass() != this.endUnit.getClass()) MySystem.error("Unit types do not match",MySystem.getFileName(),MySystem.getLineNumber());
-		//if(this.startUnit == this.endUnit) return this.value;
+		if(this.startUnit == this.endUnit) return this.value;
 		if(this.startUnit instanceof Weight) return convertWeight((Weight)this.startUnit,(Weight)this.endUnit,this.value);
 		else if(this.startUnit instanceof Volume) return convertVolume((Volume)this.startUnit,(Volume)this.endUnit,this.value);
 		else if(this.startUnit instanceof Distance) return convertDistance((Distance)this.startUnit,(Distance)this.endUnit,this.value);

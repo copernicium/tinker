@@ -6,7 +6,39 @@ import MySystem.*;
  * Stores an array of pieces and useful methods associated with them
  */
 public class ChessPieces{
+	public static class LastMove{
+		private int index;
+		private ChessPosition startPosition;
+		private ChessPosition movePosition;
+
+		public int getIndex(){
+			return this.index;
+		}
+
+		public ChessPosition getMovePosition(){
+			return movePosition;
+		}
+
+		public ChessPosition getStartPosition(){
+			return startPosition;
+		}
+
+		public LastMove(){
+			this.index = 0;
+			this.movePosition = new ChessPosition();
+			this.startPosition = new ChessPosition();
+		}
+
+		public LastMove(int index,ChessPosition movePosition,ChessPosition startPosition){
+			this.index = index;
+			this.movePosition = movePosition;
+			this.startPosition = startPosition;
+		}
+	}
+
 	private ChessPiece[] pieces;
+	private LastMove lastMove;//TODO add in
+
 
 	public void limitMoves(ChessPiece.Color color){
 		for(ChessPiece chessPiece : this.pieces){

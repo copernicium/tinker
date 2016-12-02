@@ -305,6 +305,11 @@ public class Game{
 		}
 	}
 
+	public static void playAgainstAI(){
+		ChessBoard chessBoard = new ChessBoard();
+		Opponent chan = new Opponent();
+	}
+
 	/**
 	 * The primary method that tests the chess system and instantiates a new game
 	 * @param args user arguments (no effect)
