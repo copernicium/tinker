@@ -162,7 +162,7 @@ public class ChessBoard
 			int index = pieces.getIndexOf(chessPiece);
 			chessPiece.move(moveThere);
 			pieces.set(index,chessPiece);
-			if(pieces.isOccupied(pieces.getPieceAt(index).getPosition(), ChessPiece.Color.not(chessPiece.getColor()))) pieces.capture(moveThere);
+			if(pieces.isOccupied(pieces.getPieceAt(index).getPosition(), ChessPiece.Color.not(chessPiece.getColor()))) pieces.capture(moveThere);//TODO: make this if statement a method of ChessPieces
 		} else {
 			MySystem.error("Error: trying to move piece to invalid location: piece:" + chessPiece.toString() + " cannot move to " + moveThere.toString() + " from possible " + chessPiece.getPossibleMoves().toString(), MySystem.getFileName(), MySystem.getLineNumber());//user inputs invalid move
 		}

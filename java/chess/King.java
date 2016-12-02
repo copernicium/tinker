@@ -80,7 +80,7 @@ public class King extends ChessPiece
 							return;
 						}
 					}
-					postMovePieces.set(i,defendingPiece);
+					postMovePieces.set(i,defendingPiece);//undo the move
 				}
 			}
 		}

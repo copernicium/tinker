@@ -131,11 +131,11 @@ public class ChessPiece
 			ChessPiece testPiece = ChessPiece.makePiece(this);
 			int index = testPieces.getIndexOf(testPiece);
 			testPiece.move(testMove);
-			testPieces.set(index,testPiece);
+			testPieces.set(index,testPiece);//TODO: include capturing?
 			testPieces.updatePossibleMoves(Color.not(this.getColor()));
 			testPieces.updateKingCheck(testPiece.getColor());
 			if(!testPieces.getKing(this.getColor()).getCheck()) newMoves.add(testMove);
-			testPieces.set(index,this);
+			testPieces.set(index,this);//undo the move
 		}
 		this.limitedMoves = newMoves;
 	}
