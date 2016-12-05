@@ -23,13 +23,14 @@ public class ATM {
 	public void enterPIN(){
 		Scanner input = new Scanner(System.in);
 		while (!this.signedIn && this.failedPINEntries < ATM.ENTRY_ATTEMPTS){
+			if(this.failedPINEntries > 0 ) System.out.println("Your PIN is incorrect.");
 			System.out.print("Please enter your pin: ");
 			String pinStr = input.nextLine().trim();
 			int pin = Integer.parseInt(pinStr);
 			this.logIn(pin);
 		}
-		if(this.signedIn) System.out.println("Signed in.");
-		else System.out.println("Failed to sign in. Attempts exceeded " + ATM.ENTRY_ATTEMPTS + ".");
+		if(this.signedIn) System.out.println("Your PIN is correct.");
+		else System.out.println("Your bank card is blocked. Attempts exceeded " + ATM.ENTRY_ATTEMPTS + ".");
 	}
 
 	public ATM(){
