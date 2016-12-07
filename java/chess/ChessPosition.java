@@ -36,7 +36,9 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 		 * @param b the Dimension to compare to
 		 * @return true if the two are equal (by value)
 		 */
-		public boolean equals(Dimension b){
+		public boolean equals(Object o){
+			if(o.getClass() != this.getClass()) return false;
+			Dimension b = (Dimension)o;
 			return this.get()==b.get();
 		}
 
@@ -249,7 +251,9 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 		 * @param b the Tester to compare to
 		 * @return true it they are equal
 		 */
-		public boolean equals(Tester b){
+		public boolean equals(Object o){
+			if(o.getClass() != this.getClass()) return false;
+			Tester b = (Tester)o;
 			return this.row == b.getRow() && this.column == b.getColumn();
 		}
 
@@ -331,7 +335,9 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 	 * @param b the ChessPosition to compare to
 	 * @return true if they are equal
 	 */
-    public boolean equals(ChessPosition b){
+    public boolean equals(Object o){
+	if(o.getClass() != this.getClass()) return false;
+	ChessPosition b = (ChessPosition)o;
         if(!b.getRow().equals(this.getRow())) return false;
         if(!b.getColumn().equals(this.getColumn())) return false;
         return true;

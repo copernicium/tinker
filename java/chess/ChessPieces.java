@@ -110,8 +110,10 @@ public class ChessPieces{
 		return newPieces;
 	}
 
-	boolean equals(ChessPieces b){
-		if(b == null || b.toArray().length != this.toArray().length) return false;
+	public boolean equals(Object o){
+		if(o.getClass() != this.getClass()) return false;
+		ChessPieces b = (ChessPieces)o; 
+		if(b.toArray().length != this.toArray().length) return false;
 		for(int i = 0; i<this.toArray().length; i++){
 			if(!b.toArray()[i].equalsByType(this.toArray()[i]))return false;
 		}

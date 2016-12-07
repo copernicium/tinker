@@ -37,4 +37,5 @@ ChessPieces.class: ChessPieces.java
 	javac ChessPieces.java ChessBoard.java Queen.java Game.java Pawn.java Rook.java King.java Knight.java Bishop.java ../MySystem/MySystem.java ChessPiece.java ChessPosition.java
 .PHONY: clean
 clean:
-	find -name \*.class |xargs rm;
+	find -name \*.class |xargs rm -f;
+	rm -f ../MySystem/MySystem.class; 

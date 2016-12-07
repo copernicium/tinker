@@ -139,9 +139,9 @@ public class King extends ChessPiece
 	 * @return true if the pieces are equal by value
 	 */
 	@Override
-	public boolean equals(final ChessPiece b){
+	public boolean equals(final Object b){
 		if(!(b instanceof King)) return false;
-		King testPiece = new King(b);
+		King testPiece = new King((ChessPiece)b);
 		if(this.getType() != testPiece.getType()) return false;
 		if(this.getColor()!=testPiece.getColor()) return false;
 		if(!this.getPosition().equals(testPiece.getPosition())) return false;

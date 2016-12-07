@@ -85,8 +85,9 @@ public class ChessPiece
 	 * @param b the piece to be compared to
 	 * @return true if the pieces are equal by value
 	 */
-	public boolean equals(ChessPiece b){
-		if(b == null) return false;
+	public boolean equals(Object o){
+		if(o == null) return false;
+		ChessPiece b = (ChessPiece)o;
 		if(this.getType() != b.getType()) return false;
 		if(this.getColor() != b.getColor()) return false;
 		if(!this.getPosition().equals(b.getPosition())) return false;
@@ -177,8 +178,7 @@ public class ChessPiece
 	 */
 	public boolean checkMoveDeep(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
 		MySystem.myAssert((CHESS_PIECES.checkExists(this)), MySystem.getFileName(), MySystem.getLineNumber());
-		if(!MySystem.contains(this.getLimitedMoves(),CHECK_MOVE)) return false;
-		return true;
+		return !MySystem.contains(this.getLimitedMoves(),CHECK_MOVE);
 	}
 
 	/**

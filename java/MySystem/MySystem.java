@@ -19,15 +19,19 @@ public class MySystem{
 	}
 	public static <T extends Object> boolean contains(TreeSet<T> all, T a){
 		for(T b: all){
+			MySystem.println(a.toString() + " vs " + b.toString() + " " + a.equals(b),MySystem.getFileName(),MySystem.getLineNumber());
 			if(a.equals(b)) return true;
 		}
+		MySystem.println(a.toString() + " is not in " + all.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		return false;
 	}
 
 	public static <T extends Object> boolean contains(Vector<T> all, T a){
 		for(T b: all){
+			MySystem.println(a.toString() + " vs " + b.toString() + " " + a.equals(b),MySystem.getFileName(),MySystem.getLineNumber());
 			if(a.equals(b)) return true;
 		}
+		MySystem.println(a.toString() + " is not in " + all.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		return false;
 	}
 
