@@ -178,7 +178,7 @@ public class ChessPiece
 	 */
 	public boolean checkMoveDeep(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
 		MySystem.myAssert((CHESS_PIECES.checkExists(this)), MySystem.getFileName(), MySystem.getLineNumber());
-		return !MySystem.contains(this.getLimitedMoves(),CHECK_MOVE);
+		return MySystem.contains(this.getLimitedMoves(),CHECK_MOVE);
 	}
 
 	/**

@@ -100,9 +100,6 @@ public class Pawn extends ChessPiece
 
     @Override
     public void move(ChessPosition newPosition){
-		ChessPosition a = ChessPosition.toChessPosition("E4");		
-		ChessPosition b = ChessPosition.toChessPosition("E4");
-		MySystem.println(a.toString() + " vs " + b.toString() + " " + a.equals(b),MySystem.getFileName(),MySystem.getLineNumber());
 		if(MySystem.contains(this.getPossibleMoves(),newPosition)){
 			this.position = newPosition;
 			return;
