@@ -8,7 +8,7 @@ import java.util.Scanner;
  * Simulated the minivan door opening mechanisms
  *
  * @author Logan Traffas
- * @version 12/5/2016
+ * @version 12/9/2016
  * assignment: Chapter 05--Decisions--P5.14 Minivan Sliding Doors
  */
 public class Minivan {
@@ -40,12 +40,34 @@ public class Minivan {
 				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 			}
 		}
+
+		public String toString(){
+			return "SidePair(left:" + this.left.toString() + " right:" + this.right.toString()+ ")";
+		}
+
 		public SidePair(T left,T right){
 			this.left = left;
 			this.right = right;
 		}
 	}
-	public enum GearShiftSetting{P,N,D,_1,_2,_3,R}
+	public enum GearShiftSetting{
+		P,N,D,_1,_2,_3,R;
+		public static GearShiftSetting parseGear(String in){
+			MySystem.myAssert(in.length() == 1,MySystem.getFileName(),MySystem.getLineNumber());
+			switch(Character.toUpperCase(in.charAt(0))){
+				case 'P': return GearShiftSetting.P;
+				case 'N': return GearShiftSetting.N;
+				case 'D': return GearShiftSetting.D;
+				case '1': return GearShiftSetting._1;
+				case '2': return GearShiftSetting._2;
+				case '3': return GearShiftSetting._3;
+				case 'R': return GearShiftSetting.R;
+				default:
+					MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+			}
+			return GearShiftSetting._1;//will never reach this line
+		}
+	}
 	public enum Door{OPEN,CLOSED}
 
 	private SidePair<Door> doors;
@@ -77,22 +99,56 @@ public class Minivan {
 
 		Submit your code AND a sample run of your program showing all possible inputs/outputs
 	 */
+
+	public void setData(){
+		Scanner input = new Scanner(System.in);
+		System.out.print("Enter data set: ");
+		String longData = input.nextLine().trim();
+		String data = "";
+		for(char a: longData.toCharArray()){
+			if(a == ' ') continue;
+			data += a;
+		}
+		this.parseMinivan(data);
+	}
+
+	public void parseMinivan(String data){
+		this.dashSwitches.set(Side.LEFT,MySystem.parseBoolean(data.substring(0,1)));
+		this.dashSwitches.set(Side.RIGHT,MySystem.parseBoolean(data.substring(1,2)));
+		this.childLock = MySystem.parseBoolean(data.substring(2,3));
+		this.masterUnlock = MySystem.parseBoolean(data.substring(3,4));
+		this.insideHandels.set(Side.LEFT,MySystem.parseBoolean(data.substring(4,5)));
+		this.insideHandels.set(Side.RIGHT,MySystem.parseBoolean(data.substring(5,6)));
+		this.outsideHandles.set(Side.LEFT,MySystem.parseBoolean(data.substring(6,7)));
+		this.outsideHandles.set(Side.RIGHT,MySystem.parseBoolean(data.substring(7,8)));
+		this.gear = GearShiftSetting.parseGear(data.substring(8,9));
+	}
+
+	public String toString(){
+		String s = "Minivan(";
+		s += this.dashSwitches.get(Side.LEFT) + " ";
+		s += this.dashSwitches.get(Side.RIGHT) + " ";
+		s += this.childLock + " ";
+		s += this.masterUnlock + " ";
+		s += this.insideHandels.get(Side.LEFT) + " ";
+		s += this.insideHandels.get(Side.RIGHT) + " ";
+		s += this.outsideHandles.get(Side.LEFT) + " ";
+		s += this.outsideHandles.get(Side.RIGHT) + " ";
+		s += this.gear.toString() + " ";
+		s += this.doors.get(Side.LEFT).toString() + " ";
+		s += this.doors.get(Side.RIGHT).toString() + ")";
+		return s;
+	}
+
 	public void open(Side side){
 		if(this.insideHandels.get(side) || this.outsideHandles.get(side) || this.dashSwitches.get(side)){
-			if(this.masterUnlock) {
-				if (!(this.childLock || this.gear != GearShiftSetting.P)) {
-					this.doors.set(side,Door.OPEN);
-					System.out.println(side + " door opens.");
-					return;
-				}
+			if(this.masterUnlock && !this.childLock && this.gear == GearShiftSetting.P) {
+				this.doors.set(side,Door.OPEN);
+				System.out.println(side + " door opens.");
+				return;
 			}
 		}
 		System.out.println(side + " door stays closed.");
-	}
-
-	public void enterData(){
-		Scanner input = new Scanner(System.in);
-		System.out.print("Enter data set: ");
 	}
 
 	public Minivan(){
@@ -107,5 +163,8 @@ public class Minivan {
 
 	public static void main(String[] args){
 		Minivan minivan = new Minivan();
+		minivan.setData();
+		minivan.open(Side.LEFT);
+		System.out.println("result: " + minivan.toString());
 	}
 }

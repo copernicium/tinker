@@ -8,6 +8,11 @@ import java.util.Vector;
  * A series of useful methods I've defined to use in other projects
  */
 public class MySystem{
+	public static boolean parseBoolean(String s){
+		MySystem.myAssert(s.length() == 1, MySystem.getFileName(),MySystem.getLineNumber());
+		return s.charAt(0) == '1' || s == "true";
+	}
+
 	public static <T extends Object> boolean treeSetEquals(TreeSet<T> a, TreeSet<T> b){
 		if(a.size() != b.size()) return false;
 		Iterator<T> aIterator = a.iterator();
