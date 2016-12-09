@@ -53,16 +53,20 @@ public class Minivan {
 	public enum GearShiftSetting{
 		P,N,D,_1,_2,_3,R;
 		public static GearShiftSetting parseGear(String in){
-			MySystem.myAssert(in.length() == 1,MySystem.getFileName(),MySystem.getLineNumber());
-			switch(Character.toUpperCase(in.charAt(0))){
-				case 'P': return GearShiftSetting.P;
-				case 'N': return GearShiftSetting.N;
-				case 'D': return GearShiftSetting.D;
-				case '1': return GearShiftSetting._1;
-				case '2': return GearShiftSetting._2;
-				case '3': return GearShiftSetting._3;
-				case 'R': return GearShiftSetting.R;
+			MySystem.myAssert(in.length() == 1 || in.length() == 2,MySystem.getFileName(),MySystem.getLineNumber());
+			switch(MySystem.stringToUpperCase(in)){
+				case "P": return GearShiftSetting.P;
+				case "N": return GearShiftSetting.N;
+				case "D": return GearShiftSetting.D;
+				case "1":
+				case "_1": return GearShiftSetting._1;
+				case "2":
+				case "_2": return GearShiftSetting._2;
+				case "3":
+				case "_3": return GearShiftSetting._3;
+				case "R": return GearShiftSetting.R;
 				default:
+					MySystem.println("\"" + in + "\"", MySystem.getFileName(),MySystem.getLineNumber());
 					MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
 			}
 			return GearShiftSetting._1;//will never reach this line
@@ -112,16 +116,47 @@ public class Minivan {
 		this.parseMinivan(data);
 	}
 
+	private static Side parseSide(String s){
+		s = MySystem.stringToUpperCase(s);
+		switch(s){
+			case "LEFT": return Side.LEFT;
+			case "RIGHT": return Side.RIGHT;
+			default:
+				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+ 		}
+ 		return Side.LEFT;//will never reach this line
+	}
+
+	private static int getBooleanLength(String s){
+		if(s.length() == 0) return 0;
+		if(s.charAt(0) == '1' || s.charAt(0) == '0') return 1;
+		final String true1 = "true", false1 = "false";
+		if(s.length() < true1.length()) return 0;
+		if(s.substring(0,true1.length()).equals(true1)) return  true1.length();
+		if(s.length() < false1.length()) return 0;
+		if(s.substring(0,false1.length()).equals(false1)) return false1.length();
+		return 0;
+	}
+
 	public void parseMinivan(String data){
-		this.dashSwitches.set(Side.LEFT,MySystem.parseBoolean(data.substring(0,1)));
-		this.dashSwitches.set(Side.RIGHT,MySystem.parseBoolean(data.substring(1,2)));
-		this.childLock = MySystem.parseBoolean(data.substring(2,3));
-		this.masterUnlock = MySystem.parseBoolean(data.substring(3,4));
-		this.insideHandels.set(Side.LEFT,MySystem.parseBoolean(data.substring(4,5)));
-		this.insideHandels.set(Side.RIGHT,MySystem.parseBoolean(data.substring(5,6)));
-		this.outsideHandles.set(Side.LEFT,MySystem.parseBoolean(data.substring(6,7)));
-		this.outsideHandles.set(Side.RIGHT,MySystem.parseBoolean(data.substring(7,8)));
-		this.gear = GearShiftSetting.parseGear(data.substring(8,9));
+		String d = data;
+		this.dashSwitches.set(Side.LEFT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
+		d = d.substring(getBooleanLength(d));
+		this.dashSwitches.set(Side.RIGHT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
+		d = d.substring(getBooleanLength(d));
+		this.childLock = MySystem.parseBoolean(d.substring(0,getBooleanLength(d)));
+		d = d.substring(getBooleanLength(d));
+		this.masterUnlock = MySystem.parseBoolean(d.substring(0,getBooleanLength(d)));
+		d = d.substring(getBooleanLength(d));
+		this.insideHandels.set(Side.LEFT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
+		d = d.substring(getBooleanLength(d));
+		this.insideHandels.set(Side.RIGHT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
+		d = d.substring(getBooleanLength(d));
+		this.outsideHandles.set(Side.LEFT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
+		d = d.substring(getBooleanLength(d));
+		this.outsideHandles.set(Side.RIGHT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
+		d = d.substring(getBooleanLength(d));
+		this.gear = GearShiftSetting.parseGear(d);
 	}
 
 	public String toString(){
@@ -141,6 +176,9 @@ public class Minivan {
 	}
 
 	public void open(Side side){
+		//10010000P will open left door
+		//0 0 0 1 0 1 0 0 P will open right door
+		//0 0 0 1 0 1 0 0 N will not open any door
 		if(this.insideHandels.get(side) || this.outsideHandles.get(side) || this.dashSwitches.get(side)){
 			if(this.masterUnlock && !this.childLock && this.gear == GearShiftSetting.P) {
 				this.doors.set(side,Door.OPEN);
@@ -162,9 +200,44 @@ public class Minivan {
 	}
 
 	public static void main(String[] args){
-		Minivan minivan = new Minivan();
-		minivan.setData();
-		minivan.open(Side.LEFT);
-		System.out.println("result: " + minivan.toString());
+		{//test input
+			Minivan minivan = new Minivan();
+			minivan.setData();
+			Scanner input = new Scanner(System.in);
+			System.out.print("Input the side of the door: ");
+			String side = input.next().trim();
+			minivan.open(Minivan.parseSide(side));
+			System.out.println("result: " + minivan.toString());
+		}
+		{//test all possibilities
+			final boolean[] all = {true,false};
+			final GearShiftSetting[] allGears = {GearShiftSetting.P,GearShiftSetting.N,GearShiftSetting.D,GearShiftSetting._1,GearShiftSetting._2,GearShiftSetting._3,GearShiftSetting.R};
+			final Side[] allSides = {Side.LEFT,Side.RIGHT};
+			for(boolean a: all){
+				for(boolean b: all){
+					for(boolean c: all){
+						for(boolean d: all){
+							for(boolean e: all){
+								for(boolean f: all){
+									for(boolean g: all){
+										for(boolean h: all){
+											for(GearShiftSetting i: allGears){
+												for(Side side: allSides){
+													String data = "" + a + b + c + d + e + f + g + h + i;
+													System.out.println("Next data set is " + data + " for " + side + " side");
+													Minivan minivan = new Minivan();
+													minivan.parseMinivan(data);
+													minivan.open(side);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

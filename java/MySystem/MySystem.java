@@ -8,9 +8,26 @@ import java.util.Vector;
  * A series of useful methods I've defined to use in other projects
  */
 public class MySystem{
+	public static String stringToLowerCase(final String ORIGINAL){
+		String lowerCase = "";
+		for(char a: ORIGINAL.toCharArray()){
+			lowerCase += Character.toLowerCase(a);
+		}
+		return lowerCase;
+	}
+
+	public static String stringToUpperCase(final String ORIGINAL){
+		String upperCase = "";
+		for(char a: ORIGINAL.toCharArray()){
+			upperCase += Character.toUpperCase(a);
+		}
+		return upperCase ;
+	}
+
 	public static boolean parseBoolean(String s){
-		MySystem.myAssert(s.length() == 1, MySystem.getFileName(),MySystem.getLineNumber());
-		return s.charAt(0) == '1' || s == "true";
+		final String true1 = "true", true2 = "1", false1 = "false", false2 = "0";
+		MySystem.myAssert(s.equals(true1) || s.equals(true2) || s.equals(false1) || s.equals(false2), MySystem.getFileName(),MySystem.getLineNumber());
+		return s.equals(true1) || s.equals(true2);
 	}
 
 	public static <T extends Object> boolean treeSetEquals(TreeSet<T> a, TreeSet<T> b){
