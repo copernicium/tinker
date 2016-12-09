@@ -82,7 +82,7 @@ public class ChessPiece
 
 	/**
 	 * Checks for equality by value with a given piece
-	 * @param b the piece to be compared to
+	 * @param o the piece to be compared to
 	 * @return true if the pieces are equal by value
 	 */
 	public boolean equals(Object o){

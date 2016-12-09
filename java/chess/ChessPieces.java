@@ -7,8 +7,6 @@ import MySystem.*;
  */
 public class ChessPieces{
 	private ChessPiece[] pieces;
-	private ChessPiece[] lastPieces;
-	private boolean canUndo;
 
 	public void limitMoves(ChessPiece.Color color){
 		for(ChessPiece chessPiece : this.pieces){
@@ -115,7 +113,10 @@ public class ChessPieces{
 		ChessPieces b = (ChessPieces)o; 
 		if(b.toArray().length != this.toArray().length) return false;
 		for(int i = 0; i<this.toArray().length; i++){
-			if(!b.toArray()[i].equalsByType(this.toArray()[i]))return false;
+			if(!b.toArray()[i].equalsByType(this.toArray()[i])){
+				MySystem.println(i + " is not equal " + this.toArray()[i] + b.toArray()[i],MySystem.getFileName(),MySystem.getLineNumber());
+				return false;
+			}
 		}
 		return true;
 	}
@@ -150,16 +151,8 @@ public class ChessPieces{
 	 * @param INDEX the index of the piece to set
 	 * @param CHESS_PIECE the piece to set it to
 	 */
-	public void set(final int INDEX,final ChessPiece CHESS_PIECE){//TODO add a way to undo the last (most recent) move
-		this.lastPieces = this.pieces;
-		this.canUndo = true;
+	public void set(final int INDEX,final ChessPiece CHESS_PIECE){
 		this.pieces[INDEX] = CHESS_PIECE;
-	}
-
-	public void undo(){//TODO: finish me and add me in
-		MySystem.myAssert(this.canUndo,MySystem.getFileName(),MySystem.getLineNumber());
-		this.pieces = this.lastPieces;
-		this.canUndo = false;
 	}
 
 	/**
@@ -193,14 +186,6 @@ public class ChessPieces{
 	 */
 	public ChessPiece[] toArray(){
 		return this.pieces;
-	}
-
-	/**
-	 * Fetches the state of the pieces before the most recent change
-	 * @return the array of all the last pieces
-	 */
-	public ChessPiece[] getLastPieces(){
-		return this.lastPieces;
 	}
 
 	/**
@@ -266,10 +251,6 @@ public class ChessPieces{
 		this.pieces[this.findNextUnassigned()] = ChessPiece.makePiece(PIECE);
 	}
 
-	boolean getCanUndo(){
-		return this.canUndo;
-	}
-
 	/**
 	 * Fetches the length of the pieces array
 	 * @return the length of the pieces array
@@ -287,19 +268,13 @@ public class ChessPieces{
 		for(int i = 0; i< pieces.length; i++){
 			this.pieces[i] = new ChessPiece();
 		}
-		this.lastPieces = this.pieces;
-		this.canUndo = false;
 	}
 
 	public ChessPieces(ChessPiece[] pieces){
 		this.pieces = pieces;
-		this.lastPieces = this.pieces;
-		this.canUndo = false;
 	}
 
 	public ChessPieces(ChessPieces toCopy){
 		this.pieces = ChessPieces.makePieces(toCopy).toArray();
-		this.lastPieces = ChessPieces.makePieces(toCopy.getLastPieces());
-		this.canUndo = toCopy.getCanUndo();
 	}
 }
