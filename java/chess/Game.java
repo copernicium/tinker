@@ -307,7 +307,7 @@ public class Game{
 
 	public static void playAgainstAI(){
 		ChessBoard chessBoard = new ChessBoard();
-		Opponent ben = new Opponent();
+		Opponent ben = new Opponent(ChessPiece.Color.BLACK);//TODO change color
 	}
 
 	/**
