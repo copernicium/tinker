@@ -86,11 +86,7 @@ public class Minivan {
 		Scanner input = new Scanner(System.in);
 		System.out.print("Enter data set: ");
 		String longData = input.nextLine().trim();
-		String data = "";
-		for(char a: longData.toCharArray()){
-			if(a == ' ') continue;
-			data += a;
-		}
+		String data = MySystem.removeSpaces(longData);
 		this.parseMinivan(data);
 	}
 
@@ -117,7 +113,7 @@ public class Minivan {
 	}
 
 	public void parseMinivan(String data){
-		String d = data;
+		String d = MySystem.removeSpaces(data);
 		this.dashSwitches.set(Side.LEFT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
 		d = d.substring(getBooleanLength(d));
 		this.dashSwitches.set(Side.RIGHT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));

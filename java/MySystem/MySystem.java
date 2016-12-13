@@ -16,6 +16,14 @@ public class MySystem{
 		return lowerCase;
 	}
 
+	public static String removeSpaces(final String ORIGINAL){
+		String s = "";
+		for(char c: ORIGINAL.toCharArray()){
+			if(c != ' ') s+=c;
+		}
+		return s;
+	}
+
 	public static String stringToUpperCase(final String ORIGINAL){
 		String upperCase = "";
 		for(char a: ORIGINAL.toCharArray()){
@@ -26,7 +34,9 @@ public class MySystem{
 
 	public static boolean parseBoolean(String s){
 		final String true1 = "true", true2 = "1", false1 = "false", false2 = "0";
-		MySystem.myAssert(s.equals(true1) || s.equals(true2) || s.equals(false1) || s.equals(false2), MySystem.getFileName(),MySystem.getLineNumber());
+		if(!(s.equals(true1) || s.equals(true2) || s.equals(false1) || s.equals(false2))){
+			MySystem.error("Not a valid option: received \"" + s + "\"", MySystem.getFileName(), MySystem.getLineNumber());
+		}
 		return s.equals(true1) || s.equals(true2);
 	}
 
