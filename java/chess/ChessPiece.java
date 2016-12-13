@@ -86,7 +86,7 @@ public class ChessPiece
 	 * @return true if the pieces are equal by value
 	 */
 	public boolean equals(Object o){
-		if(o == null) return false;
+		if(o == null || o.getClass() != this.getClass()) return false;
 		ChessPiece b = (ChessPiece)o;
 		if(this.getType() != b.getType()) return false;
 		if(this.getColor() != b.getColor()) return false;

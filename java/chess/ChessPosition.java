@@ -33,7 +33,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 
 		/**
 		 * Checks for equality with a given Dimension
-		 * @param b the Dimension to compare to
+		 * @param o the Dimension to compare to
 		 * @return true if the two are equal (by value)
 		 */
 		public boolean equals(Object o){
@@ -248,7 +248,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 
 		/**
 		 * Checks for equality by value
-		 * @param b the Tester to compare to
+		 * @param o the Tester to compare to
 		 * @return true it they are equal
 		 */
 		public boolean equals(Object o){
@@ -332,7 +332,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 	}
 
 	/**Checks for equality by value
-	 * @param b the ChessPosition to compare to
+	 * @param o the ChessPosition to compare to
 	 * @return true if they are equal
 	 */
     public boolean equals(Object o){
