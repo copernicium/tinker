@@ -1,6 +1,7 @@
 package MySystem;
 
 import java.util.Iterator;
+import java.util.Random;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -8,6 +9,18 @@ import java.util.Vector;
  * A series of useful methods I've defined to use in other projects
  */
 public class MySystem{
+	public static <T extends Object> T getRandomTreeSetElement(TreeSet<T> a){
+		Iterator<T> aIterator = a.iterator();
+		Random rand = new Random(a.size());
+		int r = rand.nextInt(), i = 0;
+		while(aIterator.hasNext()){
+			if(i == r) return aIterator.next();
+			i++;
+		}
+		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		return aIterator.next();//should never reach this line
+	}
+
 	public static String stringToLowerCase(final String ORIGINAL){
 		String lowerCase = "";
 		for(char a: ORIGINAL.toCharArray()){
@@ -49,6 +62,7 @@ public class MySystem{
 		}
 		return true;
 	}
+
 	public static <T extends Object> boolean contains(TreeSet<T> all, T a){
 		for(T b: all){
 			if(a.equals(b)) return true;

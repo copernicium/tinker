@@ -308,6 +308,37 @@ public class Game{
 	public static void playAgainstAI(){
 		ChessBoard chessBoard = new ChessBoard();
 		Opponent ben = new Opponent(ChessPiece.Color.BLACK);//TODO change color
+
+		while(Game.continueGame(chessBoard)){
+			chessBoard.print();
+			System.out.println("It is " + chessBoard.getPlayerTurn() + "'s turn.");
+			System.out.println("Available pieces to move are: " + chessBoard.getMoveablePositionsByPlayer().toString());
+			ChessPiece inputPiece = new ChessPiece();
+			{
+				boolean checkIfPieceIsValid = false;
+				while(!checkIfPieceIsValid){
+					System.out.print("Input a piece to move (the piece's location): ");
+					inputPiece = chessBoard.getPieces().getPieceAt(Game.getInput());
+					for(ChessPiece a : chessBoard.getMoveablePiecesByPlayer()){
+						if(inputPiece.equals(a))checkIfPieceIsValid = true;
+					}
+				}
+				inputPiece = chessBoard.getPieces().getPieceAt(chessBoard.getPieces().getIndexOf(inputPiece));
+			}
+			ChessPosition moveTarget = new ChessPosition();
+			{
+				boolean checkIfMoveIsValid = false;
+				while(!checkIfMoveIsValid){
+					System.out.print("Input the location to move that piece to (available positions are " +  inputPiece.getLimitedMoves().toString() + ": ");
+					moveTarget = Game.getInput();
+					for(ChessPosition a : inputPiece.getLimitedMoves()){
+						if(moveTarget.equals(a)) checkIfMoveIsValid = true;
+					}
+				}
+			}
+			chessBoard.move(inputPiece,moveTarget);
+		}
+		System.out.println("Game over");
 	}
 
 	/**
