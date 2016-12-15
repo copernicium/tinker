@@ -150,6 +150,23 @@ public class ChessBoard
 
 	/**
 	 * Update the chess board given a chess piece and the position to move it to
+	 * @param move the starting and end positions
+	 */
+	public void move(ChessPiece.Move move){
+		this.move(move.getStart(),move.getTarget());
+	}
+
+	/**
+	 * Update the chess board given a chess piece and the position to move it to
+	 * @param startPosition the position of the chess piece to move
+	 * @param moveThere the position to move the piece to
+	 */
+	public void move(final ChessPosition startPosition,ChessPosition moveThere){
+		this.move(this.pieces.getPieceAt(startPosition),moveThere);
+	}
+
+	/**
+	 * Update the chess board given a chess piece and the position to move it to
 	 * @param PIECE_TO_MOVE the chess piece to move
 	 * @param moveThere the position to move the piece to
 	 */

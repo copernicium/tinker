@@ -23,7 +23,14 @@ import java.util.Scanner;
  * assignment: Chapter06--Loops-6R6.2
  */
 public class Sums {
-	public static void getSumOfAllEvensBetween(final int start)
+	public static void getSumOfAllEvensBetween(final int start, final int end){
+		int i = start;
+		int sum = 0;
+		while(i <= end){
+			if(i%2 == 0) sum += i;
+		}
+		System.out.println("Sum of all even ints from " + start + " to " + end + " is " + sum);
+	}
 	public static void main(String[] args){
 		Scanner in = new Scanner(System.in);
 	}

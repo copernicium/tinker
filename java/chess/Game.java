@@ -27,6 +27,33 @@ public class Game{
 		return  ChessPosition.toChessPosition(input);
 	}
 
+	private static ChessPiece.Move getValidMove(ChessBoard chessBoard){
+		ChessPiece inputPiece = new ChessPiece();
+		{
+			boolean checkIfPieceIsValid = false;
+			while(!checkIfPieceIsValid){
+				System.out.print("Input a piece to move (the piece's location): ");
+				inputPiece = chessBoard.getPieces().getPieceAt(Game.getInput());
+				for(ChessPiece a : chessBoard.getMoveablePiecesByPlayer()){
+					if(inputPiece.equals(a))checkIfPieceIsValid = true;
+				}
+			}
+			inputPiece = chessBoard.getPieces().getPieceAt(chessBoard.getPieces().getIndexOf(inputPiece));
+		}
+		ChessPosition moveTarget = new ChessPosition();
+		{
+			boolean checkIfMoveIsValid = false;
+			while(!checkIfMoveIsValid){
+				System.out.print("Input the location to move that piece to (available positions are " + inputPiece.getLimitedMoves().toString() + ": ");
+				moveTarget = Game.getInput();
+				for(ChessPosition a : inputPiece.getLimitedMoves()){
+					if(moveTarget.equals(a)) checkIfMoveIsValid = true;
+				}
+			}
+		}
+		return new ChessPiece.Move(inputPiece.getPosition(),moveTarget);
+	}
+
 	/**
 	 * Tests that user input and string to ChessPosition conversion is working
 	 */
@@ -221,30 +248,7 @@ public class Game{
 			chessBoard.print();
 			System.out.println("It is " + chessBoard.getPlayerTurn() + "'s turn.");
 			System.out.println("Available pieces to move are: " + chessBoard.getMoveablePositionsByPlayer().toString());
-			ChessPiece inputPiece = new ChessPiece();
-			{
-				boolean checkIfPieceIsValid = false;
-				while(!checkIfPieceIsValid){
-					System.out.print("Input a piece to move (the piece's location): ");
-					inputPiece = chessBoard.getPieces().getPieceAt(Game.getInput());
-					for(ChessPiece a : chessBoard.getMoveablePiecesByPlayer()){
-						if(inputPiece.equals(a))checkIfPieceIsValid = true;
-					}
-				}
-				inputPiece = chessBoard.getPieces().getPieceAt(chessBoard.getPieces().getIndexOf(inputPiece));
-			}
-			ChessPosition moveTarget = new ChessPosition();
-			{
-				boolean checkIfMoveIsValid = false;
-				while(!checkIfMoveIsValid){
-					System.out.print("Input the location to move that piece to (available positions are " +  inputPiece.getLimitedMoves().toString() + ": ");
-					moveTarget = Game.getInput();
-					for(ChessPosition a : inputPiece.getLimitedMoves()){
-						if(moveTarget.equals(a)) checkIfMoveIsValid = true;
-					}
-				}
-			}
-			chessBoard.move(inputPiece,moveTarget);
+			chessBoard.move(getValidMove(chessBoard));
 		}
 		System.out.println("Game over");
 	}
@@ -313,39 +317,16 @@ public class Game{
 		while(Game.continueGame(chessBoard)){
 			{
 				chessBoard.print();
-				System.out.println("It is your turn.");
+				System.out.println("It is " + chessBoard.getPlayerTurn() + "'s turn.");
 				System.out.println("Available pieces to move are: " + chessBoard.getMoveablePositionsByPlayer().toString());
-				ChessPiece inputPiece = new ChessPiece();
-				{
-					boolean checkIfPieceIsValid = false;
-					while (!checkIfPieceIsValid) {
-						System.out.print("Input a piece to move (the piece's location): ");
-						inputPiece = chessBoard.getPieces().getPieceAt(Game.getInput());
-						for (ChessPiece a : chessBoard.getMoveablePiecesByPlayer()) {
-							if (inputPiece.equals(a)) checkIfPieceIsValid = true;
-						}
-					}
-					inputPiece = chessBoard.getPieces().getPieceAt(chessBoard.getPieces().getIndexOf(inputPiece));
-				}
-				ChessPosition moveTarget = new ChessPosition();
-				{
-					boolean checkIfMoveIsValid = false;
-					while (!checkIfMoveIsValid) {
-						System.out.print("Input the location to move that piece to (available positions are " + inputPiece.getLimitedMoves().toString() + ": ");
-						moveTarget = Game.getInput();
-						for (ChessPosition a : inputPiece.getLimitedMoves()) {
-							if (moveTarget.equals(a)) checkIfMoveIsValid = true;
-						}
-					}
-				}
-				chessBoard.move(inputPiece, moveTarget);
+				chessBoard.move(getValidMove(chessBoard));
 			}
 			if(Game.continueGame(chessBoard)){
-				System.out.println("Opponent's turn.");
 				chessBoard.print();
-				Opponent.Move move = ben.getMove(chessBoard.getPieces());
-				ChessPiece piece = chessBoard.getPieces().getPieceAt(move.getStart());
-				chessBoard.move(piece, move.getTarget());
+				System.out.println("Opponent's turn.");
+				ChessPiece.Move move = ben.getMove(chessBoard.getPieces());
+				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
+				chessBoard.move(move);
 			}
 
 		}

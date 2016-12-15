@@ -8,6 +8,28 @@ import MySystem.*;
  */
 public class ChessPiece
 {
+	public static class Move{
+		private ChessPosition start;
+		private ChessPosition target;
+
+		public ChessPosition getStart(){
+			return this.start;
+		}
+
+		public ChessPosition getTarget(){
+			return this.target;
+		}
+
+		public Move(){
+			this.start = new ChessPosition();
+			this.target = new ChessPosition();
+		}
+
+		public Move(ChessPosition start,ChessPosition target){
+			this.start = start;
+			this.target = target;
+		}
+	}
 	/**
 	 * Represents the types of chess pieces
 	 */
