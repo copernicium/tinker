@@ -28298,8 +28298,8 @@ cherubims
 cherubs
 chervil
 chervil's
-chess
-chess's
+Chess
+Chess's
 chessboard
 chessboard's
 chessboards

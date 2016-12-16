@@ -1,4 +1,4 @@
-package chess;
+package Chess;
 
 import java.util.Scanner;
 import java.util.TreeSet;
@@ -6,12 +6,12 @@ import java.util.Iterator;
 import MySystem.*;
 
 /**
- * Runs a chess game
+ * Runs a Chess game
  */
 public class Game{
 	/**
-	 * Prompts the user to enter in a chess position
-	 * @return the chess position entered by the user
+	 * Prompts the user to enter in a Chess position
+	 * @return the Chess position entered by the user
 	 */
 	private static ChessPosition getInput(){
 		Scanner scanner = new Scanner(System.in);
@@ -64,7 +64,7 @@ public class Game{
 	}
 
 	/**
-	 * Updates and prints a chess board given some test values
+	 * Updates and prints a Chess board given some test values
 	 * @param chessBoard the board to update
 	 * @param test the piece to move
 	 * @param testMove the position to move the piece to
@@ -240,7 +240,7 @@ public class Game{
 
 
 	/**
-	 * Prompts users to input the necessary information and manages their chess game
+	 * Prompts users to input the necessary information and manages their Chess game
 	 */
 	private static void play(){//TODO: finish
 		ChessBoard chessBoard = new ChessBoard();
@@ -324,7 +324,7 @@ public class Game{
 			if(Game.continueGame(chessBoard)){
 				chessBoard.print();
 				System.out.println("Opponent's turn.");
-				ChessPiece.Move move = ben.getMove(chessBoard.getPieces());
+				ChessPiece.Move move = ben.getRandomMove(chessBoard.getPieces());
 				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
 				chessBoard.move(move);
 			}
@@ -334,7 +334,7 @@ public class Game{
 	}
 
 	/**
-	 * The primary method that tests the chess system and instantiates a new game
+	 * The primary method that tests the Chess system and instantiates a new game
 	 * @param args user arguments (no effect)
 	 */
 	public static void main(String[] args){
@@ -346,11 +346,11 @@ public class Game{
 		//testSingleMove();
 		//testCapture();
 		//testCheck();
-		//testCheckmate();
+		testCheckmate();
 
 		//This is the actual game
 		//play();
-		playAgainstAI();
+		//playAgainstAI();
 		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n", MySystem.getFileName(), MySystem.getLineNumber());
 	}
 }

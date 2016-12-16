@@ -1,4 +1,4 @@
-package chess;
+package Chess;
 
 import MySystem.MySystem;
 
@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.Vector;
 
 /**
- * A chess ai
+ * A Chess ai
  */
 public class Opponent {
 	private ChessPiece.Color color;
@@ -15,7 +15,7 @@ public class Opponent {
 		return this.color;
 	}
 
-	public ChessPiece.Move getMove(final ChessPieces PIECES){
+	public ChessPiece.Move getRandomMove(final ChessPieces PIECES){
 		MySystem.println("Color is " + this.getColor(), MySystem.getFileName(),MySystem.getLineNumber());
 		Vector<Integer> moveable_pieces = new Vector<>(0);
 		for(int i = 0; i<PIECES.length(); i++){
