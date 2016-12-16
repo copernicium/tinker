@@ -1,8 +1,8 @@
-package chess;
+package Chess;
 import MySystem.*;
 
 /**
- * Represents a position of the chess board
+ * Represents a position of the Chess board
  */
 public class ChessPosition implements Comparable<ChessPosition>	{
 	/**
@@ -68,7 +68,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
     }
 
 	/**
-	 * Used to represent a column (aka file) on the chess board
+	 * Used to represent a column (aka file) on the Chess board
 	 */
 	public static class Column extends Dimension{//called files
         public static final int A=0;
@@ -143,7 +143,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
     }
 
 	/**
-	 * Represents a row (aka rank) of the chess board
+	 * Represents a row (aka rank) of the Chess board
 	 */
     public static class Row extends Dimension{//called ranks
         public static final int _1=0;
@@ -216,7 +216,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
     }
 
 	/**
-	 * Used to test if given values are within the bounds of a chess board
+	 * Used to test if given values are within the bounds of a Chess board
 	 */
 	public static class Tester{
 		private int column;
@@ -239,7 +239,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 		}
 
 		/**
-		 * Checks to see if a given position (Tester) is within the bounds of the chess board
+		 * Checks to see if a given position (Tester) is within the bounds of the Chess board
 		 * @return true if it within bounds
 		 */
 		public boolean inBounds(){
@@ -344,7 +344,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
     }
 
 	/**
-	 * Checks to see if a given position (row and column) is within the bounds of the chess board
+	 * Checks to see if a given position (row and column) is within the bounds of the Chess board
 	 * @param row the row of the position to check
 	 * @param column the column of the position to check
 	 * @return true if it is within bounds

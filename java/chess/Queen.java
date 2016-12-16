@@ -1,4 +1,4 @@
-package chess;
+package Chess;
 
 import java.util.TreeSet;
 import MySystem.*;
@@ -21,7 +21,7 @@ public class Queen extends ChessPiece
 
 	/**
 	 * The symbol to print given the type
-	 * @return the letter representing this chess piece
+	 * @return the letter representing this Chess piece
 	 */
   	@Override
     public String print(){

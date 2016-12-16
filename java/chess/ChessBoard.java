@@ -1,20 +1,20 @@
-package chess;
+package Chess;
 
 import java.util.Vector;
 import java.util.TreeSet;
 import MySystem.*;
 
 /**
- * A representation of a chess board
+ * A representation of a Chess board
  */
 public class ChessBoard
 {
 	/**
-	 * Stores the numbers and types of chess pieces on a chess board at start
+	 * Stores the numbers and types of Chess pieces on a Chess board at start
 	 */
     private abstract static class NumbersOfPieces{
 		/**
-		 * Stores the numbers and types of chess pieces on a half of a chess board at start
+		 * Stores the numbers and types of Chess pieces on a half of a Chess board at start
 		 */
 		public  abstract static class Half{
 			public static final int PAWNS=8;
@@ -26,7 +26,7 @@ public class ChessBoard
 			public static final int TOTAL=16;
 		}
 		/**
-		 * Stores the numbers and types of chess pieces total on a chess board at start
+		 * Stores the numbers and types of Chess pieces total on a Chess board at start
 		 */
 		public abstract static class Total{
 			public static final int PAWNS=16;
@@ -40,7 +40,7 @@ public class ChessBoard
     }
 
 	/**
-	 * Stores the starting positions of different types of chess pieces at start
+	 * Stores the starting positions of different types of Chess pieces at start
 	 */
 	public static abstract class PiecePlacement{//placement of pieces on the white and left side.
 		public static abstract class Row{
@@ -71,7 +71,7 @@ public class ChessBoard
 	}
 
 	/**
-	 * prints a new chess board given a set of pieces
+	 * prints a new Chess board given a set of pieces
 	 * @param PIECES the pieces to print
 	 */
 	private static void print(final ChessPiece[] PIECES){
@@ -93,22 +93,22 @@ public class ChessBoard
 	}
 
 	/**
-	 * Prints the current chess board
+	 * Prints the current Chess board
 	 */
 	public void print(){
 		ChessBoard.print(this.pieces.toArray());
 	}
 
 	/**
-	 * unimplemented: will be a graphical representation of the chess board
+	 * unimplemented: will be a graphical representation of the Chess board
 	 */
 	public void draw(){//TODO
 		MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
 	/**
-	 * Fetches all of the pieces on the chess board
-	 * @return the array of all the chess pieces
+	 * Fetches all of the pieces on the Chess board
+	 * @return the array of all the Chess pieces
 	 */
 	public ChessPieces getPieces(){
 		return this.pieces;
@@ -149,7 +149,7 @@ public class ChessBoard
 	}
 
 	/**
-	 * Update the chess board given a chess piece and the position to move it to
+	 * Update the Chess board given a Chess piece and the position to move it to
 	 * @param move the starting and end positions
 	 */
 	public void move(ChessPiece.Move move){
@@ -157,8 +157,8 @@ public class ChessBoard
 	}
 
 	/**
-	 * Update the chess board given a chess piece and the position to move it to
-	 * @param startPosition the position of the chess piece to move
+	 * Update the Chess board given a Chess piece and the position to move it to
+	 * @param startPosition the position of the Chess piece to move
 	 * @param moveThere the position to move the piece to
 	 */
 	public void move(final ChessPosition startPosition,ChessPosition moveThere){
@@ -166,8 +166,8 @@ public class ChessBoard
 	}
 
 	/**
-	 * Update the chess board given a chess piece and the position to move it to
-	 * @param PIECE_TO_MOVE the chess piece to move
+	 * Update the Chess board given a Chess piece and the position to move it to
+	 * @param PIECE_TO_MOVE the Chess piece to move
 	 * @param moveThere the position to move the piece to
 	 */
     public void move(final ChessPiece PIECE_TO_MOVE,ChessPosition moveThere){
@@ -197,7 +197,7 @@ public class ChessBoard
 	}
 
 	/**
-	 * Mirrors a column across the center of the chess board
+	 * Mirrors a column across the center of the Chess board
 	 * @param column the column to mirror
 	 * @return the mirrored position
 	 */
@@ -206,7 +206,7 @@ public class ChessBoard
 	}
 
 	/**
-	 * Mirrors a row across the center of the chess board
+	 * Mirrors a row across the center of the Chess board
 	 * @param row the row to mirror
 	 * @return the mirrored position
 	 */
@@ -230,8 +230,8 @@ public class ChessBoard
 	}
 
 	/**
-	 * Creates an array of pieces representing all the chess pieces at the beginning of a game
-	 * @return an array of chess pieces representing the start of a game
+	 * Creates an array of pieces representing all the Chess pieces at the beginning of a game
+	 * @return an array of Chess pieces representing the start of a game
 	 */
     private static ChessPieces fillBoard(){
 		ChessPieces chessPieces = new ChessPieces(NumbersOfPieces.Total.TOTAL);
@@ -266,14 +266,14 @@ public class ChessBoard
     }
 
 	/**
-	 * Creates a new chess board ready to be used
+	 * Creates a new Chess board ready to be used
 	 */
 	public ChessBoard(){
 		this(new ChessPieces(ChessBoard.fillBoard()));
     }
 
 	/**
-	 * Creates a chess board given an array of pieces instead of creating one itself
+	 * Creates a Chess board given an array of pieces instead of creating one itself
 	 * @param pieces the pieces to be used in place of the default
 	 */
 	public ChessBoard(ChessPieces pieces){

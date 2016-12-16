@@ -1,10 +1,10 @@
-package chess;
+package Chess;
 
 import java.util.TreeSet;
 import MySystem.*;
 
 /**
- * A class to represent a basic chess piece
+ * A class to represent a basic Chess piece
  */
 public class ChessPiece
 {
@@ -31,14 +31,14 @@ public class ChessPiece
 		}
 	}
 	/**
-	 * Represents the types of chess pieces
+	 * Represents the types of Chess pieces
 	 */
 	public enum Type{
 		UNASSIGNED,PAWN,ROOK,KNIGHT,BISHOP,QUEEN,KING
 	}
 
 	/**
-	 * Represents the color of a chess piece
+	 * Represents the color of a Chess piece
 	 */
 	public enum Color{
 		WHITE,BLACK;
@@ -88,7 +88,7 @@ public class ChessPiece
 
 	/**
 	 * The symbol to print given the type
-	 * @return the letter representing this chess piece
+	 * @return the letter representing this Chess piece
 	 */
 	public String print(){
 		return "U";
@@ -169,33 +169,33 @@ public class ChessPiece
 
 	/**
 	 * Fetches all the positions this piece can move to
-	 * @return a vector of chess positions that this piece can be moved to
+	 * @return a vector of Chess positions that this piece can be moved to
 	 */
 	public TreeSet<ChessPosition> getPossibleMoves(){
-		//MySystem.error("This is not a valid chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
+		//MySystem.error("This is not a valid Chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
 		return this.possibleMoves;
 	}
 
 	/**
 	 * Calculates all the positions this piece can move to
-	 * @param chessPieces an array of pieces representing a chess board
+	 * @param chessPieces an array of pieces representing a Chess board
 	*/
 	public void updatePossibleMoves(ChessPieces chessPieces){
-		MySystem.error("This is not a valid chess piece.", MySystem.getFileName(), MySystem.getLineNumber());
+		MySystem.error("This is not a valid Chess piece.", MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
 	/**
-	 * Moves this chess pieces
+	 * Moves this Chess pieces
 	 * @param position the position to move this piece to
 	 */
 	public void move(ChessPosition position){
-		MySystem.error("This is not a valid chess piece.", MySystem.getFileName(), MySystem.getLineNumber());
+		MySystem.error("This is not a valid Chess piece.", MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
 	/**
 	 * Checks to see if this piece can move to a given position
 	 * @param CHECK_MOVE the position to check to see if this piece can move to
-	 * @param CHESS_PIECES an array of pieces representing a chess board
+	 * @param CHESS_PIECES an array of pieces representing a Chess board
 	 * @return true if this piece can move to that position
 	 */
 	public boolean checkMoveDeep(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
@@ -206,7 +206,7 @@ public class ChessPiece
 	/**
 	 * Checks to see if this piece can move to a given position
 	 * @param CHECK_MOVE the position to check to see if this piece can move to1
-	 * @param CHESS_PIECES an array of pieces representing a chess board
+	 * @param CHESS_PIECES an array of pieces representing a Chess board
 	 * @return true if this piece can move to that position
 	 */
 	public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
@@ -223,15 +223,15 @@ public class ChessPiece
 	}
 
 	/**
-	 * Fetches the position of this chess piece
-	 * @return the position of this chess piece
+	 * Fetches the position of this Chess piece
+	 * @return the position of this Chess piece
 	 */
 	public ChessPosition getPosition(){
 		return new ChessPosition(position);
 	}
 
 	/**
-	 * Used to copy chess pieces by value
+	 * Used to copy Chess pieces by value
 	 * @param chessPiece the piece to copy
 	 * @return a new instance with the same values
 	 */
@@ -258,7 +258,7 @@ public class ChessPiece
 	}
 
 	/**
-	 * Used to copy chess pieces by value
+	 * Used to copy Chess pieces by value
 	 * @param chessPiece the piece to copy
 	 * @return a new instance with the same values
 	 */
@@ -285,10 +285,10 @@ public class ChessPiece
 	}
 
 	/*/**
-	 * Used to copy an chess piece from an array that matches a set of criteria
+	 * Used to copy an Chess piece from an array that matches a set of criteria
 	 * @param position the position of the piece to copy
 	 * @param chessPieces the array of pieces to search through
-	 * @return a new instance of the chess piece
+	 * @return a new instance of the Chess piece
 	 */
 	/*public static ChessPiece makePiece(ChessPosition position, ChessPieces chessPieces){
 		for(ChessPiece a: chessPieces.toArray()){
@@ -299,22 +299,22 @@ public class ChessPiece
 	}*/
 
 	/**
-	 * Creates a new instance of a chess piece
+	 * Creates a new instance of a Chess piece
 	 */
 	public ChessPiece(){
 		this(new ChessPosition(), Color.WHITE,new TreeSet<>(),new TreeSet<>());
 	}
 
 	/**
-	 * Used to copy a chess piece by value
-	 * @param toCopy the chess piece to copy
+	 * Used to copy a Chess piece by value
+	 * @param toCopy the Chess piece to copy
 	 */
 	public ChessPiece(ChessPiece toCopy){
 		this(new ChessPosition(toCopy.getPosition()),Color.WHITE,toCopy.getPossibleMoves(),toCopy.getLimitedMoves());
 	}
 
 	/**
-	 * Create a new instance of a chess piece given some values
+	 * Create a new instance of a Chess piece given some values
 	 * @param position the position of the piece
 	 * @param color the color of the piece
 	 */

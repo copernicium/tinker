@@ -1,4 +1,4 @@
-package chess;
+package Chess;
 
 import MySystem.*;
 
@@ -121,7 +121,7 @@ public class ChessPieces{
 		return true;
 	}
 	/**
-	 * Finds the index of a chess piece in an array, crashing if it cannot be found.
+	 * Finds the index of a Chess piece in an array, crashing if it cannot be found.
 	 * @param FIND_ME the piece to find
 	 * @return the index to the piece in the array
 	 */
@@ -181,8 +181,8 @@ public class ChessPieces{
 	}
 
 	/**
-	 * Fetches all of the pieces on the chess board
-	 * @return the array of all the chess pieces
+	 * Fetches all of the pieces on the Chess board
+	 * @return the array of all the Chess pieces
 	 */
 	public ChessPiece[] toArray(){
 		return this.pieces;
@@ -223,7 +223,7 @@ public class ChessPieces{
 	}
 
 	/**
-	 * Kills the piece occupying a given chess position
+	 * Kills the piece occupying a given Chess position
 	 * @param chessPosition the position of the piece to be killed
 	 */
 	public void capture(ChessPosition chessPosition){
@@ -231,7 +231,7 @@ public class ChessPieces{
 	}
 
 	/**
-	 * Find the index of the first chess piece in an array that hasn't been assigned an identity
+	 * Find the index of the first Chess piece in an array that hasn't been assigned an identity
 	 * @return the index of the next unassigned piece
 	 */
 	private int findNextUnassigned(){
