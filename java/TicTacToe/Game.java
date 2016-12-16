@@ -2,17 +2,47 @@ package TicTacToe;
 
 import MySystem.*;
 
+import java.util.Scanner;
+
 /**
  * Runs a Tic Tac Toe game
  */
 public class Game{
 	public static void testMove(){
 		Board board = new Board();
-		//TODO
+		board.print();
+		System.out.println("-------------");
+		board.set(new Board.Position(Board.Position._5));
+		board.print();
+		System.out.println("Expected to have an X in the center of the board.");
 	}
 
-	private static void play(){
-		//TODO
+	private static Board.Position getUserInput(){
+		Scanner input = new Scanner(System.in);
+		while(true){
+			System.out.print("Please enter the position you wish to make your mark, \"help\" to display how the board is set up, or \"quit\" to exit: ");
+			String str = input.next();
+			if(MySystem.stringToLowerCase(str).equals("help")){
+				Board.printLayout();
+			}
+			else if(MySystem.stringToLowerCase(str).equals("quit") || MySystem.stringToLowerCase(str).equals("exit")){
+				System.out.println("Quitting game from user request");
+				System.exit(0);
+			}
+			else if(Board.Position.canParsePosition(str)){
+				return Board.Position.parsePosition(str);
+			}
+		}
+		//can never reach here
+	}
+
+	public static void play(){
+		Board board = new Board();
+		while(board.getGameStatus() == Board.GameStatus.IN_PROGRESS){
+			board.print();
+			Board.Position position = getUserInput();
+			board.set(position);
+		}
 	}
 
 	/**
@@ -22,10 +52,10 @@ public class Game{
 	public static void main(String[] args){
 		System.out.println("Starting Game");
 		//These are the tests:
-		testMove();
+		//testMove();
 
 		//This is the actual game
-		//play();
+		play();
 
 		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n", MySystem.getFileName(), MySystem.getLineNumber());
 	}
