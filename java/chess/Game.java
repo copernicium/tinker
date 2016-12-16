@@ -37,6 +37,7 @@ public class Game{
 				for(ChessPiece a : chessBoard.getMoveablePiecesByPlayer()){
 					if(inputPiece.equals(a))checkIfPieceIsValid = true;
 				}
+				if(!checkIfPieceIsValid) System.out.print("Not a valid move. ");
 			}
 			inputPiece = chessBoard.getPieces().getPieceAt(chessBoard.getPieces().getIndexOf(inputPiece));
 		}
@@ -49,6 +50,7 @@ public class Game{
 				for(ChessPosition a : inputPiece.getLimitedMoves()){
 					if(moveTarget.equals(a)) checkIfMoveIsValid = true;
 				}
+				if(!checkIfMoveIsValid) System.out.print("Not a valid move. ");
 			}
 		}
 		return new ChessPiece.Move(inputPiece.getPosition(),moveTarget);
