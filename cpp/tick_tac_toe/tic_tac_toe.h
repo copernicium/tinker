@@ -1,61 +1,88 @@
-#ifndef TIC_TAC_TOE_H
-#define TIC_TAC_TOE_H
-
 #include <iostream>
 #include <array>
+#include <string>
+#include <vector>
 
-#define NYI \
-	std::cout<<__FILE__<<":"<<__LINE__<<":NYI\n"; \
-	exit(0);
+using namespace std;
 
-enum class Mark{X,O,BLANK};
-enum Column{LEFT,CENTER,RIGHT,COLUMN};
-enum Row{TOP,MIDDLE,BOTTOM,ROW};
-enum class Status{X_WIN,O_WIN,DRAW,IN_PROGRESS};
+static const string LOG_PATH="tic_tac_toe_logs/";
+static const string LOG_TEMPLATE="tic_tac_toe_log_";
+static string log_name="";
 
-std::string operator+(const std::string, const Mark);
-std::ostream& operator<<(std::ostream&, Mark);
+enum class Mark{BLANK,X,O};
 
-struct Position{
-	Column column;
-	Row row;
-	Position();
-	Position(Column,Row);
-	Position(unsigned int const&,unsigned int const&);
-};
-
-bool operator==(Position const&, Position const&);
-
-class Box{
-	Mark mark;
-	Position position;
-	
-	public:
-	void set(Mark);
-	Mark get_mark()const;
-	Position get_position()const;
-	
+struct Box{
+	unsigned int row;
+	unsigned int column;
 	Box();
-	Box(Position);
+	Box(unsigned int,unsigned int);
 };
-
-using Move = Box;
 
 class Board{
-	Mark player_turn;
-	std::array<Box, Column::COLUMN*Row::ROW> boxes;
-	Status status;
-	
-	void set(Position,Mark);
-	Mark get(Position)const;
-	void print()const;
-	void update();
-	void log(Move)const;
-	
 	public:
-	void play();
-	
+	enum class State{UNFINISHED,DRAW,X,O};
+	private:
+	array<array<Mark,3>,3> boxes;
+	public:
+	Mark get(Box)const;
+	void place(Box,Mark);
+	State state()const;
 	Board();
+	Board(array<array<Mark,3>,3>);
 };
 
-#endif
+struct Move{
+	Mark mark;
+	Box box;
+	Move();
+	Move(Mark,Box);
+};
+
+struct Board_log{
+	string file_name;
+	Board board;
+	vector<Move> moves;
+	Board_log();
+};
+
+struct Arguments{
+	bool populate_logs;
+	bool use_ai;
+	void parse(unsigned int,char *[]);
+	Arguments();
+};
+
+template<class Type, long unsigned int Len>
+ostream& operator<<(ostream& o,array<Type,Len> a){
+	o<<"(";
+	for(unsigned int i=0; i<a.size(); i++){
+		o<<a[i];
+		if(i<a.size()-1)o<<",";
+	}
+	return o<<")";
+}
+
+template<typename T>
+std::ostream& operator<<(std::ostream& o,std::vector<T> v){
+	o<<"(";
+	for(unsigned int i=0; i<v.size(); i++){
+		o<<v[i];
+		if(i<v.size()-1) o<<",";
+	}
+	return o<<")";
+}
+
+ostream& operator<<(ostream&,Mark);
+ostream& operator<<(ostream& o,Box a);
+ostream& operator<<(ostream&,Board::State);
+ostream& operator<<(ostream&,const Board);
+ostream& operator<<(ostream&,const Move);
+ostream& operator<<(ostream&,const Board_log);
+
+bool operator==(const Box a,const Box b);
+bool operator==(const Move a,const Move b);
+bool operator==(const Board a,const Board b);
+bool operator!=(const Board a,const Board b);
+bool operator==(const Board_log a,const Board_log b);
+
+Board_log parse(string);
