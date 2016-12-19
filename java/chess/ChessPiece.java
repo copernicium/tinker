@@ -149,22 +149,26 @@ public class ChessPiece
 			this.limitedMoves = newMoves;
 			return;
 		}
+		final int index = CHESS_PIECES.getIndexOf(this.getPosition());
+		final ChessPosition enemyKingPosition = CHESS_PIECES.getKing(Color.not(this.getColor())).getPosition();
 		ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
 		for(ChessPosition testMove: this.getPossibleMoves()){
-			ChessPiece testPiece = ChessPiece.makePiece(this);
-			int index = testPieces.getIndexOf(testPiece);
-			testPiece.move(testMove);
-			testPieces.set(index,testPiece);
+			if(testMove.equals(enemyKingPosition)){//if moving this piece would capture the other king, then we don't need to worry about if that would leave this king in check
+				newMoves.add(testMove);
+				continue;
+			}
+			//if(testPieces.isOccupied(testMove, ChessPiece.Color.not(this.getColor()))) testPieces.capture(testMove);
+			testPieces.move(index,testMove);
 			/*int capturedPieceIndex = -1;
 			ChessPiece capturedPiece = new ChessPiece();
 			if(testPieces.isOccupied(testMove,Color.not(testPiece.getColor()))){
-				capturedPieceIndex = testPieces.getIndexOfAlive(testMove);//TODO
+				capturedPieceIndex = testPieces.getIndexOfAlive(testMove);//TODO: add in capturing
 				capturedPiece = testPieces.getPieceAt(capturedPieceIndex);
 				testPieces.capture(testMove);
 			}*/
-			testPieces.updatePossibleMoves(Color.not(this.getColor()));
-			testPieces.updateKingCheck(testPiece.getColor());
-			if(!testPieces.getKing(this.getColor()).getCheck()) newMoves.add(testMove);
+			testPieces.updateAllPossibleMoves(Color.not(this.getColor()));
+			testPieces.updateKingCheck(this.getColor());
+			if(!testPieces.getKing(this.getColor()).getCheck()) newMoves.add(testMove);//if moving this piece would not put the king in check, allow it
 			testPieces.set(index,this);//undo the move
 			//if(capturedPieceIndex >= 0) testPieces.set(capturedPieceIndex,capturedPiece);//undo capturing
 		}
@@ -207,7 +211,7 @@ public class ChessPiece
 	 * @return true if this piece can move to that position
 	 */
 	public boolean checkMoveDeep(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
-		MySystem.myAssert((CHESS_PIECES.checkExists(this)), MySystem.getFileName(), MySystem.getLineNumber());
+		MySystem.myAssert((CHESS_PIECES.containsLiving(this)), MySystem.getFileName(), MySystem.getLineNumber());
 		return MySystem.contains(this.getLimitedMoves(),CHECK_MOVE);
 	}
 
@@ -218,7 +222,7 @@ public class ChessPiece
 	 * @return true if this piece can move to that position
 	 */
 	public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
-		MySystem.myAssert((CHESS_PIECES.checkExists(this)), MySystem.getFileName(), MySystem.getLineNumber());
+		MySystem.myAssert((CHESS_PIECES.containsLiving(this)), MySystem.getFileName(), MySystem.getLineNumber());
 		return MySystem.contains(this.getPossibleMoves(),CHECK_MOVE);
 	}
 

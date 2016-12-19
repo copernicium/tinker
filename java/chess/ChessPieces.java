@@ -8,24 +8,9 @@ import MySystem.*;
 public class ChessPieces{
 	private ChessPiece[] pieces;
 
-	public void limitMoves(ChessPiece.Color color){
-		for(ChessPiece chessPiece : this.pieces){
-			if(chessPiece.getColor() == color) chessPiece.limitMovesToLeavingCheck(this);
-		}
-	}
-
-	public void updatePossibleMoves(ChessPiece.Color color){
+	public void updateAllPossibleMoves(ChessPiece.Color color){
 		for(ChessPiece chessPiece: this.pieces){
 			if(chessPiece.getColor() == color) chessPiece.updatePossibleMoves(this);
-		}
-	}
-
-	public void updateAllMoves(ChessPiece.Color color){
-		for(ChessPiece chessPiece: this.pieces){
-			if(chessPiece.getColor() == color){
-				chessPiece.updatePossibleMoves(this);
-				chessPiece.limitMovesToLeavingCheck(this);
-			}
 		}
 	}
 
@@ -50,10 +35,6 @@ public class ChessPieces{
 		return true;
 	}
 
-	public boolean isOccupied(ChessPosition checkPosition){
-		return !this.isUnoccupied(checkPosition);
-	}
-
 	public boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color){
 		return !this.isUnoccupied(checkPosition,color);
 	}
@@ -73,7 +54,7 @@ public class ChessPieces{
 	 * @param TEST_PIECE the piece which is checked for existence
 	 * @return true if the piece exists in the array
 	 */
-	public boolean checkExists(final ChessPiece TEST_PIECE){
+	public boolean containsLiving(final ChessPiece TEST_PIECE){
 		if(!TEST_PIECE.getAlive()) return false;
 		for(ChessPiece a: this.pieces){
 			if(a.getAlive() && TEST_PIECE.equalsByType(a)) return true;
@@ -93,19 +74,19 @@ public class ChessPieces{
 		}
 		return newPieces;
 	}
-
+	/*
 	/**
 	 * Used to copy an array of pieces by value
 	 * @param CHESS_PIECES the array to copy
 	 * @return the new array
 	 */
-	public static ChessPiece[] makePieces(final ChessPiece[] CHESS_PIECES){
+	/*public static ChessPiece[] makePieces(final ChessPiece[] CHESS_PIECES){
 		ChessPiece[] newPieces = new ChessPiece[CHESS_PIECES.length];
 		for(int i = 0; i < CHESS_PIECES.length; i++){
 			newPieces[i] = ChessPiece.makePiece(CHESS_PIECES[i]);
 		}
 		return newPieces;
-	}
+	}*/
 
 	public boolean equals(Object o){
 		if(o.getClass() != this.getClass()) return false;
@@ -119,25 +100,13 @@ public class ChessPieces{
 		}
 		return true;
 	}
-	/**
-	 * Finds the index of a Chess piece in an array, crashing if it cannot be found.
-	 * @param FIND_ME the piece to find
-	 * @return the index to the piece in the array
-	 */
-	public int getIndexOf(final ChessPiece FIND_ME){
-		for(int i =0; i < this.pieces.length; i++){
-			if(FIND_ME.equalsByType(this.getPieceAt(i))) return i;
-		}
-		MySystem.error("Error: Unable to get index of " + FIND_ME.toString() + " in " + this.toString(), MySystem.getFileName(), MySystem.getLineNumber());
-		return -1;
-	}
 
 	/**
 	 * Finds the location of a piece that meets certain criteria in an array. It crashes if it cannot be found.
 	 * @param color the color of the piece
 	 * @return the index of the piece if it exits
 	 */
-	private int getIndexOfKing(ChessPiece.Color color){
+	public int getIndexOfKing(ChessPiece.Color color){
 		for(int i = 0; i < this.pieces.length; i++){
 			if(this.pieces[i].getType() == ChessPiece.Type.KING && color == this.pieces[i].getColor()) return i;
 		}
@@ -150,12 +119,14 @@ public class ChessPieces{
 	 * @param INDEX the index of the piece to set
 	 * @param CHESS_PIECE the piece to set it to
 	 */
-	public void set(final int INDEX,final ChessPiece CHESS_PIECE){
-		this.pieces[INDEX] = CHESS_PIECE;
+	public void set(final int INDEX,final ChessPiece CHESS_PIECE){//TODO: make private and replace public version with an un-move of some kind?
+		MySystem.myAssert(this.isUnoccupied(CHESS_PIECE.getPosition()), MySystem.getFileName(), MySystem.getLineNumber());
+		this.pieces[INDEX] = ChessPiece.makePiece(CHESS_PIECE);
 	}
 
-	public void move(final int INDEX,final ChessPosition CHESS_POSITION){
-		this.pieces[INDEX].move(CHESS_POSITION);
+	public void move(final int INDEX,final ChessPosition MOVE_THERE){//TODO: maybe add auto-capturing in here?
+		//MySystem.myAssert(this.isUnoccupied(MOVE_THERE), MySystem.getFileName(), MySystem.getLineNumber());//TODO: add back in
+		this.pieces[INDEX].move(MOVE_THERE);
 	}
 
 	/**
@@ -163,7 +134,7 @@ public class ChessPieces{
 	 * @param chessPosition the position to look for
 	 * @return the index of the piece if it exits
 	 */
-	public int getIndexOfAlive(ChessPosition chessPosition){//TODO: use this in more places?
+	public int getIndexOfAlive(ChessPosition chessPosition){//TODO: use this in more places? change how alive/captured works?
 		for(int i = 0; i < this.pieces.length; i++){
 			if(chessPosition.equals(this.pieces[i].getPosition()) && this.pieces[i].getAlive()) return i;
 		}
@@ -192,10 +163,6 @@ public class ChessPieces{
 		return this.getPieceAt(this.getIndexOf(POSITION));
 	}
 
-	public ChessPiece getPieceAt(final ChessPiece PIECE){
-		return this.getPieceAt(this.getIndexOf(PIECE));
-	}
-
 	/**
 	 * Fetches all of the pieces on the Chess board
 	 * @return the array of all the Chess pieces
@@ -217,25 +184,15 @@ public class ChessPieces{
 	 * Finds a king and then updates just its check status
 	 */
 	public void updateKingCheck(ChessPiece.Color color){
-		King updatedKing = getKing(color);
-
-		updatedKing.updateCheck(this);
-
-		this.set(this.getIndexOfKing(color), updatedKing);
+		((King)this.getPieceAt(this.getIndexOfKing(color))).updateCheck(this);
 	}
 
 	/**
 	 * Finds the kings and then updates their check and checkmate statuses
 	 */
 	public void updateKings(){
-		King updatedWhiteKing = getKing(ChessPiece.Color.WHITE);
-		King updatedBlackKing = getKing(ChessPiece.Color.BLACK);
-
-		updatedWhiteKing.update(this);
-		updatedBlackKing.update(this);
-
-		this.set(this.getIndexOfKing(ChessPiece.Color.WHITE), updatedWhiteKing);
-		this.set(this.getIndexOfKing(ChessPiece.Color.BLACK), updatedBlackKing);
+		((King)this.getPieceAt(this.getIndexOfKing(ChessPiece.Color.WHITE))).update(this);
+		((King)this.getPieceAt(this.getIndexOfKing(ChessPiece.Color.BLACK))).update(this);
 	}
 
 	/**

@@ -63,14 +63,14 @@ public class MySystem{
 		return true;
 	}
 
-	public static <T extends Object> boolean contains(TreeSet<T> all, T a){
+	public static <T extends Object> boolean contains(TreeSet<T> all, T a){//TODO: remove?
 		for(T b: all){
 			if(a.equals(b)) return true;
 		}
 		return false;
 	}
 
-	public static <T extends Object> boolean contains(Vector<T> all, T a){
+	public static <T extends Object> boolean contains(Vector<T> all, T a){//TODO: remove?
 		for(T b: all){
 			if(a.equals(b)) return true;
 		}

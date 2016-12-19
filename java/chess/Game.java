@@ -39,7 +39,6 @@ public class Game{
 				}
 				if(!checkIfPieceIsValid) System.out.print("Not a valid move. ");
 			}
-			inputPiece = chessBoard.getPieces().getPieceAt(chessBoard.getPieces().getIndexOf(inputPiece));
 		}
 		ChessPosition moveTarget = new ChessPosition();
 		{
@@ -234,12 +233,14 @@ public class Game{
 		final TreeSet<ChessPosition> EXPECTED_POSSIBLE_MOVES = new TreeSet<>();
 		EXPECTED_POSSIBLE_MOVES.add(ChessPosition.toChessPosition("E2"));
 		EXPECTED_POSSIBLE_MOVES.add(ChessPosition.toChessPosition("F4"));
-		System.out.println("Expected: Position (of first piece, but there's only one) " + EXPECTED_MOVEABLE_POS.toString() + " can be moved to " + EXPECTED_POSSIBLE_MOVES.toString());
 
+		System.out.println("Expected: Position (of first piece, but there's only one) " + EXPECTED_MOVEABLE_POS.toString() + " can be moved to " + EXPECTED_POSSIBLE_MOVES.toString());
+		System.out.println("White king check: " + chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheck() + " expected: true");
+
+		MySystem.myAssert(chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheck(),MySystem.getFileName(),MySystem.getLineNumber());
 		MySystem.myAssert(EXPECTED_MOVEABLE_POS.equals(firstPiece.getPosition()), MySystem.getFileName(), MySystem.getLineNumber());
 		MySystem.myAssert(MySystem.treeSetEquals(EXPECTED_POSSIBLE_MOVES,firstPiece.getLimitedMoves()), MySystem.getFileName(), MySystem.getLineNumber());
 	}
-
 
 	/**
 	 * Prompts users to input the necessary information and manages their Chess game
