@@ -1,4 +1,6 @@
-1. Update JavaDocs
-2. Create a game io
+1. Change it so that captured pieces are not on the board
+2. Replace asserts with more detailed error messages which also exit
+3. Update JavaDocs
+4. Create a game io
     - Print captured pieces
     - Pretty graphics?
