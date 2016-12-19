@@ -54,7 +54,6 @@ public class ChessPieces{
 		return !this.isUnoccupied(checkPosition);
 	}
 
-
 	public boolean isOccupied(ChessPosition checkPosition,ChessPiece.Color color){
 		return !this.isUnoccupied(checkPosition,color);
 	}
@@ -155,6 +154,23 @@ public class ChessPieces{
 		this.pieces[INDEX] = CHESS_PIECE;
 	}
 
+	public void move(final int INDEX,final ChessPosition CHESS_POSITION){
+		this.pieces[INDEX].move(CHESS_POSITION);
+	}
+
+	/**
+	 * Returns the index of a piece in an array which occupies a given position. It crashes if it cannot be found. This one also ensures that the piece that is occupying it is alive
+	 * @param chessPosition the position to look for
+	 * @return the index of the piece if it exits
+	 */
+	public int getIndexOfAlive(ChessPosition chessPosition){//TODO: use this in more places?
+		for(int i = 0; i < this.pieces.length; i++){
+			if(chessPosition.equals(this.pieces[i].getPosition()) && this.pieces[i].getAlive()) return i;
+		}
+		MySystem.error("Piece not found in array", MySystem.getFileName(), MySystem.getLineNumber());
+		return -1;
+	}
+
 	/**
 	 * Returns the index of a piece in an array which occupies a given position. It crashes if it cannot be found.
 	 * @param chessPosition the position to look for
@@ -227,7 +243,7 @@ public class ChessPieces{
 	 * @param chessPosition the position of the piece to be killed
 	 */
 	public void capture(ChessPosition chessPosition){
-		this.pieces[this.getIndexOf(chessPosition)].capture();
+		this.pieces[this.getIndexOfAlive(chessPosition)].capture();
 	}
 
 	/**

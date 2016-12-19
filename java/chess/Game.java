@@ -335,6 +335,30 @@ public class Game{
 		System.out.println("Game over");
 	}
 
+	public static void aiAgainstAI(){
+		ChessBoard chessBoard = new ChessBoard();
+		Opponent ben = new Opponent(ChessPiece.Color.WHITE);//TODO change color
+		Opponent logan = new Opponent(ChessPiece.Color.BLACK);
+
+		while(Game.continueGame(chessBoard)){
+			{
+				chessBoard.print();
+				System.out.println("-----------------------\nBen's turn.");
+				ChessPiece.Move move = ben.getRandomMove(chessBoard.getPieces());
+				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
+				chessBoard.move(move);
+			}
+			{
+				chessBoard.print();
+				System.out.println("-----------------------\nLogan's turn.");
+				ChessPiece.Move move = logan.getRandomMove(chessBoard.getPieces());
+				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
+				chessBoard.move(move);
+			}
+		}
+		System.out.println("Game over");
+	}
+
 	/**
 	 * The primary method that tests the Chess system and instantiates a new game
 	 * @param args user arguments (no effect)
@@ -348,11 +372,12 @@ public class Game{
 		//testSingleMove();
 		//testCapture();
 		//testCheck();
-		testCheckmate();
+		//testCheckmate();
 
 		//This is the actual game
-		//play();
+		play();
 		//playAgainstAI();
+		//aiAgainstAI();
 		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n", MySystem.getFileName(), MySystem.getLineNumber());
 	}
 }

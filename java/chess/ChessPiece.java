@@ -154,11 +154,19 @@ public class ChessPiece
 			ChessPiece testPiece = ChessPiece.makePiece(this);
 			int index = testPieces.getIndexOf(testPiece);
 			testPiece.move(testMove);
-			testPieces.set(index,testPiece);//TODO: include capturing?
+			testPieces.set(index,testPiece);
+			/*int capturedPieceIndex = -1;
+			ChessPiece capturedPiece = new ChessPiece();
+			if(testPieces.isOccupied(testMove,Color.not(testPiece.getColor()))){
+				capturedPieceIndex = testPieces.getIndexOfAlive(testMove);//TODO
+				capturedPiece = testPieces.getPieceAt(capturedPieceIndex);
+				testPieces.capture(testMove);
+			}*/
 			testPieces.updatePossibleMoves(Color.not(this.getColor()));
 			testPieces.updateKingCheck(testPiece.getColor());
 			if(!testPieces.getKing(this.getColor()).getCheck()) newMoves.add(testMove);
 			testPieces.set(index,this);//undo the move
+			//if(capturedPieceIndex >= 0) testPieces.set(capturedPieceIndex,capturedPiece);//undo capturing
 		}
 		this.limitedMoves = newMoves;
 	}

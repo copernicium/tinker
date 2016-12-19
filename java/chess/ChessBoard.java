@@ -171,17 +171,21 @@ public class ChessBoard
 	 * @param moveThere the position to move the piece to
 	 */
     public void move(final ChessPiece PIECE_TO_MOVE,ChessPosition moveThere){
-		MySystem.myAssert(this.status == Status.IN_PROGRESS, MySystem.getFileName(), MySystem.getLineNumber());
-		MySystem.myAssert(PIECE_TO_MOVE.getColor() == playerTurn, MySystem.getFileName(), MySystem.getLineNumber());
-		MySystem.myAssert(pieces.checkExists(PIECE_TO_MOVE), MySystem.getFileName(), MySystem.getLineNumber());
-		ChessPiece chessPiece = this.pieces.getPieceAt(PIECE_TO_MOVE);
-		if(chessPiece.checkMoveDeep(moveThere,pieces)){
-			int index = pieces.getIndexOf(chessPiece);
-			chessPiece.move(moveThere);
-			pieces.set(index,chessPiece);
-			if(pieces.isOccupied(pieces.getPieceAt(index).getPosition(), ChessPiece.Color.not(chessPiece.getColor()))) pieces.capture(moveThere);//TODO: make this if statement a method of ChessPieces
+		if(this.status != Status.IN_PROGRESS){
+			MySystem.error("Attempting to move a piece when the game has ended", MySystem.getFileName(), MySystem.getLineNumber());
+		}
+		if(PIECE_TO_MOVE.getColor() != playerTurn){
+			MySystem.error("Player is attempting to move a piece when it is not their turn: it is " + this.playerTurn + "'s turn and the piece that is trying to be moved is " + PIECE_TO_MOVE.getColor() + " ", MySystem.getFileName(), MySystem.getLineNumber());
+		}
+		if(!pieces.checkExists(PIECE_TO_MOVE)){
+			MySystem.error("Attempting to move a piece does not exist", MySystem.getFileName(), MySystem.getLineNumber());
+		}
+		int index = pieces.getIndexOf(PIECE_TO_MOVE);
+		if(this.pieces.getPieceAt(index).checkMoveDeep(moveThere,pieces)){
+			pieces.move(index,moveThere);
+			if(pieces.isOccupied(pieces.getPieceAt(index).getPosition(), ChessPiece.Color.not(this.pieces.getPieceAt(index).getColor()))) pieces.capture(moveThere);
 		} else {
-			MySystem.error("Error: trying to move piece to invalid location: piece:" + chessPiece.toString() + " cannot move to " + moveThere.toString() + " from possible " + chessPiece.getPossibleMoves().toString(), MySystem.getFileName(), MySystem.getLineNumber());//user inputs invalid move
+			MySystem.error("Error: trying to move piece to invalid location: piece:" + this.pieces.getPieceAt(index).toString() + " cannot move to " + moveThere.toString() + " from possible " + this.pieces.getPieceAt(index).getPossibleMoves().toString(), MySystem.getFileName(), MySystem.getLineNumber());//user inputs invalid move
 		}
 		this.pieces.updateAllMoves();//TODO: consider only updating one king in meaning you only have to update half of pieces (color) to save time
 		this.updateStatus();
