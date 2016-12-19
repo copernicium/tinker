@@ -22,7 +22,7 @@ public class Pawn extends ChessPiece
 
 	@Override
 	public String toString(){
-		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " alive:" + this.alive + " firstMove:" + this.firstMove + ")";
+		return "ChessPiece(type:" + this.getType() + " color:" + this.color + " position:" + this.position + " alive:" + this.alive + " firstMove:" + this.firstMove + " possibleMoves:" + this.possibleMoves + " limitedMoves:" + this.limitedMoves + ")";
 	}
 
 	/**
@@ -66,9 +66,10 @@ public class Pawn extends ChessPiece
 			}
 		}
 		if(this.getFirstMove()){
-			final int INITIAL_TWO_SQUARE_ADVANCE = 2;
+			final int INITIAL_TWO_SQUARE_ADVANCE = 2, INBETWEEN_POSITION_DIST = 1;
 			testPosition.set(this.position.getRow().get()+(INITIAL_TWO_SQUARE_ADVANCE * direction),this.position.getColumn().get());
-			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition),this.color)){//always true
+			ChessPosition.Tester inBetweenPosition = new ChessPosition.Tester(this.position.getRow().get() + INBETWEEN_POSITION_DIST  * direction,this.position.getColumn().get());
+			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition),this.color) && inBetweenPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition))){
 				possibleMoves.add(new ChessPosition(testPosition));
 			}
 		}

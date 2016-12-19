@@ -157,20 +157,16 @@ public class ChessPiece
 				newMoves.add(testMove);
 				continue;
 			}
-			//if(testPieces.isOccupied(testMove, ChessPiece.Color.not(this.getColor()))) testPieces.capture(testMove);
+			//boolean capture = testPieces.isOccupied(testMove, ChessPiece.Color.not(this.getColor()));
+			//int captureIndex = capture ? testPieces.getIndexOf(testMove) : -1;
+			//ChessPiece captured = capture ? testPieces.getPieceAt(captureIndex) : new ChessPiece();
+			//if(capture) testPieces.capture(testMove);//TODO: add in capturing
 			testPieces.move(index,testMove);
-			/*int capturedPieceIndex = -1;
-			ChessPiece capturedPiece = new ChessPiece();
-			if(testPieces.isOccupied(testMove,Color.not(testPiece.getColor()))){
-				capturedPieceIndex = testPieces.getIndexOfAlive(testMove);//TODO: add in capturing
-				capturedPiece = testPieces.getPieceAt(capturedPieceIndex);
-				testPieces.capture(testMove);
-			}*/
 			testPieces.updateAllPossibleMoves(Color.not(this.getColor()));
 			testPieces.updateKingCheck(this.getColor());
 			if(!testPieces.getKing(this.getColor()).getCheck()) newMoves.add(testMove);//if moving this piece would not put the king in check, allow it
-			testPieces.set(index,this);//undo the move
-			//if(capturedPieceIndex >= 0) testPieces.set(capturedPieceIndex,capturedPiece);//undo capturing
+			//testPieces.set(index,this);//undo the move
+			//if(capture) testPieces.set(captureIndex,captured);
 		}
 		this.limitedMoves = newMoves;
 	}

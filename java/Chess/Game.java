@@ -70,63 +70,64 @@ public class Game{
 	 * @param test the piece to move
 	 * @param testMove the position to move the piece to
 	 */
-	private static void testMove(ChessBoard chessBoard,ChessPiece test, ChessPosition testMove){
+	private static void testMove(ChessBoard chessBoard,ChessPiece test, ChessPosition testMove, boolean exitOnCompletion){
 		chessBoard.move(test, testMove);
 		System.out.println("---------------------");
 		chessBoard.print();
-		Game.handelStatus(chessBoard);
+		Game.handelStatus(chessBoard,exitOnCompletion);
 	}
 
 	/**
 	 * Tests a series of pre-programmed moves that should work
 	 */
 	private static void testMovement(){
+		final boolean EXIT_ON_COMPLETION = true;
 		ChessBoard chessBoard = new ChessBoard();
 		chessBoard.print();
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.A));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.A);
-			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );//chessBoard.move(test, testMove);
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.H));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.H);
-			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );//chessBoard.move(test, testMove);
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._1,ChessPosition.Column.A));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3,ChessPosition.Column.A);
-			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.G));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.G);
-			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION);
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.D);
-			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION);
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.F));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.F);
-			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._3,ChessPosition.Column.A));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3,ChessPosition.Column.C);
-			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION);
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._8,ChessPosition.Column.B));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6,ChessPosition.Column.C);
-			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION);
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.C));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.C);
-			testMove(chessBoard,test,testMove);//chessBoard.move(test, testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION);
 		}
 	}
 
@@ -139,7 +140,7 @@ public class Game{
 		return board.getStatus() == ChessBoard.Status.IN_PROGRESS;
 	}
 
-	private static void handelStatus(ChessBoard board){
+	private static void handelStatus(ChessBoard board, boolean exitOnCompletion){
 		switch(board.getStatus()){
 			case BLACK_WIN:
 				System.out.println("Game over. Black wins.");
@@ -152,7 +153,7 @@ public class Game{
 			default:
 				MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 		}
-		if(!Game.continueGame(board)){
+		if(!Game.continueGame(board) && exitOnCompletion){
 			System.out.println("Thanks for playing.");
 			System.exit(1);
 		}
@@ -162,65 +163,70 @@ public class Game{
 	 * Tests checkmate logic given a series of moves that result in checkmate
 	 */
 	private static void testCheckmate(){
+		final boolean EXIT_ON_COMPLETION = false;
 		ChessBoard chessBoard = new ChessBoard();
 		chessBoard.print();
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.F));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.F);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard, test, testMove,EXIT_ON_COMPLETION);
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.E));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.E);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard, test, testMove,EXIT_ON_COMPLETION );
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.G));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.G);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard, test, testMove,EXIT_ON_COMPLETION );
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._8, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.H);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard, test, testMove,EXIT_ON_COMPLETION );
 		}
+		System.out.println("Finishing with status " + chessBoard.getStatus().toString() + " Expected: BLACK_WIN");
+		System.out.println("White king check: " + chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheck() + " expected: true  White king checkmate: " + chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheckmate() + " expected: true");
+		MySystem.myAssert(chessBoard.getStatus().equals(ChessBoard.Status.BLACK_WIN),MySystem.getFileName(),MySystem.getLineNumber());
 	}
 
 	/**
 	 * Tests check logic given a series of moves that result in check
 	 */
 	private static void testCheck(){
+		final boolean EXIT_ON_COMPLETION = false;
 		ChessBoard chessBoard = new ChessBoard();
 		chessBoard.print();
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.E));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.E);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.D);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._1, ChessPosition.Column.E));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.E);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._8, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.D);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.E));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._3, ChessPosition.Column.F);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._6, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.F);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
 		System.out.println("Finishing with status " + chessBoard.getStatus().toString());
 
@@ -283,10 +289,11 @@ public class Game{
 	 */
 	public static void testSingleMove(){
 		ChessBoard chessBoard = new ChessBoard();
+		final boolean EXIT_ON_COMPLETION = true;
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.A));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.A);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
 	}
 
@@ -295,20 +302,21 @@ public class Game{
 	 */
 	public static void testCapture(){
 		ChessBoard chessBoard = new ChessBoard();
+		final boolean EXIT_ON_COMPLETION = true;
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._2, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._7, ChessPosition.Column.E));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.E);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
 		{
 			ChessPiece test = chessBoard.getPieces().getPieceAt(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D));
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.E);
-			testMove(chessBoard,test,testMove);
+			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
 	}
 
@@ -379,6 +387,6 @@ public class Game{
 		play();
 		//playAgainstAI();
 		//aiAgainstAI();
-		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n", MySystem.getFileName(), MySystem.getLineNumber());
+		MySystem.println("\n\n\nEND OF GAME FILE", MySystem.getFileName(), MySystem.getLineNumber());
 	}
 }
