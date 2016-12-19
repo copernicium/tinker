@@ -7,6 +7,8 @@ import MySystem.*;
  */
 public class ChessPieces{
 	private ChessPiece[] pieces;
+	private ChessPiece.Move lastMove;
+	private ChessPiece lastCapture;
 
 	public void updateAllPossibleMoves(ChessPiece.Color color){
 		for(ChessPiece chessPiece: this.pieces){
@@ -88,9 +90,19 @@ public class ChessPieces{
 		return newPieces;
 	}*/
 
+	public ChessPiece.Move getLastMove(){
+		return this.lastMove;
+	}
+
+	public ChessPiece getLastCapture(){
+		return this.lastCapture;
+	}
+
 	public boolean equals(Object o){
 		if(o.getClass() != this.getClass()) return false;
-		ChessPieces b = (ChessPieces)o; 
+		ChessPieces b = (ChessPieces)o;
+		if(!b.getLastMove().equals(this.getLastMove())) return false;
+		if(!b.getLastCapture().equals(this.getLastCapture())) return false;
 		if(b.toArray().length != this.toArray().length) return false;
 		for(int i = 0; i<this.toArray().length; i++){
 			if(!b.toArray()[i].equalsByType(this.toArray()[i])){
@@ -119,14 +131,25 @@ public class ChessPieces{
 	 * @param INDEX the index of the piece to set
 	 * @param CHESS_PIECE the piece to set it to
 	 */
-	public void set(final int INDEX,final ChessPiece CHESS_PIECE){//TODO: make private and replace public version with an un-move of some kind?
-		MySystem.myAssert(this.isUnoccupied(CHESS_PIECE.getPosition()), MySystem.getFileName(), MySystem.getLineNumber());
+	private void set(final int INDEX,final ChessPiece CHESS_PIECE){
+		if(!this.isUnoccupied(CHESS_PIECE.getPosition())){
+			MySystem.error("Trying to set a piece to a position that is already occupied: piece " + CHESS_PIECE.toString() + " occupying piece: " + this.getPieceAt(CHESS_PIECE.getPosition()),MySystem.getFileName(), MySystem.getLineNumber());
+		}
 		this.pieces[INDEX] = ChessPiece.makePiece(CHESS_PIECE);
 	}
 
 	public void move(final int INDEX,final ChessPosition MOVE_THERE){//TODO: maybe add auto-capturing in here?
-		//MySystem.myAssert(this.isUnoccupied(MOVE_THERE), MySystem.getFileName(), MySystem.getLineNumber());//TODO: add back in
+		MySystem.myAssert(this.isUnoccupied(MOVE_THERE), MySystem.getFileName(), MySystem.getLineNumber());
+		this.lastMove = new ChessPiece.Move(ChessPiece.makePiece(this.pieces[INDEX]), MOVE_THERE);
 		this.pieces[INDEX].move(MOVE_THERE);
+	}
+
+	public void unMove(){//TODO: add in un-capturing
+		MySystem.myAssert(!this.lastMove.equals(new ChessPiece.Move()),MySystem.getFileName(),MySystem.getLineNumber());
+		this.set(this.getIndexOfAlive(lastMove.getTarget()),ChessPiece.makePiece(lastMove.getStart()));
+		if(!this.lastCapture.equals(new ChessPiece()) && this.lastCapture.getPosition().equals(this.lastMove.getTarget())){
+			this.set(this.getIndexOf(this.lastCapture.getPosition()),ChessPiece.makePiece(this.lastCapture));
+		}
 	}
 
 	/**
@@ -197,10 +220,11 @@ public class ChessPieces{
 
 	/**
 	 * Kills the piece occupying a given Chess position
-	 * @param chessPosition the position of the piece to be killed
+	 * @param CAPTURING_POSITION the position of the piece to be killed
 	 */
-	public void capture(ChessPosition chessPosition){
-		this.pieces[this.getIndexOfAlive(chessPosition)].capture();
+	public void capture(ChessPosition CAPTURING_POSITION){
+		this.lastCapture = ChessPiece.makePiece(this.pieces[this.getIndexOfAlive(CAPTURING_POSITION)]);
+		this.pieces[this.getIndexOfAlive(CAPTURING_POSITION)].capture();
 	}
 
 	/**
@@ -241,13 +265,19 @@ public class ChessPieces{
 		for(int i = 0; i< pieces.length; i++){
 			this.pieces[i] = new ChessPiece();
 		}
+		this.lastMove = new ChessPiece.Move();
+		this.lastCapture = new ChessPiece();
 	}
 
 	public ChessPieces(ChessPiece[] pieces){
 		this.pieces = pieces;
+		this.lastMove = new ChessPiece.Move();
+		this.lastCapture = new ChessPiece();
 	}
 
 	public ChessPieces(ChessPieces toCopy){
 		this.pieces = ChessPieces.makePieces(toCopy).toArray();
+		this.lastMove = new ChessPiece.Move(toCopy.getLastMove());
+		this.lastCapture = new ChessPiece();
 	}
 }

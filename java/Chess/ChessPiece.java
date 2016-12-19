@@ -1,18 +1,17 @@
 package Chess;
 
 import java.util.TreeSet;
-import MySystem.*;
+import MySystem.MySystem;
 
 /**
  * A class to represent a basic Chess piece
  */
-public class ChessPiece
-{
+public class ChessPiece{
 	public static class Move{
-		private ChessPosition start;
+		private ChessPiece start;
 		private ChessPosition target;
 
-		public ChessPosition getStart(){
+		public ChessPiece getStart(){
 			return this.start;
 		}
 
@@ -20,14 +19,26 @@ public class ChessPiece
 			return this.target;
 		}
 
+		public boolean equals(Object o){
+			if(o == null || o.getClass() != this.getClass()) return false;
+			Move b = (Move)o;
+			if(!b.getStart().equals(this.getStart())) return false;
+			if(!b.getTarget().equals(this.getTarget())) return false;
+			return true;
+	 	}
+
 		public Move(){
-			this.start = new ChessPosition();
+			this.start = new ChessPiece();
 			this.target = new ChessPosition();
 		}
 
-		public Move(ChessPosition start,ChessPosition target){
+		public Move(ChessPiece start,ChessPosition target){
 			this.start = start;
 			this.target = target;
+		}
+		public Move(Move toCopy){
+			this.start = new ChessPiece(toCopy.getStart());
+			this.target = new ChessPosition(toCopy.getTarget());
 		}
 	}
 	/**
@@ -124,7 +135,7 @@ public class ChessPiece
 	 * @param a the piece to compare to
 	 * @return true if the two pieces are equal
 	 */
-	public boolean equalsByType(ChessPiece a){
+	public boolean equalsByType(ChessPiece a){//TODO: remove?
 		switch(this.getType()){
 			case PAWN:{
 				Pawn b = new Pawn(a);
@@ -157,16 +168,14 @@ public class ChessPiece
 				newMoves.add(testMove);
 				continue;
 			}
-			//boolean capture = testPieces.isOccupied(testMove, ChessPiece.Color.not(this.getColor()));
-			//int captureIndex = capture ? testPieces.getIndexOf(testMove) : -1;
-			//ChessPiece captured = capture ? testPieces.getPieceAt(captureIndex) : new ChessPiece();
-			//if(capture) testPieces.capture(testMove);//TODO: add in capturing
+			if(testPieces.isOccupied(testMove, ChessPiece.Color.not(this.getColor()))){
+				testPieces.capture(testMove);
+			}
 			testPieces.move(index,testMove);
 			testPieces.updateAllPossibleMoves(Color.not(this.getColor()));
 			testPieces.updateKingCheck(this.getColor());
 			if(!testPieces.getKing(this.getColor()).getCheck()) newMoves.add(testMove);//if moving this piece would not put the king in check, allow it
-			//testPieces.set(index,this);//undo the move
-			//if(capture) testPieces.set(captureIndex,captured);
+			testPieces.unMove();
 		}
 		this.limitedMoves = newMoves;
 	}
@@ -318,7 +327,11 @@ public class ChessPiece
 	 * @param toCopy the Chess piece to copy
 	 */
 	public ChessPiece(ChessPiece toCopy){
-		this(new ChessPosition(toCopy.getPosition()),Color.WHITE,toCopy.getPossibleMoves(),toCopy.getLimitedMoves());
+		this.position = new ChessPosition(toCopy.getPosition());
+		this.color = toCopy.getColor();
+		this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());
+		this.limitedMoves = new TreeSet<>(toCopy.getLimitedMoves());
+		this.alive = toCopy.getAlive();
 	}
 
 	/**

@@ -73,7 +73,7 @@ public class Pawn extends ChessPiece
 				possibleMoves.add(new ChessPosition(testPosition));
 			}
 		}
-        this.possibleMoves = possibleMoves;
+		this.possibleMoves = possibleMoves;
 	}
 
     public boolean getFirstMove(){
@@ -103,17 +103,19 @@ public class Pawn extends ChessPiece
     public void move(ChessPosition newPosition){
 		if(MySystem.contains(this.getPossibleMoves(),newPosition)){
 			this.position = newPosition;
+			this.firstMove = false;
 			return;
 		}
 		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
 	public Pawn(Pawn toCopy) {
-		super();
 		this.position = new ChessPosition(toCopy.position);
 		this.alive = toCopy.alive;
 		this.color = toCopy.color;
 		this.firstMove = toCopy.firstMove;
+		this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());
+		this.limitedMoves = new TreeSet<>(toCopy.getLimitedMoves());
 	}
 
     public Pawn(){
@@ -128,8 +130,8 @@ public class Pawn extends ChessPiece
 			this.alive = toCopy.alive;
 			this.color = toCopy.color;
 			this.firstMove = toCopy.getFirstMove();
-			this.possibleMoves = toCopy.getPossibleMoves();
-			this.limitedMoves = toCopy.getLimitedMoves();
+			this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());
+			this.limitedMoves = new TreeSet<>(toCopy.getLimitedMoves());
 		}
 	}
     public Pawn(ChessPosition position,Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){

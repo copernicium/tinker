@@ -46,7 +46,7 @@ public class King extends ChessPiece
 			if(!postMovePieces.getKing(this.getColor()).getCheck()){//could the king itself move out of check
 				return false;
 			}
-			postMovePieces.set(index,this);//undo the failed move
+			postMovePieces.unMove();
 		}
 		return true;
 	}
@@ -76,7 +76,7 @@ public class King extends ChessPiece
 						return;
 					}
 				}
-				postMovePieces.set(i,defendingPiece);//undo the move
+				postMovePieces.unMove();
 			}
 
 		}

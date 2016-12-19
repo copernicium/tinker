@@ -24,7 +24,7 @@ public class Opponent {
 		}
 		Random rand = new Random();
 		int index = moveable_pieces.elementAt(rand.nextInt(moveable_pieces.size()));
-		ChessPosition start = PIECES.getPieceAt(index).getPosition();
+		ChessPiece start = PIECES.getPieceAt(index);
 		ChessPosition target = MySystem.getRandomTreeSetElement(PIECES.getPieceAt(index).getLimitedMoves());
 		return new ChessPiece.Move(start,target);
 	}

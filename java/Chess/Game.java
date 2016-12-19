@@ -52,7 +52,7 @@ public class Game{
 				if(!checkIfMoveIsValid) System.out.print("Not a valid move. ");
 			}
 		}
-		return new ChessPiece.Move(inputPiece.getPosition(),moveTarget);
+		return new ChessPiece.Move(inputPiece,moveTarget);
 	}
 
 	/**
@@ -336,7 +336,7 @@ public class Game{
 				chessBoard.print();
 				System.out.println("Opponent's turn.");
 				ChessPiece.Move move = ben.getRandomMove(chessBoard.getPieces());
-				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
+				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart().getPosition()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
 				chessBoard.move(move);
 			}
 
@@ -354,14 +354,14 @@ public class Game{
 				chessBoard.print();
 				System.out.println("-----------------------\nBen's turn.");
 				ChessPiece.Move move = ben.getRandomMove(chessBoard.getPieces());
-				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
+				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart().getPosition()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
 				chessBoard.move(move);
 			}
 			{
 				chessBoard.print();
 				System.out.println("-----------------------\nLogan's turn.");
 				ChessPiece.Move move = logan.getRandomMove(chessBoard.getPieces());
-				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
+				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart().getPosition()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
 				chessBoard.move(move);
 			}
 		}
