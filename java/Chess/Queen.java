@@ -84,7 +84,8 @@ public class Queen extends ChessPiece
 		this.position = new ChessPosition(toCopy.position);
 		this.alive = toCopy.alive;
 		this.color = toCopy.color;
-		this.limitedMoves = toCopy.getLimitedMoves();
+		this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());
+		this.limitedMoves = new TreeSet<>(toCopy.getLimitedMoves());
 	}
     public Queen(){
         super();

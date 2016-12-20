@@ -69,8 +69,8 @@ public class Rook extends ChessPiece
 		this.position = new ChessPosition(toCopy.position);
 		this.alive = toCopy.alive;
 		this.color = toCopy.color;
-		this.possibleMoves = toCopy.getPossibleMoves();
-		this.limitedMoves = toCopy.getLimitedMoves();
+		this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());
+		this.limitedMoves = new TreeSet<>(toCopy.getLimitedMoves());
 	}
 
     public Rook(){

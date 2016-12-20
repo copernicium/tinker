@@ -63,14 +63,15 @@ public class Bishop extends ChessPiece
 		this.position = new ChessPosition(toCopy.position);
 		this.alive = toCopy.alive;
 		this.color = toCopy.color;
-		this.limitedMoves = toCopy.limitedMoves;
+		this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());
+		this.limitedMoves = new TreeSet<>(toCopy.getLimitedMoves());
 	}
 
     public Bishop(){
         super();
     }
     public Bishop(ChessPiece chessPiece){
-		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
+		super(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
 	}
     public Bishop(ChessPosition position, Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
         super(position,color,possibleMoves,limitedMoves);

@@ -1,8 +1,6 @@
-1. Change all toStrings so that they print out all instance variables
-2. Check all equals methods and constructors to make sure they cover everything
-3. Change it so that captured pieces are not on the board
-4. Replace asserts with more detailed error messages which also exit
-5. Update JavaDocs
-6. Create a game io
+1. Change it so that captured pieces are not on the board
+2. Replace asserts with more detailed error messages which also exit
+3. Update JavaDocs
+4. Create a game io
     - Print captured pieces
     - Pretty graphics?

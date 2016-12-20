@@ -278,6 +278,6 @@ public class ChessPieces{
 	public ChessPieces(ChessPieces toCopy){
 		this.pieces = ChessPieces.makePieces(toCopy).toArray();
 		this.lastMove = new ChessPiece.Move(toCopy.getLastMove());
-		this.lastCapture = new ChessPiece();
+		this.lastCapture = new ChessPiece(toCopy.getLastCapture());
 	}
 }

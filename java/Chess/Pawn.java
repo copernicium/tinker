@@ -82,20 +82,20 @@ public class Pawn extends ChessPiece
 
 	/**
 	 * Checks for equality by value with a given piece
-	 * @param b the piece to be compared to
+	 * @param o the piece to be compared to
 	 * @return true if the pieces are equal by value
 	 */
     @Override
-	public boolean equals(final Object b){
-		if(!(b instanceof Pawn)) return false;
-		Pawn testPiece = (Pawn)b;
-		if(this.getType() != testPiece.getType()) return false;
-		if(this.getColor()!=testPiece.getColor()) return false;
-		if(!this.getPosition().equals(testPiece.getPosition())) return false;
-		if(this.getAlive() != testPiece.getAlive()) return false;
-		if(this.getFirstMove() != testPiece.getFirstMove()) return  false;
-		if(!MySystem.treeSetEquals(this.getPossibleMoves(),testPiece.getPossibleMoves())) return false;
-		if(!MySystem.treeSetEquals(this.getLimitedMoves(),testPiece.getLimitedMoves())) return false;
+	public boolean equals(Object o){
+		if(!(o instanceof Pawn)) return false;
+		Pawn b = (Pawn)o;
+		if(this.getType() != b.getType()) return false;
+		if(this.getColor()!= b.getColor()) return false;
+		if(!this.getPosition().equals(b.getPosition())) return false;
+		if(this.getAlive() != b.getAlive()) return false;
+		if(this.getFirstMove() != b.getFirstMove()) return  false;
+		if(!MySystem.treeSetEquals(this.getPossibleMoves(),b.getPossibleMoves())) return false;
+		if(!MySystem.treeSetEquals(this.getLimitedMoves(),b.getLimitedMoves())) return false;
 		return true;
 	}
 

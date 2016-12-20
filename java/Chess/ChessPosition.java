@@ -336,11 +336,11 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 	 * @return true if they are equal
 	 */
     public boolean equals(Object o){
-	if(o.getClass() != this.getClass()) return false;
-	ChessPosition b = (ChessPosition)o;
-        if(!b.getRow().equals(this.getRow())) return false;
-        if(!b.getColumn().equals(this.getColumn())) return false;
-        return true;
+		if(o.getClass() != this.getClass()) return false;
+		ChessPosition b = (ChessPosition)o;
+		if(!b.getRow().equals(this.getRow())) return false;
+		if(!b.getColumn().equals(this.getColumn())) return false;
+		return true;
     }
 
 	/**

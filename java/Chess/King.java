@@ -90,7 +90,7 @@ public class King extends ChessPiece
 
 	@Override
 	public String toString(){
-		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " check:" + this.check + " checkmate:" + this.checkmate + " )";
+		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " check:" + this.check + " checkmate:" + this.checkmate + " possibleMoves:" + this.possibleMoves + " limitedMoves:" + this.limitedMoves + " )";
 	}
 
 	@Override
@@ -128,21 +128,21 @@ public class King extends ChessPiece
 
 	/**
 	 * Checks for equality by value with a given piece
-	 * @param b the piece to be compared to
+	 * @param o the piece to be compared to
 	 * @return true if the pieces are equal by value
 	 */
 	@Override
-	public boolean equals(final Object b){
-		if(!(b instanceof King)) return false;
-		King testPiece = new King((ChessPiece)b);
-		if(this.getType() != testPiece.getType()) return false;
-		if(this.getColor()!=testPiece.getColor()) return false;
-		if(!this.getPosition().equals(testPiece.getPosition())) return false;
-		if(this.getAlive() != testPiece.getAlive()) return false;
-		if(this.getCheck() != testPiece.getCheck()) return  false;
-		if(this.getCheckmate() != testPiece.getCheckmate()) return  false;
-		if(!MySystem.treeSetEquals(this.getPossibleMoves(),testPiece.getPossibleMoves())) return false;
-		if(!MySystem.treeSetEquals(this.getLimitedMoves(),testPiece.getLimitedMoves())) return false;
+	public boolean equals(final Object o){
+		if(!(o instanceof King)) return false;
+		King b = (King)o;
+		if(this.getType() != b.getType()) return false;
+		if(this.getColor()!= b.getColor()) return false;
+		if(!this.getPosition().equals(b.getPosition())) return false;
+		if(this.getAlive() != b.getAlive()) return false;
+		if(this.getCheck() != b.getCheck()) return  false;
+		if(this.getCheckmate() != b.getCheckmate()) return  false;
+		if(!MySystem.treeSetEquals(this.getPossibleMoves(),b.getPossibleMoves())) return false;
+		if(!MySystem.treeSetEquals(this.getLimitedMoves(),b.getLimitedMoves())) return false;
 		return true;
 	}
 
@@ -171,6 +171,8 @@ public class King extends ChessPiece
 		this.color = toCopy.color;
 		this.check = toCopy.check;
 		this.checkmate = toCopy.checkmate;
+		this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());
+		this.limitedMoves = new TreeSet<>(toCopy.getLimitedMoves());
 	}
 
 	public King(ChessPiece chessPiece){
@@ -182,8 +184,8 @@ public class King extends ChessPiece
 			this.color = toCopy.color;
 			this.check = toCopy.check;
 			this.checkmate = toCopy.checkmate;
-			this.possibleMoves = toCopy.getPossibleMoves();
-			this.limitedMoves = toCopy.getLimitedMoves();
+			this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());
+			this.limitedMoves = new TreeSet<>(toCopy.getLimitedMoves());
 		}
 	}
 	public King(ChessPosition position, Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){

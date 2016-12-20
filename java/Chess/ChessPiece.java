@@ -94,7 +94,7 @@ public class ChessPiece{
 	 */
 	@Override
 	public String toString(){
-		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " alive:" + this.alive + ")";
+		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " alive:" + this.alive + " possibleMoves:" + this.possibleMoves + " limitedMoves:" + this.limitedMoves + ")";
 	}
 
 	/**
