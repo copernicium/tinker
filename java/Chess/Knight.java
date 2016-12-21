@@ -39,10 +39,6 @@ public class Knight extends ChessPiece
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){
 		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();
-		if(!this.getAlive()){
-			this.possibleMoves = possibleMoves;
-			return;
-		}
 		for(ChessPosition.Tester testPosition: getCorners(-2,1)){
 			if(testPosition.inBounds() && chessPieces.isUnoccupied(new ChessPosition(testPosition), this.color)){
 				possibleMoves.add(new ChessPosition(testPosition));
@@ -65,7 +61,6 @@ public class Knight extends ChessPiece
 	}
 	public Knight(Knight toCopy) {
 		this.position = new ChessPosition(toCopy.position);
-		this.alive = toCopy.alive;
 		this.color = toCopy.color;
 		this.limitedMoves = toCopy.getLimitedMoves();
 		this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());

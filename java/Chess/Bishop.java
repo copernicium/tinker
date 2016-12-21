@@ -29,10 +29,6 @@ public class Bishop extends ChessPiece
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){
 		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();
-		if(!this.getAlive()){
-			this.possibleMoves = possibleMoves;
-			return;
-		}
 		ChessPosition.Tester testPosition = new ChessPosition.Tester();
 		{
 			int rowDirection = -1, columnDirection = -1;
@@ -61,7 +57,6 @@ public class Bishop extends ChessPiece
 	}
 	public Bishop(Bishop toCopy) {
 		this.position = new ChessPosition(toCopy.position);
-		this.alive = toCopy.alive;
 		this.color = toCopy.color;
 		this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());
 		this.limitedMoves = new TreeSet<>(toCopy.getLimitedMoves());

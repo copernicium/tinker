@@ -67,7 +67,6 @@ public class ChessPiece{
 	}
 	protected Color color;
 	protected ChessPosition position;
-	protected boolean alive;
 	private final static Type type = Type.UNASSIGNED;
 	protected TreeSet<ChessPosition> possibleMoves;
 	protected TreeSet<ChessPosition> limitedMoves;
@@ -76,16 +75,8 @@ public class ChessPiece{
 	 * Fetches the status of the current piece
 	 * @return true if the piece has not been captured
 	 */
-	public boolean getAlive(){
-		return alive;
-	}
-
-	/**
-	 * Kills the piece
-	 */
-	public void capture(){
-		if(!alive) MySystem.error("Error: trying to capture an already captured piece", MySystem.getFileName(), MySystem.getLineNumber());
-		alive = false;
+	public boolean getAlive(){//TODO
+		return !(this instanceof CapturedPiece);
 	}
 
 	/**
@@ -94,7 +85,7 @@ public class ChessPiece{
 	 */
 	@Override
 	public String toString(){
-		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " alive:" + this.alive + " possibleMoves:" + this.possibleMoves + " limitedMoves:" + this.limitedMoves + ")";
+		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " possibleMoves:" + this.possibleMoves + " limitedMoves:" + this.limitedMoves + ")";
 	}
 
 	/**
@@ -124,30 +115,9 @@ public class ChessPiece{
 		if(this.getType() != b.getType()) return false;
 		if(this.getColor() != b.getColor()) return false;
 		if(!this.getPosition().equals(b.getPosition())) return false;
-		if(this.getAlive() != b.getAlive()) return false;
 		if(!MySystem.treeSetEquals(this.getPossibleMoves(),b.getPossibleMoves())) return false;
 		if(!MySystem.treeSetEquals(this.getLimitedMoves(),b.getLimitedMoves())) return false;
 		return true;
-	}
-
-	/**
-	 * Uses more sophisticated logic to test for equality given the type, as pieces have different instance variables
-	 * @param a the piece to compare to
-	 * @return true if the two pieces are equal
-	 */
-	public boolean equalsByType(ChessPiece a){//TODO: remove?
-		switch(this.getType()){
-			case PAWN:{
-				Pawn b = new Pawn(a);
-				return b.equals(this);
-			}
-			case KING:{
-				King b = new King(a);
-				return b.equals(this);
-			}
-			default:
-				return a.equals(this);
-		}
 	}
 
 	/**
@@ -156,10 +126,6 @@ public class ChessPiece{
 	 */
 	public void limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){
 		TreeSet<ChessPosition> newMoves = new TreeSet<>();
-		if(!this.getAlive()){
-			this.limitedMoves = newMoves;
-			return;
-		}
 		final int index = CHESS_PIECES.getIndexOf(this.getPosition());
 		final ChessPosition enemyKingPosition = CHESS_PIECES.getKing(Color.not(this.getColor())).getPosition();
 		ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
@@ -253,6 +219,7 @@ public class ChessPiece{
 	 * @return a new instance with the same values
 	 */
 	public static ChessPiece makePiece(Type type,ChessPiece chessPiece){
+		if(!chessPiece.getAlive()) return new CapturedPiece(chessPiece);
 		switch(type){
 			case KING:
 				return new King(chessPiece);
@@ -280,6 +247,7 @@ public class ChessPiece{
 	 * @return a new instance with the same values
 	 */
 	public static ChessPiece makePiece(ChessPiece chessPiece){
+		if(!chessPiece.getAlive()) return new CapturedPiece(chessPiece);
 		switch(chessPiece.getType()){
 			case KING:
 				return new King(chessPiece);
@@ -331,7 +299,6 @@ public class ChessPiece{
 		this.color = toCopy.getColor();
 		this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());
 		this.limitedMoves = new TreeSet<>(toCopy.getLimitedMoves());
-		this.alive = toCopy.getAlive();
 	}
 
 	/**
@@ -342,7 +309,6 @@ public class ChessPiece{
 	public ChessPiece(ChessPosition position,Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
 		this.position = position;
 		this.color = color;
-		this.alive = true;
 		this.possibleMoves = possibleMoves;
 		this.limitedMoves = limitedMoves;
 	}

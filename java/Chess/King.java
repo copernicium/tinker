@@ -59,7 +59,7 @@ public class King extends ChessPiece
 		ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
 		for(int i = 0; i < postMovePieces.length(); i++){//TODO: make foreach?
 			ChessPiece defendingPiece = ChessPiece.makePiece(postMovePieces.getPieceAt(i));
-			if(defendingPiece.getColor() != this.getColor() || defendingPiece.equalsByType(this)) continue;
+			if(defendingPiece.getColor() != this.getColor() || defendingPiece.equals(this)) continue;
 			for(ChessPosition possibleMove : defendingPiece.getLimitedMoves()){
 				{
 					//if(!postMovePieces.checkExists(testPiece)) MySystem.error("Piece does not exist",MySystem.getFileName(),MySystem.getLineNumber());//useful when tinkering with kings
@@ -93,11 +93,6 @@ public class King extends ChessPiece
 		return "ChessPiece( type:" + this.getType() + " color:" + this.color + " position:" + this.position + " check:" + this.check + " checkmate:" + this.checkmate + " possibleMoves:" + this.possibleMoves + " limitedMoves:" + this.limitedMoves + " )";
 	}
 
-	@Override
-	public void capture(){
-		MySystem.error("Error: Kings can never be captured", MySystem.getFileName(), MySystem.getLineNumber());
-	}
-
 	/**
 	 * The symbol to print given the type
 	 * @return the letter representing this Chess piece
@@ -109,10 +104,6 @@ public class King extends ChessPiece
 	@Override
 	public void updatePossibleMoves(ChessPieces chessPieces){
 		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();
-		if(!this.getAlive()){
-			this.possibleMoves = possibleMoves;
-			return;
-		}
 		final int MOVEMENT_DISTANCE = 1;
 		ChessPosition.Tester testPosition = new ChessPosition.Tester();
 		for(int y = -MOVEMENT_DISTANCE ; y <= MOVEMENT_DISTANCE ; y++){
@@ -167,7 +158,6 @@ public class King extends ChessPiece
 	}
 	public King(King toCopy) {
 		this.position = new ChessPosition(toCopy.position);
-		this.alive = toCopy.alive;
 		this.color = toCopy.color;
 		this.check = toCopy.check;
 		this.checkmate = toCopy.checkmate;
@@ -180,7 +170,6 @@ public class King extends ChessPiece
 		if(chessPiece instanceof King){
 			King toCopy = (King)chessPiece;
 			this.position = new ChessPosition(toCopy.position);//TODO: redundant?
-			this.alive = toCopy.alive;
 			this.color = toCopy.color;
 			this.check = toCopy.check;
 			this.checkmate = toCopy.checkmate;

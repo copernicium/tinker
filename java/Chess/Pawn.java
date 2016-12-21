@@ -22,7 +22,7 @@ public class Pawn extends ChessPiece
 
 	@Override
 	public String toString(){
-		return "ChessPiece(type:" + this.getType() + " color:" + this.color + " position:" + this.position + " alive:" + this.alive + " firstMove:" + this.firstMove + " possibleMoves:" + this.possibleMoves + " limitedMoves:" + this.limitedMoves + ")";
+		return "ChessPiece(type:" + this.getType() + " color:" + this.color + " position:" + this.position + " firstMove:" + this.firstMove + " possibleMoves:" + this.possibleMoves + " limitedMoves:" + this.limitedMoves + ")";
 	}
 
 	/**
@@ -36,10 +36,6 @@ public class Pawn extends ChessPiece
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){//TODO: en passant and maybe promotion
 		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();
-		if(!this.getAlive()){
-			this.possibleMoves = possibleMoves;
-			return;
-		}
 		int direction = (this.getColor() == ChessPiece.Color.WHITE) ? 1 : -1;
 		ChessPosition.Tester testPosition = new ChessPosition.Tester();
 		final int ADVANCE_DISTANCE = 1;
@@ -111,7 +107,6 @@ public class Pawn extends ChessPiece
 
 	public Pawn(Pawn toCopy) {
 		this.position = new ChessPosition(toCopy.position);
-		this.alive = toCopy.alive;
 		this.color = toCopy.color;
 		this.firstMove = toCopy.firstMove;
 		this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());
@@ -127,7 +122,6 @@ public class Pawn extends ChessPiece
 		if(chessPiece instanceof Pawn){
 			Pawn toCopy = (Pawn)chessPiece;
 			this.position = new ChessPosition(toCopy.position);
-			this.alive = toCopy.alive;
 			this.color = toCopy.color;
 			this.firstMove = toCopy.getFirstMove();
 			this.possibleMoves = new TreeSet<>(toCopy.getPossibleMoves());

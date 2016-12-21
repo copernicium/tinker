@@ -12,12 +12,13 @@ public class ChessPieces{
 
 	public void updateAllPossibleMoves(ChessPiece.Color color){
 		for(ChessPiece chessPiece: this.pieces){
-			if(chessPiece.getColor() == color) chessPiece.updatePossibleMoves(this);
+			if(chessPiece.getColor() == color && chessPiece.getAlive()) chessPiece.updatePossibleMoves(this);
 		}
 	}
 
 	public void updateAllMoves(){
 		for(ChessPiece chessPiece: this.pieces){
+			if(!chessPiece.getAlive()) continue;
 			chessPiece.updatePossibleMoves(this);
 			chessPiece.limitMovesToLeavingCheck(this);
 		}
@@ -41,6 +42,10 @@ public class ChessPieces{
 		return !this.isUnoccupied(checkPosition,color);
 	}
 
+	public boolean isOccupied(ChessPosition checkPosition){
+		return !this.isUnoccupied(checkPosition);
+	}
+
 	@Override
 	public String toString(){
 		String string = "ChessPieces(";
@@ -59,7 +64,7 @@ public class ChessPieces{
 	public boolean containsLiving(final ChessPiece TEST_PIECE){
 		if(!TEST_PIECE.getAlive()) return false;
 		for(ChessPiece a: this.pieces){
-			if(a.getAlive() && TEST_PIECE.equalsByType(a)) return true;
+			if(a.getAlive() && TEST_PIECE.equals(a)) return true;
 		}
 		return false;
 	}
@@ -105,7 +110,7 @@ public class ChessPieces{
 		if(!b.getLastCapture().equals(this.getLastCapture())) return false;
 		if(b.toArray().length != this.toArray().length) return false;
 		for(int i = 0; i<this.toArray().length; i++){
-			if(!b.toArray()[i].equalsByType(this.toArray()[i])){
+			if(!b.toArray()[i].equals(this.toArray()[i])){
 				MySystem.println(i + " is not equal " + this.toArray()[i] + b.toArray()[i],MySystem.getFileName(),MySystem.getLineNumber());
 				return false;
 			}
@@ -132,8 +137,8 @@ public class ChessPieces{
 	 * @param CHESS_PIECE the piece to set it to
 	 */
 	private void set(final int INDEX,final ChessPiece CHESS_PIECE){
-		if(!this.isUnoccupied(CHESS_PIECE.getPosition())){
-			MySystem.error("Trying to set a piece to a position that is already occupied: piece " + CHESS_PIECE.toString() + " occupying piece: " + this.getPieceAt(CHESS_PIECE.getPosition()),MySystem.getFileName(), MySystem.getLineNumber());
+		if(CHESS_PIECE.getAlive() && this.isOccupied(CHESS_PIECE.getPosition())){
+			MySystem.error(" Trying to set a piece to a position that is already occupied: piece " + CHESS_PIECE.toString() + " occupying piece: " + this.getPieceAt(CHESS_PIECE.getPosition()),MySystem.getFileName(), MySystem.getLineNumber());
 		}
 		this.pieces[INDEX] = ChessPiece.makePiece(CHESS_PIECE);
 	}
@@ -146,35 +151,38 @@ public class ChessPieces{
 
 	public void unMove(){//TODO: add in un-capturing
 		MySystem.myAssert(!this.lastMove.equals(new ChessPiece.Move()),MySystem.getFileName(),MySystem.getLineNumber());
-		this.set(this.getIndexOfAlive(lastMove.getTarget()),ChessPiece.makePiece(lastMove.getStart()));
-		if(!this.lastCapture.equals(new ChessPiece()) && this.lastCapture.getPosition().equals(this.lastMove.getTarget())){
-			this.set(this.getIndexOf(this.lastCapture.getPosition()),ChessPiece.makePiece(this.lastCapture));
+		this.set(this.getIndexOf(lastMove.getTarget()),ChessPiece.makePiece(lastMove.getStart()));
+		if(this.lastCapture.getType() != ChessPiece.Type.UNASSIGNED && this.lastCapture.getPosition().equals(this.lastMove.getTarget())){
+			this.set(this.getIndexOfCaptured(this.lastCapture.getPosition()),ChessPiece.makePiece(this.lastCapture));
 		}
 	}
 
 	/**
-	 * Returns the index of a piece in an array which occupies a given position. It crashes if it cannot be found. This one also ensures that the piece that is occupying it is alive
-	 * @param chessPosition the position to look for
-	 * @return the index of the piece if it exits
-	 */
-	public int getIndexOfAlive(ChessPosition chessPosition){//TODO: use this in more places? change how alive/captured works?
-		for(int i = 0; i < this.pieces.length; i++){
-			if(chessPosition.equals(this.pieces[i].getPosition()) && this.pieces[i].getAlive()) return i;
-		}
-		MySystem.error("Piece not found in array", MySystem.getFileName(), MySystem.getLineNumber());
-		return -1;
-	}
-
-	/**
-	 * Returns the index of a piece in an array which occupies a given position. It crashes if it cannot be found.
+	 * Returns the index of a piece in an array which occupies a given position. It crashes if it cannot be found. This also ensures that the piece that is occupying it is alive
 	 * @param chessPosition the position to look for
 	 * @return the index of the piece if it exits
 	 */
 	public int getIndexOf(ChessPosition chessPosition){
 		for(int i = 0; i < this.pieces.length; i++){
-			if(chessPosition.equals(this.pieces[i].getPosition())) return i;
+			if(this.pieces[i].getAlive() && chessPosition.equals(this.pieces[i].getPosition())) return i;
 		}
-		MySystem.error("Piece not found in array", MySystem.getFileName(), MySystem.getLineNumber());
+		MySystem.error("Piece not found in array: position " + chessPosition.toString() + " is not in " + this.toString(), MySystem.getFileName(), MySystem.getLineNumber());
+		return -1;
+	}
+
+	/**
+	 * Returns the index of a piece in an array which occupies a given position. It crashes if it cannot be found. This also ensures that the piece that is occupying it is alive
+	 * @param chessPosition the position to look for
+	 * @return the index of the piece if it exits
+	 */
+	public int getIndexOfCaptured(ChessPosition chessPosition){
+		for(int i = 0; i < this.pieces.length; i++){
+			if(!this.pieces[i].getAlive() && chessPosition.equals(this.pieces[i].getPosition())) return i;
+		}
+		ChessBoard a = new ChessBoard(this);
+		System.out.print("================\n");
+		a.print();
+		MySystem.error("Piece not found in array: position " + chessPosition.toString() + " is not in " + this.toString(), MySystem.getFileName(), MySystem.getLineNumber());
 		return -1;
 	}
 
@@ -223,8 +231,12 @@ public class ChessPieces{
 	 * @param CAPTURING_POSITION the position of the piece to be killed
 	 */
 	public void capture(ChessPosition CAPTURING_POSITION){
-		this.lastCapture = ChessPiece.makePiece(this.pieces[this.getIndexOfAlive(CAPTURING_POSITION)]);
-		this.pieces[this.getIndexOfAlive(CAPTURING_POSITION)].capture();
+		if(this.getPieceAt(CAPTURING_POSITION) instanceof King){
+			MySystem.error("Attempting to capture a king at " + CAPTURING_POSITION.toString(),MySystem.getFileName(),MySystem.getLineNumber());
+		}
+		int index = this.getIndexOf(CAPTURING_POSITION);
+		this.lastCapture = ChessPiece.makePiece(this.getPieceAt(index));
+		this.pieces[index] = new CapturedPiece(this.lastCapture.getType(),this.lastCapture.getColor(),this.lastCapture.getPosition());
 	}
 
 	/**

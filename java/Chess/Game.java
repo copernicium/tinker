@@ -272,7 +272,7 @@ public class Game{
 			ChessPiece b = new Pawn(a);
 			a.move(new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.D));
 			System.out.println("a(" + a.toString() + ") b(" + b.toString() + ")");
-			System.out.println("==:" + (a == b) + " .equals():" + b.equalsByType(a));
+			System.out.println("==:" + (a == b) + " .equals():" + b.equals(a));
 		}
 		System.out.print("\n");
 		{
