@@ -1,4 +1,4 @@
-all: ChessBoard.class ChessPieces.java ChessPosition.class ChessPiece.class Pawn.class Game.class MySystem.class Bishop.class King.class Knight.class Queen.class Rook.class 
+all: ChessBoard.class ChessPieces.java CapturedPiece.class ChessPosition.class ChessPiece.class Pawn.class Game.class MySystem.class Bishop.class King.class Knight.class Queen.class Rook.class 
 
 Queen.class: Queen.java
 	javac Queen.java ChessPieces.java ChessBoard.java Pawn.java Rook.java King.java Knight.java Bishop.java ../MySystem/MySystem.java ChessPiece.java ChessPosition.java
@@ -19,10 +19,13 @@ MySystem.class: ../MySystem/MySystem.java
 	javac ../MySystem/MySystem.java
 
 ChessPiece.class: ChessPiece.java
-	javac ChessPiece.java ChessPosition.java ../MySystem/MySystem.java
+	javac ChessPiece.java  CapturedPiece.java ChessPosition.java ../MySystem/MySystem.java
 
 Pawn.class: Pawn.java
 	javac Pawn.java Queen.java ChessBoard.java ChessPieces.java  Rook.java King.java Knight.java Bishop.java ../MySystem/MySystem.java ChessPiece.java ChessPosition.java
+	
+CapturedPiece.class: CapturedPiece.java
+	javac CapturedPiece.java Pawn.java Queen.java ChessBoard.java ChessPieces.java  Rook.java King.java Knight.java Bishop.java ../MySystem/MySystem.java ChessPiece.java ChessPosition.java
 	
 ChessPosition.class: ChessPosition.java
 	javac ChessPosition.java
@@ -31,10 +34,11 @@ ChessBoard.class: ChessBoard.java
 	javac ChessBoard.java Pawn.java Queen.java ChessPieces.java Rook.java King.java Knight.java Bishop.java ../MySystem/MySystem.java ChessPiece.java ChessPosition.java
 
 Game.class: Game.java
-	javac -O Game.java Opponent.java ChessBoard.java Queen.java ChessPieces.java Pawn.java Rook.java King.java Knight.java Bishop.java ../MySystem/MySystem.java ChessPiece.java ChessPosition.java
+	javac -O Game.java Opponent.java ChessBoard.java  CapturedPiece.java Queen.java ChessPieces.java Pawn.java Rook.java King.java Knight.java Bishop.java ../MySystem/MySystem.java ChessPiece.java ChessPosition.java
 	
 ChessPieces.class: ChessPieces.java 
-	javac ChessPieces.java ChessBoard.java Queen.java Game.java Pawn.java Rook.java King.java Knight.java Bishop.java ../MySystem/MySystem.java ChessPiece.java ChessPosition.java
+	javac ChessPieces.java ChessBoard.java  CapturedPiece.java Queen.java Game.java Pawn.java Rook.java King.java Knight.java Bishop.java ../MySystem/MySystem.java ChessPiece.java ChessPosition.java
+
 .PHONY: clean
 clean:
 	find -name \*.class |xargs rm -f;
