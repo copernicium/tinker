@@ -208,8 +208,9 @@ public class ChessBoard
 		}
 		int index = pieces.getIndexOf(PIECE_TO_MOVE.getPosition());
 		if(this.pieces.getPieceAt(index).checkMoveDeep(MOVE_THERE,pieces)){
+			final boolean USE_LIMITED = true;
 			if(this.pieces.isOccupied(MOVE_THERE, ChessPiece.Color.not(this.pieces.getPieceAt(index).getColor()))) this.pieces.capture(MOVE_THERE);
-			pieces.move(index,MOVE_THERE);
+			pieces.move(index,MOVE_THERE,USE_LIMITED);
 		} else {
 			MySystem.error("Error: trying to move piece to invalid location: piece:" + this.pieces.getPieceAt(index).toString() + " cannot move to " + MOVE_THERE.toString() + " from possible " + this.pieces.getPieceAt(index).getPossibleMoves().toString(), MySystem.getFileName(), MySystem.getLineNumber());//user inputs invalid move
 		}
@@ -253,9 +254,9 @@ public class ChessBoard
 		final int NUMBER_OF_CORNERS = 4;
 		ChessPiece[] fourPositions = new ChessPiece[NUMBER_OF_CORNERS ];
 		fourPositions[0] = pos1;
-		fourPositions[1] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE, new TreeSet<>(),new TreeSet<>()));
-		fourPositions[2] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK, new TreeSet<>(),new TreeSet<>()));
-		fourPositions[3] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK, new TreeSet<>(),new TreeSet<>()));
+		fourPositions[1] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition((pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.WHITE));
+		fourPositions[2] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),pos1.getPosition().getColumn()), ChessPiece.Color.BLACK));
+		fourPositions[3] = ChessPiece.makePiece(pos1.getType(),new ChessPiece(new ChessPosition(mirror(pos1.getPosition().getRow()),mirror(pos1.getPosition().getColumn())), ChessPiece.Color.BLACK));
 		return fourPositions;
 	}
 
@@ -267,15 +268,14 @@ public class ChessBoard
 		ChessPieces chessPieces = new ChessPieces(NumbersOfPieces.Total.TOTAL);
 			{
 				for(int i = 0; i < NumbersOfPieces.Half.PAWNS; i++){
-					chessPieces.setNextPiece(new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE, new TreeSet<>(),new TreeSet<>()));
-					chessPieces.setNextPiece(new Pawn(new ChessPosition(mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK, new TreeSet<>(),new TreeSet<>()));
+					chessPieces.setNextPiece(new Pawn(new ChessPosition(PiecePlacement.Row.PAWN, new ChessPosition.Column(i)), ChessPiece.Color.WHITE));
+					chessPieces.setNextPiece(new Pawn(new ChessPosition(mirror(PiecePlacement.Row.PAWN), new ChessPosition.Column(i)), ChessPiece.Color.BLACK));
 				}
 			{
 				final ChessPiece[] PIECES_IN_CORNERS = {
-						new Rook(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE, new TreeSet<>(), new TreeSet<>()),
-						new Knight(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.KNIGHT), ChessPiece.Color.WHITE, new TreeSet<>(), new TreeSet<>()),
-						new Bishop(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.BISHOP), ChessPiece.Color.WHITE, new TreeSet<>(), new TreeSet<>())
-
+						new Rook(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.ROOK), ChessPiece.Color.WHITE),
+						new Knight(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.KNIGHT), ChessPiece.Color.WHITE),
+						new Bishop(new ChessPosition(PiecePlacement.Row.ALL, PiecePlacement.Column.BISHOP), ChessPiece.Color.WHITE)
 				};
 				for(ChessPiece original : PIECES_IN_CORNERS){
 					for(ChessPiece a : makeFour(original)){
@@ -284,22 +284,24 @@ public class ChessBoard
 				}
 			}
 			{
-				chessPieces.setNextPiece(new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE, new TreeSet<>(),new TreeSet<>()));
-				chessPieces.setNextPiece(new Queen(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK, new TreeSet<>(),new TreeSet<>()));
+				chessPieces.setNextPiece(new Queen(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.QUEEN), ChessPiece.Color.WHITE));
+				chessPieces.setNextPiece(new Queen(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.QUEEN), ChessPiece.Color.BLACK));
 			}
 			{
-				chessPieces.setNextPiece(new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE, new TreeSet<>(),new TreeSet<>()));
-				chessPieces.setNextPiece(new King(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK, new TreeSet<>(),new TreeSet<>()));
+				chessPieces.setNextPiece(new King(new ChessPosition(PiecePlacement.Row.ALL,PiecePlacement.Column.KING), ChessPiece.Color.WHITE));
+				chessPieces.setNextPiece(new King(new ChessPosition(mirror(PiecePlacement.Row.ALL),PiecePlacement.Column.KING), ChessPiece.Color.BLACK));
 			}
 		}
-        return new ChessPieces(chessPieces);
+		chessPieces.updateAllMoves();
+        return chessPieces;
     }
 
 	/**
 	 * Creates a new Chess board ready to be used
 	 */
 	public ChessBoard(){
-		this(new ChessPieces(ChessBoard.fillBoard()));
+		this(ChessBoard.fillBoard());
+		MySystem.println("HERE",MySystem.getFileName(),MySystem.getLineNumber());
     }
 
 	/**
@@ -309,6 +311,7 @@ public class ChessBoard
 	public ChessBoard(ChessPieces pieces){
 		this.pieces = ChessPieces.makePieces(pieces);
 		this.pieces.updateAllMoves();
+		MySystem.println("Updated",MySystem.getFileName(),MySystem.getLineNumber());
 		this.playerTurn = ChessPiece.Color.WHITE;
 		this.status = Status.IN_PROGRESS;
 	}

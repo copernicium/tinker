@@ -328,7 +328,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 	 * @return the corresponding ChessPosition
 	 */
 	public static ChessPosition toChessPosition(String input){
-		if(input.length() != 2){//TODO: use test case instead?
+		if(!testConversion(input)){
 			MySystem.error("String length is either too short or not long enough to be converted to a chess position", MySystem.getFileName(), MySystem.getLineNumber());//make sure its only two characters
 		}
 		final int COLUMN_LOC = 0, ROW_LOC = 1;

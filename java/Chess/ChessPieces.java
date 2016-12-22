@@ -12,7 +12,7 @@ public class ChessPieces{
 
 	public void updateAllPossibleMoves(ChessPiece.Color color){
 		for(ChessPiece chessPiece: this.pieces){
-			if(chessPiece.getColor() == color && chessPiece.getAlive()) chessPiece.updatePossibleMoves(this);
+			if(chessPiece.getAlive() && chessPiece.getColor() == color) chessPiece.updatePossibleMoves(this);
 		}
 	}
 
@@ -20,7 +20,7 @@ public class ChessPieces{
 		for(ChessPiece chessPiece: this.pieces){
 			if(!chessPiece.getAlive()) continue;
 			chessPiece.updatePossibleMoves(this);
-			chessPiece.limitMovesToLeavingCheck(this);
+			chessPiece.limitMovesToAvoidCheck(this);
 		}
 	}
 
@@ -79,6 +79,8 @@ public class ChessPieces{
 		for(int i = 0; i < CHESS_PIECES.length(); i++){
 			newPieces.set(i,ChessPiece.makePiece(CHESS_PIECES.getPieceAt(i)));
 		}
+		newPieces.lastMove = CHESS_PIECES.getLastMove();
+		newPieces.lastCapture = CHESS_PIECES.getLastCapture();
 		return newPieces;
 	}
 	/*
@@ -143,15 +145,15 @@ public class ChessPieces{
 		this.pieces[INDEX] = ChessPiece.makePiece(CHESS_PIECE);
 	}
 
-	public void move(final int INDEX,final ChessPosition MOVE_THERE){//TODO: maybe add auto-capturing in here?
+	public void move(final int INDEX,final ChessPosition MOVE_THERE,boolean useLimited){//TODO: maybe add auto-capturing in here?
 		if(this.isOccupied(MOVE_THERE)){
 			MySystem.error("Move cannot be completed because target position is already occupied", MySystem.getFileName(), MySystem.getLineNumber());
 		}
 		this.lastMove = new ChessPiece.Move(ChessPiece.makePiece(this.pieces[INDEX]), MOVE_THERE);
-		this.pieces[INDEX].move(MOVE_THERE);
+		this.pieces[INDEX].move(MOVE_THERE,useLimited);
 	}
 
-	public void unMove(){//TODO: add in un-capturing
+	public void unMove(){
 		if(this.lastMove.equals(new ChessPiece.Move())){
 			MySystem.error("Attempting to un-move when no moves have been made",MySystem.getFileName(),MySystem.getLineNumber());
 		}
@@ -296,6 +298,6 @@ public class ChessPieces{
 	public ChessPieces(ChessPieces toCopy){
 		this.pieces = ChessPieces.makePieces(toCopy).toArray();
 		this.lastMove = new ChessPiece.Move(toCopy.getLastMove());
-		this.lastCapture = new ChessPiece(toCopy.getLastCapture());
+		this.lastCapture = ChessPiece.makePiece(toCopy.getLastCapture());
 	}
 }

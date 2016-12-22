@@ -51,12 +51,13 @@ public class Knight extends ChessPiece
 		}
         this.possibleMoves = possibleMoves;
     }
-    @Override
-    public void move(ChessPosition newPosition){
-       if(MySystem.contains(this.getPossibleMoves(),newPosition)){
+	@Override
+	public void move(ChessPosition newPosition,boolean useLimited){
+		TreeSet<ChessPosition> setForChecking = useLimited ? this.getLimitedMoves(): this.getPossibleMoves();
+		if(MySystem.contains(setForChecking,newPosition)){
 			this.position = newPosition;
 			return;
-        }
+		}
 		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), MySystem.getFileName(), MySystem.getLineNumber());
 	}
 	public Knight(Knight toCopy) {
@@ -70,9 +71,9 @@ public class Knight extends ChessPiece
         super();
     }
     public Knight(ChessPiece chessPiece){
-		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
+		super(chessPiece);
 	}
-    public Knight(ChessPosition position, Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
-        super(position,color,possibleMoves,limitedMoves);
+    public Knight(ChessPosition position, Color color){
+        super(position,color);
     }
 }

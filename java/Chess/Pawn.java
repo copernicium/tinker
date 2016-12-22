@@ -97,9 +97,10 @@ public class Pawn extends ChessPiece
 		return true;
 	}
 
-    @Override
-    public void move(ChessPosition newPosition){
-		if(MySystem.contains(this.getPossibleMoves(),newPosition)){
+	@Override
+	public void move(ChessPosition newPosition,boolean useLimited){
+		TreeSet<ChessPosition> setForChecking = useLimited ? this.getLimitedMoves(): this.getPossibleMoves();
+		if(MySystem.contains(setForChecking,newPosition)){
 			this.position = newPosition;
 			this.firstMove = false;
 			return;
@@ -107,7 +108,7 @@ public class Pawn extends ChessPiece
 		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
-	public Pawn(Pawn toCopy) {
+	public Pawn(Pawn toCopy) {//TODO: use Pawn(ChessPiece)? is this ever called at all or is Pawn(ChessPiece) used instead?
 		this.position = new ChessPosition(toCopy.position);
 		this.color = toCopy.color;
 		this.firstMove = toCopy.firstMove;
@@ -120,7 +121,7 @@ public class Pawn extends ChessPiece
         firstMove = true;
     }
 	public Pawn(ChessPiece chessPiece){
-		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
+		super(chessPiece);
 		if(chessPiece instanceof Pawn){
 			Pawn toCopy = (Pawn)chessPiece;
 			this.position = new ChessPosition(toCopy.position);
@@ -130,8 +131,8 @@ public class Pawn extends ChessPiece
 			this.limitedMoves = new TreeSet<>(toCopy.getLimitedMoves());
 		}
 	}
-    public Pawn(ChessPosition position,Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
-        super(position,color,possibleMoves,limitedMoves);
+    public Pawn(ChessPosition position,Color color){
+        super(position,color);
 		this.firstMove = (position.getRow().equals(ChessBoard.PiecePlacement.Row.PAWN )|| position.getRow().equals(ChessBoard.mirror(ChessBoard.PiecePlacement.Row.PAWN)));
     }
 }

@@ -37,7 +37,7 @@ public class ChessPiece{
 			this.target = target;
 		}
 		public Move(Move toCopy){
-			this.start = new ChessPiece(toCopy.getStart());
+			this.start = ChessPiece.makePiece(toCopy.getStart());
 			this.target = new ChessPosition(toCopy.getTarget());
 		}
 	}
@@ -76,7 +76,7 @@ public class ChessPiece{
 	 * Fetches the status of the current piece
 	 * @return true if the piece has not been captured
 	 */
-	public boolean getAlive(){//TODO
+	public boolean getAlive(){
 		return !(this instanceof CapturedPiece);
 	}
 
@@ -125,7 +125,9 @@ public class ChessPiece{
 	 * Limits the possible moves to a those which do not result the king being in check
 	 * @param CHESS_PIECES all of the pieces
 	 */
-	public void limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){
+	public void limitMovesToAvoidCheck(final ChessPieces CHESS_PIECES){
+		ChessPiece original = makePiece(this);
+		final boolean USE_LIMITED = false;
 		TreeSet<ChessPosition> newMoves = new TreeSet<>();
 		final int index = CHESS_PIECES.getIndexOf(this.getPosition());
 		final ChessPosition enemyKingPosition = CHESS_PIECES.getKing(Color.not(this.getColor())).getPosition();
@@ -138,12 +140,13 @@ public class ChessPiece{
 			if(testPieces.isOccupied(testMove, ChessPiece.Color.not(this.getColor()))){
 				testPieces.capture(testMove);
 			}
-			testPieces.move(index,testMove);
+			testPieces.move(index,testMove,USE_LIMITED);
 			testPieces.updateAllPossibleMoves(Color.not(this.getColor()));
 			testPieces.updateKingCheck(this.getColor());
 			if(!testPieces.getKing(this.getColor()).getCheck()) newMoves.add(testMove);//if moving this piece would not put the king in check, allow it
 			testPieces.unMove();
 		}
+		MySystem.myAssert(this.equals(original),MySystem.getFileName(),MySystem.getLineNumber());
 		this.limitedMoves = newMoves;
 	}
 
@@ -171,8 +174,9 @@ public class ChessPiece{
 	/**
 	 * Moves this Chess pieces
 	 * @param position the position to move this piece to
+	 * @param useLimited check if the position is in the limited moves, not just the possibles
 	 */
-	public void move(ChessPosition position){
+	public void move(ChessPosition position,boolean useLimited){
 		MySystem.error("This is not a valid Chess piece.", MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
@@ -223,7 +227,7 @@ public class ChessPiece{
 	 * @param chessPiece the piece to copy
 	 * @return a new instance with the same values
 	 */
-	public static ChessPiece makePiece(Type type,ChessPiece chessPiece){
+	public static ChessPiece makePiece(Type type,ChessPiece chessPiece){//TODO: find out if these are actually needed
 		if(!chessPiece.getAlive()) return new CapturedPiece(chessPiece);
 		switch(type){
 			case KING:
@@ -274,25 +278,11 @@ public class ChessPiece{
 		return new ChessPiece();
 	}
 
-	/*/**
-	 * Used to copy an Chess piece from an array that matches a set of criteria
-	 * @param position the position of the piece to copy
-	 * @param chessPieces the array of pieces to search through
-	 * @return a new instance of the Chess piece
-	 */
-	/*public static ChessPiece makePiece(ChessPosition position, ChessPieces chessPieces){
-		for(ChessPiece a: chessPieces.toArray()){
-			if(a.getPosition().equals(position)) return a;
-		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
-		return new ChessPiece();
-	}*/
-
 	/**
 	 * Creates a new instance of a Chess piece
 	 */
 	public ChessPiece(){
-		this(new ChessPosition(), Color.WHITE,new TreeSet<>(),new TreeSet<>());
+		this(new ChessPosition(), Color.WHITE);
 	}
 
 	/**
@@ -311,10 +301,10 @@ public class ChessPiece{
 	 * @param position the position of the piece
 	 * @param color the color of the piece
 	 */
-	public ChessPiece(ChessPosition position,Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
+	public ChessPiece(ChessPosition position,Color color){
 		this.position = position;
 		this.color = color;
-		this.possibleMoves = possibleMoves;
-		this.limitedMoves = limitedMoves;
+		this.possibleMoves = new TreeSet<>();
+		this.limitedMoves = new TreeSet<>();
 	}
 }

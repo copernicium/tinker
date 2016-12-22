@@ -69,9 +69,10 @@ public class Queen extends ChessPiece
 		}
         this.possibleMoves = possibleMoves;
     }
-    @Override
-    public void move(ChessPosition newPosition){
-		if(MySystem.contains(this.getPossibleMoves(),newPosition)){
+	@Override
+	public void move(ChessPosition newPosition,boolean useLimited){
+		TreeSet<ChessPosition> setForChecking = useLimited ? this.getLimitedMoves(): this.getPossibleMoves();
+		if(MySystem.contains(setForChecking,newPosition)){
 			this.position = newPosition;
 			return;
 		}
@@ -87,9 +88,9 @@ public class Queen extends ChessPiece
         super();
     }
     public Queen(ChessPiece chessPiece){
-		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
+		super(chessPiece);
 	}
-    public Queen(ChessPosition position, Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
-        super(position,color,possibleMoves,limitedMoves);
+    public Queen(ChessPosition position, Color color){
+        super(position,color);
     }
 }

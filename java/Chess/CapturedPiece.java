@@ -76,7 +76,7 @@ public class CapturedPiece extends ChessPiece{
 	 * @param position the position to move this piece to
 	 */
 	@Override
-	public void move(ChessPosition position){
+	public void move(ChessPosition position,boolean useLimited){
 		MySystem.error("Trying to move a captured chess piece.", MySystem.getFileName(), MySystem.getLineNumber());
 	}
 

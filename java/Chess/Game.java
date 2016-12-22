@@ -277,12 +277,13 @@ public class Game{
 	 * Tests copy-by-value methods
 	 */
 	public static void testCopy(){
+		final boolean USE_LIMITED = false;//it doesn't matter
 		{
-			Pawn a = new Pawn(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D), ChessPiece.Color.WHITE, new TreeSet<>(),new TreeSet<>());
+			Pawn a = new Pawn(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D), ChessPiece.Color.WHITE);
 			a.updatePossibleMoves(new ChessPieces());
 			ChessPiece b = new Pawn(a);
 			b.updatePossibleMoves(new ChessPieces());
-			a.move(new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.D));
+			a.move(new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.D),USE_LIMITED);
 			System.out.println("a(" + a.toString() + ") b(" + b.toString() + ")");
 			System.out.println("==:" + (a == b) + " .equals():" + b.equals(a));
 		}
@@ -291,7 +292,7 @@ public class Game{
 			ChessPieces a = new ChessBoard().getPieces();
 			ChessPieces b = ChessPieces.makePieces(a);
 			System.out.println((a.getPieceAt(0)==b.getPieceAt(0)) + " " + (a.getPieceAt(0).equals(b.getPieceAt(0))));
-			a.getPieceAt(0).move(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.A));
+			a.getPieceAt(0).move(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.A),USE_LIMITED);
 			System.out.println((a.getPieceAt(0)==b.getPieceAt(0)) + " " + (a.getPieceAt(0).equals(b.getPieceAt(0))));
 		}
 	}
@@ -338,9 +339,10 @@ public class Game{
 	}
 
 	public static void playAgainstAI(){
+		//TODO: add in option to choose color
 		ChessBoard chessBoard = new ChessBoard();
 		final ChessPiece.Color PLAYER_COLOR = ChessPiece.Color.WHITE;
-		Opponent ben = new Opponent(ChessPiece.Color.not(PLAYER_COLOR));//TODO change color
+		Opponent ben = new Opponent(ChessPiece.Color.not(PLAYER_COLOR));
 
 		while(Game.continueGame(chessBoard)){
 			{
@@ -363,8 +365,9 @@ public class Game{
 
 	public static void aiAgainstAI(){
 		ChessBoard chessBoard = new ChessBoard();
-		Opponent ben = new Opponent(ChessPiece.Color.WHITE);//TODO change color
-		Opponent logan = new Opponent(ChessPiece.Color.BLACK);
+		final ChessPiece.Color AI_ONE_COLOR = ChessPiece.Color.WHITE;
+		Opponent ben = new Opponent(AI_ONE_COLOR );
+		Opponent logan = new Opponent(ChessPiece.Color.not(AI_ONE_COLOR));
 
 		while(Game.continueGame(chessBoard)){
 			{
@@ -398,10 +401,10 @@ public class Game{
 		//testSingleMove();
 		//testCapture();
 		//testCheck();
-		//testCheckmate();
+		testCheckmate();
 
 		//This is the actual game
-		play();
+		//play();
 		//playAgainstAI();
 		//aiAgainstAI();
 		MySystem.println("\n\n\nEND OF GAME FILE", MySystem.getFileName(), MySystem.getLineNumber());

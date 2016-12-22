@@ -52,12 +52,13 @@ public class Rook extends ChessPiece
 		}
         this.possibleMoves = possibleMoves;
     }
-    @Override
-    public void move(ChessPosition newPosition){
-        if(MySystem.contains(this.getPossibleMoves(),newPosition)){
-            this.position = newPosition;
-            return;
-        }
+	@Override
+	public void move(ChessPosition newPosition,boolean useLimited){
+		TreeSet<ChessPosition> setForChecking = useLimited ? this.getLimitedMoves(): this.getPossibleMoves();
+		if(MySystem.contains(setForChecking,newPosition)){
+			this.position = newPosition;
+			return;
+		}
 		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), MySystem.getFileName(), MySystem.getLineNumber());
 	}
 
@@ -72,9 +73,9 @@ public class Rook extends ChessPiece
         super();
     }
     public Rook(ChessPiece chessPiece){
-		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
+		super(chessPiece);
 	}
-    public Rook(ChessPosition position, Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
-        super(position,color,possibleMoves,limitedMoves);
+    public Rook(ChessPosition position, Color color){
+        super(position,color);
     }
 }

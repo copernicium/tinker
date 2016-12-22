@@ -36,6 +36,7 @@ public class King extends ChessPiece
 	}
 
 	private boolean checkMyMoves(final ChessPieces CHESS_PIECES){
+		final boolean USE_LIMITED = true;
 		if(!this.getCheck()){
 			MySystem.error("Testing for checkmate when this king is not even in check", MySystem.getFileName(), MySystem.getLineNumber());
 		}
@@ -43,7 +44,7 @@ public class King extends ChessPiece
 		ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
 		int index = postMovePieces.getIndexOf(this.getPosition());
 		for(ChessPosition possibleMove: this.getLimitedMoves()){
-			postMovePieces.move(index,possibleMove);
+			postMovePieces.move(index,possibleMove,USE_LIMITED);
 			postMovePieces.updateAllPossibleMoves(Color.not(this.getColor()));//only update the opposite color because it only needs to look to see if it's moved out of check which is determined by the other color's ability to take the king
 			postMovePieces.updateKingCheck(this.getColor());
 			if(!postMovePieces.getKing(this.getColor()).getCheck()){//could the king itself move out of check
@@ -60,7 +61,8 @@ public class King extends ChessPiece
 			return;//if it's not in check, then it doesn't need to check if it's in checkmate
 		}
 		ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
-		for(int i = 0; i < postMovePieces.length(); i++){//TODO: make foreach?
+		final boolean USE_LIMITED = true;
+		for(int i = 0; i < postMovePieces.length(); i++){
 			ChessPiece defendingPiece = ChessPiece.makePiece(postMovePieces.getPieceAt(i));
 			if(defendingPiece.getColor() != this.getColor() || defendingPiece.equals(this)) continue;
 			for(ChessPosition possibleMove : defendingPiece.getLimitedMoves()){
@@ -68,7 +70,7 @@ public class King extends ChessPiece
 					//if(!postMovePieces.checkExists(testPiece)) MySystem.error("Piece does not exist",MySystem.getFileName(),MySystem.getLineNumber());//useful when tinkering with kings
 					//if(!testPiece.checkMove(possibleMove,postMovePieces)) MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());//useful when tinkering with kings
 					if(postMovePieces.isOccupied(possibleMove, ChessPiece.Color.not(postMovePieces.getPieceAt(i).getColor()))) postMovePieces.capture(possibleMove);
-					postMovePieces.move(i,possibleMove);
+					postMovePieces.move(i,possibleMove,USE_LIMITED);
 				}
 				{
 					postMovePieces.updateAllPossibleMoves(Color.not(this.getColor()));
@@ -141,13 +143,15 @@ public class King extends ChessPiece
 	}
 
 	@Override
-	public void move(ChessPosition newPosition){
-		if(MySystem.contains(this.getPossibleMoves(),newPosition)){//TODO: make out of limited moves instead of p
+	public void move(ChessPosition newPosition,boolean useLimited){
+		TreeSet<ChessPosition> setForChecking = useLimited ? this.getLimitedMoves(): this.getPossibleMoves();
+		if(MySystem.contains(setForChecking,newPosition)){
 			this.position = newPosition;
 			return;
 		}
-		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString() + " out of " + this.getPossibleMoves().toString(), MySystem.getFileName(), MySystem.getLineNumber());
+		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), MySystem.getFileName(), MySystem.getLineNumber());
 	}
+
 	public boolean getCheck(){
 		return check;
 	}
@@ -169,10 +173,10 @@ public class King extends ChessPiece
 	}
 
 	public King(ChessPiece chessPiece){
-		this(chessPiece.getPosition(),chessPiece.getColor(),chessPiece.getPossibleMoves(),chessPiece.getLimitedMoves());
+		super(chessPiece);
 		if(chessPiece instanceof King){
 			King toCopy = (King)chessPiece;
-			this.position = new ChessPosition(toCopy.position);//TODO: redundant?
+			this.position = new ChessPosition(toCopy.position);//TODO: redundant because in super()?
 			this.color = toCopy.color;
 			this.check = toCopy.check;
 			this.checkmate = toCopy.checkmate;
@@ -180,8 +184,8 @@ public class King extends ChessPiece
 			this.limitedMoves = new TreeSet<>(toCopy.getLimitedMoves());
 		}
 	}
-	public King(ChessPosition position, Color color,TreeSet<ChessPosition> possibleMoves,TreeSet<ChessPosition> limitedMoves){
-		super(position,color,possibleMoves,limitedMoves);
+	public King(ChessPosition position, Color color){
+		super(position,color);
 		check = false;
 		checkmate = false;
 	}

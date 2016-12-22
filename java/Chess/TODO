@@ -1,6 +1,7 @@
 1. Replace nyis?
-2. Check for draws
-3. Update JavaDocs
-4. Create a game io
+2. Change get methods so that they return a new instance?
+3. Check for draws
+4. Update JavaDocs
+5. Create a game io
     - Print captured pieces
     - Pretty graphics?
