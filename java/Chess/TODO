@@ -1,4 +1,4 @@
-1. Replace nyis?
+1. Look into [makePiece and makePieces] and [Pawn(Pawn) vs Pawn(ChessPiece)]
 2. Change get methods so that they return a new instance?
 3. Check for draws
 4. Update JavaDocs

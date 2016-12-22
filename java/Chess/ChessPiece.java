@@ -60,7 +60,7 @@ public class ChessPiece{
 					return BLACK;
 				case BLACK:
 					return WHITE;
-				default: MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
+				default: MySystem.error("Color is neither black nor white",MySystem.getFileName(), MySystem.getLineNumber());
 			}
 			return WHITE;
 		}
@@ -243,8 +243,7 @@ public class ChessPiece{
 				return new ChessPiece(chessPiece);
 			default: MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 		}
-		MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
-		return new ChessPiece();
+		return new ChessPiece();//will never reach this line
 	}
 
 	/**
@@ -271,8 +270,7 @@ public class ChessPiece{
 				return new ChessPiece(chessPiece);
 			default: MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 		}
-		MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
-		return new ChessPiece();
+		return new ChessPiece();//will never reach this line
 	}
 
 	/**

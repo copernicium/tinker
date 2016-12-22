@@ -124,7 +124,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 				case 'H':
 					return new Column(Column.H);
 				default:
-					MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
+					MySystem.error("Column conversion failed",MySystem.getFileName(), MySystem.getLineNumber());
 			}
 			return new Column();
 		}
@@ -197,7 +197,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 					return new Row(Row._7);
 				case '8':
 					return new Row(Row._8);
-				default: MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
+				default: MySystem.error("Row conversion failed",MySystem.getFileName(), MySystem.getLineNumber());
 			}
 			return new Row();
 		}
