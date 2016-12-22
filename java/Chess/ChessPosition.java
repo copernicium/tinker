@@ -47,7 +47,9 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 		 * @param value the value to set the Dimension to
 		 */
 		public void set(int value){
-            MySystem.myAssert(value < DIMENSION && value >= 0, MySystem.getFileName(), MySystem.getLineNumber());
+			if(value >= DIMENSION && value < 0){
+				MySystem.error("Trying to set a dimension to a value which is out of bounds", MySystem.getFileName(), MySystem.getLineNumber());
+			}
             this.value = value;
         }
 
@@ -195,7 +197,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 					return new Row(Row._7);
 				case '8':
 					return new Row(Row._8);
-				default: MySystem.myAssert(false, MySystem.getFileName(), MySystem.getLineNumber());
+				default: MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 			}
 			return new Row();
 		}
@@ -326,7 +328,9 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 	 * @return the corresponding ChessPosition
 	 */
 	public static ChessPosition toChessPosition(String input){
-		MySystem.myAssert(input.length() == 2, MySystem.getFileName(), MySystem.getLineNumber());//make sure its only two characters
+		if(input.length() != 2){//TODO: use test case instead?
+			MySystem.error("String length is either too short or not long enough to be converted to a chess position", MySystem.getFileName(), MySystem.getLineNumber());//make sure its only two characters
+		}
 		final int COLUMN_LOC = 0, ROW_LOC = 1;
 		return new ChessPosition(Row.toRow(input.charAt(ROW_LOC)),Column.toColumn(input.charAt(COLUMN_LOC)));
 	}
@@ -402,7 +406,9 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 	 * @param column the column to instantiate it with
 	 */
 	public ChessPosition(int row,int column){
-		MySystem.myAssert(inBounds(row,column), MySystem.getFileName(), MySystem.getLineNumber());
+		if(!inBounds(row, column)){
+			MySystem.error("Trying to create a chess position which would be out of bounds", MySystem.getFileName(), MySystem.getLineNumber());
+		}
 		this.column = new Column(column);
 		this.row = new Row(row);
 	}

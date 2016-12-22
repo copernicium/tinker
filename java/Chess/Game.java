@@ -150,6 +150,9 @@ public class Game{
 				break;
 			case IN_PROGRESS:
 				break;
+			case DRAW:
+				System.out.println("Game over. Draw.");
+				break;
 			default:
 				MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
 		}
@@ -188,7 +191,9 @@ public class Game{
 		}
 		System.out.println("Finishing with status " + chessBoard.getStatus().toString() + " Expected: BLACK_WIN");
 		System.out.println("White king check: " + chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheck() + " expected: true  White king checkmate: " + chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheckmate() + " expected: true");
-		MySystem.myAssert(chessBoard.getStatus().equals(ChessBoard.Status.BLACK_WIN),MySystem.getFileName(),MySystem.getLineNumber());
+		if(!chessBoard.getStatus().equals(ChessBoard.Status.BLACK_WIN)){
+			MySystem.error("Test failed: did not end in a black win as expected", MySystem.getFileName(), MySystem.getLineNumber());
+		}
 	}
 
 	/**
@@ -243,9 +248,15 @@ public class Game{
 		System.out.println("Expected: Position (of first piece, but there's only one) " + EXPECTED_MOVEABLE_POS.toString() + " can be moved to " + EXPECTED_POSSIBLE_MOVES.toString());
 		System.out.println("White king check: " + chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheck() + " expected: true");
 
-		MySystem.myAssert(chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheck(),MySystem.getFileName(),MySystem.getLineNumber());
-		MySystem.myAssert(EXPECTED_MOVEABLE_POS.equals(firstPiece.getPosition()), MySystem.getFileName(), MySystem.getLineNumber());
-		MySystem.myAssert(MySystem.treeSetEquals(EXPECTED_POSSIBLE_MOVES,firstPiece.getLimitedMoves()), MySystem.getFileName(), MySystem.getLineNumber());
+		if(!chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheck()){
+			MySystem.error("Test failed: did not finish in check as expected",MySystem.getFileName(),MySystem.getLineNumber());
+		}
+		if(!EXPECTED_MOVEABLE_POS.equals(firstPiece.getPosition())){
+			MySystem.error("Test failed: the move-able pieces' positions did not match the expected one",MySystem.getFileName(),MySystem.getLineNumber());
+		}
+		if(!MySystem.treeSetEquals(EXPECTED_POSSIBLE_MOVES,firstPiece.getLimitedMoves())){
+			MySystem.error("Test failed: calculated limited moves did not match expected ones",MySystem.getFileName(),MySystem.getLineNumber());
+		}
 	}
 
 	/**
@@ -268,8 +279,9 @@ public class Game{
 	public static void testCopy(){
 		{
 			Pawn a = new Pawn(new ChessPosition(ChessPosition.Row._4, ChessPosition.Column.D), ChessPiece.Color.WHITE, new TreeSet<>(),new TreeSet<>());
-
+			a.updatePossibleMoves(new ChessPieces());
 			ChessPiece b = new Pawn(a);
+			b.updatePossibleMoves(new ChessPieces());
 			a.move(new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.D));
 			System.out.println("a(" + a.toString() + ") b(" + b.toString() + ")");
 			System.out.println("==:" + (a == b) + " .equals():" + b.equals(a));

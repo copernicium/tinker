@@ -144,13 +144,17 @@ public class ChessPieces{
 	}
 
 	public void move(final int INDEX,final ChessPosition MOVE_THERE){//TODO: maybe add auto-capturing in here?
-		MySystem.myAssert(this.isUnoccupied(MOVE_THERE), MySystem.getFileName(), MySystem.getLineNumber());
+		if(this.isOccupied(MOVE_THERE)){
+			MySystem.error("Move cannot be completed because target position is already occupied", MySystem.getFileName(), MySystem.getLineNumber());
+		}
 		this.lastMove = new ChessPiece.Move(ChessPiece.makePiece(this.pieces[INDEX]), MOVE_THERE);
 		this.pieces[INDEX].move(MOVE_THERE);
 	}
 
 	public void unMove(){//TODO: add in un-capturing
-		MySystem.myAssert(!this.lastMove.equals(new ChessPiece.Move()),MySystem.getFileName(),MySystem.getLineNumber());
+		if(this.lastMove.equals(new ChessPiece.Move())){
+			MySystem.error("Attempting to un-move when no moves have been made",MySystem.getFileName(),MySystem.getLineNumber());
+		}
 		this.set(this.getIndexOf(lastMove.getTarget()),ChessPiece.makePiece(lastMove.getStart()));
 		if(this.lastCapture.getType() != ChessPiece.Type.UNASSIGNED && this.lastCapture.getPosition().equals(this.lastMove.getTarget())){
 			this.set(this.getIndexOfCaptured(this.lastCapture.getPosition()),ChessPiece.makePiece(this.lastCapture));
@@ -256,7 +260,9 @@ public class ChessPieces{
 	 * @param PIECE the piece to be assigned into the array
 	 */
 	public void setNextPiece(final ChessPiece PIECE){
-		MySystem.myAssert(this.isUnoccupied(PIECE.getPosition()), MySystem.getFileName(), MySystem.getLineNumber());
+		if(this.isOccupied(PIECE.getPosition())){
+			MySystem.error("Trying to set a piece which is at a positon which is already occupied", MySystem.getFileName(), MySystem.getLineNumber());
+		}
 		this.pieces[this.findNextUnassigned()] = ChessPiece.makePiece(PIECE);
 	}
 

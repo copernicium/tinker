@@ -36,7 +36,9 @@ public class King extends ChessPiece
 	}
 
 	private boolean checkMyMoves(final ChessPieces CHESS_PIECES){
-		MySystem.myAssert(this.getCheck(), MySystem.getFileName(), MySystem.getLineNumber());
+		if(!this.getCheck()){
+			MySystem.error("Testing for checkmate when this king is not even in check", MySystem.getFileName(), MySystem.getLineNumber());
+		}
 		this.updatePossibleMoves(CHESS_PIECES);
 		ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
 		int index = postMovePieces.getIndexOf(this.getPosition());

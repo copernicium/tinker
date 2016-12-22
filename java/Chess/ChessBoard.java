@@ -56,7 +56,7 @@ public class ChessBoard
 		}
 	}
 
-	public enum Status{IN_PROGRESS,WHITE_WIN,BLACK_WIN}
+	public enum Status{IN_PROGRESS,DRAW,WHITE_WIN,BLACK_WIN}
 
 	private ChessPieces pieces;
 	private ChessPiece.Color playerTurn;
@@ -137,6 +137,30 @@ public class ChessBoard
 		return moveablePositions;
 	}
 
+	private static boolean checkForDraw(ChessPieces pieces){
+		//check for draw
+		/*Situation when a draw occurs due to insufficient material
+		- king versus king
+		- king and bishop versus king
+		- king and knight versus king
+		- king and bishop versus king and bishop with the bishops on the same colour. (Any number of additional bishops of either color on the same color of square due to underpromotion do not affect the situation.)
+		 */
+		for(ChessPiece piece: pieces.toArray()){
+			if(piece.getAlive() && piece.getType() != ChessPiece.Type.KNIGHT && piece.getType() != ChessPiece.Type.BISHOP && piece.getType() != ChessPiece.Type.KING) return false;
+		}
+		//also if the king is not in check but there are no possible moves left
+		final ChessPiece.Color[] colors = {ChessPiece.Color.WHITE, ChessPiece.Color.BLACK};
+		for(ChessPiece.Color color: colors){
+			if(!pieces.getKing(color).getCheck()){
+				for(ChessPiece piece : pieces.toArray()){
+					if(piece.getAlive() && piece.getColor() == color && piece.getPossibleMoves().size() > 0) return false;
+				}
+				return true;
+			}
+		}
+		return false;//TODO
+	}
+
 	/**
 	 * Asks both kings if they are in checkmate. If one is, then it ends the game.
 	 */
@@ -145,7 +169,9 @@ public class ChessBoard
 
 		if(this.pieces.getKing(ChessPiece.Color.BLACK).getCheckmate()) status = Status.WHITE_WIN;
 		else if(this.pieces.getKing(ChessPiece.Color.WHITE).getCheckmate()) status = Status.BLACK_WIN;
+		else if(checkForDraw(this.pieces)) status = Status.DRAW;
 		else status = Status.IN_PROGRESS;
+
 	}
 
 	/**

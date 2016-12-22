@@ -183,7 +183,9 @@ public class ChessPiece{
 	 * @return true if this piece can move to that position
 	 */
 	public boolean checkMoveDeep(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
-		MySystem.myAssert((CHESS_PIECES.containsLiving(this)), MySystem.getFileName(), MySystem.getLineNumber());
+		if(!CHESS_PIECES.containsLiving(this)){
+			MySystem.error("Move cannot be tested because piece does not exist in array", MySystem.getFileName(), MySystem.getLineNumber());
+		}
 		return MySystem.contains(this.getLimitedMoves(),CHECK_MOVE);
 	}
 
@@ -194,7 +196,9 @@ public class ChessPiece{
 	 * @return true if this piece can move to that position
 	 */
 	public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
-		MySystem.myAssert((CHESS_PIECES.containsLiving(this)), MySystem.getFileName(), MySystem.getLineNumber());
+		if(!CHESS_PIECES.containsLiving(this)){
+			MySystem.error("Move cannot be tested because piece does not exist in piece array", MySystem.getFileName(), MySystem.getLineNumber());
+		}
 		return MySystem.contains(this.getPossibleMoves(),CHECK_MOVE);
 	}
 
