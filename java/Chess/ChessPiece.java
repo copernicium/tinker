@@ -137,10 +137,7 @@ public class ChessPiece{
 				newMoves.add(testMove);
 				continue;
 			}
-			if(testPieces.isOccupied(testMove, ChessPiece.Color.not(this.getColor()))){
-				testPieces.capture(testMove);
-			}
-			testPieces.move(index,testMove,USE_LIMITED);
+			testPieces.moveAndCapture(index,testMove,USE_LIMITED);
 			testPieces.updateAllPossibleMoves(Color.not(this.getColor()));
 			testPieces.updateKingCheck(this.getColor());
 			if(!testPieces.getKing(this.getColor()).getCheck()) newMoves.add(testMove);//if moving this piece would not put the king in check, allow it

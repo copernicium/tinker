@@ -401,10 +401,10 @@ public class Game{
 		//testSingleMove();
 		//testCapture();
 		//testCheck();
-		testCheckmate();
+		//testCheckmate();
 
 		//This is the actual game
-		//play();
+		play();
 		//playAgainstAI();
 		//aiAgainstAI();
 		MySystem.println("\n\n\nEND OF GAME FILE", MySystem.getFileName(), MySystem.getLineNumber());

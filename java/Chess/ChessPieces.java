@@ -145,7 +145,8 @@ public class ChessPieces{
 		this.pieces[INDEX] = ChessPiece.makePiece(CHESS_PIECE);
 	}
 
-	public void move(final int INDEX,final ChessPosition MOVE_THERE,boolean useLimited){//TODO: maybe add auto-capturing in here?
+	public void moveAndCapture(final int INDEX,final ChessPosition MOVE_THERE,boolean useLimited){
+		if(this.isOccupied(MOVE_THERE, ChessPiece.Color.not(this.getPieceAt(INDEX).getColor()))) this.capture(MOVE_THERE);
 		if(this.isOccupied(MOVE_THERE)){
 			MySystem.error("Move cannot be completed because target position is already occupied", MySystem.getFileName(), MySystem.getLineNumber());
 		}
@@ -236,7 +237,7 @@ public class ChessPieces{
 	 * Kills the piece occupying a given Chess position
 	 * @param CAPTURING_POSITION the position of the piece to be killed
 	 */
-	public void capture(ChessPosition CAPTURING_POSITION){
+	private void capture(ChessPosition CAPTURING_POSITION){
 		if(this.getPieceAt(CAPTURING_POSITION) instanceof King){
 			MySystem.error("Attempting to capture a king at " + CAPTURING_POSITION.toString(),MySystem.getFileName(),MySystem.getLineNumber());
 		}

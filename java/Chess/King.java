@@ -44,7 +44,7 @@ public class King extends ChessPiece
 		ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
 		int index = postMovePieces.getIndexOf(this.getPosition());
 		for(ChessPosition possibleMove: this.getLimitedMoves()){
-			postMovePieces.move(index,possibleMove,USE_LIMITED);
+			postMovePieces.moveAndCapture(index,possibleMove,USE_LIMITED);
 			postMovePieces.updateAllPossibleMoves(Color.not(this.getColor()));//only update the opposite color because it only needs to look to see if it's moved out of check which is determined by the other color's ability to take the king
 			postMovePieces.updateKingCheck(this.getColor());
 			if(!postMovePieces.getKing(this.getColor()).getCheck()){//could the king itself move out of check
@@ -66,21 +66,16 @@ public class King extends ChessPiece
 			ChessPiece defendingPiece = ChessPiece.makePiece(postMovePieces.getPieceAt(i));
 			if(defendingPiece.getColor() != this.getColor() || defendingPiece.equals(this)) continue;
 			for(ChessPosition possibleMove : defendingPiece.getLimitedMoves()){
-				{
-					//if(!postMovePieces.checkExists(testPiece)) MySystem.error("Piece does not exist",MySystem.getFileName(),MySystem.getLineNumber());//useful when tinkering with kings
-					//if(!testPiece.checkMove(possibleMove,postMovePieces)) MySystem.error("Error: trying to move piece to invalid location.",MySystem.getFileName(),MySystem.getLineNumber());//useful when tinkering with kings
-					if(postMovePieces.isOccupied(possibleMove, ChessPiece.Color.not(postMovePieces.getPieceAt(i).getColor()))) postMovePieces.capture(possibleMove);
-					postMovePieces.move(i,possibleMove,USE_LIMITED);
-				}
-				{
-					postMovePieces.updateAllPossibleMoves(Color.not(this.getColor()));
-					this.updateCheck(postMovePieces);
+				postMovePieces.moveAndCapture(i,possibleMove,USE_LIMITED);
 
-					if(!this.check){//if a move moves it out of check, then it isn't in checkmate
-						this.checkmate = false;
-						return;
-					}
+				postMovePieces.updateAllPossibleMoves(Color.not(this.getColor()));
+				this.updateCheck(postMovePieces);
+
+				if(!this.check){//if a move moves it out of check, then it isn't in checkmate
+					this.checkmate = false;
+					return;
 				}
+
 				postMovePieces.unMove();
 			}
 

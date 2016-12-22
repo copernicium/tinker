@@ -209,8 +209,7 @@ public class ChessBoard
 		int index = pieces.getIndexOf(PIECE_TO_MOVE.getPosition());
 		if(this.pieces.getPieceAt(index).checkMoveDeep(MOVE_THERE,pieces)){
 			final boolean USE_LIMITED = true;
-			if(this.pieces.isOccupied(MOVE_THERE, ChessPiece.Color.not(this.pieces.getPieceAt(index).getColor()))) this.pieces.capture(MOVE_THERE);
-			pieces.move(index,MOVE_THERE,USE_LIMITED);
+			pieces.moveAndCapture(index,MOVE_THERE,USE_LIMITED);
 		} else {
 			MySystem.error("Error: trying to move piece to invalid location: piece:" + this.pieces.getPieceAt(index).toString() + " cannot move to " + MOVE_THERE.toString() + " from possible " + this.pieces.getPieceAt(index).getPossibleMoves().toString(), MySystem.getFileName(), MySystem.getLineNumber());//user inputs invalid move
 		}
