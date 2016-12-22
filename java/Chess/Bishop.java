@@ -8,6 +8,7 @@ import MySystem.*;
 public class Bishop extends ChessPiece
 {
 	private static final Type type = Type.BISHOP;
+	private static final char symbol = 'B';
 
 	/**
 	 * Fetches the type of this piece
@@ -22,10 +23,10 @@ public class Bishop extends ChessPiece
 	 * The symbol to print given the type
 	 * @return the letter representing this Chess piece
 	 */
-	@Override
-    public String print(){
-        return "B";
-    }
+	public char getSymbol(){
+		return (this.color == Color.WHITE) ? Character.toUpperCase(symbol) : Character.toLowerCase(symbol);
+	}
+
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){
 		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();

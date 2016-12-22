@@ -29,8 +29,8 @@ public class CapturedPiece extends ChessPiece{
 	 * The symbol to print given the type
 	 * @return the letter representing this Chess piece
 	 */
-	public String print(){
-		return "Q";//TODO
+	public char getSymbol(){
+		return ChessPiece.makePiece(this.type,new ChessPiece(this)).getSymbol();
 	}
 
 	/**

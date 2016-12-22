@@ -12,6 +12,7 @@ public class King extends ChessPiece
 	private boolean checkmate;
 
 	private static final Type type = Type.KING;
+	private static final char symbol = 'K';
 
 	/**
 	 * Fetches the type of this piece
@@ -97,10 +98,10 @@ public class King extends ChessPiece
 	 * The symbol to print given the type
 	 * @return the letter representing this Chess piece
 	 */
-	@Override
-	public String print(){
-		return "K";
+	public char getSymbol(){
+		return (this.color == Color.WHITE) ? Character.toUpperCase(symbol) : Character.toLowerCase(symbol);
 	}
+
 	@Override
 	public void updatePossibleMoves(ChessPieces chessPieces){
 		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();

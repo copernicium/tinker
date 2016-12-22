@@ -9,6 +9,7 @@ import MySystem.*;
 public class Knight extends ChessPiece
 {
 	private static final Type type = Type.KNIGHT;
+	private static final char symbol = 'N';
 
 	/**
 	 * Fetches the type of this piece
@@ -23,10 +24,9 @@ public class Knight extends ChessPiece
 	 * The symbol to print given the type
 	 * @return the letter representing this Chess piece
 	 */
-	@Override
-    public String print(){
-        return "N";
-    }
+	public char getSymbol(){
+		return (this.color == Color.WHITE) ? Character.toUpperCase(symbol) : Character.toLowerCase(symbol);
+	}
 	private ChessPosition.Tester[] getCorners(int xDisplacement, int yDisplacement){
 		final int NUMBER_OF_CORNERS = 4;
 		ChessPosition.Tester[] corners = new ChessPosition.Tester[NUMBER_OF_CORNERS];

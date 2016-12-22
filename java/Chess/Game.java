@@ -318,6 +318,11 @@ public class Game{
 			ChessPosition testMove = new ChessPosition(ChessPosition.Row._5, ChessPosition.Column.E);
 			testMove(chessBoard,test,testMove,EXIT_ON_COMPLETION );
 		}
+		System.out.print("Captured pieces: ");
+		for(ChessPiece piece: chessBoard.getPieces().toArray()){
+			if(!piece.getAlive()) System.out.print("[" + piece.getSymbol() + ", " + piece.toString() + "]");
+		}
+		System.out.print("\n");
 	}
 
 	public static void playAgainstAI(){

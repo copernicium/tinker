@@ -9,6 +9,7 @@ import MySystem.*;
 public class Queen extends ChessPiece
 {
 	private static final Type type = Type.QUEEN;
+	private static final char symbol = 'Q';
 
 	/**
 	 * Fetches the type of this piece
@@ -23,10 +24,10 @@ public class Queen extends ChessPiece
 	 * The symbol to print given the type
 	 * @return the letter representing this Chess piece
 	 */
-  	@Override
-    public String print(){
-        return "Q";
-    }
+	public char getSymbol(){
+		return (this.color == Color.WHITE) ? Character.toUpperCase(symbol) : Character.toLowerCase(symbol);
+	}
+
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){
 		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();

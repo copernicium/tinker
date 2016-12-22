@@ -68,6 +68,7 @@ public class ChessPiece{
 	protected Color color;
 	protected ChessPosition position;
 	private final static Type type = Type.UNASSIGNED;
+	private final static char symbol = 'U';
 	protected TreeSet<ChessPosition> possibleMoves;
 	protected TreeSet<ChessPosition> limitedMoves;
 
@@ -92,8 +93,8 @@ public class ChessPiece{
 	 * The symbol to print given the type
 	 * @return the letter representing this Chess piece
 	 */
-	public String print(){
-		return "U";
+	public char getSymbol(){
+		return (this.color == Color.WHITE) ? Character.toUpperCase(symbol) : Character.toLowerCase(symbol);
 	}
 
 	/**

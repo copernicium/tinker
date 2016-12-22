@@ -10,6 +10,7 @@ public class Pawn extends ChessPiece
     private boolean firstMove;//pawns can move differently on their first move
 
 	private static final Type type = Type.PAWN;
+	private static final char symbol = 'P';
 
 	/**
 	 * Fetches the type of this piece
@@ -30,9 +31,10 @@ public class Pawn extends ChessPiece
 	 * @return the letter representing this Chess piece
 	 */
 	@Override
-    public String print(){
-        return "P";
-    }
+	public char getSymbol(){
+		return (this.color == Color.WHITE) ? Character.toUpperCase(symbol) : Character.toLowerCase(symbol);
+	}
+
     @Override
     public void updatePossibleMoves(ChessPieces chessPieces){//TODO: en passant and maybe promotion
 		TreeSet<ChessPosition> possibleMoves = new TreeSet<>();

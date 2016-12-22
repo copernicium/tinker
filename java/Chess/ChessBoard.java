@@ -82,7 +82,7 @@ public class ChessBoard
 			}
 		}
 		for(ChessPiece a: PIECES){
-			if(a.getAlive()) board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()-1][a.getPosition().getColumn().get()] = a.print();
+			if(a.getAlive()) board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()-1][a.getPosition().getColumn().get()] = "" + a.getSymbol();
 		}
 		for(String[] a: board){
 			for(String b:a){
