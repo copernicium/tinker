@@ -38,7 +38,7 @@ public class SquareNumbers {
 
 	/**
 	 * Given an integer it prints all of the powers of two less than it
-	 * @param the upper limit
+	 * @param n upper limit
 	 */
 	public static void getPowersOfTwoLessThan(int n){
 		int power = 0;
