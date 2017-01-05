@@ -16,7 +16,6 @@ public class Opponent {
 	}
 
 	public ChessPiece.Move getRandomMove(final ChessPieces PIECES){
-		MySystem.println("Color is " + this.getColor(), MySystem.getFileName(),MySystem.getLineNumber());
 		Vector<Integer> moveable_pieces = new Vector<>(0);
 		for(int i = 0; i < PIECES.length(); i++){
 			ChessPiece a = PIECES.toArray()[i];

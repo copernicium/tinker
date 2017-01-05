@@ -1,7 +1,8 @@
 1. Look into [makePiece and makePieces] and [Pawn(Pawn) vs Pawn(ChessPiece)]
-2. Change get methods so that they return a new instance?
-3. Check for draws
-4. Update JavaDocs
-5. Create a game io
+2. Double check checkmate
+3. Change get methods so that they return a new instance?
+4. Check for draws
+5. Update JavaDocs
+6. Create a game io
     - Print captured pieces
     - Pretty graphics?

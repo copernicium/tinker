@@ -364,6 +364,7 @@ public class Game{
 	}
 
 	public static void aiAgainstAI(){
+		final boolean EXIT_ON_COMPLETION = true;
 		ChessBoard chessBoard = new ChessBoard();
 		final ChessPiece.Color AI_ONE_COLOR = ChessPiece.Color.WHITE;
 		Opponent ben = new Opponent(AI_ONE_COLOR );
@@ -377,7 +378,7 @@ public class Game{
 				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart().getPosition()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
 				chessBoard.move(move);
 			}
-			{
+			if(Game.continueGame(chessBoard)){
 				chessBoard.print();
 				System.out.println("-----------------------\nLogan's turn.");
 				ChessPiece.Move move = logan.getRandomMove(chessBoard.getPieces());
@@ -385,6 +386,7 @@ public class Game{
 				chessBoard.move(move);
 			}
 		}
+		Game.handelStatus(chessBoard,EXIT_ON_COMPLETION);
 		System.out.println("Game over");
 	}
 
@@ -404,9 +406,9 @@ public class Game{
 		//testCheckmate();
 
 		//This is the actual game
-		play();
+		//play();
 		//playAgainstAI();
-		//aiAgainstAI();
+		aiAgainstAI();
 		MySystem.println("\n\n\nEND OF GAME FILE", MySystem.getFileName(), MySystem.getLineNumber());
 	}
 }

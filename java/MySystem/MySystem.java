@@ -11,10 +11,10 @@ import java.util.Vector;
 public class MySystem{
 	public static <T extends Object> T getRandomTreeSetElement(TreeSet<T> a){
 		Iterator<T> aIterator = a.iterator();
-		Random rand = new Random(a.size());
-		int r = rand.nextInt(), i = 0;
-		while(aIterator.hasNext()){
-			if(i == r) return aIterator.next();
+		Random rand = new Random();
+		int r = rand.nextInt(a.size()), i = 0;
+		for(T obj: a){
+			if(i == r) return obj;
 			i++;
 		}
 		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());

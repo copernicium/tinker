@@ -143,13 +143,27 @@ public class ChessBoard
 		- king versus king
 		- king and bishop versus king
 		- king and knight versus king
-		- king and bishop versus king and bishop with the bishops on the same colour. (Any number of additional bishops of either color on the same color of square due to underpromotion do not affect the situation.)
+		- king and bishop versus king and bishop with the bishops on the same color. (Any number of additional bishops of either color on the same color of square due to underpromotion do not affect the situation.)
 		 */
 		for(ChessPiece piece: pieces.toArray()){
 			if(piece.getAlive() && piece.getType() != ChessPiece.Type.KNIGHT && piece.getType() != ChessPiece.Type.BISHOP && piece.getType() != ChessPiece.Type.KING) return false;
 		}
-		//also if the king is not in check but there are no possible moves left
+		MySystem.println("HERE",MySystem.getFileName(),MySystem.getLineNumber());
+
 		final ChessPiece.Color[] colors = {ChessPiece.Color.WHITE, ChessPiece.Color.BLACK};
+
+		{
+			boolean king_versus_king = true;
+			for (ChessPiece piece : pieces.toArray()) {
+				if (piece.getAlive() && piece.getType() != ChessPiece.Type.KING){
+					king_versus_king = false;
+					break;
+				}
+			}
+			MySystem.println("KING_VS_KING",MySystem.getFileName(),MySystem.getLineNumber());
+			if(king_versus_king) return true;
+		}
+		//also if the king is not in check but there are no possible moves left
 		for(ChessPiece.Color color: colors){
 			if(!pieces.getKing(color).getCheck()){
 				for(ChessPiece piece : pieces.toArray()){
