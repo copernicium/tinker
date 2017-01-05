@@ -386,6 +386,7 @@ public class Game{
 				chessBoard.move(move);
 			}
 		}
+		chessBoard.print();
 		Game.handelStatus(chessBoard,EXIT_ON_COMPLETION);
 		System.out.println("Game over");
 	}
