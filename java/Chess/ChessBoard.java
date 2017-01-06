@@ -70,22 +70,63 @@ public class ChessBoard
 		return playerTurn;
 	}
 
+	private static int lengthWithGrid(int a){
+		return a *2 + 1;
+	}
+
+	private static void printWithGrid(final ChessPiece[] PIECES){
+		final int WIDTH = lengthWithGrid(ChessPosition.Row.DIMENSION), HEIGHT = lengthWithGrid(ChessPosition.Column.DIMENSION);
+
+		char[][] board = new char[HEIGHT][WIDTH];
+		for(int i = 0; i < board.length; i++){
+			for(int j = 0; j < board[i].length; j++){
+				board[i][j] = ' ';
+			}
+		}
+		for(ChessPiece a: PIECES){
+			if(a.getAlive()) board[lengthWithGrid(ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()-1)][lengthWithGrid(a.getPosition().getColumn().get())] = a.getSymbol();
+		}
+		boolean horizontalLine = true;
+		for(int i = 0; i < board.length; i++){
+			if(horizontalLine){
+				for(int j = 0; j < board[i].length ; j++){
+					board[i][j] = '-';
+				}
+			} else {
+				boolean verticalLine = true;
+				for (int j = 0; j < board[i].length; j++) {
+					if (verticalLine) {
+						board[i][j] = '|';
+					}
+					verticalLine = !verticalLine;
+				}
+			}
+			horizontalLine = !horizontalLine;
+		}
+		for(char[] a: board){
+			for(char b:a){
+				System.out.print(b);
+			}
+			System.out.print("\n");
+		}
+	}
+
 	/**
 	 * prints a new Chess board given a set of pieces
 	 * @param PIECES the pieces to print
 	 */
 	private static void print(final ChessPiece[] PIECES){
-		String[][] board = new String[ChessPosition.Row.DIMENSION][ChessPosition.Column.DIMENSION];
+		char[][] board = new char[ChessPosition.Column.DIMENSION][ChessPosition.Row.DIMENSION];
 		for(int i = 0; i < board.length; i++){
 			for(int j = 0; j < board[i].length; j++){
-				board[i][j] = " ";
+				board[i][j] = ' ';
 			}
 		}
 		for(ChessPiece a: PIECES){
-			if(a.getAlive()) board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()-1][a.getPosition().getColumn().get()] = "" + a.getSymbol();
+			if(a.getAlive()) board[ChessPosition.Row.DIMENSION - a.getPosition().getRow().get()-1][a.getPosition().getColumn().get()] = a.getSymbol();
 		}
-		for(String[] a: board){
-			for(String b:a){
+		for(char[] a: board){
+			for(char b:a){
 				System.out.print(b);
 			}
 			System.out.print("\n");
@@ -96,7 +137,7 @@ public class ChessBoard
 	 * Prints the current Chess board
 	 */
 	public void print(){
-		ChessBoard.print(this.pieces.toArray());
+		ChessBoard.printWithGrid(this.pieces.toArray());
 	}
 
 	/**

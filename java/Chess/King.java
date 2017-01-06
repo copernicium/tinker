@@ -55,7 +55,22 @@ public class King extends ChessPiece
 		return true;
 	}
 
+	private boolean canColorMoveAnyPieces(final ChessPieces CHESS_PIECES){
+		ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
+		//testPieces.updateAllMoves();
+		for(ChessPiece piece: testPieces.toArray()){
+			if(piece.getColor() == this.color && piece.getLimitedMoves().size() > 0){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private void updateCheckmate(final ChessPieces CHESS_PIECES){
+		if(!canColorMoveAnyPieces(CHESS_PIECES)){
+			this.checkmate = true;
+			return;
+		}
 		if(!this.check){
 			this.checkmate = false;
 			return;//if it's not in check, then it doesn't need to check if it's in checkmate
@@ -86,6 +101,13 @@ public class King extends ChessPiece
 	public void update(final ChessPieces ORIGINAL_PIECES){
 		this.updateCheck(ORIGINAL_PIECES);
 		this.updateCheckmate(ORIGINAL_PIECES);
+		if(this.checkmate){
+			MySystem.println("+++++++++++++++++" ,MySystem.getFileName(),MySystem.getLineNumber());
+			MySystem.println("Checkmate pieces: " + ORIGINAL_PIECES,MySystem.getFileName(),MySystem.getLineNumber());
+			ChessBoard a = new ChessBoard(ORIGINAL_PIECES);
+			a.print();
+			MySystem.println("+++++++++++++++++" ,MySystem.getFileName(),MySystem.getLineNumber());
+		}
 	}
 
 	@Override

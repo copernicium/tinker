@@ -134,7 +134,7 @@ public class ChessPiece{
 		ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
 		for(ChessPosition testMove: this.getPossibleMoves()){
 			if(testMove.equals(enemyKingPosition)){//if moving this piece would capture the other king, then we don't need to worry about if that would leave this king in check
-				newMoves.add(testMove);
+				//newMoves.add(testMove);//TODO: add back in? Maybe not.
 				continue;
 			}
 			testPieces.moveAndCapture(index,testMove,USE_LIMITED);

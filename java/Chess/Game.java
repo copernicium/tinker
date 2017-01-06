@@ -364,6 +364,7 @@ public class Game{
 	}
 
 	public static void aiAgainstAI(){
+		final boolean RUN_UNTIL_NOT_DRAW = true;
 		final boolean EXIT_ON_COMPLETION = true;
 		ChessBoard chessBoard = new ChessBoard();
 		final ChessPiece.Color AI_ONE_COLOR = ChessPiece.Color.WHITE;
@@ -373,18 +374,21 @@ public class Game{
 		while(Game.continueGame(chessBoard)){
 			{
 				chessBoard.print();
-				System.out.println("-----------------------\nBen's turn.");
+				System.out.println("-----------------------\nBen's turn (" + ben.getColor() + ").");
 				ChessPiece.Move move = ben.getRandomMove(chessBoard.getPieces());
 				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart().getPosition()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
 				chessBoard.move(move);
 			}
 			if(Game.continueGame(chessBoard)){
 				chessBoard.print();
-				System.out.println("-----------------------\nLogan's turn.");
+				System.out.println("-----------------------\nLogan's turn (" + logan.getColor() + ").");
 				ChessPiece.Move move = logan.getRandomMove(chessBoard.getPieces());
 				System.out.println("Moving " + chessBoard.getPieces().getPieceAt(move.getStart().getPosition()).getType().toString() + " from " + move.getStart().toString() + " to " + move.getTarget().toString() + ".");
 				chessBoard.move(move);
 			}
+		}
+		if(RUN_UNTIL_NOT_DRAW && chessBoard.getStatus() == ChessBoard.Status.DRAW){
+			aiAgainstAI();
 		}
 		chessBoard.print();
 		Game.handelStatus(chessBoard,EXIT_ON_COMPLETION);
