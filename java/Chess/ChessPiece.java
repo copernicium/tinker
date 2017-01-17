@@ -134,7 +134,7 @@ public class ChessPiece{
 		ChessPieces testPieces = ChessPieces.makePieces(CHESS_PIECES);
 		for(ChessPosition testMove: this.getPossibleMoves()){
 			if(testMove.equals(enemyKingPosition)){//if moving this piece would capture the other king, then we don't need to worry about if that would leave this king in check
-				//newMoves.add(testMove);//TODO: add back in? Maybe not.
+				newMoves.add(testMove);//TODO: add back in? Maybe not.
 				continue;
 			}
 			testPieces.moveAndCapture(index,testMove,USE_LIMITED);
@@ -143,7 +143,9 @@ public class ChessPiece{
 			if(!testPieces.getKing(this.getColor()).getCheck()) newMoves.add(testMove);//if moving this piece would not put the king in check, allow it
 			testPieces.unMove();
 		}
-		MySystem.myAssert(this.equals(original),MySystem.getFileName(),MySystem.getLineNumber());
+		if(!this.equals(original)){
+			MySystem.error("Method changed the object. Should not have. Original: " + original.toString() + " this: " + this.toString(), MySystem.getFileName(), MySystem.getLineNumber());
+		}
 		this.limitedMoves = newMoves;
 	}
 
