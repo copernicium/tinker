@@ -9,6 +9,22 @@ import java.util.Vector;
  * A series of useful methods I've defined to use in other projects
  */
 public class MySystem{
+	/**
+	 * Takes an array and returns a string which represents it
+	 * @param array the array to print
+	 * @param <T> the type of the array elements
+	 * @return the array in string form
+	 */
+	public static <T extends Object> String arrayToString(T[] array){
+		String s = "[";
+		for(int i = 0; i < array.length; i++){
+			s += array[i].toString();
+			if(i < array.length - 1) s += ", ";
+		}
+		s += "]";
+		return s;
+	}
+
 	public static <T extends Object> T getRandomTreeSetElement(TreeSet<T> a){
 		Iterator<T> aIterator = a.iterator();
 		Random rand = new Random();
