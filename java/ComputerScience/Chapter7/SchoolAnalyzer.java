@@ -126,5 +126,13 @@ public class SchoolAnalyzer {
 				System.out.print("\n");
 			}
 		}
+
+		{
+			int totalSchoolSize = 0;
+			for(int a: gradeSizes){
+				totalSchoolSize += a;
+			}
+			System.out.println("Total school size: " + totalSchoolSize);
+		}
 	}
 }
