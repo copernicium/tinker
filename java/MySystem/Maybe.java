@@ -3,11 +3,11 @@ package MySystem;
 /**
  * Stores and integer and keeps track of whether it has been set or not
  */
-public class MaybeInteger{
-	private int a;
+public class Maybe<T>{
+	private T a;
 	private boolean set;
 
-	public int get(){
+	public T get(){
 		if(!this.set){
 			MySystem.error("Integer not set",MySystem.getFileName(),MySystem.getLineNumber());
 		}
@@ -18,17 +18,16 @@ public class MaybeInteger{
 		return this.set;
 	}
 
-	public MaybeInteger(){
-		a = 0;
+	public Maybe(){
 		set = false;
 	}
 
-	public void set(int a){
+	public void set(T a){
 		this.a = a;
 		this.set = true;
 	}
 
-	public MaybeInteger(int a){
+	public Maybe(T a){
 		this.a = a;
 		set = true;
 	}

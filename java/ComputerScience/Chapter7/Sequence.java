@@ -1,7 +1,7 @@
 package ComputerScience.Chapter7;
 
 
-import MySystem.MaybeInteger;
+import MySystem.Maybe;
 import java.util.ArrayList;
 
 /**
@@ -86,9 +86,9 @@ public class Sequence {
 		ArrayList<Integer> c = new ArrayList<>();
 		{
 			ArrayList a = new ArrayList(this.getValues()), b = new ArrayList(other.getValues());
-			MaybeInteger last = new MaybeInteger();
+			Maybe<Integer> last = new Maybe<Integer>();
 			while(a.size() > 0 || b.size() > 0){
-				MaybeInteger next = new MaybeInteger(), aVal = new MaybeInteger(), bVal = new MaybeInteger();
+				Maybe<Integer> next = new Maybe<Integer>(), aVal = new Maybe<Integer>(), bVal = new Maybe<Integer>();
 
 				if(a.size() > 0) aVal.set((int)a.get(0));
 				if(b.size() > 0) bVal.set((int)b.get(0));
