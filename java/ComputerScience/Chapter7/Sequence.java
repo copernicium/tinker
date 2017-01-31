@@ -1,5 +1,7 @@
 package ComputerScience.Chapter7;
 
+
+import MySystem.MaybeInteger;
 import java.util.ArrayList;
 
 /**
@@ -81,20 +83,33 @@ public class Sequence {
 	 */
 	public Sequence mergeSorted(Sequence other){
 		Sequence s = new Sequence();
-		ArrayList a = this.getValues(), b = other.getValues();
-		int last = 0;
-		boolean set = false;
-		for(int i = 0; i < a.size() || i < b.size(); i++){
-			boolean aExists = i < a.size(), bExists = i < b.size();
-			int bVal = bExists ? (int)b.get(i) : 0, aVal = aExists ? (int)a.get(i) : 0;
-			if(aExists && (!bExists || aVal <= bVal)){
-				s.add(aVal);
-				if(bExists) s.add(bVal);
+		ArrayList<Integer> c = new ArrayList<>();
+		{
+			ArrayList a = new ArrayList(this.getValues()), b = new ArrayList(other.getValues());
+			MaybeInteger last = new MaybeInteger();
+			while(a.size() > 0 || b.size() > 0){
+				MaybeInteger next = new MaybeInteger(), aVal = new MaybeInteger(), bVal = new MaybeInteger();
+
+				if(a.size() > 0) aVal.set((int)a.get(0));
+				if(b.size() > 0) bVal.set((int)b.get(0));
+
+				if(aVal.hasBeenSet() && (!bVal.hasBeenSet() || aVal.get() <= bVal.get())){
+					next.set(aVal.get());
+					a.remove(0);
+				} else if(bVal.hasBeenSet() && (!aVal.hasBeenSet() || bVal.get() <= aVal.get())){
+					next.set(bVal.get());
+					b.remove(0);
+				}
+
+				if(next.hasBeenSet()){
+					if(last.hasBeenSet() && next.get() < last.get()) break;
+					c.add(next.get());
+					last.set(next.get());
+				}
 			}
-			if(bExists && (!aExists || bVal <= aVal)){
-				s.add(bVal);
-				if(aExists) s.add(aVal);
-			}
+		}
+		for(int a: c){
+			s.add(a);
 		}
 		return s;
 	}
