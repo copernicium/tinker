@@ -1,0 +1,92 @@
+package ComputerScience.Zork;
+
+import MySystem.MySystem;
+
+import java.util.ArrayList;
+
+/**
+ * Stores all of the information for a given room in the Zork text adventure game
+ */
+public class Room {
+	String name;
+	String desc;
+	Treasure treasure;
+	ArrayList<Room> exits;
+
+	/**
+	 * Add exits to the Room
+	 * @param exit - the Room to exit into
+	 */
+	void addExit(Room exit){
+		this.exits.add(exit);
+	}
+
+	/**
+	 * Add treature to the Room
+	 * @param treasure - the treasure
+	 */
+	void addTreasure(Treasure treasure){
+		this.treasure = treasure;
+	}
+
+	/**
+	 * Get the description of the Room
+	 * @return the Room description
+	 */
+	String getDesc(){
+		return this.desc;
+	}
+
+	/**
+	 * Get the exits of the Room
+	 * @return String of Rooms that this Room exits into
+	 */
+	String getExits(){
+		String s = "";
+		for(int i = 0; i < this.exits.size(); i++){
+			if(i != 0) s += " ";
+			s += this.exits.get(i).getName();
+			if(i != this.exits.size() - 1) s += ",";
+			if(i == this.exits.size() - 2) s += " and";
+		}
+		return s;
+	}
+
+	/**
+	 *  Get the treasure in the Room
+	 * @return the Room's treasure
+	 */
+	Treasure getTreasure(){
+		return this.treasure;
+	}
+
+	/**
+	 * Remove treasure from the Room
+	 */
+	void removeTreasure(){
+		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());//TODO: implement
+	}
+
+	/**
+	 * Get the exits of the Room--Alternate method
+	 * @return a list of Rooms that this Room exits into
+	 */
+	ArrayList<Room> showExits(){
+		return this.exits;
+	}
+
+	/**
+	 * Get the name of the Room
+	 * @return the Room name
+	 */
+	String getName(){
+		return this.name;
+	}
+
+	public Room(String name, String desc){
+		this.name = name;
+		this.desc = desc;
+		this.treasure = new Treasure();
+		this.exits = new ArrayList<>();
+	}
+}
