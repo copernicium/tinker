@@ -93,16 +93,16 @@ public class Sequence {
 				if(a.size() > 0) aVal.set((int)a.get(0));
 				if(b.size() > 0) bVal.set((int)b.get(0));
 
-				if(aVal.hasBeenSet() && (!bVal.hasBeenSet() || aVal.get() <= bVal.get())){
+				if(aVal.isValid() && (!bVal.isValid() || aVal.get() <= bVal.get())){
 					next.set(aVal.get());
 					a.remove(0);
-				} else if(bVal.hasBeenSet() && (!aVal.hasBeenSet() || bVal.get() <= aVal.get())){
+				} else if(bVal.isValid() && (!aVal.isValid() || bVal.get() <= aVal.get())){
 					next.set(bVal.get());
 					b.remove(0);
 				}
 
-				if(next.hasBeenSet()){
-					if(last.hasBeenSet() && next.get() < last.get()) break;
+				if(next.isValid()){
+					if(last.isValid() && next.get() < last.get()) break;
 					c.add(next.get());
 					last.set(next.get());
 				}

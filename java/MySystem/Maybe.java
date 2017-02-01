@@ -5,30 +5,50 @@ package MySystem;
  */
 public class Maybe<T>{
 	private T a;
-	private boolean set;
+	private boolean valid;
 
 	public T get(){
-		if(!this.set){
+		if(!this.valid){
 			MySystem.error("Integer not set",MySystem.getFileName(),MySystem.getLineNumber());
 		}
 		return this.a;
 	}
 
-	public boolean hasBeenSet(){
-		return this.set;
+	@Override
+	public String toString(){
+		String s = "Maybe(";
+		s += "has been set:" + this.valid;
+		if(this.valid) s+= " valid:" + this.get();
+		s += ")";
+		return s;
+	}
+
+	@Override
+	public boolean equals(Object o){
+		if(o == null || o.getClass() != this.getClass()) return false;
+		Maybe<T> b = (Maybe<T>)o;
+		if(b.isValid() != this.valid) return false;
+		if(this.valid){
+			return this.get().equals(b.get());
+		}
+		return true;
+	}
+
+	public boolean isValid(){
+		return this.valid;
 	}
 
 	public Maybe(){
-		set = false;
+		valid = false;
 	}
 
 	public void set(T a){
 		this.a = a;
-		this.set = true;
+		this.valid = true;
 	}
 
 	public Maybe(T a){
 		this.a = a;
-		set = true;
+		valid = true;
 	}
 }
