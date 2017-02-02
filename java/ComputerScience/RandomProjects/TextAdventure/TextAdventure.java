@@ -1,5 +1,5 @@
 package ComputerScience.RandomProjects.TextAdventure;
-import java.lang.*;
+
 import java.util.Vector;
 public class TextAdventure
 {
@@ -8,8 +8,8 @@ public class TextAdventure
     public static TextAdventure buildGame(){
         Vector<Room> rooms = new Vector<Room>(0);
         {
-            Vector<java.lang.Object> objects = new Vector<java.lang.Object>(0);
-            objects.addElement(new Object("Dagger","A rusty old dagger that is no fun to play with"));
+            Vector<Item> objects = new Vector<Item>(0);
+            objects.addElement(new Item("Dagger","A rusty old dagger that is no fun to play with"));
             rooms.addElement(new Room("the dining hall","It is large ornate room with a fancy oak table in its center. It's not your style.",objects));
         }
         TextAdventure textAdventure= new TextAdventure(rooms);

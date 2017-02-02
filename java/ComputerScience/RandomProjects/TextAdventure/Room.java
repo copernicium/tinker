@@ -1,12 +1,12 @@
 package ComputerScience.RandomProjects.TextAdventure;
-import java.lang.*;
+
 import java.util.Vector;
-import java.util.Scanner; 
+import java.util.Scanner;
 public class Room
 {
     private String name;
     private String description;
-    private Vector<java.lang.Object> objects;
+    private Vector<Item> objects;
     private final static String[] actions = {"Look around"};
     
     public void printActions(){
@@ -41,9 +41,9 @@ public class Room
     public Room(){
         name = "";
         description = "";
-        objects = new Vector<java.lang.Object>(0);
+        objects = new Vector<Item>(0);
     }
-    public Room(String name,String description,Vector<java.lang.Object> objects){
+    public Room(String name,String description,Vector<Item> objects){
         this.name = name;
         this.description = description;
         this.objects = objects;

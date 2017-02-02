@@ -1,11 +1,11 @@
 package ComputerScience.RandomProjects.TextAdventure;
-public class Object
+public class Item
 {
     private String name;
     private String description;
     boolean inInventory;
     
-    public Object pickUp(){
+    public Item pickUp(){
         inInventory = true;
         return this;
     }
@@ -17,12 +17,12 @@ public class Object
     public void use(){
     }
     
-    public Object(){
+    public Item(){
         name = "";
         description = "";
         inInventory = false;
     }
-    Object(String name,String description){
+    Item(String name, String description){
         this.name = name;
         this.description = description;
         this.inInventory = inInventory;
