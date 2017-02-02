@@ -8,16 +8,16 @@ import java.util.ArrayList;
  * Stores all of the information for a given room in the Zork text adventure game
  */
 public class Room {
-	String name;
-	String desc;
-	Treasure treasure;
-	ArrayList<Room> exits;
+	private String name;
+	private String desc;
+	private Treasure treasure;
+	private ArrayList<Room> exits;
 
 	/**
 	 * Add exits to the Room
 	 * @param exit - the Room to exit into
 	 */
-	void addExit(Room exit){
+	public void addExit(Room exit){
 		this.exits.add(exit);
 	}
 
@@ -25,7 +25,7 @@ public class Room {
 	 * Add treature to the Room
 	 * @param treasure - the treasure
 	 */
-	void addTreasure(Treasure treasure){
+	public void addTreasure(Treasure treasure){
 		this.treasure = treasure;
 	}
 
@@ -33,7 +33,7 @@ public class Room {
 	 * Get the description of the Room
 	 * @return the Room description
 	 */
-	String getDesc(){
+	public String getDesc(){
 		return this.desc;
 	}
 
@@ -41,7 +41,7 @@ public class Room {
 	 * Get the exits of the Room
 	 * @return String of Rooms that this Room exits into
 	 */
-	String getExits(){
+	public String getExits(){
 		String s = "";
 		for(int i = 0; i < this.exits.size(); i++){
 			if(i != 0) s += " ";
@@ -56,14 +56,14 @@ public class Room {
 	 *  Get the treasure in the Room
 	 * @return the Room's treasure
 	 */
-	Treasure getTreasure(){
+	public Treasure getTreasure(){
 		return this.treasure;
 	}
 
 	/**
 	 * Remove treasure from the Room
 	 */
-	void removeTreasure(){
+	public void removeTreasure(){
 		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());//TODO: implement
 	}
 
@@ -71,7 +71,7 @@ public class Room {
 	 * Get the exits of the Room--Alternate method
 	 * @return a list of Rooms that this Room exits into
 	 */
-	ArrayList<Room> showExits(){
+	public ArrayList<Room> showExits(){
 		return this.exits;
 	}
 
@@ -79,7 +79,7 @@ public class Room {
 	 * Get the name of the Room
 	 * @return the Room name
 	 */
-	String getName(){
+	public String getName(){
 		return this.name;
 	}
 

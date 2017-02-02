@@ -1,0 +1,52 @@
+Name: Gym
+
+Description: A large, brightly lit room with semi-obnoxious music playing. There are many robots competing against each other on a walled-off field in the center. The stands are packed.
+
+Treaure: Trophy
+
+Exits: Pit, Cafeteria
+______________________________________________________
+
+Name: Pit
+
+Description: The room is full of tents, each with a different team, and there are many people walking about unhelpfully shouting "ROBOT."
+
+Treaure: Drive Team
+
+Exits: Gym
+______________________________________________________
+
+Name: Cafeteria
+
+Description: It is full of circular tables, and there is a long table in the cornver stacked with food for team members and volunteers.
+
+Treaure: Lunch
+
+Exits: Gym, Shed, Cafe
+______________________________________________________
+
+Name: Cafe
+
+Description: There are many students crouched over or sitting at a few tables covered in laptops, wires, aluminum shavings, and miscellaneous other tech.
+
+Treaure: Software
+
+Exits: Cafeteria, The Room
+______________________________________________________
+
+Name: The Room
+
+Description: A small room with shelves lining every wall storing everyting from batteries to wagos to gear boxes.
+
+Treaure: Safety Glasses
+
+Exits: Cafe, Shed
+______________________________________________________
+
+Name: Shed
+
+Description: A cramped room with way too many tables for its size. Everything appears to be covered in aluminum shavings or sawdust and not a single horizontal surface has been spared from the rising tide of prototypes, tools, and machinery.
+
+Treaure: Robot Parts
+
+Exits: Cafeteria, The Room
