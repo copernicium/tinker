@@ -86,6 +86,11 @@ public class Room {
 		return this.name;
 	}
 
+	/**
+	 * Constructs a Room object
+	 * @param name the name of the Room
+	 * @param desc the Description of the Room
+	 */
 	public Room(String name, String desc){
 		this.name = name;
 		this.desc = desc;
