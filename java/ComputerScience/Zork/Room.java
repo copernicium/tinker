@@ -1,7 +1,5 @@
 package ComputerScience.Zork;
 
-import MySystem.MySystem;
-
 import java.util.ArrayList;
 
 /**
@@ -19,6 +17,7 @@ public class Room {
 	 */
 	public void addExit(Room exit){
 		this.exits.add(exit);
+		exit.exits.add(this);
 	}
 
 	/**
@@ -34,7 +33,11 @@ public class Room {
 	 * @return the Room description
 	 */
 	public String getDesc(){
-		return this.desc;
+		String desc = this.desc;
+		if(this.treasure != null){
+			desc += " The room also contains " + this.treasure.getName() + ".";
+		}
+		return desc;
 	}
 
 	/**
@@ -64,7 +67,7 @@ public class Room {
 	 * Remove treasure from the Room
 	 */
 	public void removeTreasure(){
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());//TODO: implement
+		this.treasure = null;
 	}
 
 	/**
@@ -86,7 +89,7 @@ public class Room {
 	public Room(String name, String desc){
 		this.name = name;
 		this.desc = desc;
-		this.treasure = new Treasure();
+		this.treasure = null;
 		this.exits = new ArrayList<>();
 	}
 }
