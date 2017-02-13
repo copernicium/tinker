@@ -91,9 +91,9 @@ string decode(const string encoded, const string keyed){
 int main(){
 	string key,message;
 	cout<<"Key:     ";
-	cin>>key;
+	getline(cin,key);
 	cout<<"Message: ";
-	cin>>message;
+	getline(cin,message);
 	string keyed=fill(message,key);
 	cout<<"Keyed:   "<<keyed<<"\n";
 	string encoded=encode(message,keyed);
