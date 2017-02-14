@@ -31,14 +31,27 @@ public class Game {
 		this.rooms.add(cafeteria);
 		this.rooms.add(theShed);
 		this.rooms.add(theRoom);*/
-		Room livingRoom = new Room("Living Room","");
-		Room kitchen = new Room("Kitchen","");
-		Room bathroom = new Room("Bathroom","");
-		Room porch = new Room("Porch","");
-		Treasure kitten = new Treasure("Kitten",livingRoom);
+		//creates rooms
+		Room livingRoom = new Room("Living room","comfy cozy with bananas");
+		Room kitchen = new Room("Kitchen","there's food, so there's that");
+		Room bathroom = new Room("Bathroom", "***flush***");
+		Room porch = new Room("Porch","has a nice view of the street");
+
+		rooms.add(livingRoom );
+		rooms.add(kitchen);
+		rooms.add(bathroom);
+		rooms.add(porch);
+		livingRoom.addExit(kitchen);
+		livingRoom.addExit(bathroom);
+		livingRoom.addExit(porch);
+		kitchen.addExit(bathroom);
+
+		Treasure kitten = new Treasure("Kitten",livingRoom );
 		Treasure knife = new Treasure("Knife",kitchen);
-		this.treasures.add(kitten);
-		this.treasures.add(knife);
+		treasures.add(kitten);
+		treasures.add(knife);
+		livingRoom.addTreasure(kitten);
+		kitchen.addTreasure(knife);
 
 	}
 
