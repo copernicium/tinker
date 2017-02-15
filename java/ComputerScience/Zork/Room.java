@@ -16,8 +16,8 @@ public class Room {
 	 * @param exit - the Room to exit into
 	 */
 	public void addExit(Room exit){
-		this.exits.add(exit);
-		exit.exits.add(this);
+		if(this.exits.indexOf(exit) == -1) this.exits.add(exit);
+		if(exit.exits.indexOf(this) == -1) exit.exits.add(this);
 	}
 
 	/**
@@ -45,11 +45,11 @@ public class Room {
 	 * @return String of Rooms that this Room exits into
 	 */
 	public String getExits(){
-		String s = "";
+		String s = "The ";
 		for(int i = 0; i < this.exits.size(); i++){
-			if(i != 0) s += " ";
+			if(i != 0) s += " the ";
 			s += this.exits.get(i).getName();
-			if(i != this.exits.size() - 1) s += ",";
+			if(this.exits.size() > 2 && i != this.exits.size() - 1) s += ",";
 			if(i == this.exits.size() - 2) s += " and";
 		}
 		return s;

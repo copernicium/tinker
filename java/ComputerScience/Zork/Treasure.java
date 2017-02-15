@@ -16,7 +16,7 @@ public class Treasure {
 	}
 
 	/**
-	 * Contruct a Treasure object
+	 * Construct a Treasure object
 	 * @param name the name of the treasure
 	 * @param room the room that the treasure is in
 	 */
