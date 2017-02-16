@@ -45,12 +45,13 @@ public class Room {
 	 * @return String of Rooms that this Room exits into
 	 */
 	public String getExits(){
-		String s = "The ";
+		String s = "";
 		for(int i = 0; i < this.exits.size(); i++){
-			if(i != 0) s += " the ";
+			s += "the ";
 			s += this.exits.get(i).getName();
 			if(this.exits.size() > 2 && i != this.exits.size() - 1) s += ",";
 			if(i == this.exits.size() - 2) s += " and";
+			if(i != this.exits.size() -1) s += " ";
 		}
 		return s;
 	}
@@ -96,5 +97,12 @@ public class Room {
 		this.desc = desc;
 		this.treasure = null;
 		this.exits = new ArrayList<>();
+	}
+
+	/**
+	 * Construct a Room object
+	 */
+	public Room(){
+		this("","");
 	}
 }

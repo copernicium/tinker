@@ -9,6 +9,7 @@ public class Game {
 	private ArrayList<Treasure> inventory;
 	private ArrayList<Room> rooms;
 	private ArrayList<Treasure> treasures;
+	private Room currentRoom;
 
 	/**
 	 * Constructs the Game object
@@ -67,33 +68,12 @@ public class Game {
 			cafe.addTreasure(software);
 			room.addTreasure(safetyGlasses);
 			shed.addTreasure(robotParts);
+
+			currentRoom = cafe;
 		}
-		{
-			/*Room livingRoom = new Room("Living room", "It's comfy cozy with bananas.");
-			Room kitchen = new Room("Kitchen", "There's food, so there's that.");
-			Room bathroom = new Room("Bathroom", "*flush*");
-			Room porch = new Room("Porch", "It has a nice view of the street.");
-
-			livingRoom.addExit(kitchen);
-			livingRoom.addExit(bathroom);
-			livingRoom.addExit(porch);
-			kitchen.addExit(bathroom);
-
-			rooms.add(livingRoom);
-			rooms.add(kitchen);
-			rooms.add(bathroom);
-			rooms.add(porch);
-
-			Treasure kitten = new Treasure("Kitten", livingRoom);
-			Treasure knife = new Treasure("Knife", kitchen);
-			treasures.add(kitten);
-			treasures.add(knife);
-			livingRoom.addTreasure(kitten);
-			kitchen.addTreasure(knife);*/
-		}
-		for(Room r: this.rooms){
+		/*for(Room r: this.rooms){
 			System.out.println(r.getName() + " " + r.getDesc() + " " + r.getExits() +  " "+  r.getTreasure().getName());
-		}
+		}*/
 	}
 
 	/**
@@ -120,28 +100,37 @@ public class Game {
 	 */
 	public String getInventory(){
 		if(this.inventory.size() == 0) return "Your inventory is empty";
-		String items = "";
+		String items = "You have ";
 		for(Treasure item: this.inventory){
 			items += item.getName();
 			if(this.inventory.size() > 2 && this.inventory.indexOf(item) < this.inventory.size() - 1){
 				items += ",";
 			}
 			if(this.inventory.indexOf(item) == this.inventory.size() - 2) items += " and";
+			if(this.inventory.indexOf(item) != this.inventory.size() -1) items += " ";
 		}
 		return items;
 	}
 
 	/**
+	 * Returns the current room
+	 * @return the current room
+	 */
+	public Room getCurrentRoom(){
+		return this.currentRoom;
+	}
+
+	/**
 	 * Enters a room
 	 * @param room the room to enter
-	 * @return the message announcing the contents of the room
 	 */
-	public String enterRoom(Room room){
+	public void enterRoom(Room room){
 		String message = "";
-		message += "You are standing in the " + room.getName();
+		message += "You entered the " + room.getName() + ".";
 		message += "\n" + room.getDesc();
-		message += "\nThere are exits to: " + room.getExits();
-		return message;
+		message += "\nThere are exits to " + room.getExits() + ".";
+		System.out.println(message);
+		this.currentRoom = room;
 	}
 
 	/**
