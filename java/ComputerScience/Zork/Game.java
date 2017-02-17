@@ -41,26 +41,12 @@ public class Game {
 			shed.addExit(cafeteria);
 			shed.addExit(cafe);
 
-			this.rooms.add(gym);
-			this.rooms.add(pit);
-			this.rooms.add(cafe);
-			this.rooms.add(cafeteria);
-			this.rooms.add(shed);
-			this.rooms.add(room);
-
 			Treasure trophy = new Treasure("Trophy",gym);
 			Treasure driveTeam = new Treasure("Drive Team",pit);
 			Treasure lunch = new Treasure("Lunch",cafeteria);
 			Treasure software = new Treasure("Software",cafe);
 			Treasure safetyGlasses = new Treasure("Safety Glasses",room);
 			Treasure robotParts = new Treasure("Robot Parts",shed);
-
-			treasures.add(trophy);
-			treasures.add(driveTeam);
-			treasures.add(lunch);
-			treasures.add(software);
-			treasures.add(safetyGlasses);
-			treasures.add(robotParts);
 
 			gym.addTreasure(trophy);
 			pit.addTreasure(driveTeam);
@@ -69,7 +55,24 @@ public class Game {
 			room.addTreasure(safetyGlasses);
 			shed.addTreasure(robotParts);
 
-			currentRoom = cafe;
+			pit.addRequirement(safetyGlasses);
+			shed.addRequirement(safetyGlasses);
+
+			this.rooms.add(gym);
+			this.rooms.add(pit);
+			this.rooms.add(cafe);
+			this.rooms.add(cafeteria);
+			this.rooms.add(shed);
+			this.rooms.add(room);
+
+			this.treasures.add(trophy);
+			this.treasures.add(driveTeam);
+			this.treasures.add(lunch);
+			this.treasures.add(software);
+			this.treasures.add(safetyGlasses);
+			this.treasures.add(robotParts);
+
+			this.currentRoom = cafe;
 		}
 		/*for(Room r: this.rooms){
 			System.out.println(r.getName() + " " + r.getDesc() + " " + r.getExits() +  " "+  r.getTreasure().getName());
@@ -94,13 +97,17 @@ public class Game {
 		return this.rooms.indexOf(room);
 	}
 
+	public ArrayList<Treasure> getInventory(){
+		return this.inventory;
+	}
+
 	/**
 	 * Returns a string with the contents of the player's inventory
 	 * @return the player's inventory in string form
 	 */
-	public String getInventory(){
+	public String printInventory(){
 		if(this.inventory.size() == 0) return "Your inventory is empty";
-		String items = "You have ";
+		String items = "You 1have ";
 		for(Treasure item: this.inventory){
 			items += item.getName();
 			if(this.inventory.size() > 2 && this.inventory.indexOf(item) < this.inventory.size() - 1){
@@ -125,6 +132,10 @@ public class Game {
 	 * @param room the room to enter
 	 */
 	public void enterRoom(Room room){
+		if(!room.meetsRequirements(this.inventory)){
+			System.out.println("Cannot enter the " + room.getName() + ". You do not have " + room.printRequirements(this.inventory).toString());
+			return;
+		}
 		String message = "";
 		message += "You entered the " + room.getName() + ".";
 		message += "\n" + room.getDesc();
@@ -138,7 +149,11 @@ public class Game {
 	 * @param treasure the treasure to pick up
 	 * @param room the current room
 	 */
-	public void pickUpTreasure(Treasure treasure, Room room){
+	public void pickUpTreasure(Treasure treasure, Room room,ArrayList<Treasure> inventory){
+		if(!treasure.meetsRequirements(inventory)){
+			System.out.println("You do not meet the requirements to take this treasure. You still need " + treasure.printRequirements(inventory));
+			return;
+		}
 		inventory.add(treasure);
 		room.removeTreasure();
 	}

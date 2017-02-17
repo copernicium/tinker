@@ -10,6 +10,25 @@ public class Room {
 	private String desc;
 	private Treasure treasure;
 	private ArrayList<Room> exits;
+	private ArrayList<Treasure> requirements;
+
+	@Override
+	public String toString(){
+		return this.name;
+	}
+
+	@Override
+	public boolean equals(Object o){
+		if(this == o) return true;
+		if(o == null || o.getClass() != this.getClass()) return false;
+		Room b = (Room)o;
+		if(!this.name.equals(b.name)) return false;
+		if(!this.desc.equals(b.desc)) return false;
+		if(!this.treasure.equals(b.treasure)) return false;
+		if(!this.exits.equals(b.exits)) return false;
+		if(!this.requirements.equals(b.requirements)) return false;
+		return true;
+ 	}
 
 	/**
 	 * Add exits to the Room
@@ -56,6 +75,64 @@ public class Room {
 		return s;
 	}
 
+	public String printRequirements(ArrayList<Treasure> inventory){
+		int remainingSize = this.getRemainingRequirements(inventory).size();
+		String s = "";
+		for(int i = 0; i < remainingSize; i++){
+			s += "the ";
+			s += this.requirements.get(i).getName();
+			if(remainingSize > 2 && i != remainingSize - 1) s += ",";
+			if(i == remainingSize - 2) s += " and";
+			if(i != remainingSize - 1) s += " ";
+		}
+		return s;
+	}
+
+	public void addRequirement(Treasure a){
+		this.requirements.add(a);
+	}
+
+	public ArrayList<Treasure> getRemainingRequirements(ArrayList<Treasure> inventory){
+		ArrayList<Treasure> remaining = new ArrayList<>();
+		for(Treasure a: this.requirements){
+			for(Treasure b: inventory){
+				if(a.equals(b)){
+					remaining.add(a);
+					break;
+				}
+			}
+			remaining.add(a);
+		}
+		return remaining;
+	}
+
+	/**
+	 * Gets the requirements for the room
+	 * @return the requirements to enter the room
+	 */
+	public ArrayList<Treasure> getRequirements(){
+		return this.requirements;
+	}
+
+	/**
+	 * Checks to see if the player can enter the room
+	 * @param inventory the player's inventory
+	 * @return if they meet the requirements to enter the room
+	 */
+	public boolean meetsRequirements(ArrayList<Treasure> inventory){
+		for(Treasure a: this.requirements){
+			boolean has = false;
+			for(Treasure b: inventory){
+				if(a.equals(b)){
+					has = true;
+					break;
+				}
+			}
+			if(!has) return false;
+		}
+		return true;
+	}
+
 	/**
 	 *  Get the treasure in the Room
 	 * @return the Room's treasure
@@ -97,6 +174,7 @@ public class Room {
 		this.desc = desc;
 		this.treasure = null;
 		this.exits = new ArrayList<>();
+		this.requirements = new ArrayList<>();
 	}
 
 	/**

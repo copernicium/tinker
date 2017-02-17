@@ -37,14 +37,15 @@ public class ZorkRunner {
 	}
 
 	public static void main(String[] args){
-		//initialize objects
 		Scanner in = new Scanner(System.in);
 		Game game = new Game();
 
-		//infinite loop for game
 		while(true){
 			System.out.print("Enter a command (type \"help\" for help): ");
 			Command command = Command.toCommand(in.nextLine().trim());
+
+			//TODO: victory checker
+
 			switch(command){
 				case ROOM_INFO:
 					{
@@ -68,10 +69,9 @@ public class ZorkRunner {
 						System.out.println(message);
 						break;
 					}
-
 				case INVENTORY:
 					{
-						System.out.println(game.getInventory());
+						System.out.println(game.printInventory());
 					}
 					break;
 				case MOVE:
@@ -80,7 +80,7 @@ public class ZorkRunner {
 						while(!done) {
 							final String STAY = "stay";
 
-							System.out.print("The exits from  the" + game.getCurrentRoom().getName() + " are to " + game.getCurrentRoom().getExits() + ". Which room do you want to enter? (Type \"" + STAY + "\" to stay where you are): ");
+							System.out.print("The exits from the " + game.getCurrentRoom().getName() + " are to " + game.getCurrentRoom().getExits() + ". Which room do you want to enter? (Type \"" + STAY + "\" to stay where you are): ");
 							String query = MySystem.stringToLowerCase(in.nextLine().trim());
 
 							if(query.equals(STAY)) break;
@@ -109,7 +109,7 @@ public class ZorkRunner {
 							System.out.println("There aren't any treasures in " + game.getCurrentRoom().getName());
 						} else{
 							System.out.println("You took the " + game.getCurrentRoom().getTreasure().getName());
-							game.pickUpTreasure(game.getCurrentRoom().getTreasure(), game.getCurrentRoom());
+							game.pickUpTreasure(game.getCurrentRoom().getTreasure(), game.getCurrentRoom(),game.getInventory());
 						}
 						break;
 					}
