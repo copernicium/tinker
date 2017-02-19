@@ -1,6 +1,6 @@
 package ComputerScience.Chapter6;
 
-import MySystem.MySystem;
+import Util.Util;
 
 import java.util.Scanner;
 import java.util.Vector;
@@ -44,7 +44,7 @@ public class HottestMonthCalculator{
 				case 12:
 					return DEC;
 				default:
-					MySystem.error("Failed to parse month",MySystem.getFileName(),MySystem.getLineNumber());
+					Util.error("Failed to parse month", Util.getFileName(), Util.getLineNumber());
 			}
 			return JAN;//should never reach this line
 		}
@@ -56,7 +56,7 @@ public class HottestMonthCalculator{
 	 * @return the hottest month
 	 */
 	public static Month findHottestMonth(Vector<Double> temps){
-		MySystem.myAssert(temps.size() == NUMBER_OF_MONTHS,MySystem.getFileName(),MySystem.getLineNumber());
+		Util.myAssert(temps.size() == NUMBER_OF_MONTHS, Util.getFileName(), Util.getLineNumber());
 		double hottestTemp = temps.elementAt(0);
 		Month hottestMonth = Month.JAN;
 		for(int i = 0; i < temps.size(); i++){

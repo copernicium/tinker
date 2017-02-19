@@ -1,6 +1,6 @@
 package ComputerScience.Chapter5;
 
-import MySystem.MySystem;
+import Util.Util;
 import java.util.Scanner;
 
 /**
@@ -102,7 +102,7 @@ public class UnitConversion{
 					case KILOGRAMS:
 						return value*KILOGRAMS_PER_POUND;
 					default:
-						MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+						Util.nyi(Util.getFileName(), Util.getLineNumber());
 				}
 			case OUNCES:
 				return convertWeight(Weight.POUNDS,endUnit,(value*reverse(OUNCES_PER_POUND)));//use recursion to get to the proper unit
@@ -111,9 +111,9 @@ public class UnitConversion{
 			case GRAMS:
 				return convertWeight(Weight.KILOGRAMS,endUnit,(value*reverse(GRAMS_PER_KILOGRAM)));
 			default:
-				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+				Util.nyi(Util.getFileName(), Util.getLineNumber());
 		}
-		MySystem.error("Conversion failed",MySystem.getFileName(),MySystem.getLineNumber());
+		Util.error("Conversion failed", Util.getFileName(), Util.getLineNumber());
 		return 0;
 	}
 
@@ -137,7 +137,7 @@ public class UnitConversion{
 					case KILOMETERS:
 						return value*MILLIMETERS_PER_INCH*reverse(MILLIMETERS_PER_CENTIMETER)*reverse(CENTIMETERS_PER_METER)*reverse(METERS_PER_KILOMETER);
 					default:
-						MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+						Util.nyi(Util.getFileName(), Util.getLineNumber());
 				}
 			case FEET:
 				return convertDistance(Distance.INCHES,endUnit,value*reverse(FEET_PER_INCH));//use recursion to get to the proper unit
@@ -152,9 +152,9 @@ public class UnitConversion{
 			case KILOMETERS:
 				return convertDistance(Distance.METERS,endUnit,value*METERS_PER_KILOMETER);
 			default:
-				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+				Util.nyi(Util.getFileName(), Util.getLineNumber());
 		}
-		MySystem.error("Conversion failed",MySystem.getFileName(),MySystem.getLineNumber());
+		Util.error("Conversion failed", Util.getFileName(), Util.getLineNumber());
 		return 0;
 	}
 
@@ -172,7 +172,7 @@ public class UnitConversion{
 					case GALLONS:
 						return value*FLUID_OUNCES_PER_LITER*reverse(FLUID_OUNCES_PER_GALLON);
 					default:
-						MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+						Util.nyi(Util.getFileName(), Util.getLineNumber());
 				}
 			case MILLILITERS:
 				return convertVolume(Volume.LITERS,endUnit,value*reverse(MILLILITERS_PER_LITER));//use recursion to get to the proper unit
@@ -181,24 +181,24 @@ public class UnitConversion{
 			case GALLONS:
 				return convertVolume(Volume.FLUID_OUNCES,endUnit,value*FLUID_OUNCES_PER_GALLON);
 			default:
-				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+				Util.nyi(Util.getFileName(), Util.getLineNumber());
 		}
-		MySystem.error("Conversion failed",MySystem.getFileName(),MySystem.getLineNumber());
+		Util.error("Conversion failed", Util.getFileName(), Util.getLineNumber());
 		return 0;
 	}
 
 	private double convert(){
-		if(this.startUnit.getClass() != this.endUnit.getClass()) MySystem.error("Unit types do not match",MySystem.getFileName(),MySystem.getLineNumber());
+		if(this.startUnit.getClass() != this.endUnit.getClass()) Util.error("Unit types do not match", Util.getFileName(), Util.getLineNumber());
 		if(this.startUnit == this.endUnit) return this.value;
 		if(this.startUnit instanceof Weight) return convertWeight((Weight)this.startUnit,(Weight)this.endUnit,this.value);
 		else if(this.startUnit instanceof Volume) return convertVolume((Volume)this.startUnit,(Volume)this.endUnit,this.value);
 		else if(this.startUnit instanceof Distance) return convertDistance((Distance)this.startUnit,(Distance)this.endUnit,this.value);
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		Util.nyi(Util.getFileName(), Util.getLineNumber());
 		return 0;//should never reach here
 	}
 
 	public void getConversion(){
-		if(this.startUnit == Undef.UNDEF || this.endUnit == Undef.UNDEF) MySystem.error("One or more units undefined",MySystem.getFileName(),MySystem.getLineNumber());
+		if(this.startUnit == Undef.UNDEF || this.endUnit == Undef.UNDEF) Util.error("One or more units undefined", Util.getFileName(), Util.getLineNumber());
 		System.out.println(this.value + " in " + this.startUnit + " is " + convert() + " in " + this.endUnit);
 	}
 

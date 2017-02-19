@@ -1,6 +1,6 @@
 package TicTacToe;
 
-import MySystem.*;
+import Util.*;
 
 import java.util.Scanner;
 
@@ -22,10 +22,10 @@ public class Game{
 		while(true){
 			System.out.print("Please enter the position you wish to make your mark, \"help\" to display how the board is set up, or \"quit\" to exit: ");
 			String str = input.next();
-			if(MySystem.stringToLowerCase(str).equals("help")){
+			if(Util.stringToLowerCase(str).equals("help")){
 				Board.printLayout();
 			}
-			else if(MySystem.stringToLowerCase(str).equals("quit") || MySystem.stringToLowerCase(str).equals("exit")){
+			else if(Util.stringToLowerCase(str).equals("quit") || Util.stringToLowerCase(str).equals("exit")){
 				System.out.println("Quitting game from user request");
 				System.exit(0);
 			}
@@ -57,6 +57,6 @@ public class Game{
 		//This is the actual game
 		play();
 
-		MySystem.println("\n\n\nEND OF GAME FILE\n\n\n", MySystem.getFileName(), MySystem.getLineNumber());
+		Util.println("\n\n\nEND OF GAME FILE\n\n\n", Util.getFileName(), Util.getLineNumber());
 	}
 }

@@ -3,7 +3,7 @@ package Chess;
 import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.Iterator;
-import MySystem.*;
+import Util.*;
 
 /**
  * Runs a Chess game
@@ -154,7 +154,7 @@ public class Game{
 				System.out.println("Game over. Draw.");
 				break;
 			default:
-				MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
+				Util.nyi(Util.getFileName(), Util.getLineNumber());
 		}
 		if(!Game.continueGame(board) && exitOnCompletion){
 			System.out.println("Thanks for playing.");
@@ -192,7 +192,7 @@ public class Game{
 		System.out.println("Finishing with status " + chessBoard.getStatus().toString() + " Expected: BLACK_WIN");
 		System.out.println("White king check: " + chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheck() + " expected: true  White king checkmate: " + chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheckmate() + " expected: true");
 		if(!chessBoard.getStatus().equals(ChessBoard.Status.BLACK_WIN)){
-			MySystem.error("Test failed: did not end in a black win as expected", MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error("Test failed: did not end in a black win as expected", Util.getFileName(), Util.getLineNumber());
 		}
 	}
 
@@ -249,13 +249,13 @@ public class Game{
 		System.out.println("White king check: " + chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheck() + " expected: true");
 
 		if(!chessBoard.getPieces().getKing(ChessPiece.Color.WHITE).getCheck()){
-			MySystem.error("Test failed: did not finish in check as expected",MySystem.getFileName(),MySystem.getLineNumber());
+			Util.error("Test failed: did not finish in check as expected", Util.getFileName(), Util.getLineNumber());
 		}
 		if(!EXPECTED_MOVEABLE_POS.equals(firstPiece.getPosition())){
-			MySystem.error("Test failed: the move-able pieces' positions did not match the expected one",MySystem.getFileName(),MySystem.getLineNumber());
+			Util.error("Test failed: the move-able pieces' positions did not match the expected one", Util.getFileName(), Util.getLineNumber());
 		}
-		if(!MySystem.treeSetEquals(EXPECTED_POSSIBLE_MOVES,firstPiece.getLimitedMoves())){
-			MySystem.error("Test failed: calculated limited moves did not match expected ones",MySystem.getFileName(),MySystem.getLineNumber());
+		if(!Util.treeSetEquals(EXPECTED_POSSIBLE_MOVES,firstPiece.getLimitedMoves())){
+			Util.error("Test failed: calculated limited moves did not match expected ones", Util.getFileName(), Util.getLineNumber());
 		}
 	}
 
@@ -414,6 +414,6 @@ public class Game{
 		//play();
 		//playAgainstAI();
 		aiAgainstAI();
-		MySystem.println("\n\n\nEND OF GAME FILE", MySystem.getFileName(), MySystem.getLineNumber());
+		Util.println("\n\n\nEND OF GAME FILE", Util.getFileName(), Util.getLineNumber());
 	}
 }

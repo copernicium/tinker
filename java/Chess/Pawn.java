@@ -1,7 +1,7 @@
 package Chess;
 
 import java.util.TreeSet;
-import MySystem.*;
+import Util.*;
 /**
  * A pawn piece
  */
@@ -92,20 +92,20 @@ public class Pawn extends ChessPiece
 		if(!this.getPosition().equals(b.getPosition())) return false;
 		if(this.getAlive() != b.getAlive()) return false;
 		if(this.getFirstMove() != b.getFirstMove()) return  false;
-		if(!MySystem.treeSetEquals(this.getPossibleMoves(),b.getPossibleMoves())) return false;
-		if(!MySystem.treeSetEquals(this.getLimitedMoves(),b.getLimitedMoves())) return false;
+		if(!Util.treeSetEquals(this.getPossibleMoves(),b.getPossibleMoves())) return false;
+		if(!Util.treeSetEquals(this.getLimitedMoves(),b.getLimitedMoves())) return false;
 		return true;
 	}
 
 	@Override
 	public void move(ChessPosition newPosition,boolean useLimited){
 		TreeSet<ChessPosition> setForChecking = useLimited ? this.getLimitedMoves(): this.getPossibleMoves();
-		if(MySystem.contains(setForChecking,newPosition)){
+		if(Util.contains(setForChecking,newPosition)){
 			this.position = newPosition;
 			this.firstMove = false;
 			return;
 		}
-		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), MySystem.getFileName(), MySystem.getLineNumber());
+		Util.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), Util.getFileName(), Util.getLineNumber());
 	}
 
 	public Pawn(Pawn toCopy) {//TODO: use Pawn(ChessPiece)? is this ever called at all or is Pawn(ChessPiece) used instead?

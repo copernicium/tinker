@@ -1,6 +1,6 @@
 package ComputerScience.Chapter5;
 
-import MySystem.MySystem;
+import Util.Util;
 
 import java.util.Scanner;
 
@@ -24,7 +24,7 @@ public class Minivan {
 				case RIGHT:
 					return this.right;
 				default:
-					MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+					Util.nyi(Util.getFileName(), Util.getLineNumber());
 			}
 			return this.left;//should never get to this line
 		}
@@ -37,7 +37,7 @@ public class Minivan {
 				this.right = value;
 				return;
 			default:
-				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+				Util.nyi(Util.getFileName(), Util.getLineNumber());
 			}
 		}
 
@@ -53,8 +53,8 @@ public class Minivan {
 	public enum GearShiftSetting{
 		P,N,D,_1,_2,_3,R;
 		public static GearShiftSetting parseGear(String in){
-			MySystem.myAssert(in.length() == 1 || in.length() == 2,MySystem.getFileName(),MySystem.getLineNumber());
-			switch(MySystem.stringToUpperCase(in)){
+			Util.myAssert(in.length() == 1 || in.length() == 2, Util.getFileName(), Util.getLineNumber());
+			switch(Util.stringToUpperCase(in)){
 				case "P": return GearShiftSetting.P;
 				case "N": return GearShiftSetting.N;
 				case "D": return GearShiftSetting.D;
@@ -66,8 +66,8 @@ public class Minivan {
 				case "_3": return GearShiftSetting._3;
 				case "R": return GearShiftSetting.R;
 				default:
-					MySystem.println("\"" + in + "\"", MySystem.getFileName(),MySystem.getLineNumber());
-					MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+					Util.println("\"" + in + "\"", Util.getFileName(), Util.getLineNumber());
+					Util.nyi(Util.getFileName(), Util.getLineNumber());
 			}
 			return GearShiftSetting._1;//will never reach this line
 		}
@@ -86,17 +86,17 @@ public class Minivan {
 		Scanner input = new Scanner(System.in);
 		System.out.print("Enter data set: ");
 		String longData = input.nextLine().trim();
-		String data = MySystem.removeSpaces(longData);
+		String data = Util.removeSpaces(longData);
 		this.parseMinivan(data);
 	}
 
 	private static Side parseSide(String s){
-		s = MySystem.stringToUpperCase(s);
+		s = Util.stringToUpperCase(s);
 		switch(s){
 			case "LEFT": return Side.LEFT;
 			case "RIGHT": return Side.RIGHT;
 			default:
-				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+				Util.nyi(Util.getFileName(), Util.getLineNumber());
  		}
  		return Side.LEFT;//will never reach this line
 	}
@@ -113,22 +113,22 @@ public class Minivan {
 	}
 
 	public void parseMinivan(String data){
-		String d = MySystem.removeSpaces(data);
-		this.dashSwitches.set(Side.LEFT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
+		String d = Util.removeSpaces(data);
+		this.dashSwitches.set(Side.LEFT, Util.parseBoolean(d.substring(0,getBooleanLength(d))));
 		d = d.substring(getBooleanLength(d));
-		this.dashSwitches.set(Side.RIGHT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
+		this.dashSwitches.set(Side.RIGHT, Util.parseBoolean(d.substring(0,getBooleanLength(d))));
 		d = d.substring(getBooleanLength(d));
-		this.childLock = MySystem.parseBoolean(d.substring(0,getBooleanLength(d)));
+		this.childLock = Util.parseBoolean(d.substring(0,getBooleanLength(d)));
 		d = d.substring(getBooleanLength(d));
-		this.masterUnlock = MySystem.parseBoolean(d.substring(0,getBooleanLength(d)));
+		this.masterUnlock = Util.parseBoolean(d.substring(0,getBooleanLength(d)));
 		d = d.substring(getBooleanLength(d));
-		this.insideHandels.set(Side.LEFT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
+		this.insideHandels.set(Side.LEFT, Util.parseBoolean(d.substring(0,getBooleanLength(d))));
 		d = d.substring(getBooleanLength(d));
-		this.insideHandels.set(Side.RIGHT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
+		this.insideHandels.set(Side.RIGHT, Util.parseBoolean(d.substring(0,getBooleanLength(d))));
 		d = d.substring(getBooleanLength(d));
-		this.outsideHandles.set(Side.LEFT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
+		this.outsideHandles.set(Side.LEFT, Util.parseBoolean(d.substring(0,getBooleanLength(d))));
 		d = d.substring(getBooleanLength(d));
-		this.outsideHandles.set(Side.RIGHT,MySystem.parseBoolean(d.substring(0,getBooleanLength(d))));
+		this.outsideHandles.set(Side.RIGHT, Util.parseBoolean(d.substring(0,getBooleanLength(d))));
 		d = d.substring(getBooleanLength(d));
 		this.gear = GearShiftSetting.parseGear(d);
 	}

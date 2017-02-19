@@ -1,7 +1,7 @@
 package Chess;
 
 import java.util.TreeSet;
-import MySystem.MySystem;
+import Util.Util;
 
 /**
  * A class to represent a basic Chess piece
@@ -60,7 +60,7 @@ public class ChessPiece{
 					return BLACK;
 				case BLACK:
 					return WHITE;
-				default: MySystem.error("Color is neither black nor white",MySystem.getFileName(), MySystem.getLineNumber());
+				default: Util.error("Color is neither black nor white", Util.getFileName(), Util.getLineNumber());
 			}
 			return WHITE;
 		}
@@ -116,8 +116,8 @@ public class ChessPiece{
 		if(this.getType() != b.getType()) return false;
 		if(this.getColor() != b.getColor()) return false;
 		if(!this.getPosition().equals(b.getPosition())) return false;
-		if(!MySystem.treeSetEquals(this.getPossibleMoves(),b.getPossibleMoves())) return false;
-		if(!MySystem.treeSetEquals(this.getLimitedMoves(),b.getLimitedMoves())) return false;
+		if(!Util.treeSetEquals(this.getPossibleMoves(),b.getPossibleMoves())) return false;
+		if(!Util.treeSetEquals(this.getLimitedMoves(),b.getLimitedMoves())) return false;
 		return true;
 	}
 
@@ -144,7 +144,7 @@ public class ChessPiece{
 			testPieces.unMove();
 		}
 		if(!this.equals(original)){
-			MySystem.error("Method changed the object. Should not have. Original: " + original.toString() + " this: " + this.toString(), MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error("Method changed the object. Should not have. Original: " + original.toString() + " this: " + this.toString(), Util.getFileName(), Util.getLineNumber());
 		}
 		this.limitedMoves = newMoves;
 	}
@@ -158,7 +158,7 @@ public class ChessPiece{
 	 * @return a vector of Chess positions that this piece can be moved to
 	 */
 	public TreeSet<ChessPosition> getPossibleMoves(){
-		//MySystem.error("This is not a valid Chess piece.",MySystem.getFileName(),MySystem.getLineNumber());
+		//Util.error("This is not a valid Chess piece.",Util.getFileName(),Util.getLineNumber());
 		return this.possibleMoves;
 	}
 
@@ -167,7 +167,7 @@ public class ChessPiece{
 	 * @param chessPieces an array of pieces representing a Chess board
 	*/
 	public void updatePossibleMoves(ChessPieces chessPieces){
-		MySystem.error("This is not a valid Chess piece.", MySystem.getFileName(), MySystem.getLineNumber());
+		Util.error("This is not a valid Chess piece.", Util.getFileName(), Util.getLineNumber());
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class ChessPiece{
 	 * @param useLimited check if the position is in the limited moves, not just the possibles
 	 */
 	public void move(ChessPosition position,boolean useLimited){
-		MySystem.error("This is not a valid Chess piece.", MySystem.getFileName(), MySystem.getLineNumber());
+		Util.error("This is not a valid Chess piece.", Util.getFileName(), Util.getLineNumber());
 	}
 
 	/**
@@ -187,9 +187,9 @@ public class ChessPiece{
 	 */
 	public boolean checkMoveDeep(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
 		if(!CHESS_PIECES.containsLiving(this)){
-			MySystem.error("Move cannot be tested because piece does not exist in array", MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error("Move cannot be tested because piece does not exist in array", Util.getFileName(), Util.getLineNumber());
 		}
-		return MySystem.contains(this.getLimitedMoves(),CHECK_MOVE);
+		return Util.contains(this.getLimitedMoves(),CHECK_MOVE);
 	}
 
 	/**
@@ -200,9 +200,9 @@ public class ChessPiece{
 	 */
 	public boolean checkMove(final ChessPosition CHECK_MOVE,final ChessPieces CHESS_PIECES){
 		if(!CHESS_PIECES.containsLiving(this)){
-			MySystem.error("Move cannot be tested because piece does not exist in piece array", MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error("Move cannot be tested because piece does not exist in piece array", Util.getFileName(), Util.getLineNumber());
 		}
-		return MySystem.contains(this.getPossibleMoves(),CHECK_MOVE);
+		return Util.contains(this.getPossibleMoves(),CHECK_MOVE);
 	}
 
 	/**
@@ -243,7 +243,7 @@ public class ChessPiece{
 				return new Bishop(chessPiece);
 			case UNASSIGNED:
 				return new ChessPiece(chessPiece);
-			default: MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
+			default: Util.nyi(Util.getFileName(), Util.getLineNumber());
 		}
 		return new ChessPiece();//will never reach this line
 	}
@@ -270,7 +270,7 @@ public class ChessPiece{
 				return new Bishop(chessPiece);
 			case UNASSIGNED:
 				return new ChessPiece(chessPiece);
-			default: MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
+			default: Util.nyi(Util.getFileName(), Util.getLineNumber());
 		}
 		return new ChessPiece();//will never reach this line
 	}

@@ -2,7 +2,7 @@ package Chess;
 
 import java.util.Vector;
 import java.util.TreeSet;
-import MySystem.*;
+import Util.*;
 
 /**
  * A representation of a Chess board
@@ -144,7 +144,7 @@ public class ChessBoard
 	 * unimplemented: will be a graphical representation of the Chess board
 	 */
 	public void draw(){//TODO
-		MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
+		Util.nyi(Util.getFileName(), Util.getLineNumber());
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class ChessBoard
 		for(ChessPiece piece: pieces.toArray()){
 			if(piece.getAlive() && piece.getType() != ChessPiece.Type.KNIGHT && piece.getType() != ChessPiece.Type.BISHOP && piece.getType() != ChessPiece.Type.KING) return false;
 		}
-		MySystem.println("HERE",MySystem.getFileName(),MySystem.getLineNumber());
+		Util.println("HERE", Util.getFileName(), Util.getLineNumber());
 
 		final ChessPiece.Color[] colors = {ChessPiece.Color.WHITE, ChessPiece.Color.BLACK};
 
@@ -201,7 +201,7 @@ public class ChessBoard
 					break;
 				}
 			}
-			MySystem.println("KING_VS_KING",MySystem.getFileName(),MySystem.getLineNumber());
+			Util.println("KING_VS_KING", Util.getFileName(), Util.getLineNumber());
 			if(king_versus_king) return true;
 		}
 		//also if the king is not in check but there are no possible moves left
@@ -253,20 +253,20 @@ public class ChessBoard
 	 */
     public void move(final ChessPiece PIECE_TO_MOVE,final ChessPosition MOVE_THERE){
 		if(this.status != Status.IN_PROGRESS){
-			MySystem.error("Attempting to move a piece when the game has ended", MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error("Attempting to move a piece when the game has ended", Util.getFileName(), Util.getLineNumber());
 		}
 		if(PIECE_TO_MOVE.getColor() != playerTurn){
-			MySystem.error("Player is attempting to move a piece when it is not their turn: it is " + this.playerTurn + "'s turn and the piece that is trying to be moved is " + PIECE_TO_MOVE.getColor() + " ", MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error("Player is attempting to move a piece when it is not their turn: it is " + this.playerTurn + "'s turn and the piece that is trying to be moved is " + PIECE_TO_MOVE.getColor() + " ", Util.getFileName(), Util.getLineNumber());
 		}
 		if(!pieces.containsLiving(PIECE_TO_MOVE)){
-			MySystem.error("Attempting to move a piece does not exist", MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error("Attempting to move a piece does not exist", Util.getFileName(), Util.getLineNumber());
 		}
 		int index = pieces.getIndexOf(PIECE_TO_MOVE.getPosition());
 		if(this.pieces.getPieceAt(index).checkMoveDeep(MOVE_THERE,pieces)){
 			final boolean USE_LIMITED = true;
 			pieces.moveAndCapture(index,MOVE_THERE,USE_LIMITED);
 		} else {
-			MySystem.error("Error: trying to move piece to invalid location: piece:" + this.pieces.getPieceAt(index).toString() + " cannot move to " + MOVE_THERE.toString() + " from possible " + this.pieces.getPieceAt(index).getPossibleMoves().toString(), MySystem.getFileName(), MySystem.getLineNumber());//user inputs invalid move
+			Util.error("Error: trying to move piece to invalid location: piece:" + this.pieces.getPieceAt(index).toString() + " cannot move to " + MOVE_THERE.toString() + " from possible " + this.pieces.getPieceAt(index).getPossibleMoves().toString(), Util.getFileName(), Util.getLineNumber());//user inputs invalid move
 		}
 		this.pieces.updateAllMoves();
 		this.updateStatus();
@@ -355,7 +355,7 @@ public class ChessBoard
 	 */
 	public ChessBoard(){
 		this(ChessBoard.fillBoard());
-		MySystem.println("HERE",MySystem.getFileName(),MySystem.getLineNumber());
+		Util.println("HERE", Util.getFileName(), Util.getLineNumber());
     }
 
 	/**
@@ -365,7 +365,7 @@ public class ChessBoard
 	public ChessBoard(ChessPieces pieces){
 		this.pieces = ChessPieces.makePieces(pieces);
 		this.pieces.updateAllMoves();
-		MySystem.println("Updated",MySystem.getFileName(),MySystem.getLineNumber());
+		Util.println("Updated", Util.getFileName(), Util.getLineNumber());
 		this.playerTurn = ChessPiece.Color.WHITE;
 		this.status = Status.IN_PROGRESS;
 	}

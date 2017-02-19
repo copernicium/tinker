@@ -1,6 +1,6 @@
 package ComputerScience.Chapter7;
 
-import MySystem.MySystem;
+import Util.Util;
 
 /**
  * Simultaneously computes the maximum and the minimum of an array
@@ -12,8 +12,8 @@ import MySystem.MySystem;
 public class MaxMinArray {
 	public static void main(String[] args){
 		Double[] data = {-1.0,2.0,-3.0,4.0,5.0,66.0,7.0,8.0,9.0};
-		MySystem.myAssert(data.length > 0, MySystem.getFileName(), MySystem.getLineNumber());
-		System.out.println("Array is: " + MySystem.arrayToString(data));
+		Util.myAssert(data.length > 0, Util.getFileName(), Util.getLineNumber());
+		System.out.println("Array is: " + Util.arrayToString(data));
 		double min = data[0], max = data[0];
 		for(double a: data){
 			if(a < min) min = a;

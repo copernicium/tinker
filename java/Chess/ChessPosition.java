@@ -1,5 +1,5 @@
 package Chess;
-import MySystem.*;
+import Util.*;
 
 /**
  * Represents a position of the Chess board
@@ -48,7 +48,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 		 */
 		public void set(int value){
 			if(value >= DIMENSION && value < 0){
-				MySystem.error("Trying to set a dimension to a value which is out of bounds", MySystem.getFileName(), MySystem.getLineNumber());
+				Util.error("Trying to set a dimension to a value which is out of bounds", Util.getFileName(), Util.getLineNumber());
 			}
             this.value = value;
         }
@@ -124,7 +124,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 				case 'H':
 					return new Column(Column.H);
 				default:
-					MySystem.error("Column conversion failed",MySystem.getFileName(), MySystem.getLineNumber());
+					Util.error("Column conversion failed", Util.getFileName(), Util.getLineNumber());
 			}
 			return new Column();
 		}
@@ -197,7 +197,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 					return new Row(Row._7);
 				case '8':
 					return new Row(Row._8);
-				default: MySystem.error("Row conversion failed",MySystem.getFileName(), MySystem.getLineNumber());
+				default: Util.error("Row conversion failed", Util.getFileName(), Util.getLineNumber());
 			}
 			return new Row();
 		}
@@ -329,7 +329,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 	 */
 	public static ChessPosition toChessPosition(String input){
 		if(!testConversion(input)){
-			MySystem.error("String length is either too short or not long enough to be converted to a chess position", MySystem.getFileName(), MySystem.getLineNumber());//make sure its only two characters
+			Util.error("String length is either too short or not long enough to be converted to a chess position", Util.getFileName(), Util.getLineNumber());//make sure its only two characters
 		}
 		final int COLUMN_LOC = 0, ROW_LOC = 1;
 		return new ChessPosition(Row.toRow(input.charAt(ROW_LOC)),Column.toColumn(input.charAt(COLUMN_LOC)));
@@ -407,7 +407,7 @@ public class ChessPosition implements Comparable<ChessPosition>	{
 	 */
 	public ChessPosition(int row,int column){
 		if(!inBounds(row, column)){
-			MySystem.error("Trying to create a chess position which would be out of bounds", MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error("Trying to create a chess position which would be out of bounds", Util.getFileName(), Util.getLineNumber());
 		}
 		this.column = new Column(column);
 		this.row = new Row(row);

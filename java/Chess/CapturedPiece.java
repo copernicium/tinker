@@ -1,6 +1,6 @@
 package Chess;
 
-import MySystem.MySystem;
+import Util.Util;
 import java.util.TreeSet;
 
 /**
@@ -13,7 +13,7 @@ public class CapturedPiece extends ChessPiece{
 	 * Kills the piece
 	 */
 	public void capture(){
-		MySystem.error("Error: trying to capture an already captured piece", MySystem.getFileName(), MySystem.getLineNumber());
+		Util.error("Error: trying to capture an already captured piece", Util.getFileName(), Util.getLineNumber());
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class CapturedPiece extends ChessPiece{
 	 * @param CHESS_PIECES all of the pieces
 	 */
 	public void limitMovesToLeavingCheck(final ChessPieces CHESS_PIECES){
-		MySystem.error("Trying to limit possible moves of a captured piece.",MySystem.getFileName(),MySystem.getLineNumber());
+		Util.error("Trying to limit possible moves of a captured piece.", Util.getFileName(), Util.getLineNumber());
 	}
 
 	public TreeSet<ChessPosition> getLimitedMoves(){
@@ -58,7 +58,7 @@ public class CapturedPiece extends ChessPiece{
 	 * @return a vector of Chess positions that this piece can be moved to
 	 */
 	public TreeSet<ChessPosition> getPossibleMoves(){
-		//MySystem.error("Trying to get possible moves from a captured piece.",MySystem.getFileName(),MySystem.getLineNumber());//TODO: add back in?
+		//Util.error("Trying to get possible moves from a captured piece.",Util.getFileName(),Util.getLineNumber());//TODO: add back in?
 		return new TreeSet<>();
 	}
 
@@ -68,7 +68,7 @@ public class CapturedPiece extends ChessPiece{
 	 */
 	@Override
 	public void updatePossibleMoves(ChessPieces chessPieces){
-		MySystem.error("Trying to update moves for a captured piece.", MySystem.getFileName(), MySystem.getLineNumber());
+		Util.error("Trying to update moves for a captured piece.", Util.getFileName(), Util.getLineNumber());
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class CapturedPiece extends ChessPiece{
 	 */
 	@Override
 	public void move(ChessPosition position,boolean useLimited){
-		MySystem.error("Trying to move a captured chess piece.", MySystem.getFileName(), MySystem.getLineNumber());
+		Util.error("Trying to move a captured chess piece.", Util.getFileName(), Util.getLineNumber());
 	}
 
 	/**

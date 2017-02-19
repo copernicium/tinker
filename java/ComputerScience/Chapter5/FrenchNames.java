@@ -1,6 +1,6 @@
 package ComputerScience.Chapter5;
 
-import MySystem.MySystem;
+import Util.Util;
 
 import java.util.Scanner;
 
@@ -60,9 +60,9 @@ public class FrenchNames{
 			case MASCULINE:
 				return MASCULINE_ARTICLE + " " + NAME;
 			default:
-				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+				Util.nyi(Util.getFileName(), Util.getLineNumber());
 		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		Util.nyi(Util.getFileName(), Util.getLineNumber());
 		return "";//should never reach here
 	}
 

@@ -1,6 +1,6 @@
 package ComputerScience.Chapter6;
 
-import MySystem.MySystem;
+import Util.Util;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.Scanner;
 
@@ -18,7 +18,7 @@ public class LetterSwapper{
 	 */
 	public static void permute(final String input){
 		if(input.length() < 2){
-			MySystem.error("Error: length of input string is less than two meaning that two random numbers cannot be selected such that the second is greater than the first",MySystem.getFileName(),MySystem.getLineNumber());
+			Util.error("Error: length of input string is less than two meaning that two random numbers cannot be selected such that the second is greater than the first", Util.getFileName(), Util.getLineNumber());
 		}
 
 		final int max = input.length();

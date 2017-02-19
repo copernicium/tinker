@@ -1,7 +1,7 @@
 package Chess;
 
 import java.util.TreeSet;
-import MySystem.*;
+import Util.*;
 
 /**
  * A queen piece
@@ -72,11 +72,11 @@ public class Queen extends ChessPiece
 	@Override
 	public void move(ChessPosition newPosition,boolean useLimited){
 		TreeSet<ChessPosition> setForChecking = useLimited ? this.getLimitedMoves(): this.getPossibleMoves();
-		if(MySystem.contains(setForChecking,newPosition)){
+		if(Util.contains(setForChecking,newPosition)){
 			this.position = newPosition;
 			return;
 		}
-		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), MySystem.getFileName(), MySystem.getLineNumber());
+		Util.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), Util.getFileName(), Util.getLineNumber());
 	}
 	public Queen(Queen toCopy) {
 		this.position = new ChessPosition(toCopy.position);

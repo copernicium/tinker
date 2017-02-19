@@ -1,6 +1,6 @@
 package ComputerScience.Chapter5;
 
-import MySystem.MySystem;
+import Util.Util;
 
 import java.util.Scanner;
 
@@ -84,9 +84,9 @@ public class Horoscope{
 				if(this.day < DEC_LIM) return AstrologicalSign.SAGITTARIUS;
 				return AstrologicalSign.CAPRICORN;
 			default:
-				MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+				Util.nyi(Util.getFileName(), Util.getLineNumber());
 		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		Util.nyi(Util.getFileName(), Util.getLineNumber());
 		return AstrologicalSign.AQUARIUS;//should never reach here
 	}
 
@@ -131,7 +131,7 @@ public class Horoscope{
 				horoscope += "The tricky part of the juicy secret that's about to be whispered into your ear is that you may need to keep it that way for at least a few more weeks --\nand as wonderful as you'll be feeling once you've heard it, that may not be easy. Still, though -- think of how wonderful you'll feel about letting the cat out of the bag when you finally do (and of how smug you'll feel). You're grinning already, aren't you?";
 				break;
 			default:
-				MySystem.nyi(MySystem.getFileName(), MySystem.getLineNumber());
+				Util.nyi(Util.getFileName(), Util.getLineNumber());
 		}
 		return horoscope;
 	}

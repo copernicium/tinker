@@ -1,6 +1,6 @@
 package ComputerScience.Chapter5;
 
-import MySystem.MySystem;
+import Util.Util;
 
 import java.util.Scanner;
 
@@ -30,8 +30,8 @@ public class Seasons {
 		}
 
 		public Date(int month, int day) {
-			MySystem.myAssert(1 <= month && month <= 12,MySystem.getFileName(),MySystem.getLineNumber());
-			MySystem.myAssert(1 <= month && month <= 31,MySystem.getFileName(),MySystem.getLineNumber());
+			Util.myAssert(1 <= month && month <= 12, Util.getFileName(), Util.getLineNumber());
+			Util.myAssert(1 <= month && month <= 31, Util.getFileName(), Util.getLineNumber());
 
 			this.month = month;
 			this.day = day;

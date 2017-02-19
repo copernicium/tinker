@@ -1,7 +1,7 @@
 package ComputerScience.Chapter7;
 
 
-import MySystem.Maybe;
+import Util.Maybe;
 import java.util.ArrayList;
 
 /**

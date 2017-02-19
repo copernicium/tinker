@@ -1,6 +1,6 @@
 package ComputerScience.Chapter6;
 
-import MySystem.MySystem;
+import Util.Util;
 
 import java.util.Scanner;
 
@@ -29,7 +29,7 @@ public class FactorGenerator{
 			}
 			this.testFactor--;
 		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		Util.nyi(Util.getFileName(), Util.getLineNumber());
 		return 0;//should never reach this line
 	}
 
@@ -52,7 +52,7 @@ public class FactorGenerator{
 	 */
 	public FactorGenerator(int numberToFactor){
 		if(numberToFactor == 0){
-			MySystem.error("There are no factors of zero",MySystem.getFileName(),MySystem.getLineNumber());
+			Util.error("There are no factors of zero", Util.getFileName(), Util.getLineNumber());
 		}
 		this.numberToFactor = numberToFactor;
 		this.lastVerifiedFactor = numberToFactor;

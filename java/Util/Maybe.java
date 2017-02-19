@@ -1,4 +1,4 @@
-package MySystem;
+package Util;
 
 /**
  * Stores and integer and keeps track of whether it has been set or not
@@ -9,7 +9,7 @@ public class Maybe<T>{
 
 	public T get(){
 		if(!this.valid){
-			MySystem.error("Integer not set",MySystem.getFileName(),MySystem.getLineNumber());
+			Util.error("Integer not set", Util.getFileName(), Util.getLineNumber());
 		}
 		return this.a;
 	}

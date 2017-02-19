@@ -1,6 +1,6 @@
 package ComputerScience.Zork;
 
-import MySystem.MySystem;
+import Util.Util;
 import java.util.Scanner;
 
 public class ZorkRunner {
@@ -16,7 +16,7 @@ public class ZorkRunner {
 		 * @return the command it parsed
 		 */
 		public static Command toCommand(String s){
-			s = MySystem.stringToLowerCase(s);
+			s = Util.stringToLowerCase(s);
 			switch(s){
 				case "help":
 					return HELP;
@@ -81,12 +81,12 @@ public class ZorkRunner {
 							final String STAY = "stay";
 
 							System.out.print("The exits from the " + game.getCurrentRoom().getName() + " are to " + game.getCurrentRoom().getExits() + ". Which room do you want to enter? (Type \"" + STAY + "\" to stay where you are): ");
-							String query = MySystem.stringToLowerCase(in.nextLine().trim());
+							String query = Util.stringToLowerCase(in.nextLine().trim());
 
 							if(query.equals(STAY)) break;
 
 							for (Room r : game.getCurrentRoom().showExits()) {
-								if (query.equals(MySystem.stringToLowerCase(r.getName()))) {
+								if (query.equals(Util.stringToLowerCase(r.getName()))) {
 									game.enterRoom(game.getRoom(game.getRoomIndex(r)));
 									done = true;
 									break;
@@ -119,7 +119,7 @@ public class ZorkRunner {
 						break;
 					}
 				default:
-					MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+					Util.nyi(Util.getFileName(), Util.getLineNumber());
 			}
 			System.out.print("\n");
 		}

@@ -1,7 +1,6 @@
 package TicTacToe;
 
-import MySystem.MySystem;
-import javafx.geometry.Pos;
+import Util.Util;
 
 /**
  * Represents a tic tac toe board
@@ -17,7 +16,7 @@ public class Board{
 					return "O";
 				case BLANK: return " ";
 				default:
-					MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+					Util.nyi(Util.getFileName(), Util.getLineNumber());
 			}
 			return "";//should never reach this line
 		}
@@ -67,7 +66,7 @@ public class Board{
 		public static Position parsePosition(String in){
 			int value = Integer.parseInt(in);
 			value --; //- 1 because position is 0-indexed while the user interface is not
-			MySystem.myAssert(value >= Position._1 && value < Position.POSITIONS,MySystem.getFileName(),MySystem.getLineNumber());
+			Util.myAssert(value >= Position._1 && value < Position.POSITIONS, Util.getFileName(), Util.getLineNumber());
 			return new Position(value);
 		}
 
@@ -82,7 +81,7 @@ public class Board{
 		}
 
 		public void set(int value){
-			MySystem.myAssert(value >= _1 && value <= _9,MySystem.getFileName(),MySystem.getLineNumber());
+			Util.myAssert(value >= _1 && value <= _9, Util.getFileName(), Util.getLineNumber());
 			this.value = value;
 		}
 
@@ -115,7 +114,7 @@ public class Board{
 			this.playerTurn = Mark.X;
 			return;
 		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		Util.nyi(Util.getFileName(), Util.getLineNumber());
 	}
 
 	public static class Status{
@@ -123,7 +122,7 @@ public class Board{
 		private Position position;
 
 		public void set(Mark mark){
-			MySystem.myAssert(this.mark == Mark.BLANK,MySystem.getFileName(),MySystem.getLineNumber());
+			Util.myAssert(this.mark == Mark.BLANK, Util.getFileName(), Util.getLineNumber());
 			this.mark = mark;
 		}
 
@@ -169,7 +168,7 @@ public class Board{
 	}
 
 	public void set(Position position){
-		MySystem.myAssert(this.gameStatus == GameStatus.IN_PROGRESS,MySystem.getFileName(),MySystem.getLineNumber());
+		Util.myAssert(this.gameStatus == GameStatus.IN_PROGRESS, Util.getFileName(), Util.getLineNumber());
 		for(Status status: this.statuses){
 			if(status.getPosition().equals(position)){
 				status.set(this.playerTurn);
@@ -178,7 +177,7 @@ public class Board{
 				return;
 			}
 		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		Util.nyi(Util.getFileName(), Util.getLineNumber());
 	}
 
 	@Override
@@ -245,7 +244,7 @@ public class Board{
 		for(Status status: this.statuses){
 			if(status.getPosition().equals(position)) return status.get();
 		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		Util.nyi(Util.getFileName(), Util.getLineNumber());
 		return Mark.BLANK;//should never reach this line
 	}
 

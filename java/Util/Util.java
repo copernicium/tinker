@@ -1,4 +1,4 @@
-package MySystem;
+package Util;
 
 import java.util.Iterator;
 import java.util.Random;
@@ -8,7 +8,7 @@ import java.util.Vector;
 /**
  * A series of useful methods I've defined to use in other projects
  */
-public class MySystem{
+public class Util{
 	/**
 	 * Takes an array and returns a string which represents it
 	 * @param array the array to print
@@ -33,7 +33,7 @@ public class MySystem{
 			if(i == r) return obj;
 			i++;
 		}
-		MySystem.nyi(MySystem.getFileName(),MySystem.getLineNumber());
+		Util.nyi(Util.getFileName(), Util.getLineNumber());
 		return aIterator.next();//should never reach this line
 	}
 
@@ -64,7 +64,7 @@ public class MySystem{
 	public static boolean parseBoolean(String s){
 		final String true1 = "true", true2 = "1", false1 = "false", false2 = "0";
 		if(!(s.equals(true1) || s.equals(true2) || s.equals(false1) || s.equals(false2))){
-			MySystem.error("Not a valid option: received \"" + s + "\"", MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error("Not a valid option: received \"" + s + "\"", Util.getFileName(), Util.getLineNumber());
 		}
 		return s.equals(true1) || s.equals(true2);
 	}

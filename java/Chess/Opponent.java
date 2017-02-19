@@ -1,6 +1,6 @@
 package Chess;
 
-import MySystem.MySystem;
+import Util.Util;
 
 import java.util.Random;
 import java.util.Vector;
@@ -22,14 +22,14 @@ public class Opponent {
 			if(a.getColor().equals(this.getColor()) && a.getLimitedMoves().size() > 0 && a.getAlive()) moveable_pieces.addElement(i);
 		}
 		if(moveable_pieces.size() == 0){
-			MySystem.error("Opponent could not find any possible moves. Game should have ended by now. Pieces: " + PIECES,MySystem.getFileName(),MySystem.getLineNumber());
-			MySystem.println("Board would look like: ",MySystem.getFileName(),MySystem.getLineNumber());
+			Util.error("Opponent could not find any possible moves. Game should have ended by now. Pieces: " + PIECES, Util.getFileName(), Util.getLineNumber());
+			Util.println("Board would look like: ", Util.getFileName(), Util.getLineNumber());
 			(new ChessBoard(PIECES)).print();
 		}
 		Random rand = new Random();
 		int index = moveable_pieces.elementAt(rand.nextInt(moveable_pieces.size()));
 		ChessPiece start = PIECES.getPieceAt(index);
-		ChessPosition target = MySystem.getRandomTreeSetElement(PIECES.getPieceAt(index).getLimitedMoves());
+		ChessPosition target = Util.getRandomTreeSetElement(PIECES.getPieceAt(index).getLimitedMoves());
 		return new ChessPiece.Move(start,target);
 	}
 

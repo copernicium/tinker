@@ -1,7 +1,7 @@
 package Chess;
 
 import java.util.TreeSet;
-import MySystem.*;
+import Util.*;
 
 /**
  * A king piece
@@ -26,7 +26,7 @@ public class King extends ChessPiece
 	public void updateCheck(final ChessPieces CHESS_PIECES){
 		for(ChessPiece enemyPiece: CHESS_PIECES.toArray()){
 			if(enemyPiece.getColor() == Color.not(this.color)){//if it's an enemy piece
-				if(MySystem.contains(enemyPiece.getPossibleMoves(),this.getPosition())){//if it can take this piece (the king)
+				if(Util.contains(enemyPiece.getPossibleMoves(),this.getPosition())){//if it can take this piece (the king)
 					check = true;
 					return;
 				}
@@ -38,7 +38,7 @@ public class King extends ChessPiece
 	private boolean checkMyMoves(final ChessPieces CHESS_PIECES){
 		final boolean USE_LIMITED = true;
 		if(!this.getCheck()){
-			MySystem.error("Testing for checkmate when this king is not even in check", MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error("Testing for checkmate when this king is not even in check", Util.getFileName(), Util.getLineNumber());
 		}
 		this.updatePossibleMoves(CHESS_PIECES);
 		ChessPieces postMovePieces = ChessPieces.makePieces(CHESS_PIECES);
@@ -102,11 +102,11 @@ public class King extends ChessPiece
 		this.updateCheck(ORIGINAL_PIECES);
 		this.updateCheckmate(ORIGINAL_PIECES);
 		if(this.checkmate){
-			MySystem.println("+++++++++++++++++" ,MySystem.getFileName(),MySystem.getLineNumber());
-			MySystem.println("Checkmate pieces: " + ORIGINAL_PIECES,MySystem.getFileName(),MySystem.getLineNumber());
+			Util.println("+++++++++++++++++" , Util.getFileName(), Util.getLineNumber());
+			Util.println("Checkmate pieces: " + ORIGINAL_PIECES, Util.getFileName(), Util.getLineNumber());
 			ChessBoard a = new ChessBoard(ORIGINAL_PIECES);
 			a.print();
-			MySystem.println("+++++++++++++++++" ,MySystem.getFileName(),MySystem.getLineNumber());
+			Util.println("+++++++++++++++++" , Util.getFileName(), Util.getLineNumber());
 		}
 	}
 
@@ -154,19 +154,19 @@ public class King extends ChessPiece
 		if(this.getAlive() != b.getAlive()) return false;
 		if(this.getCheck() != b.getCheck()) return  false;
 		if(this.getCheckmate() != b.getCheckmate()) return  false;
-		if(!MySystem.treeSetEquals(this.getPossibleMoves(),b.getPossibleMoves())) return false;
-		if(!MySystem.treeSetEquals(this.getLimitedMoves(),b.getLimitedMoves())) return false;
+		if(!Util.treeSetEquals(this.getPossibleMoves(),b.getPossibleMoves())) return false;
+		if(!Util.treeSetEquals(this.getLimitedMoves(),b.getLimitedMoves())) return false;
 		return true;
 	}
 
 	@Override
 	public void move(ChessPosition newPosition,boolean useLimited){
 		TreeSet<ChessPosition> setForChecking = useLimited ? this.getLimitedMoves(): this.getPossibleMoves();
-		if(MySystem.contains(setForChecking,newPosition)){
+		if(Util.contains(setForChecking,newPosition)){
 			this.position = newPosition;
 			return;
 		}
-		MySystem.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), MySystem.getFileName(), MySystem.getLineNumber());
+		Util.error("Move failed: Not a valid move: trying to move from " + this.getPosition().toString() + " to " + newPosition.toString(), Util.getFileName(), Util.getLineNumber());
 	}
 
 	public boolean getCheck(){

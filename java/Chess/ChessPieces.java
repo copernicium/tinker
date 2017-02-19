@@ -1,6 +1,6 @@
 package Chess;
 
-import MySystem.*;
+import Util.*;
 
 /**
  * Stores an array of pieces and useful methods associated with them
@@ -113,7 +113,7 @@ public class ChessPieces{
 		if(b.toArray().length != this.toArray().length) return false;
 		for(int i = 0; i<this.toArray().length; i++){
 			if(!b.toArray()[i].equals(this.toArray()[i])){
-				MySystem.println(i + " is not equal " + this.toArray()[i] + b.toArray()[i],MySystem.getFileName(),MySystem.getLineNumber());
+				Util.println(i + " is not equal " + this.toArray()[i] + b.toArray()[i], Util.getFileName(), Util.getLineNumber());
 				return false;
 			}
 		}
@@ -129,7 +129,7 @@ public class ChessPieces{
 		for(int i = 0; i < this.pieces.length; i++){
 			if(this.pieces[i].getType() == ChessPiece.Type.KING && color == this.pieces[i].getColor()) return i;
 		}
-		MySystem.error("King of color " + color.toString() + " not found in array", MySystem.getFileName(), MySystem.getLineNumber());
+		Util.error("King of color " + color.toString() + " not found in array", Util.getFileName(), Util.getLineNumber());
 		return -1;
 	}
 
@@ -140,7 +140,7 @@ public class ChessPieces{
 	 */
 	private void set(final int INDEX,final ChessPiece CHESS_PIECE){
 		if(CHESS_PIECE.getAlive() && this.isOccupied(CHESS_PIECE.getPosition())){
-			MySystem.error(" Trying to set a piece to a position that is already occupied: piece " + CHESS_PIECE.toString() + " occupying piece: " + this.getPieceAt(CHESS_PIECE.getPosition()),MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error(" Trying to set a piece to a position that is already occupied: piece " + CHESS_PIECE.toString() + " occupying piece: " + this.getPieceAt(CHESS_PIECE.getPosition()), Util.getFileName(), Util.getLineNumber());
 		}
 		this.pieces[INDEX] = ChessPiece.makePiece(CHESS_PIECE);
 	}
@@ -148,7 +148,7 @@ public class ChessPieces{
 	public void moveAndCapture(final int INDEX,final ChessPosition MOVE_THERE,boolean useLimited){
 		if(this.isOccupied(MOVE_THERE, ChessPiece.Color.not(this.getPieceAt(INDEX).getColor()))) this.capture(MOVE_THERE);
 		if(this.isOccupied(MOVE_THERE)){
-			MySystem.error("Move cannot be completed because target position is already occupied", MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error("Move cannot be completed because target position is already occupied", Util.getFileName(), Util.getLineNumber());
 		}
 		this.lastMove = new ChessPiece.Move(ChessPiece.makePiece(this.pieces[INDEX]), MOVE_THERE);
 		this.pieces[INDEX].move(MOVE_THERE,useLimited);
@@ -156,7 +156,7 @@ public class ChessPieces{
 
 	public void unMove(){
 		if(this.lastMove.equals(new ChessPiece.Move())){
-			MySystem.error("Attempting to un-move when no moves have been made",MySystem.getFileName(),MySystem.getLineNumber());
+			Util.error("Attempting to un-move when no moves have been made", Util.getFileName(), Util.getLineNumber());
 		}
 		this.set(this.getIndexOf(lastMove.getTarget()),ChessPiece.makePiece(lastMove.getStart()));
 		if(this.lastCapture.getType() != ChessPiece.Type.UNASSIGNED && this.lastCapture.getPosition().equals(this.lastMove.getTarget())){
@@ -173,7 +173,7 @@ public class ChessPieces{
 		for(int i = 0; i < this.pieces.length; i++){
 			if(this.pieces[i].getAlive() && chessPosition.equals(this.pieces[i].getPosition())) return i;
 		}
-		MySystem.error("Piece not found in array: position " + chessPosition.toString() + " is not in " + this.toString(), MySystem.getFileName(), MySystem.getLineNumber());
+		Util.error("Piece not found in array: position " + chessPosition.toString() + " is not in " + this.toString(), Util.getFileName(), Util.getLineNumber());
 		return -1;
 	}
 
@@ -189,7 +189,7 @@ public class ChessPieces{
 		ChessBoard a = new ChessBoard(this);
 		System.out.print("================\n");
 		a.print();
-		MySystem.error("Piece not found in array: position " + chessPosition.toString() + " is not in " + this.toString(), MySystem.getFileName(), MySystem.getLineNumber());
+		Util.error("Piece not found in array: position " + chessPosition.toString() + " is not in " + this.toString(), Util.getFileName(), Util.getLineNumber());
 		return -1;
 	}
 
@@ -239,7 +239,7 @@ public class ChessPieces{
 	 */
 	private void capture(ChessPosition CAPTURING_POSITION){
 		if(this.getPieceAt(CAPTURING_POSITION) instanceof King){
-			MySystem.error("Attempting to capture a king at " + CAPTURING_POSITION.toString(),MySystem.getFileName(),MySystem.getLineNumber());
+			Util.error("Attempting to capture a king at " + CAPTURING_POSITION.toString(), Util.getFileName(), Util.getLineNumber());
 		}
 		int index = this.getIndexOf(CAPTURING_POSITION);
 		this.lastCapture = ChessPiece.makePiece(this.getPieceAt(index));
@@ -254,7 +254,7 @@ public class ChessPieces{
 		for(int i = 0; i < this.pieces.length; i++){
 			if(this.pieces[i].getType() == ChessPiece.Type.UNASSIGNED) return i;
 		}
-		MySystem.error("Error: Unable to find index of the next unassigned piece, array full", MySystem.getFileName(), MySystem.getLineNumber());
+		Util.error("Error: Unable to find index of the next unassigned piece, array full", Util.getFileName(), Util.getLineNumber());
 		return -1;
 	}
 
@@ -264,7 +264,7 @@ public class ChessPieces{
 	 */
 	public void setNextPiece(final ChessPiece PIECE){
 		if(this.isOccupied(PIECE.getPosition())){
-			MySystem.error("Trying to set a piece which is at a positon which is already occupied", MySystem.getFileName(), MySystem.getLineNumber());
+			Util.error("Trying to set a piece which is at a positon which is already occupied", Util.getFileName(), Util.getLineNumber());
 		}
 		this.pieces[this.findNextUnassigned()] = ChessPiece.makePiece(PIECE);
 	}
