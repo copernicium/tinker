@@ -1,4 +1,4 @@
-package ComputerScience.labs.magpie;
+package ComputerScience.Labs.Magpie;
 import java.util.Scanner;
 
 /**

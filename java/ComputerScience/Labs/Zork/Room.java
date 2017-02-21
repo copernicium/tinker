@@ -1,4 +1,4 @@
-package ComputerScience.Zork;
+package ComputerScience.Labs.Zork;
 
 import java.util.ArrayList;
 

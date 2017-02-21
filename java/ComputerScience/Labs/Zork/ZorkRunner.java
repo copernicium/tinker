@@ -1,4 +1,4 @@
-package ComputerScience.Zork;
+package ComputerScience.Labs.Zork;
 
 import Util.Util;
 import java.util.Scanner;
