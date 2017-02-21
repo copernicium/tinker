@@ -109,12 +109,7 @@ public class ZorkRunner {
 					}
 				case TAKE:
 					{
-						if(game.getCurrentRoom().getTreasure() == null){
-							System.out.println("There aren't any treasures in " + game.getCurrentRoom().getName());
-						} else{
-							System.out.println("You took the " + game.getCurrentRoom().getTreasure().getName());
-							game.pickUpTreasure(game.getCurrentRoom().getTreasure(), game.getCurrentRoom(),game.getInventory());
-						}
+						game.pickUpTreasure(game.getCurrentRoom().getTreasure(), game.getCurrentRoom(),game.getInventory());
 						break;
 					}
 				case UNKNOWN:

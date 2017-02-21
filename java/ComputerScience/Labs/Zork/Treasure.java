@@ -30,13 +30,14 @@ public class Treasure {
 	public ArrayList<Treasure> getRemainingRequirements(ArrayList<Treasure> inventory){
 		ArrayList<Treasure> remaining = new ArrayList<>();
 		for(Treasure a: this.requirements){
+			boolean has = false;
 			for(Treasure b: inventory){
 				if(a.equals(b)){
-					remaining.add(a);
+					has = true;
 					break;
 				}
 			}
-			remaining.add(a);
+			if(!has) remaining.add(a);
 		}
 		return remaining;
 	}

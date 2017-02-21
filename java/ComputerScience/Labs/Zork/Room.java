@@ -24,9 +24,9 @@ public class Room {
 		Room b = (Room)o;
 		if(!this.name.equals(b.name)) return false;
 		if(!this.desc.equals(b.desc)) return false;
-		if(!this.treasure.equals(b.treasure)) return false;
+		//if(!this.treasure.equals(b.treasure)) return false;
 		if(!this.exits.equals(b.exits)) return false;
-		if(!this.requirements.equals(b.requirements)) return false;
+		//if(!this.requirements.equals(b.requirements)) return false;
 		return true;
  	}
 

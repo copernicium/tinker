@@ -50,6 +50,12 @@ public class Game {
 			Treasure safetyGlasses = new Treasure("Safety Glasses",room);
 			Treasure robotParts = new Treasure("Robot Parts",shed);
 
+			driveTeam.addRequirement(lunch);
+			software.addRequirement(robotParts);
+			trophy.addRequirement(robotParts);
+			trophy.addRequirement(driveTeam);
+			trophy.addRequirement(software);
+
 			gym.addTreasure(trophy);
 			pit.addTreasure(driveTeam);
 			cafeteria.addTreasure(lunch);
@@ -76,9 +82,6 @@ public class Game {
 
 			this.currentRoom = this.rooms.get(STARTING_ROOM);
 		}
-		/*for(Room r: this.rooms){
-			System.out.println(r.getName() + " " + r.getDesc() + " " + r.getExits() +  " "+  r.getTreasure().getName());
-		}*/
 	}
 
 	/**
@@ -118,6 +121,7 @@ public class Game {
 			if(this.inventory.indexOf(item) == this.inventory.size() - 2) items += " and";
 			if(this.inventory.indexOf(item) != this.inventory.size() -1) items += " ";
 		}
+		items += ".";
 		return items;
 	}
 
@@ -142,7 +146,7 @@ public class Game {
 	 */
 	public void enterRoom(Room room){
 		if(!room.meetsRequirements(this.inventory)){
-			System.out.println("Cannot enter the " + room.getName() + ". You do not have " + room.printRequirements(this.inventory).toString());
+			System.out.println("You cannot enter the " + room.getName() + ". You do not have " + room.printRequirements(this.inventory).toString() + ".");
 			return;
 		}
 		String message = "";
@@ -159,10 +163,15 @@ public class Game {
 	 * @param room the current room
 	 */
 	public void pickUpTreasure(Treasure treasure, Room room,ArrayList<Treasure> inventory){
-		if(!treasure.meetsRequirements(inventory)){
-			System.out.println("You do not meet the requirements to take this treasure. You still need " + treasure.printRequirements(inventory));
+		if(this.getCurrentRoom().getTreasure() == null){
+			System.out.println("There aren't any treasures in " + this.getCurrentRoom().getName());
 			return;
 		}
+		if(!treasure.meetsRequirements(inventory)){
+			System.out.println("You do not meat the requirements to take the " + treasure.getName() + ". You still need " + treasure.printRequirements(inventory) + ".");
+			return;
+		}
+		System.out.println("You took the " + this.getCurrentRoom().getTreasure().getName() + ".");
 		inventory.add(treasure);
 		room.removeTreasure();
 	}
