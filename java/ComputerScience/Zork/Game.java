@@ -11,6 +11,8 @@ public class Game {
 	private ArrayList<Treasure> treasures;
 	private Room currentRoom;
 
+	private static final int STARTING_ROOM = 2, ENDING_ROOM = 0;
+
 	/**
 	 * Constructs the Game object
 	 * Create the rooms and add to the list
@@ -72,7 +74,7 @@ public class Game {
 			this.treasures.add(safetyGlasses);
 			this.treasures.add(robotParts);
 
-			this.currentRoom = cafe;
+			this.currentRoom = this.rooms.get(STARTING_ROOM);
 		}
 		/*for(Room r: this.rooms){
 			System.out.println(r.getName() + " " + r.getDesc() + " " + r.getExits() +  " "+  r.getTreasure().getName());
@@ -107,7 +109,7 @@ public class Game {
 	 */
 	public String printInventory(){
 		if(this.inventory.size() == 0) return "Your inventory is empty";
-		String items = "You 1have ";
+		String items = "You have ";
 		for(Treasure item: this.inventory){
 			items += item.getName();
 			if(this.inventory.size() > 2 && this.inventory.indexOf(item) < this.inventory.size() - 1){
@@ -117,6 +119,13 @@ public class Game {
 			if(this.inventory.indexOf(item) != this.inventory.size() -1) items += " ";
 		}
 		return items;
+	}
+
+	public boolean getVictory(){
+		for(Room r: this.rooms){
+			if(r.getTreasure() != null) return false;
+		}
+		return currentRoom.equals(this.rooms.get(ENDING_ROOM));
 	}
 
 	/**

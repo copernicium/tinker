@@ -41,6 +41,10 @@ public class ZorkRunner {
 		Game game = new Game();
 
 		while(true){
+			if(game.getVictory()){
+				System.out.println("Congratulations! YOU WIN! EXCLAMATION POINT! Redundant! Redundant!");
+				break;
+			}
 			System.out.print("Enter a command (type \"help\" for help): ");
 			Command command = Command.toCommand(in.nextLine().trim());
 

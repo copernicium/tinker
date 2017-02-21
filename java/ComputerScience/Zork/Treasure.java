@@ -99,6 +99,7 @@ public class Treasure {
 	public Treasure(String name, Room room){
 		this.name = name;
 		this.room = room;
+		this.requirements = new ArrayList<>();
 	}
 
 	public Treasure(){
