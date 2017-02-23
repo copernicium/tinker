@@ -3,6 +3,9 @@ package ComputerScience.Labs.Zork;
 import Util.Util;
 import java.util.Scanner;
 
+/**
+ * Runs the Zork game
+ */
 public class ZorkRunner {
 	/**
 	 * Represents any of the defined commands the player can run
@@ -40,21 +43,26 @@ public class ZorkRunner {
 		Scanner in = new Scanner(System.in);
 		Game game = new Game();
 
+		System.out.println(
+				"Welcome to the Wilsonville Robotics District Event!\n" +
+				"Your mission, should you choose to accept it, is to\n" +
+				"assemble a robot from parts and load software onto \n" +
+				"it in order to compete and win! The game is afoot!\n"
+		);
 		while(true){
 			if(game.getVictory()){
-				System.out.println("Congratulations! YOU WIN! EXCLAMATION POINT! Redundant! Redundant!");
-				break;
+				System.out.println("Congratulations! YOU WIN THE COMPETITION! EXCLAMATION POINT! Redundant! Redundant!");
+				return;
 			}
+
 			System.out.print("Enter a command (type \"help\" for help): ");
 			Command command = Command.toCommand(in.nextLine().trim());
-
-			//TODO: victory checker
 
 			switch(command){
 				case ROOM_INFO:
 					{
 						String message = "";
-						message += "You are currently standing in " + game.getCurrentRoom().getName();
+						message += "You are currently standing in the " + game.getCurrentRoom().getName() + ".";
 						message += "\n" + game.getCurrentRoom().getDesc();
 						message += "\nThere are exits to " + game.getCurrentRoom().getExits() + ".";
 						System.out.println(message);

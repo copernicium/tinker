@@ -168,7 +168,7 @@ public class Game {
 			return;
 		}
 		if(!treasure.meetsRequirements(inventory)){
-			System.out.println("You do not meat the requirements to take the " + treasure.getName() + ". You still need " + treasure.printRequirements(inventory) + ".");
+			System.out.println("You do not meet the requirements to take the " + treasure.getName() + ". You still need " + treasure.printRequirements(inventory) + ".");
 			return;
 		}
 		System.out.println("You took the " + this.getCurrentRoom().getTreasure().getName() + ".");
