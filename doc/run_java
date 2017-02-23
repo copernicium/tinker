@@ -1,0 +1,6 @@
+To make a java runner in a terminal, first cd to to the directory outside of the package
+	Example: If you are trying to make and run Main.java which is in package X.Y, your runner will start with "cd ../../" (assuming your runner is in the same directory as Main.java)
+Then you will write your make command, but you must use the -C command to (unsure what it's for, can't remember)
+	Example: make Main.class -C X/Y/
+Then you actually need to run the class file using java, but you must change the classpath so it knows what to run (note: the first period means start in the current directory)
+	Example: java -classpath . X.Y.Main
