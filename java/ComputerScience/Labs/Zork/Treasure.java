@@ -11,14 +11,14 @@ public class Treasure {
 	ArrayList<Treasure> requirements;
 
 	public String printRequirements(ArrayList<Treasure> inventory){
-		int remainingSize = this.getRemainingRequirements(inventory).size();
+		ArrayList<Treasure> remainingRequirements = this.getRemainingRequirements(inventory);
 		String s = "";
-		for(int i = 0; i < remainingSize; i++){
+		for(int i = 0; i < remainingRequirements.size(); i++){
 			s += "the ";
-			s += this.requirements.get(i).getName();
-			if(remainingSize > 2 && i != remainingSize - 1) s += ",";
-			if(i == remainingSize - 2) s += " and";
-			if(i != remainingSize - 1) s += " ";
+			s += remainingRequirements.get(i).getName();
+			if(remainingRequirements.size() > 2 && i != remainingRequirements.size() - 1) s += ",";
+			if(i == remainingRequirements.size() - 2) s += " and";
+			if(i != remainingRequirements.size() - 1) s += " ";
 		}
 		return s;
 	}
