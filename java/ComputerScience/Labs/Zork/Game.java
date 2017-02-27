@@ -102,6 +102,10 @@ public class Game {
 		return this.rooms.indexOf(room);
 	}
 
+	/**
+	 * Fetches the player's inventory
+	 * @return the player's inventory
+	 */
 	public ArrayList<Treasure> getInventory(){
 		return this.inventory;
 	}
@@ -125,6 +129,10 @@ public class Game {
 		return items;
 	}
 
+	/**
+	 * Checks to see if the player has met the requirements to win
+	 * @return true if the player has beaten the game
+	 */
 	public boolean getVictory(){
 		for(Room r: this.rooms){
 			if(r.getTreasure() != null) return false;

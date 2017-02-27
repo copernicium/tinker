@@ -12,11 +12,20 @@ public class Room {
 	private ArrayList<Room> exits;
 	private ArrayList<Treasure> requirements;
 
+	/**
+	 * Converts the object to a readable String
+	 * @return the String representing the object
+	 */
 	@Override
 	public String toString(){
 		return this.name;
 	}
 
+	/**
+	 * The equality operator by value for this type
+	 * @param o the object to compare with
+	 * @return true if they are equal by value
+	 */
 	@Override
 	public boolean equals(Object o){
 		if(this == o) return true;
@@ -75,6 +84,11 @@ public class Room {
 		return s;
 	}
 
+	/**
+	 * Formats the remaining requirements of a room to be easier to read
+	 * @param inventory the player's inventory
+	 * @return a String of the remaining requirements
+	 */
 	public String printRequirements(ArrayList<Treasure> inventory){
 		int remainingSize = this.getRemainingRequirements(inventory).size();
 		String s = "";
@@ -88,10 +102,19 @@ public class Room {
 		return s;
 	}
 
+	/**
+	 * Adds a requirement that must be met before the treasure is available
+	 * @param a the requirement
+	 */
 	public void addRequirement(Treasure a){
 		this.requirements.add(a);
 	}
 
+	/**
+	 * Returns an ArrayList of the remaining requirements of the room
+	 * @param inventory the player's inventory
+	 * @return the unmet requirements
+	 */
 	public ArrayList<Treasure> getRemainingRequirements(ArrayList<Treasure> inventory){
 		ArrayList<Treasure> remaining = new ArrayList<>();
 		for(Treasure a: this.requirements){
@@ -104,14 +127,6 @@ public class Room {
 			remaining.add(a);
 		}
 		return remaining;
-	}
-
-	/**
-	 * Gets the requirements for the room
-	 * @return the requirements to enter the room
-	 */
-	public ArrayList<Treasure> getRequirements(){
-		return this.requirements;
 	}
 
 	/**
