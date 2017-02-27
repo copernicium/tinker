@@ -10,3 +10,7 @@ hangman_test.cpp  Loss  - worker's
 hangman_test.cpp  Loss  - Castries's
 hangman_test.cpp  Win   - armors
 hangman_test.cpp  Win   - disembark
+hangman_test.cpp  Win   - layoff
+hangman_test.cpp  Win   - halfpence
+hangman_test.cpp  Win   - splicer
+hangman_solver.cpp  Win   - e
