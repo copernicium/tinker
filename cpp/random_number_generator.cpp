@@ -11,10 +11,8 @@
 using namespace std;
 
 int main(){
-	int i=0;
 	for(int stop=0;stop<10000000;stop++){
 		Sleep(250);
-		i=0;
 		srand(time(NULL));
 		Sleep(250);
 		int random=(rand() % 100000)+1;

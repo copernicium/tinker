@@ -24,7 +24,8 @@ int main(){
 				else cout<<input_number<<" is not a prime.";
 			}
 			else cout<<input_number<<" is not a prime.";
-		}		
+		}
+		cout<<"\n";
 	}
 	return 0;
 }

@@ -22,15 +22,17 @@ struct Room_1{
 };
 
 void explore(int room){
+	(void)room;
 	Room_1 current_room;
 	cout<<"There is "<<current_room.visible;
 }
 
 void use(int room){
-	
+	(void)room;	
 }
 
 string take(int room){
+	(void)room;
 	string item;
 	cout<<endl<<"What do you want to take? ";
 	getline(cin, item);
@@ -42,6 +44,7 @@ string take(int room){
 }
 
 void investigate(int room){
+	(void)room;
 	string object;
 	cout<<endl<<"What do you want to investigate? ";
 	getline(cin, object);
@@ -55,7 +58,7 @@ void investigate(int room){
 }
 
 void go_to(int room){
-
+	(void)room;
 }
 
 string determine_command(string command, int room){

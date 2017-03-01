@@ -9,7 +9,7 @@ int main(){
 	bool correct=1;
 	bool allCorrect=0;
 	while(1){	
-		int i=0;
+		unsigned i=0;
 		string myGuess;
 		string pi="3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679";
 		cout<<"Your guess:  ";
@@ -18,7 +18,7 @@ int main(){
 			break;
 		}
 		cout<<"The real pi: ";
-		for(i; i<myGuess.length(); i++){
+		for(; i<myGuess.length(); i++){
 			cout<<pi[i];
 		}
 		cout<<endl;
