@@ -7,4 +7,28 @@ package ComputerScience.Chapter9.Vehicles;
  * @Assignment Ch 9: Introduction to Inheritance
  */
 public class ElectricCar extends Car{
+	protected double batteryCapacity;
+	protected double currentCharge;
+
+	public double getBatteryCapacity(){
+		return this.batteryCapacity;
+	}
+
+	public double getCurrentCharge(){
+		return this.currentCharge;
+	}
+
+	public void setBatteryCapacity(double batteryCapacity){
+		this.batteryCapacity = batteryCapacity;
+	}
+
+	public void setCurrentCharge(double currentCharge){
+		this.currentCharge = currentCharge;
+	}
+
+	public ElectricCar(){
+		super();
+		this.batteryCapacity = 0;
+		this.currentCharge = 0;
+	}
 }

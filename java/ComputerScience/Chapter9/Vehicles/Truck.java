@@ -7,4 +7,12 @@ package ComputerScience.Chapter9.Vehicles;
  * @Assignment Ch 9: Introduction to Inheritance
  */
 public class Truck extends Vehicle{
+	protected String fuelType;//TODO: determine type
+	protected double load;
+
+	public Truck(){
+		super();
+		this.fuelType = "";
+		this.load = 0;
+	}
 }

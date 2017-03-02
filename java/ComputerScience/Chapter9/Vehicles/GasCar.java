@@ -7,4 +7,7 @@ package ComputerScience.Chapter9.Vehicles;
  * @Assignment Ch 9: Introduction to Inheritance
  */
 public class GasCar extends Car{
+	public GasCar(){
+		super();
+	}
 }
