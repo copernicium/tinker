@@ -9,14 +9,30 @@ import Util.Util;
  * @Assignment Ch 9: Introduction to Inheritance
  */
 public class Employee {
-	protected double hireDate;//TODO: determine type
+	enum Gender{MALE,FEMALE,OTHER};
+	public static class Date{
+		enum Month{JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEPT,OCT,NOV,DEC}
+		private Month month;
+		int day;
+		int year;
+
+		public Date(Month month,int day,int year){
+			this.month = month;
+			this.day = day;
+			this.year = year;
+		}
+		public Date(){
+			this(Month.JAN,0,0);
+		}
+	}
+	protected Date hireDate;
 	protected int age;
-	protected char gender;
+	protected Gender gender;
 	protected String location;
 	protected double salary;
 	protected int monthsSinceReview;
 
-	public double getHireDate(){
+	public Date getHireDate(){
 		return this.hireDate;
 	}
 
@@ -24,7 +40,7 @@ public class Employee {
 		return this.age;
 	}
 
-	public char getGender(){
+	public Gender getGender(){
 		return this.gender;
 	}
 
@@ -40,7 +56,7 @@ public class Employee {
 		return this.monthsSinceReview;
 	}
 
-	public void setHireDate(double hireDate){
+	public void setHireDate(Date hireDate){
 		this.hireDate = hireDate;
 	}
 
@@ -48,7 +64,7 @@ public class Employee {
 		this.age = age;
 	}
 
-	public void setGender(char gender){
+	public void setGender(Gender gender){
 		this.gender = gender;
 	}
 
@@ -71,9 +87,9 @@ public class Employee {
 	}
 
 	public Employee(){
-		this.hireDate = 0;
+		this.hireDate = new Date();
 		this.age = 0;
-		this.gender = ' ';
+		this.gender = Gender.OTHER;
 		this.location = "";
 		this.salary = 0;
 		this.monthsSinceReview = 0;

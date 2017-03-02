@@ -9,6 +9,7 @@ import Util.Util;
  * @Assignment Ch 9: Introduction to Inheritance
  */
 public class Vehicle {
+	public enum Gear{P,N,D,_1,_2,_3,R}
 	protected String make;
 	protected String model;
 	protected int year;
@@ -19,7 +20,7 @@ public class Vehicle {
 	protected double currentGasAmount;
 	protected double maxSpeed;
 	protected double currentSpeed;
-	protected char drive;//TODO: determine type
+	protected Gear drive;
 
 	public String getMake(){
 		return this.make;
@@ -61,7 +62,7 @@ public class Vehicle {
 		return this.currentSpeed;
 	}
 
-	public char getDrive(){
+	public Gear getDrive(){
 		return this.drive;
 	}
 
@@ -105,18 +106,18 @@ public class Vehicle {
 		this.currentSpeed = currentSpeed;
 	}
 
-	public void setDrive(char drive){
+	public void setDrive(Gear drive){
 		this.drive = drive;
 	}
 
 	public void drive(){
-		//TODO
-		Util.nyi(Util.getFileName(),Util.getLineNumber());
+		final double DECREMENT = 10;
+		this.currentGasAmount -= DECREMENT;
 	}
 
 	public void fillGas(){
-		//TODO
-		Util.nyi(Util.getFileName(),Util.getLineNumber());
+		final double INCREMENT = 10;
+		this.currentGasAmount += INCREMENT ;
 	}
 
 	public Vehicle(){
@@ -130,6 +131,6 @@ public class Vehicle {
 		this.currentGasAmount = 0;
 		this.maxSpeed = 0;
 		this.currentSpeed = 0;
-		this.drive ='P';
+		this.drive = Gear.P;
 	}
 }

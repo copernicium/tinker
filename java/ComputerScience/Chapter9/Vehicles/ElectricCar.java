@@ -26,6 +26,17 @@ public class ElectricCar extends Car{
 		this.currentCharge = currentCharge;
 	}
 
+	@Override
+	public void drive(){
+		final double DECREMENT = 10;
+		this.currentCharge -= DECREMENT;
+	}
+
+	@Override
+	public void fillGas(){
+		System.out.println("Cannot fill gas: this is an electric car");
+	}
+
 	public ElectricCar(){
 		super();
 		this.batteryCapacity = 0;
