@@ -1,7 +1,5 @@
 package ComputerScience.Chapter9.Employees;
 
-import Util.Util;
-
 /**
  * @Author Logan Traffas
  * @Date 3/1/2017.
@@ -29,9 +27,7 @@ public class Programmer extends Employee{
 	}
 
 	public double calculateRaise(){
-		//TODO
-		Util.nyi(Util.getFileName(),Util.getLineNumber());
-		return 0;
+		return 1.1 * this.salary;
 	}
 
 	public Programmer(){

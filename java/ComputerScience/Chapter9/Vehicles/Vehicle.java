@@ -1,7 +1,4 @@
 package ComputerScience.Chapter9.Vehicles;
-
-import Util.Util;
-
 /**
  * @Author Logan Traffas
  * @Date 3/1/2017.

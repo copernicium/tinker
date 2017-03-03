@@ -1,7 +1,7 @@
 package Util;
 
 /**
- * Stores and integer and keeps track of whether it has been set or not
+ * Stores a value and keeps track of whether it has been set or not
  */
 public class Maybe<T>{
 	private T a;
@@ -9,7 +9,7 @@ public class Maybe<T>{
 
 	public T get(){
 		if(!this.valid){
-			Util.error("Integer not set", Util.getFileName(), Util.getLineNumber());
+			Util.error("Value not set", Util.getFileName(), Util.getLineNumber());
 		}
 		return this.a;
 	}
@@ -17,8 +17,8 @@ public class Maybe<T>{
 	@Override
 	public String toString(){
 		String s = "Maybe(";
-		s += "has been set:" + this.valid;
-		if(this.valid) s+= " valid:" + this.get();
+		if(this.valid) s+= this.get();
+		else s+= "NULL";
 		s += ")";
 		return s;
 	}

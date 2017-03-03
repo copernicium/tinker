@@ -1,7 +1,5 @@
 package ComputerScience.Chapter9.Employees;
 
-import Util.Util;
-
 /**
  * @Author Logan Traffas
  * @Date 3/1/2017.
@@ -13,8 +11,8 @@ public class Employee {
 	public static class Date{
 		enum Month{JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEPT,OCT,NOV,DEC}
 		private Month month;
-		int day;
-		int year;
+		private int day;
+		private int year;
 
 		public Date(Month month,int day,int year){
 			this.month = month;
@@ -81,9 +79,7 @@ public class Employee {
 	}
 
 	public int computeMonthsToNextReview(){
-		//TODO
-		Util.nyi(Util.getFileName(),Util.getLineNumber());
-		return 0;
+		return 12 - monthsSinceReview;
 	}
 
 	public Employee(){
