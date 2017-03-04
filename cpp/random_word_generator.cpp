@@ -7,7 +7,8 @@
 #include <fstream>
 #include <string>
 #include <ctime>
-#include <windows.h>
+#include "simple_time.h"
+
 using namespace std;
 
 int main(){
@@ -15,15 +16,15 @@ int main(){
 	string word="";
 	ifstream chooseword;
 	while(true){
-		Sleep(250);
+		Simple_time::sleep(250,Simple_time::Unit::MILLISECONDS);
 		i=0;
 		srand(time(NULL));
 		int random=(rand() % 99171)+1;
 		chooseword.open("words.txt");
-		Sleep(250);
+		Simple_time::sleep(250,Simple_time::Unit::MILLISECONDS);
 		while(!chooseword.eof()){//Choosing the word.
 			if(i==random){
-				Sleep(250);
+				Simple_time::sleep(250,Simple_time::Unit::MILLISECONDS);
 				break;
 			}	
 			else{
@@ -35,7 +36,7 @@ int main(){
 		}
 		chooseword.close();
 		cout<<word<<endl<<endl;
-		Sleep(250);
+		Simple_time::sleep(250,Simple_time::Unit::MILLISECONDS);
 	}
 	return 0;
 }

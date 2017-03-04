@@ -16,7 +16,7 @@ int main(){
 	const double STANDARD_DEVIATION_2=5;
 	normal_distribution<double> alliance_2(MEAN_2,STANDARD_DEVIATION_2);
 
-	default_random_engine generator(get_time(Time_type::NANOSECONDS));
+	default_random_engine generator(get_time(Simple_time::Unit::NANOSECONDS));
 	
 	unsigned int alliance_1_wins=0;
 	unsigned int alliance_2_wins=0;

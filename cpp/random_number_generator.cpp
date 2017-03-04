@@ -7,18 +7,19 @@
 #include <fstream>
 #include <string>
 #include <ctime>
-#include <windows.h>
+#include "simple_time.h"
+
 using namespace std;
 
 int main(){
 	for(int stop=0;stop<10000000;stop++){
-		Sleep(250);
+		Simple_time::sleep(250,Simple_time::Unit::MILLISECONDS);
 		srand(time(NULL));
-		Sleep(250);
+		Simple_time::sleep(250,Simple_time::Unit::MILLISECONDS);
 		int random=(rand() % 100000)+1;
-		Sleep(250);
+		Simple_time::sleep(250,Simple_time::Unit::MILLISECONDS);
 		cout<<random<<endl<<endl;
-		Sleep(250);
+		Simple_time::sleep(250,Simple_time::Unit::MILLISECONDS);
 	}
 	return 0;
 }
