@@ -21,7 +21,10 @@ public class Appointment
 	 */
 	public Appointment(int year, int month, int day, String description)
 	{
-		//your code here
+		this.year = year;
+		this.month = month;
+		this.day = day;
+		this.description = description;
 	}
 
 	/**
@@ -30,8 +33,7 @@ public class Appointment
 	 */
 	public int getYear()
 	{
-		Util.nyi(Util.getFileName(),Util.getLineNumber());//TODO
-		return 0;
+		return year;
 	}
 
 	/**
@@ -40,8 +42,7 @@ public class Appointment
 	 */
 	public int getMonth()
 	{
-		Util.nyi(Util.getFileName(),Util.getLineNumber());//TODO
-		return 0;
+		return this.month;
 	}
 
 	/**
@@ -50,8 +51,7 @@ public class Appointment
 	 */
 	public int getDay()
 	{
-		Util.nyi(Util.getFileName(),Util.getLineNumber());//TODO
-		return 0;
+		return this.day;
 	}
 
 	/**
@@ -63,8 +63,7 @@ public class Appointment
 	 */
 	public boolean occursOn(int year, int month, int day)
 	{
-		Util.nyi(Util.getFileName(),Util.getLineNumber());//TODO
-		return false;
+		return this.year == year && this.month == month && this.day == day;
 	}
 
 	/**

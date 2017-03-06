@@ -16,8 +16,7 @@ public class AppointmentDemo
 		appointments[2] = new Onetime(2004, 11, 2, "Dentist appointment.");
 		appointments[3] = new Onetime(2004, 10, 31, "Trick or Treat.");
 
-		System.out.println("Enter a date (year, month, day) to list "
-				+ "appointments: ");
+		System.out.println("Enter a date (year, month, day) to list " + "appointments: ");
 		Scanner in = new Scanner(System.in);
 		int year = in.nextInt();
 		int month = in.nextInt();
