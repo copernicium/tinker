@@ -20,7 +20,7 @@ int main(){
 		i=0;
 		srand(time(NULL));
 		int random=(rand() % 99171)+1;
-		chooseword.open("words.txt");
+		chooseword.open("hangman/words.txt");
 		Simple_time::sleep(250,Simple_time::Unit::MILLISECONDS);
 		while(!chooseword.eof()){//Choosing the word.
 			if(i==random){
