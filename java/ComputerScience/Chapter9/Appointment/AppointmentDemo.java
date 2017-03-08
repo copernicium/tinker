@@ -5,11 +5,8 @@ import java.util.Scanner;
 /**
  Demonstration of the appointment classes
  */
-public class AppointmentDemo
-{
-
-	public static void main(String[] args)
-	{
+public class AppointmentDemo {
+	public static void main(String[] args){
 		Appointment[] appointments = new Appointment[4];
 		appointments[0] = new Daily(2000, 8, 13, "Brush your teeth.");
 		appointments[1] = new Monthly(2003, 5, 20, "Visit grandma.");
@@ -21,10 +18,8 @@ public class AppointmentDemo
 		int year = in.nextInt();
 		int month = in.nextInt();
 		int day = in.nextInt();
-		for (int i = 0; i < appointments.length; i++)
-		{
-			if (appointments[i].occursOn(year, month, day))
-			{
+		for (int i = 0; i < appointments.length; i++){
+			if(appointments[i].occursOn(year, month, day)){
 				System.out.println(appointments[i]);
 			}
 		}

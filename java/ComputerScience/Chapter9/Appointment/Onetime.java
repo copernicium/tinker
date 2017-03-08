@@ -11,8 +11,7 @@ public class Onetime extends Appointment{
 	 @param day the day
 	 @param description the text description of the appointment
 	 */
-	public Onetime(int year, int month, int day, String description)
-	{
+	public Onetime(int year, int month, int day, String description){
 		super(year, month, day, description);
 	}
 }

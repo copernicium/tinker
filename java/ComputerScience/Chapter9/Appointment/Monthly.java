@@ -3,8 +3,7 @@ package ComputerScience.Chapter9.Appointment;
 /**
  Monthly appointment.
  */
-public class Monthly extends Appointment
-{
+public class Monthly extends Appointment {
 	/**
 	 Initializes appointment for a given date.
 	 @param year the year
@@ -12,8 +11,7 @@ public class Monthly extends Appointment
 	 @param day the day
 	 @param description the text description of the appointment
 	 */
-	public Monthly(int year, int month, int day, String description)
-	{
+	public Monthly(int year, int month, int day, String description){
 		super(year, month, day, description);
 	}
 
@@ -25,14 +23,12 @@ public class Monthly extends Appointment
 	 @return true if day matches the appointment date and is later than the
 	 base appointment
 	 */
-	public boolean occursOn(int year, int month, int day)
-	{
-		if (year < getYear())
-		{
+	@Override
+	public boolean occursOn(int year, int month, int day) {
+		if (year < getYear()) {
 			return false;
 		}
-		if (month < getMonth() && year == getYear())
-		{
+		if (month < getMonth() && year == getYear()){
 			return false;
 		}
 		return day == getDay();
