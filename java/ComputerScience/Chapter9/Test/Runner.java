@@ -5,9 +5,15 @@ package ComputerScience.Chapter9.Test;
  */
 public class Runner {
 	public static void main(String[] args){
-		A a = new B();
-		System.out.println("The value of i in A: " + a.i);
-		System.out.println("The value of i in B: " + ((B)a).i);
-		System.out.println("Notice that these are not the same variable with different values. They are different variables with different values.");
+		{
+			A a = new A();
+			A b = new B();
+
+			System.out.println("a and b are both of type A, but a is set to a new A and b is set to a new B");
+			System.out.println("b.i = " + b.i);//prints 10
+			System.out.println("((B)b).i = " + ((B)b).i);//prints 20
+			System.out.println("a.j = " + a.j);//prints 5
+			System.out.println("b.j = " + b.j);//prints 15
+		}
 	}
 }
