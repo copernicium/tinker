@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <cassert>
-#include "../simple_time.h"
+#include "../util/simple_time.h"
 
 #define UPDATE_EVERY 5
 
@@ -159,7 +159,7 @@ void run(){
 		int i =0;
 		while(true){
 			i++;
-			if(get_time(Time_type::MILLISECONDS)%UPDATE_EVERY!=0) continue;
+			if(Simple_time::get_time(Simple_time::Unit::MILLISECONDS)%UPDATE_EVERY!=0) continue;
 			if(i%2==0)last_grid = grid_str;
 			grid.update();
 			grid_str = grid.to_string();
