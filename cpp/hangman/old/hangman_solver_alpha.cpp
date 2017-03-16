@@ -13,13 +13,9 @@ TODO:
 #include <ctime>
 #include <vector>
 #include <algorithm>
+#include "../../util/nyi.h"
 
 using namespace std;
-
-#define nyi { \
-	cout<<"\nnyi "<<__LINE__<<"\n"; \
-	exit(44); \
-}
 
 ostream& operator<<(ostream& o, pair<char,int> p){
 	return o<<"<"<<p.first<<","<<p.second<<">";
@@ -284,7 +280,7 @@ void if_correct_guess(string& word, vector<char>& correct_letters, char& letter_
 	else{
 		cout<<"\nThere is already a letter there, the letter \""<<word[letter_place-1]<<"\". Are you sure you mean to replace it?(y/n)";
 		cin>>yn;
-		nyi;
+		NYI
 		if(yn=='y')correct_misplaced();
 	}
 	for(unsigned int j=0; j<word.size(); j++){

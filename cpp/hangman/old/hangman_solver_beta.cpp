@@ -12,11 +12,6 @@ TODO:
 #include <stdlib.h>
 #include <algorithm>
 
-#define nyi { \
-	std::cout<<"\nnyi "<<__LINE__<<"\n"; \
-	exit(44); \
-}
-
 const std::vector<char> GEN_FREQ={'e','t','a','o','i','n','s','h','r','d','l','c','u','m','w','f','g','y','p','b','v','k','j','x','q','z'};
 const std::vector<char> CAPS_GEN_FREQ={'E','T','A','O','I','N','S','H','R','D','L','C','U','M','W','F','G','Y','P','B','V','K','J','X','Q','Z'};
 
