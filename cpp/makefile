@@ -10,17 +10,17 @@ vigenere: vigenere.cpp
 	g++ -std=c++14 -g -Wall -Werror -Wextra vigenere.cpp -o "vigenere"
 
 monte_carlo: monte_carlo.cpp
-	g++ -std=c++14 -g -Wall -Werror -Wextra monte_carlo.cpp simple_time.cpp -o "monte_carlo"
+	g++ -std=c++14 -g -Wall -Werror -Wextra monte_carlo.cpp util/simple_time.cpp -o "monte_carlo"
 
 animals: animals.cpp
 	g++ -std=c++14 -g -Wall -Werror -Wextra animals.cpp -o "animals"
 
 
 random_number_generator: random_number_generator.cpp
-	g++ -std=c++14 -g -Wall -Werror -Wextra random_number_generator.cpp simple_time.cpp -o "random_number_generator"
+	g++ -std=c++14 -g -Wall -Werror -Wextra random_number_generator.cpp util/simple_time.cpp -o "random_number_generator"
 
 simple_time_test: simple_time_test.cpp
-	g++ -std=c++14 -g -Wall -Werror -Wextra simple_time_test.cpp simple_time.cpp -o "simple_time_test"
+	g++ -std=c++14 -g -Wall -Werror -Wextra simple_time_test.cpp util/simple_time.cpp -o "simple_time_test"
 
 temperature_control: temperature_control.cpp
 	g++ -std=c++14 -g -Wall -Werror -Wextra temperature_control.cpp -o "temperature_control"
@@ -29,7 +29,7 @@ num_converter: num_converter.cpp
 	g++ -std=c++14 -g -Wall -Werror -Wextra num_converter.cpp -o "num_converter"
 
 random_word_generator: random_word_generator.cpp
-	g++ -std=c++14 -g -Wall -Werror -Wextra random_word_generator.cpp simple_time.cpp -o "random_word_generator"
+	g++ -std=c++14 -g -Wall -Werror -Wextra random_word_generator.cpp util/simple_time.cpp -o "random_word_generator"
 
 skip_printer: skip_printer.cpp
 	g++ -std=c++14 -g -Wall -Werror -Wextra skip_printer.cpp -o "skip_printer"

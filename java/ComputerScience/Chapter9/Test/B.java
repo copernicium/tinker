@@ -7,5 +7,6 @@ public class B extends A{
 	public int i;//creates a new i which is initialized in the constructor and then hidden by the i declared in A
 	public B(){
 		i = 20;
+		j = 15;
 	}
 }

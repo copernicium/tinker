@@ -14,3 +14,14 @@ hangman_test.cpp  Win   - layoff
 hangman_test.cpp  Win   - halfpence
 hangman_test.cpp  Win   - splicer
 hangman_solver.cpp  Win   - e
+hangman_test.cpp  Loss  - zincing
+hangman_test.cpp  Loss  - Draco
+hangman_test.cpp  Win   - bandaged
+hangman_test.cpp  Loss  - ticking
+hangman_test.cpp  Loss  - Locke
+hangman_test.cpp  Win   - riddance's
+hangman_test.cpp  Loss  - vamoosing
+hangman_test.cpp  Loss  - obedient
+hangman_test.cpp  Loss  - streetcar's
+hangman_test.cpp  Win   - landslidden
+hangman_test.cpp  Loss  - quicksand's

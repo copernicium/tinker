@@ -8,11 +8,7 @@
 #include <array>
 #include <set>
 #include <vector>
-
-#define NYI { \
-	std::cout<<"\nnyi "<<__LINE__<<"\n"; \
-	assert(0); \
-}
+#include "../util/nyi.h"
 
 #define FILENAME "words.txt"
 #define LOG_FILE "hangman_log.txt"
