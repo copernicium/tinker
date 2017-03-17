@@ -1,6 +1,6 @@
-all: vigenere monte_carlo square_root animals random_number_generator simple_time_test temperature_control num_converter random_word_generator text_adventure_alpha vigenere_old pi_helper reader prime_finder #skip_printer high_order_functions
+all: vigenere monte_carlo square_root animals random_number_generator simple_time_test temperature_control num_converter random_word_generator text_adventure_alpha vigenere_old pi_helper reader prime_finder high_order_functions #skip_printer
 
-#high_order_functions: high_order_functions.cpp \
+high_order_functions: high_order_functions.cpp 
 	g++ -std=c++14 -g -Wall -Werror -Wextra high_order_functions.cpp -o "high_order_functions"
 
 square_root: square_root.cpp 
