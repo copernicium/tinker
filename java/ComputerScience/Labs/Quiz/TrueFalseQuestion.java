@@ -7,18 +7,6 @@ package ComputerScience.Labs.Quiz;
  * @Assignment Ch 9 Lab: Quiz Maker
  */
 public class TrueFalseQuestion extends Question{
-	private String text;
-	private boolean answer;
-
-	public void setAnswer(boolean answer){
-		this.answer = answer;
-	}
-
-
-	public boolean checkAnswer(boolean response){
-		return this.answer == response;
-	}
-
 	public TrueFalseQuestion(){
 		super();
 	}

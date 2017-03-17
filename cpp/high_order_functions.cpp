@@ -12,9 +12,9 @@ vector<T> filter(FUNC f,vector<T> v){
 }
 
 template<typename FUNC,typename T>
-auto map(FUNC f, vector<T> const& v) -> vector< typename remove_reference< decltype(f)>::type > {
+auto map(FUNC f, vector<T> const& v) -> vector< decltype(f( *((T*)nullptr) ))> {
 	/*vector<typename remove_const<typename remove_reference<decltype(f)>::type>::type>*/ 
-	vector< typename remove_reference< decltype(f)>::type > out;
+	vector< decltype(f( *((T*)nullptr) )) > out;
 	for(T a:v){
 		out.push_back(f(a));
 	}
@@ -32,15 +32,17 @@ int add(int a){
 
 template<typename T>
 void printv(const vector<T> v){
-	for(T a: v){
-		cout<<a;
+	cout<<"(";
+	for(unsigned i = 0; i < v.size(); i++){
+		cout<<v[i];
+		if(i < v.size() - 1) cout<<", ";
 	}
-	cout<<"\n";
+	cout<<")\n";
 }
 
 int main(){
 	{
-		vector<int> all = {1,2,3,4,5,};
+		vector<int> all = {1,2,3,4,5};
 		printv(all);
 		vector<int> evens = filter(is_even,all);
 		printv(evens);
@@ -48,7 +50,7 @@ int main(){
 	{
 		vector<int> all = {1,2,3,4,5,6,7,8,9};
 		printv(all);
-		/*vector<int>*/ auto added = map(add,all);
+		vector<int> added = map(add,all);
 		printv(added);
 	}
 }
