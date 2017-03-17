@@ -7,6 +7,25 @@ package ComputerScience.Labs.Quiz;
  * @Assignment Ch 9 Lab: Quiz Maker
  */
 public class FillInQuestion extends Question{
+	/**
+	 * Displays the question, auto-replacing "||" with the number of blanks of the answer
+	 */
+	@Override
+	public void display(){
+		//if(this.text == null || this.text.equals("")) return;
+		String out = "";
+		for(int i = 0; i < this.text.length(); i++){
+			if(i < this.text.length() - 1 && this.text.charAt(i) == '|' && this.text.charAt(i + 1) == '|'){
+				for(int j = 0; j < this.answer.length(); j++){
+					out += '_';
+				}
+				i++;
+			} else {
+				out += this.text.charAt(i);
+			}
+		}
+		System.out.print(out);
+	}
 	public FillInQuestion(){
 		super();
 	}

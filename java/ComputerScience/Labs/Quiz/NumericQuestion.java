@@ -7,4 +7,8 @@ package ComputerScience.Labs.Quiz;
  * @Assignment Ch 9 Lab: Quiz Maker
  */
 public class NumericQuestion extends Question {
+
+	public NumericQuestion(){
+		super();
+	}
 }

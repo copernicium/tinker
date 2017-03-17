@@ -7,8 +7,8 @@ package ComputerScience.Labs.Quiz;
  * @Assignment Ch 9 Lab: Quiz Maker
  */
 public class Question {
-	private String text;
-	private String answer;
+	protected String text;
+	protected String answer;//TODO: make this protected too?
 
 	/**
 	 Constructs a question with empty question and answer.
@@ -47,6 +47,6 @@ public class Question {
 	 Displays this question.
 	 */
 	public void display(){
-		System.out.println(text);
+		System.out.print(text);
 	}
 }
