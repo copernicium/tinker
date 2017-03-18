@@ -21,4 +21,12 @@ auto map(FUNC f, std::vector<T> const& v) -> std::vector<decltype(f(*((T*)nullpt
 	return out;
 }
 
+std::vector<unsigned> range(unsigned lim){
+	std::vector<unsigned> v;
+	for(unsigned i=0;i<lim;i++){
+		v.push_back(i);
+	}
+	return v;
+}
+
 #endif
