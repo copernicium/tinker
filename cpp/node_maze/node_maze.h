@@ -55,18 +55,12 @@ class Tile{
 
 	Tile();
 	Tile(Position);
+	Tile(Type);
 	Tile(Position,Type);
 };
 
 std::ostream& operator<<(std::ostream&,Tile::Type const&);
-
-class Node{ //TODO
-	Position position;
-
-	public:
-	Node();	
-};
-
+std::ostream& operator<<(std::ostream&,Tile const&);
 
 class Maze{
 	std::vector<Tile> tiles;
@@ -74,13 +68,23 @@ class Maze{
 	unsigned y_bound;
 
 	public:
+	bool in_bounds(Position const&)const;
+
 	Tile get(Position const&)const;
+	std::vector<Tile> get_neighbors(Position const&)const;
 
 	static Maze parse(std::string const&);
 	std::string to_string()const;
 
 	Maze();
 	Maze(unsigned,unsigned);
+};
+
+class Node{ //TODO
+	Position position;
+
+	public:
+	Node();	
 };
 
 class Node_maze{ //TODO

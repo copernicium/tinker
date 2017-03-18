@@ -24,6 +24,7 @@ Position::Position(unsigned a,unsigned b):x(a),y(b){}
 Position::Position():Position(0,0){}
 
 Tile::Tile(Position p, Type t):position_(p),type_(t){}
+Tile::Tile(Type t):Tile({},t){}
 Tile::Tile(Position p):Tile(p,Type::EMPTY){}
 
 Position Tile::position()const{
@@ -49,11 +50,40 @@ Tile::Type Tile::parse_type(string const& S){
 	NYI
 }
 
+Tile::Type Tile::type()const{
+	return type_;
+}
+
+ostream& operator<<(ostream& o,Tile::Type const& T){
+	return o<<(new Tile(T))->type_to_string();
+}
+
+ostream& operator<<(ostream& o,Tile const& T){
+	o<<"Tile(";
+	o<<"pos:"<<T.position();
+	o<<" type:"<<T.type();
+	return o<<")";
+}
+
+bool Maze::in_bounds(Position const& POS)const{
+	return POS.x < x_bound && POS.y < y_bound;
+}
+
 Tile Maze::get(Position const& POS)const{
 	for(Tile a: tiles){
 		if(a.position() == POS) return a;
 	}
-	NYI
+	cout<<"Error: Tile not found at "<<POS<<"\n";
+	exit(44);
+}
+
+vector<Tile> Maze::get_neighbors(Position const& POS)const{
+	vector<Tile> v;
+	if((int)POS.x - 1 >= 0) v.push_back(get({POS.x - 1, POS.y}));	
+	if(POS.x + 1 < x_bound) v.push_back(get({POS.x + 1, POS.y}));	
+	if((int)POS.y - 1 >= 0) v.push_back(get({POS.x, POS.y - 1}));	
+	if(POS.y + 1 < y_bound) v.push_back(get({POS.x, POS.y + 1}));	
+	return v;
 }
 
 vector<vector<string>> make_empty_str_maze(unsigned const& X_BOUND,unsigned const& Y_BOUND){
@@ -111,8 +141,18 @@ string Maze::to_string()const{
 		}
 	}
 
-
 	return s;
+}
+
+vector<Tile> generate(unsigned const& X_BOUND,unsigned const& Y_BOUND){
+	vector<Tile> tiles;
+	for(unsigned y: range(Y_BOUND)){
+		for(unsigned x: range(X_BOUND)){
+			tiles.push_back({{x,y}});
+		}
+	}
+
+	return tiles;
 }
 
 Maze::Maze():x_bound(DEFAULT_BOUND),y_bound(DEFAULT_BOUND){ 
@@ -125,6 +165,10 @@ Maze::Maze():x_bound(DEFAULT_BOUND),y_bound(DEFAULT_BOUND){
 		}
 		return v;
 	}();
+}
+
+Maze::Maze(unsigned a,unsigned b):x_bound(a),y_bound(b){
+	tiles = generate(x_bound,y_bound);
 }
 
 int main(){
