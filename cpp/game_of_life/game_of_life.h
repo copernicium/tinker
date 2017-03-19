@@ -5,11 +5,15 @@
 #define X_LEN 190
 #define Y_LEN 65
 
+
 struct Point;
+
+using Ptr_point_array = std::array< std::array< std::unique_ptr<Point>, X_LEN>, Y_LEN>;
+using Point_array = std::array< std::array<Point, X_LEN>, Y_LEN>;
 
 struct Grid{
 	private:
-	std::array<std::array<std::unique_ptr<Point>, X_LEN > , Y_LEN> grid;
+	Ptr_point_array grid;
 	
 	public:
 	friend std::ostream& operator<<(std::ostream&,Grid);
@@ -26,12 +30,16 @@ struct Point{
 	
 	public:
 	bool alive()const;
+		
 	std::string print()const;
+	
 	friend std::ostream& operator<<(std::ostream&,Point);
 	friend void Grid::set(std::vector<std::unique_ptr<Point>>);
-	std::vector<Point> get_neighbors()const;
-	void update(const std::array<std::array<Point,X_LEN>,Y_LEN>);
+	
+	std::vector<Point> get_neighbors()const;//TODO: rename as get_neighboring()
+	void update(Point_array const&);
+	
 	Point();
-	Point(unsigned int,unsigned int);
-	Point(unsigned int,unsigned int,bool);
+	Point(unsigned,unsigned);
+	Point(unsigned,unsigned,bool);
 };
