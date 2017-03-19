@@ -18,16 +18,6 @@ Any dead cell with exactly three live neighbours becomes a live cell
 
 using namespace std;
 
-template<typename T>
-ostream& operator<<(ostream& o,vector<T> v){
-	o<<"(";
-	for(unsigned i: range(v.size())){
-		o<<v[i];
-		if(i<v.size()-1) o<<",";
-	}
-	return o<<")";
-}
-
 Point::Point(unsigned a,unsigned b,bool is_alive):x(),y(),alive_(is_alive){
 	assert(a<X_LEN && b<Y_LEN);//is at least zero by nature of being unsigned
 	x=a;
@@ -50,18 +40,18 @@ string Point::print()const{
 
 vector<Point> Point::get_neighbors()const{//returns a vector of neighbors of a point
 	vector<Point> v;
-	if(x>0){
-		v.push_back({x-1,y});//left
-		if(y>0)v.push_back({x-1,y-1});//up left
-		if(y<Y_LEN-1)v.push_back({x-1,y+1});//down left
+	if(x > 0){
+		v.push_back({x - 1,y});//left
+		if(y > 0) v.push_back({x - 1,y - 1});//up left
+		if(y < Y_LEN - 1) v.push_back({x - 1,y + 1});//down left
 	}
-	if(x<X_LEN-1){
-		v.push_back({x+1,y});//right
-		if(y>0)v.push_back({x+1,y-1});//up right
-		if(y<Y_LEN-1)v.push_back({x+1,y+1});//down right
+	if(x < X_LEN - 1){
+		v.push_back({x + 1,y});//right
+		if(y > 0) v.push_back({x + 1,y - 1});//up right
+		if( y < Y_LEN - 1) v.push_back({x + 1,y + 1});//down right
 	}
-	if(y>0) v.push_back({x,y-1});//up
-	if(y<Y_LEN-1) v.push_back({x,y+1});//down	
+	if(y > 0) v.push_back({x,y - 1});//up
+	if(y < Y_LEN - 1) v.push_back({x,y + 1});//down	
 	return v;
 }
 
@@ -74,25 +64,19 @@ Grid::Grid():grid({{}}){
 }
 
 void Point::update(Point_array const& grid){
-	unsigned neighbors = filter( 
-		[&](Point const& p){ 
-			return grid[p.y][p.x].alive();
-		},
-		get_neighbors()
-	).size();
-	
 	alive_ = [&]{
+		//what the rules dictate happens in certain cases
+		unsigned neighbors = filter( 
+			[&](Point const& p){ 
+				return grid[p.y][p.x].alive();
+			},
+			get_neighbors()
+		).size();
 		if(alive_){//if current point is alive
-			switch(neighbors){//what the rules dictate happens in certain cases
-				case 0:
-				case 1:
-					return false;
-				case 2:
-				case 3:
-					return true;
-				default:
-					return false;
+			if(neighbors == 2 || neighbors == 3){
+				return true;
 			}
+			return false; 
 		}
 		return neighbors==3;
 	}();
@@ -115,7 +99,7 @@ void Grid::update(){
 	}
 }
 
-void Grid::set(vector<unique_ptr<Point>> v){
+void Grid::set(Point_vector v){
 	for(unsigned i: range(v.size())){
 		grid[v[i]->y][v[i]->x]->alive_ = true;
 	}
@@ -129,9 +113,9 @@ string Grid::to_string(){
 	string s;
 	for(unsigned y: range(Y_LEN)){
 		for(unsigned x: range(X_LEN)){
-			s += grid[y][x]->print();
+			s.append(grid[y][x]->print());
 		}
-		s+="\n";
+		s.append("\n");
 	}
 	return s;
 }
@@ -140,21 +124,23 @@ void run(){
 	srand(time(NULL));
 	Grid grid;
 	while(true){
-		vector<unique_ptr<Point>> random_points;
-		for(unsigned y: range(Y_LEN)){
-			for(unsigned x: range(X_LEN)){
-				if((bool)(rand() % 2)) random_points.push_back(make_unique<Point>(x,y));
+		{
+			Point_vector random_points;
+			for(unsigned y: range(Y_LEN)){
+				for(unsigned x: range(X_LEN)){
+					if((bool)(rand() % 2)) random_points.push_back(make_unique<Point>(x,y));
+				}
 			}
+			grid.set(move(random_points));
 		}
-		grid.set(move(random_points));
 		string grid_str = grid.to_string();
-		cout<<grid_str<<"\n";
 		string last_grid = grid_str;
-		int i = 0;
+		cout<<grid_str<<"\n";
+		unsigned i = 0;
 		while(true){
 			i++;
-			if(Simple_time::get_time(Simple_time::Unit::MILLISECONDS)%UPDATE_EVERY!=0) continue;
-			if(i%2==0)last_grid = grid_str;
+			if(Simple_time::get_time(Simple_time::Unit::MILLISECONDS) % UPDATE_EVERY > 0) continue;
+			if(i % 2 == 0)last_grid = grid_str;
 			grid.update();
 			grid_str = grid.to_string();
 			if(last_grid == grid_str) break;
