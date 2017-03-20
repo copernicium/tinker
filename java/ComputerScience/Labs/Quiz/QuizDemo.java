@@ -36,25 +36,25 @@ public class QuizDemo {
 		{
 			FillInQuestion fillInQuestion = new FillInQuestion();
 			fillInQuestion.setText("Adrian is the ||.\n");
-			fillInQuestion.setAnswer("Best");
+			fillInQuestion.setAnswer("best");
 			demo(fillInQuestion);
 		}
 		{
 			TrueFalseQuestion trueFalseQuestion = new TrueFalseQuestion();
-			trueFalseQuestion.setText("");
-			trueFalseQuestion.setAnswer("");
+			trueFalseQuestion.setText("Mr. Hyman is the Queen of England. ");
+			trueFalseQuestion.setAnswer("False");
 			demo(trueFalseQuestion);
 		}
 		{
 			FreeResponseQuestion freeResponseQuestion = new FreeResponseQuestion();
-			freeResponseQuestion.setText("");
-			freeResponseQuestion.setAnswer("");
+			freeResponseQuestion.setText("Do you like pi? Why?");
+			freeResponseQuestion.setAnswer("math number friend love circle diameter tau like");
 			demo(freeResponseQuestion);
 		}
 		{
 			NumericQuestion numericQuestion = new NumericQuestion();
-			numericQuestion.setText("");
-			numericQuestion.setAnswer("");
+			numericQuestion.setText("5 + 4 = ");
+			numericQuestion.setAnswer("9");
 			demo(numericQuestion);
 		}
 	}

@@ -7,8 +7,8 @@ package ComputerScience.Chapter10.Engineer;
  * @Assignment Ch10-Exercise1-Java Interface Tutorials--Engineer Interface
  */
 public interface Engineer {
-	public void useCAD();
-	public void designProduct();
-	public void payDues();
-	public void getTitle();
+	void useCAD();
+	void designProduct();
+	void payDues();
+	void getTitle();
 }

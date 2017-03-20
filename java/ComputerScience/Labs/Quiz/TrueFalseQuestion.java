@@ -7,6 +7,16 @@ package ComputerScience.Labs.Quiz;
  * @Assignment Ch 9 Lab: Quiz Maker
  */
 public class TrueFalseQuestion extends Question{
+
+	/**
+	 Displays this question.
+	 */
+	@Override
+	public void display(){
+		System.out.print(text + " \"True\" or \"False\": ");
+	}
+
+
 	public TrueFalseQuestion(){
 		super();
 	}
