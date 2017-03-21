@@ -12,7 +12,6 @@ public class FillInQuestion extends Question{
 	 */
 	@Override
 	public void display(){
-		//if(this.text == null || this.text.equals("")) return;
 		String out = "";
 		for(int i = 0; i < this.text.length(); i++){
 			if(i < this.text.length() - 1 && this.text.charAt(i) == '|' && this.text.charAt(i + 1) == '|'){

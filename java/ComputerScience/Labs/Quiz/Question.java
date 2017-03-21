@@ -8,7 +8,7 @@ package ComputerScience.Labs.Quiz;
  */
 public class Question {
 	protected String text;
-	protected String answer;//TODO: make this protected too?
+	protected String answer;
 
 	/**
 	 Constructs a question with empty question and answer.
