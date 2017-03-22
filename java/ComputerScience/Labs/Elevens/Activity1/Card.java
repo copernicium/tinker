@@ -1,4 +1,4 @@
-package ComputerScience.Labs.Elevens;
+package ComputerScience.Labs.Elevens.Activity1;
 
 /**
  * @Author Logan Traffas
@@ -27,7 +27,7 @@ public class Card {
 	private int pointValue;
 
 	/**
-	 * Creates a new <code>Card</code> instance.
+	 * Creates a new Card instance.
 	 *
 	 * @param cardRank  the rank of the card
 	 * @param cardSuit  the suit of the card
@@ -92,9 +92,9 @@ public class Card {
 	@Override
 	public String toString() {
 		String s = "Card(";
-		s += "rank:" + this.rank;
-		s += " suit:" + this.suit;
-		s += " pointValue:" + this.pointValue;
+		s += this.rank;
+		s += " of " + this.suit;
+		s += " (point value = " + this.pointValue + ")";
 		s += ")";
 		return s;
 	}
