@@ -21,8 +21,20 @@ enum class Direction{
 std::ostream& operator<<(std::ostream&,Direction const&);
 
 struct Position{
-	unsigned x;
+	unsigned x;//TODO: make private
 	unsigned y;
+
+	void up();
+	void down();
+	void left();
+	void right();
+	
+	Position up()const;
+	Position down()const;
+	Position left()const;
+	Position right()const;
+	void move(Direction const&);
+
 	Position();
 	Position(unsigned,unsigned);
 };
