@@ -206,30 +206,45 @@ unsigned gen_rand(const unsigned LIM){
 	return rand() % LIM;
 }
 
-vector<Direction> f(Position const& pos, vector<Position> const& walls){
+vector<Direction> get_possible_dirs(Position const& pos, vector<Position> const& walls){
 	(void)walls;
 	static const vector<Direction> ALL_DIRS = {
 		#define X(DIR) Direction::DIR,
 		DIRECTIONS
 		#undef X
 	};
+
+	vector<Direction> possible_dirs;
+
 	for(Direction dir: ALL_DIRS){
 		Position p = pos;
 		p.move(dir);
+
+		bool occupied = false;
+		for(Position wall: walls){
+			if(wall == p){
+				occupied = true;
+				break;
+			}
+		}
+		if(!occupied) possible_dirs.push_back(dir);
 		
 	}
-	NYI //TODO
+	return possible_dirs;
 }
 
-vector<Tile> generate(unsigned const& X_BOUND,unsigned const& Y_BOUND,vector<Position>& visited,bool& done){
+void generate(unsigned const& X_BOUND,unsigned const& Y_BOUND,vector<Position>& visited,vector<Tile>& walls,bool& done){
 	(void)X_BOUND;
 	(void)Y_BOUND;
 	(void)visited;
-	(void)done;
+	(void)walls;
+	if(done){
+		return;
+	}
 	NYI	
 }
 
-Maze::Maze():x_bound(DEFAULT_BOUND),y_bound(DEFAULT_BOUND){ 
+Maze::Maze():x_bound(DEFAULT_BOUND),y_bound(DEFAULT_BOUND){ //TODO: call other constructor 
 	tiles = [&]{
 		vector<Tile> v;
 		for(unsigned x: range(x_bound)){
@@ -245,14 +260,14 @@ Maze::Maze(unsigned a,unsigned b):x_bound(a),y_bound(b){
 	{
 		vector<Position> start = {{gen_rand(x_bound),gen_rand(y_bound)}};
 		bool done = false;
-		tiles = generate(x_bound,y_bound,start,done);
+		generate(x_bound,y_bound,start,tiles,done);
 	}
 }
 
 int main(){
 	{
 		srand(time(NULL));
-		Maze a;
+		Maze a = {10,10};
 		cout<<"a:\n"<<a.to_string();
 		Maze b = Maze::parse(a.to_string());
 		cout<<"b:\n"<<b.to_string();
