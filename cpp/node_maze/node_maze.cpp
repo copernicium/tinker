@@ -14,6 +14,64 @@ ostream& operator<<(ostream& o,Direction const& A){
 	};
 }
 
+Position Position::up()const{
+	Position p = *this;
+	p.up();
+	return p;
+}
+
+Position Position::down()const{
+	Position p = *this;
+	p.down();
+	return p;
+}
+
+Position Position::left()const{
+	Position p = *this;
+	p.left();
+	return p;
+}
+
+Position Position::right()const{
+	Position p = *this;
+	p.right();
+	return p;
+}
+
+void Position::up(){
+	y++;
+}
+
+void Position::down(){
+	y--;
+}
+
+void Position::left(){
+	x--;
+}
+
+void Position::right(){
+	x++;
+}
+
+void Position::move(Direction const& dir){
+	switch(dir){
+		case Direction::UP:
+			up();
+			break;
+		case Direction::DOWN:
+			down();
+			break;
+		case Direction::LEFT:
+			left();
+			break;
+		case Direction::RIGHT:
+			right();
+		default:
+			NYI
+	}
+}
+
 bool operator==(Position const& A,Position const& B){
 	if(A.x != B.x) return false;
 	if(A.y != B.y) return false;
@@ -144,18 +202,49 @@ string Maze::to_string()const{
 	return s;
 }
 
-vector<Tile> generate(unsigned const& X_BOUND,unsigned const& Y_BOUND){
-	vector<Tile> tiles;
-	for(unsigned y: range(Y_BOUND)){
-		for(unsigned x: range(X_BOUND)){
-			tiles.push_back({{x,y}});
-		}
-	}
-
-	return tiles;
+unsigned gen_rand(const unsigned LIM){
+	return rand() % LIM;
 }
 
-Maze::Maze():x_bound(DEFAULT_BOUND),y_bound(DEFAULT_BOUND){ 
+vector<Direction> get_possible_dirs(Position const& pos, vector<Position> const& walls){
+	(void)walls;
+	static const vector<Direction> ALL_DIRS = {
+		#define X(DIR) Direction::DIR,
+		DIRECTIONS
+		#undef X
+	};
+
+	vector<Direction> possible_dirs;
+
+	for(Direction dir: ALL_DIRS){
+		Position p = pos;
+		p.move(dir);
+
+		bool occupied = false;
+		for(Position wall: walls){
+			if(wall == p){
+				occupied = true;
+				break;
+			}
+		}
+		if(!occupied) possible_dirs.push_back(dir);
+		
+	}
+	return possible_dirs;
+}
+
+void generate(unsigned const& X_BOUND,unsigned const& Y_BOUND,vector<Position>& visited,vector<Tile>& walls,bool& done){
+	(void)X_BOUND;
+	(void)Y_BOUND;
+	(void)visited;
+	(void)walls;
+	if(done){
+		return;
+	}
+	NYI	
+}
+
+Maze::Maze():x_bound(DEFAULT_BOUND),y_bound(DEFAULT_BOUND){ //TODO: call other constructor 
 	tiles = [&]{
 		vector<Tile> v;
 		for(unsigned x: range(x_bound)){
@@ -168,12 +257,17 @@ Maze::Maze():x_bound(DEFAULT_BOUND),y_bound(DEFAULT_BOUND){
 }
 
 Maze::Maze(unsigned a,unsigned b):x_bound(a),y_bound(b){
-	tiles = generate(x_bound,y_bound);
+	{
+		vector<Position> start = {{gen_rand(x_bound),gen_rand(y_bound)}};
+		bool done = false;
+		generate(x_bound,y_bound,start,tiles,done);
+	}
 }
 
 int main(){
 	{
-		Maze a;
+		srand(time(NULL));
+		Maze a = {10,10};
 		cout<<"a:\n"<<a.to_string();
 		Maze b = Maze::parse(a.to_string());
 		cout<<"b:\n"<<b.to_string();
