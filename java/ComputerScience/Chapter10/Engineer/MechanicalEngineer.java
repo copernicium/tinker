@@ -7,8 +7,25 @@ package ComputerScience.Chapter10.Engineer;
  * @Assignment Ch10-Exercise1-Java Interface Tutorials--Engineer Interface
  */
 public class MechanicalEngineer implements Engineer {
-	public void useCAD(){}
-	public void designProduct(){}
-	public void payDues(){}
-	public void getTitle(){}
+	private String title;
+
+	public void useCAD(){
+		System.out.println("The " + this.getTitle() + " tried to open CAD, but it crashed.");
+	}
+
+	public void designProduct(){
+		System.out.println("The " + this.getTitle() + " CADed a piston 10x more efficient than their current competitors'.");
+	}
+
+	public void payDues(int years){
+		System.out.println("After " + years + " years of work, the " + this.getTitle() + " was finally promoted.");
+	}
+
+	public String getTitle(){
+		return this.title;
+	}
+
+	public MechanicalEngineer(){
+		this.title = "Mechanical Engineer";
+	}
 }

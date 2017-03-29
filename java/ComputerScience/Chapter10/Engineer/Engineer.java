@@ -9,6 +9,6 @@ package ComputerScience.Chapter10.Engineer;
 public interface Engineer {
 	void useCAD();
 	void designProduct();
-	void payDues();
-	void getTitle();
+	void payDues(int years);
+	String getTitle();
 }
