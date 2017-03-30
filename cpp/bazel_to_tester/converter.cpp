@@ -97,9 +97,8 @@ vector<string> merge(vector<string> const& A, vector<string> const& B){
 	return sum;
 }
 
-Maybe<Rule> Rule::integrate_deps(Rule const& RULE,vector<Library> const& LIBRARIES){//TODO: manage deps
+Maybe<Rule> Rule::integrate_deps(Rule const& RULE,vector<Library> const& LIBRARIES){
 	if(RULE.deps.empty()) return Maybe<Rule>(RULE);
-	Maybe<Rule> rule;
 	vector<Library> dependencies;
 	for(string dep: RULE.deps){
 		Maybe<Library> library = Library::find(dep,LIBRARIES);
@@ -127,7 +126,7 @@ Maybe<Rule> Rule::integrate_deps(Rule const& RULE,vector<Library> const& LIBRARI
 	
 	vector<string> new_srcs = merge(RULE.srcs, dependencies_srcs);
 	
-	rule = RULE;
+	Maybe<Rule> rule = Maybe<Rule>(RULE);
 	(*rule).srcs = new_srcs;
 	
 	return rule;
@@ -301,14 +300,13 @@ Maybe<Library> Library::find(string const& NAME,vector<Library> const& LIBRARIES
 
 Maybe<Library> Library::integrate_deps(Library const& LIBRARY,vector<Library> const& LIBRARIES){//TODO: manage deps
 	if(LIBRARY.deps.empty()) return Maybe<Library>(LIBRARY);
-	Maybe<Library> library;
 	vector<Library> dependencies;
 	for(string dep: LIBRARY.deps){
-		Maybe<Library> l = Library::find(dep,LIBRARIES);
-		if(!l){
+		Maybe<Library> library = Library::find(dep,LIBRARIES);
+		if(!library){
 			cerr<<"Cannot handle dep \""<<dep<<"\" - Library not found\n";
 		} else{
-			dependencies.push_back(*l);
+			dependencies.push_back(*library);
 		}
 	}
 	
@@ -324,7 +322,7 @@ Maybe<Library> Library::integrate_deps(Library const& LIBRARY,vector<Library> co
 	
 	vector<string> new_srcs = merge(LIBRARY.srcs,dependencies_srcs);
 	
-	library = LIBRARY;
+	Maybe<Library> library = Maybe<Library>(LIBRARY);
 	(*library).srcs = new_srcs;
 	
 	return library;
