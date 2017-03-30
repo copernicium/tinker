@@ -1,4 +1,5 @@
 Important
+	- confirm when parsing that the headers match
 	- Manage deps
 
 Nice things to have

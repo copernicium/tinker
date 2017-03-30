@@ -7,18 +7,18 @@
 struct Rule{	
 	private:
 	#define RULE_ITEMS(X) \
-		X(std::string,name,NAME,SINGLE) \
-		X(std::string,out,OUT,SINGLE) \
-		X(std::vector<std::string>,srcs,SRCS,MULTIPLE) \
-		X(std::vector<std::string>,copts,COPTS,MULTIPLE) \
-		X(std::vector<std::string>,deps,DEPS,MULTIPLE) \
-		X(std::string,timeout,TIMEOUT,SINGLE)
-	#define X(TYPE,NAME,C,D) TYPE NAME;
+		X(std::string,name,NAME) \
+		X(std::vector<std::string>,srcs,SRCS) \
+		X(std::vector<std::string>,copts,COPTS) \
+		X(std::vector<std::string>,deps,DEPS) \
+		X(std::string,timeout,TIMEOUT)
+	#define X(TYPE,INSTANCE_VARIABLE,ATTRIBUTE_NAME) TYPE INSTANCE_VARIABLE;
 	RULE_ITEMS(X)
 	#undef X
 	
 	public:
-	#define X(A,B,ATTRIBUTE_NAME,D) static const std::string ATTRIBUTE_NAME;
+	static const std::string HEADING;
+	#define X(TYPE,INSTANCE_VARIABLE,ATTRIBUTE_NAME) static const std::string ATTRIBUTE_NAME;
 	RULE_ITEMS(X)
 	#undef X
 
@@ -38,16 +38,17 @@ struct Rule{
 struct Library{	
 	private:
 	#define LIBRARY_ITEMS(X) \
-		X(std::string,name,NAME,SINGLE) \
-		X(std::vector<std::string>,srcs,SRCS,MULTIPLE) \
-		X(std::vector<std::string>,hdrs,HDRS,MULTIPLE) \
-		X(std::vector<std::string>,deps,DEPS,MULTIPLE)
-	#define X(TYPE,NAME,C,D) TYPE NAME;
+		X(std::string,name,NAME) \
+		X(std::vector<std::string>,srcs,SRCS) \
+		X(std::vector<std::string>,hdrs,HDRS) \
+		X(std::vector<std::string>,deps,DEPS)
+	#define X(TYPE,INSTANCE_VARIABLE,ATTRIBUTE_NAME) TYPE INSTANCE_VARIABLE;
 	LIBRARY_ITEMS(X)
 	#undef X
 	
 	public:
-	#define X(A,B,ATTRIBUTE_NAME,D) static const std::string ATTRIBUTE_NAME;
+	static const std::string HEADING;
+	#define X(TYPE,INSTANCE_VARIABLE,ATTRIBUTE_NAME) static const std::string ATTRIBUTE_NAME;
 	LIBRARY_ITEMS(X)
 	#undef X
 	
@@ -68,8 +69,6 @@ struct Project{
 	std::vector<Rule> rules;
 	std::vector<Library> libraries;
 	static std::vector<std::vector<std::string>> read(std::string const&,std::string const&); 
-	static std::vector<std::vector<std::string>> read_rules(std::string const&); 
-	static std::vector<std::vector<std::string>> read_libraries(std::string const&); 
 	
 	public:
 	void import();

@@ -1,6 +1,7 @@
 #include "converter.h"
 #include "../util/util.h"
 #include <fstream>
+#include "../util/nyi.h"
 
 using namespace std;
 
@@ -48,15 +49,15 @@ vector<string> split(string const& STRING,char BREAK){//TODO move to util?
 Rule::Rule():name(""),srcs({}),copts({}),deps({}),timeout(""){}
 
 const string Rule::NAME = "name=";
-const string Rule::OUT = "";
 const string Rule::TIMEOUT = "timeout=";
 const string Rule::SRCS = "srcs=";
 const string Rule::COPTS = "copts=";
 const string Rule::DEPS = "deps=";
+const string Rule::HEADING = "cc_test(";
 
 std::ostream& operator<<(std::ostream& o,Rule const& a){
 	o<<"Rule(";
-	#define X(A,NAME,C,D) o<<" "#NAME":"<<a.NAME;
+	#define X(A,NAME,C) o<<" "#NAME":"<<a.NAME;
 	RULE_ITEMS(X)
 	#undef X
 	o<<")";
@@ -67,46 +68,39 @@ Rule Rule::parse(string const& FILENAME){
 	return Rule::parse(read(FILENAME));
 }
 
-#define SINGLE(ATTRIBUTE_NAME, INSTANCE_VARIABLE) \
-	if(line.find(ATTRIBUTE_NAME) != std::string::npos){ \
-		vector<string> parts = split(line,'\"'); \
-		for(string part: parts){ \
-			if(part == ATTRIBUTE_NAME || part == "") continue; \
-			parseable.INSTANCE_VARIABLE = part; \
-		} \
-	} 
 
-#define MULTIPLE(ATTRIBUTE_NAME, INSTANCE_VARIABLE) \
-	if(line.find(ATTRIBUTE_NAME) != std::string::npos){ \
-		vector<string> parts = split(line,'\"'); \
-		for(string part: parts){  \
-			if(part == ATTRIBUTE_NAME || part == "") continue; \
-			parseable.INSTANCE_VARIABLE.push_back(part); \
-		} \
-	} 
-
-#define PARSE_ITEM(A,INSTANCE_VARIABLE,ATTRIBUTE_NAME,TYPE) TYPE(ATTRIBUTE_NAME,INSTANCE_VARIABLE); 
-
-
-#define PARSE_ITEMS(ITEMS) \
-	for(string line: LINES){ \
-		if(line == "") continue;  \
-		ITEMS(PARSE_ITEM) \
+void parse(string const& ATTRIBUTE_NAME, string const& LINE, vector<string>& instance_variable){
+	if(LINE.find(ATTRIBUTE_NAME) != std::string::npos){
+		vector<string> parts = split(LINE,'\"'); 
+		for(string part: parts){  
+			if(part == ATTRIBUTE_NAME || part == "") continue; 
+			instance_variable.push_back(part); 
+		} 
 	}
+}
+
+void parse(string const& ATTRIBUTE_NAME, string const& LINE, string& instance_variable){
+	if(LINE.find(ATTRIBUTE_NAME) != std::string::npos){ 
+		vector<string> parts = split(LINE,'\"'); 
+		for(string part: parts){ 
+			if(part == ATTRIBUTE_NAME || part == "") continue; 
+			instance_variable = part;
+		}
+	} 
+}
+
+#define PARSE_ITEM(A,INSTANCE_VARIABLE,ATTRIBUTE_NAME) ::parse(ATTRIBUTE_NAME,line,parseable.INSTANCE_VARIABLE); 	
 
 Rule Rule::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
 	Rule rule;
 	{
 		Rule parseable;		
-		PARSE_ITEMS(RULE_ITEMS)
+		for(string line: LINES){ 
+			if(line == "") continue; 		
+			RULE_ITEMS(PARSE_ITEM) 
+		}
 		
 		rule = parseable;
-	}
-	{//make the out file name
-		static const string TEST_EXTENSION = "_test";
-		if(rule.name.size() >= TEST_EXTENSION.size()){
-			rule.out = rule.name.substr(0, rule.name.size() - TEST_EXTENSION.size());
-		}
 	}
 	{//remove header files from sources
 		vector<string> new_srcs;
@@ -124,20 +118,16 @@ Rule Rule::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
 }
 
 Library Library::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
-	Library library;
-	{
-		Library parseable;		
-		PARSE_ITEMS(LIBRARY_ITEMS)
-		
-		library = parseable;
+	Library parseable;		
+	for(string line: LINES){ 
+		if(line == "") continue; 		
+		LIBRARY_ITEMS(PARSE_ITEM) 
 	}
-	return library;
+	
+	return parseable;
 }
 
-#undef SINGLE
-#undef MULTIPLE
 #undef PARSE_ITEM
-#undef PARSE_ITEMS
 
 std::string Rule::get_name()const{
 	return name;
@@ -158,6 +148,14 @@ void Rule::make_test(std::string const& PATH)const{
 	for(string src: srcs){
 		o<<"\t"<<src<<" \\";
 	}
+	string out = [&]{
+	//make the out file name
+		static const string TEST_EXTENSION = "_test";
+		if(name.size() >= TEST_EXTENSION.size()){
+			return name.substr(0, name.size() - TEST_EXTENSION.size());
+		}
+		NYI
+	}();
 	o<<"\n\t-o "<<out<<" 2>&1 && ./"<<out;
 	{ 
 		const string MAKE_EXECUTABLE = "chmod +x " + PATH + name;
@@ -173,10 +171,11 @@ const string Library::NAME = Rule::NAME;
 const string Library::SRCS = Rule::SRCS;
 const string Library::DEPS = Rule::DEPS;
 const string Library::HDRS = "hdrs=";
+const string Library::HEADING = "cc_library(";
 
 ostream& operator<<(ostream& o,Library const& a){
 	o<<"Library(";
-	#define X(A,NAME,C,D) o<<" "#NAME":"<<a.NAME;
+	#define X(A,NAME,C) o<<" "#NAME":"<<a.NAME;
 	LIBRARY_ITEMS(X)
 	#undef X
 	o<<")";
@@ -206,19 +205,9 @@ std::ostream& operator<<(std::ostream& o,Project const& a){
 	for(Library library: a.libraries){
 		library_names.push_back(library.get_name());
 	}
-	o<<"library_names:"<<library_names;
+	o<<" library_names:"<<library_names;
 	o<<")";
 	return o;
-}
-
-vector<vector<string>> Project::read_rules(string const& PATH){
-	static const string HEADING = "cc_test(";
-	return Project::read(PATH,HEADING);
-}
-
-vector<vector<string>> Project::read_libraries(string const& PATH){
-	static const string HEADING = "cc_library(";
-	return Project::read(PATH,HEADING);
 }
 
 vector<vector<string>> Project::read(string const& PATH, string const& HEADING){
@@ -253,10 +242,10 @@ void Project::import(){
 }
 
 void Project::import(string const& PATH){
-	for(vector<string> rule: Project::read_rules(PATH)){
+	for(vector<string> rule: Project::read(PATH,Rule::HEADING)){
 		rules.push_back(Rule::parse(rule));
 	}
-	for(vector<string> library: Project::read_libraries(PATH)){
+	for(vector<string> library: Project::read(PATH,Library::HEADING)){
 		libraries.push_back(Library::parse(library));
 	}
 }
