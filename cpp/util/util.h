@@ -1,6 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include <set>
 #include <vector>
 #include <iostream>
 
@@ -32,6 +33,16 @@ std::vector<unsigned> range(unsigned lim){
 
 template<typename T>
 std::ostream& operator<<(std::ostream& o, std::vector<T> const& v){
+	o<<"[";
+	for(T a: v){
+		o<<a<<" ";
+	}
+	o<<"]";
+	return o;
+}
+
+template<typename T>
+std::ostream& operator<<(std::ostream& o, std::set<T> const& v){
 	o<<"[";
 	for(T a: v){
 		o<<a<<" ";

@@ -1,5 +1,5 @@
 Important
-	- Manage deps
+	- Handle the fact that srcs, for example, can appear on multiple lines 
 
 Nice things to have
 	- Take care of block comments
