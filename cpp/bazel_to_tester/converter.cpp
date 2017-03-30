@@ -5,6 +5,8 @@
 
 using namespace std;
 
+static const string ENDING = ")";
+
 vector<string> read(string const& FILENAME){
 	vector<string> lines;
 	ifstream f(FILENAME);
@@ -64,71 +66,6 @@ std::ostream& operator<<(std::ostream& o,Rule const& a){
 	return o;
 }
 
-Rule Rule::parse(string const& FILENAME){
-	return Rule::parse(read(FILENAME));
-}
-
-
-void parse(string const& ATTRIBUTE_NAME, string const& LINE, vector<string>& instance_variable){
-	if(LINE.find(ATTRIBUTE_NAME) != std::string::npos){
-		vector<string> parts = split(LINE,'\"'); 
-		for(string part: parts){  
-			if(part == ATTRIBUTE_NAME || part == "") continue; 
-			instance_variable.push_back(part); 
-		} 
-	}
-}
-
-void parse(string const& ATTRIBUTE_NAME, string const& LINE, string& instance_variable){
-	if(LINE.find(ATTRIBUTE_NAME) != std::string::npos){ 
-		vector<string> parts = split(LINE,'\"'); 
-		for(string part: parts){ 
-			if(part == ATTRIBUTE_NAME || part == "") continue; 
-			instance_variable = part;
-		}
-	} 
-}
-
-#define PARSE_ITEM(A,INSTANCE_VARIABLE,ATTRIBUTE_NAME) ::parse(ATTRIBUTE_NAME,line,parseable.INSTANCE_VARIABLE); 	
-
-Rule Rule::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
-	Rule rule;
-	{
-		Rule parseable;		
-		for(string line: LINES){ 
-			if(line == "") continue; 		
-			RULE_ITEMS(PARSE_ITEM) 
-		}
-		
-		rule = parseable;
-	}
-	{//remove header files from sources
-		vector<string> new_srcs;
-		static const string HEADER_EXTENSION = ".h";
-		for(string src: rule.srcs){
-			if(src.size() >= HEADER_EXTENSION.size()){
-				if(src.substr(src.size() - HEADER_EXTENSION.size()) != HEADER_EXTENSION){
-					new_srcs.push_back(src);
-				}
-			}
-		}
-		rule.srcs = new_srcs;
-	}
-	return rule;
-}
-
-Library Library::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
-	Library parseable;		
-	for(string line: LINES){ 
-		if(line == "") continue; 		
-		LIBRARY_ITEMS(PARSE_ITEM) 
-	}
-	
-	return parseable;
-}
-
-#undef PARSE_ITEM
-
 std::string Rule::get_name()const{
 	return name;
 }
@@ -159,11 +96,97 @@ void Rule::make_test(std::string const& PATH)const{
 	o<<"\n\t-o "<<out<<" 2>&1 && ./"<<out;
 	{ 
 		const string MAKE_EXECUTABLE = "chmod +x " + PATH + name;
-		cout<<"\nPAHT+name=\""<<PATH<<name<<"\"\n";
 		const char* SYSTEM_ARG = MAKE_EXECUTABLE.c_str();
 		system(SYSTEM_ARG);
 	}
 }
+
+Rule Rule::parse(string const& FILENAME){
+	return Rule::parse(read(FILENAME));
+}
+
+
+void parse(string const& ATTRIBUTE_NAME, string const& LINE, vector<string>& instance_variable){
+	if(LINE.find(ATTRIBUTE_NAME) != string::npos){
+		vector<string> parts = split(LINE,'\"'); 
+		for(string part: parts){  
+			if(part == ATTRIBUTE_NAME || part == "") continue; 
+			instance_variable.push_back(part); 
+		} 
+	}
+}
+
+void parse(string const& ATTRIBUTE_NAME, string const& LINE, string& instance_variable){
+	if(LINE.find(ATTRIBUTE_NAME) != string::npos){ 
+		vector<string> parts = split(LINE,'\"'); 
+		for(string part: parts){ 
+			if(part == ATTRIBUTE_NAME || part == "") continue; 
+			instance_variable = part;
+		}
+	} 
+}
+
+vector<string> trim_lines(vector<string> const& LINES,string const& HEADING){
+	vector<string> trimmed_lines;
+	{
+		bool found = false;
+		for(string line: LINES){ 
+			if(line == "") continue; 
+			if(line.find(HEADING) != string::npos){
+				found = true;
+			}
+			if(found){
+				trimmed_lines.push_back(line);
+			}
+			if(found && line.find(ENDING) != string::npos){
+				break;
+			}
+		}
+		if(!found) return {};
+	}
+	return trimmed_lines;
+}
+
+#define PARSE_ITEM(A,INSTANCE_VARIABLE,ATTRIBUTE_NAME) ::parse(ATTRIBUTE_NAME,line,parseable.INSTANCE_VARIABLE); 	
+
+Rule Rule::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
+	Rule rule;
+	vector<string> rule_lines = trim_lines(LINES,Rule::HEADING);
+	{//parse the chunk of lines 
+		Rule parseable;		
+		for(string line: rule_lines){ 
+			if(line == "") continue; 
+			RULE_ITEMS(PARSE_ITEM) 
+		}
+		
+		rule = parseable;
+	}
+	{//remove header files from sources
+		vector<string> new_srcs;
+		static const string HEADER_EXTENSION = ".h";
+		for(string src: rule.srcs){
+			if(src.size() >= HEADER_EXTENSION.size()){
+				if(src.substr(src.size() - HEADER_EXTENSION.size()) != HEADER_EXTENSION){
+					new_srcs.push_back(src);
+				}
+			}
+		}
+		rule.srcs = new_srcs;
+	}
+	return rule;
+}
+
+Library Library::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
+	Library parseable;	
+	vector<string> library_lines = trim_lines(LINES,Library::HEADING);
+	for(string line: library_lines){ //parse the lines
+		if(line == "") continue; 
+		LIBRARY_ITEMS(PARSE_ITEM) 
+	}
+	return parseable;
+}
+
+#undef PARSE_ITEM
 
 Library::Library():name(""),srcs({}),hdrs({}),deps({}){}
 
@@ -211,7 +234,6 @@ std::ostream& operator<<(std::ostream& o,Project const& a){
 }
 
 vector<vector<string>> Project::read(string const& PATH, string const& HEADING){
-	static const string ENDING = ")";
 	vector<string> lines = ::read(PATH + SOURCE);
 	vector<vector<string>> rules;
 	
@@ -233,7 +255,6 @@ vector<vector<string>> Project::read(string const& PATH, string const& HEADING){
 			collect = false;
 		}
 	}
-	cout<<"rules:"<<rules<<"\n";
 	return rules;
 }
 
@@ -262,13 +283,14 @@ void Project::make_tests(std::string const& PATH)const{
 
 int main(){
 	{
+		cout<<"Test 1 - Parsing a Rule out of a file containging one Rule and one Rule only\n";
 		Rule a = Rule::parse("test1/test");
-		cout<<"Test1\n"<<a<<"\n";
+		cout<<a<<"\n";
 		a.make_test("test1/");
 		cout<<"\n";
 	}
 	{
-		cout<<"Test2\n";
+		cout<<"Test 2 - Parsing a Project out of a BUILD file containging only rules with no deps\n";
 		Project a;
 		a.import("test2/");
 		cout<<a<<"\n";
@@ -276,7 +298,13 @@ int main(){
 		cout<<"\n";
 	}
 	{
-		cout<<"Test3\n";
+		cout<<"Test 3.1 - Parsing a single Library out of a BUILD file with both rules and libraries\n";
+		Library a = Library::parse("test3/BUILD");
+		cout<<a<<"\n";
+		cout<<"\n";
+	}
+	{
+		cout<<"Test 3.2 - Parsing a Project out of a BUILD file with Rules, Libraries, and deps\n";
 		Project a;
 		a.import("test3/");
 		cout<<a<<"\n";
