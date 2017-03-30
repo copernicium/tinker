@@ -2,6 +2,7 @@
 #define UTIL_H
 
 #include <vector>
+#include <iostream>
 
 template<typename FUNC,typename T>
 std::vector<T> filter(FUNC f,std::vector<T> v){
@@ -27,6 +28,16 @@ std::vector<unsigned> range(unsigned lim){
 		v.push_back(i);
 	}
 	return v;
+}
+
+template<typename T>
+std::ostream& operator<<(std::ostream& o, std::vector<T> const& v){
+	o<<"[";
+	for(T a: v){
+		o<<a<<" ";
+	}
+	o<<"]";
+	return o;
 }
 
 #endif
