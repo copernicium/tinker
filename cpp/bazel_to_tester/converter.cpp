@@ -4,20 +4,6 @@
 
 using namespace std;
 
-Build_rule::Build_rule():name(""),srcs({}),copts({}),deps({}),timeout(""){}
-
-std::ostream& operator<<(std::ostream& o,Build_rule const& a){
-	o<<"Build_rule(";
-	o<<"name:"<<a.name;
-	o<<" out:"<<a.out;
-	o<<" srcs:"<<a.srcs;
-	o<<" copts:"<<a.copts;
-	o<<" deps:"<<a.deps;
-	o<<" timeout:"<<a.timeout;
-	o<<")";
-	return o;
-}
-
 vector<string> read(string const& FILENAME){
 	vector<string> lines;
 	ifstream f(FILENAME);
@@ -30,7 +16,7 @@ vector<string> read(string const& FILENAME){
 		getline(f,original);
 		string line = "";
 		for(char c: original){
-			if(c == '\n' || c == '\r' || c == '\t' || c == ',' || c == ' ' || c == '[' || c == ']') continue;//ignore certain characters
+			if(c == '\n' || c == '\r' || c == '\t' || c == ',' || c == ' ' || c == '[' || c == ']' || c == ':') continue;//ignore certain characters
 			line += c;
 		}
 		if(line != ""){
@@ -58,70 +44,110 @@ vector<string> split(string const& STRING,char BREAK){//TODO move to util?
 	if(s.size() > 0) r.push_back(s);
 	return r;
 }
-Build_rule Build_rule::parse(string const& FILENAME){//TODO take advantage of Maybe?
-	return Build_rule::parse(read(FILENAME));
+
+Rule::Rule():name(""),srcs({}),copts({}),deps({}),timeout(""){}
+
+const string Rule::NAME = "name=";
+const string Rule::OUT = "";
+const string Rule::TIMEOUT = "timeout=";
+const string Rule::SRCS = "srcs=";
+const string Rule::COPTS = "copts=";
+const string Rule::DEPS = "deps=";
+
+std::ostream& operator<<(std::ostream& o,Rule const& a){
+	o<<"Rule(";
+	#define X(A,NAME,C,D) o<<" "#NAME":"<<a.NAME;
+	RULE_ITEMS(X)
+	#undef X
+	o<<")";
+	return o;
 }
-Build_rule Build_rule::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
-	Build_rule build_rule;
-	const string NAME = "name=", TIMEOUT = "timeout=", SRCS = "srcs=", COPTS = "copts=", DEPS = "deps=";
-	#define SINGLE(ATTRIBUTE_NAME, INSTANCE_VARIABLE) \
-		if(line.find(ATTRIBUTE_NAME) != std::string::npos){ \
-			vector<string> parts = split(line,'\"'); \
-			for(string part: parts){ \
-				if(part == ATTRIBUTE_NAME || part == "") continue; \
-				build_rule.INSTANCE_VARIABLE = part; \
-			} \
-		} 
-	#define MULTIPLE(ATTRIBUTE_NAME, INSTANCE_VARIABLE) \
-		if(line.find(ATTRIBUTE_NAME) != std::string::npos){ \
-			vector<string> parts = split(line,'\"'); \
-			for(string part: parts){  \
-				if(part == ATTRIBUTE_NAME || part == "") continue; \
-				build_rule.INSTANCE_VARIABLE.push_back(part); \
-			} \
-		} 
-	
-	for(string line: LINES){
-		if(line == "") continue;
-		SINGLE(NAME,name)
-		SINGLE(TIMEOUT,timeout)
-		MULTIPLE(SRCS,srcs)
-		MULTIPLE(COPTS,copts)
-		MULTIPLE(DEPS,deps)
+
+Rule Rule::parse(string const& FILENAME){
+	return Rule::parse(read(FILENAME));
+}
+
+#define SINGLE(ATTRIBUTE_NAME, INSTANCE_VARIABLE) \
+	if(line.find(ATTRIBUTE_NAME) != std::string::npos){ \
+		vector<string> parts = split(line,'\"'); \
+		for(string part: parts){ \
+			if(part == ATTRIBUTE_NAME || part == "") continue; \
+			parseable.INSTANCE_VARIABLE = part; \
+		} \
+	} 
+
+#define MULTIPLE(ATTRIBUTE_NAME, INSTANCE_VARIABLE) \
+	if(line.find(ATTRIBUTE_NAME) != std::string::npos){ \
+		vector<string> parts = split(line,'\"'); \
+		for(string part: parts){  \
+			if(part == ATTRIBUTE_NAME || part == "") continue; \
+			parseable.INSTANCE_VARIABLE.push_back(part); \
+		} \
+	} 
+
+#define PARSE_ITEM(A,INSTANCE_VARIABLE,ATTRIBUTE_NAME,TYPE) TYPE(ATTRIBUTE_NAME,INSTANCE_VARIABLE); 
+
+
+#define PARSE_ITEMS(ITEMS) \
+	for(string line: LINES){ \
+		if(line == "") continue;  \
+		ITEMS(PARSE_ITEM) \
 	}
-	#undef SINGLE
-	#undef MULTIPLE
+
+Rule Rule::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
+	Rule rule;
+	{
+		Rule parseable;		
+		PARSE_ITEMS(RULE_ITEMS)
+		
+		rule = parseable;
+	}
 	{//make the out file name
 		static const string TEST_EXTENSION = "_test";
-		if(build_rule.name.size() >= TEST_EXTENSION.size()){
-			build_rule.out = build_rule.name.substr(0, build_rule.name.size() - TEST_EXTENSION.size());
+		if(rule.name.size() >= TEST_EXTENSION.size()){
+			rule.out = rule.name.substr(0, rule.name.size() - TEST_EXTENSION.size());
 		}
 	}
 	{//remove header files from sources
 		vector<string> new_srcs;
 		static const string HEADER_EXTENSION = ".h";
-		for(string src: build_rule.srcs){
+		for(string src: rule.srcs){
 			if(src.size() >= HEADER_EXTENSION.size()){
 				if(src.substr(src.size() - HEADER_EXTENSION.size()) != HEADER_EXTENSION){
 					new_srcs.push_back(src);
 				}
 			}
 		}
-		build_rule.srcs = new_srcs;
+		rule.srcs = new_srcs;
 	}
-	return build_rule;
+	return rule;
 }
 
+Library Library::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
+	Library library;
+	{
+		Library parseable;		
+		PARSE_ITEMS(LIBRARY_ITEMS)
+		
+		library = parseable;
+	}
+	return library;
+}
 
-std::string Build_rule::get_name()const{
+#undef SINGLE
+#undef MULTIPLE
+#undef PARSE_ITEM
+#undef PARSE_ITEMS
+
+std::string Rule::get_name()const{
 	return name;
 }
 
-void Build_rule::make_test()const{
+void Rule::make_test()const{
 	make_test("");
 }
 
-void Build_rule::make_test(std::string const& PATH)const{
+void Rule::make_test(std::string const& PATH)const{
 	ofstream o(PATH + name);
 	o<<"g++ -std=c++14 ";
 	//TODO: manage deps
@@ -141,24 +167,63 @@ void Build_rule::make_test(std::string const& PATH)const{
 	}
 }
 
-Project::Project():build_rules({}){}
+Library::Library():name(""),srcs({}),hdrs({}),deps({}){}
+
+const string Library::NAME = Rule::NAME;
+const string Library::SRCS = Rule::SRCS;
+const string Library::DEPS = Rule::DEPS;
+const string Library::HDRS = "hdrs=";
+
+ostream& operator<<(ostream& o,Library const& a){
+	o<<"Library(";
+	#define X(A,NAME,C,D) o<<" "#NAME":"<<a.NAME;
+	LIBRARY_ITEMS(X)
+	#undef X
+	o<<")";
+	return o;
+}
+
+string Library::get_name()const{
+	return name;
+}
+
+Library Library::parse(string const& FILENAME){
+	return Library::parse(read(FILENAME));
+}
+
+Project::Project():rules({}){}
 
 const string Project::SOURCE = "BUILD";
 
 std::ostream& operator<<(std::ostream& o,Project const& a){
 	o<<"Project(";
-	vector<string> names;
-	for(Build_rule rule: a.build_rules){
-		names.push_back(rule.get_name());
+	vector<string> rule_names;
+	for(Rule rule: a.rules){
+		rule_names.push_back(rule.get_name());
 	}
-	o<<"names:"<<names;
+	o<<"rule_names:"<<rule_names;
+	vector<string> library_names;
+	for(Library library: a.libraries){
+		library_names.push_back(library.get_name());
+	}
+	o<<"library_names:"<<library_names;
 	o<<")";
 	return o;
 }
 
-vector<vector<string>> Project::read_project(string const& PATH){
-	static const string HEADING = "cc_test(", ENDING = ")";
-	vector<string> lines = read(PATH + SOURCE);
+vector<vector<string>> Project::read_rules(string const& PATH){
+	static const string HEADING = "cc_test(";
+	return Project::read(PATH,HEADING);
+}
+
+vector<vector<string>> Project::read_libraries(string const& PATH){
+	static const string HEADING = "cc_library(";
+	return Project::read(PATH,HEADING);
+}
+
+vector<vector<string>> Project::read(string const& PATH, string const& HEADING){
+	static const string ENDING = ")";
+	vector<string> lines = ::read(PATH + SOURCE);
 	vector<vector<string>> rules;
 	
 	vector<string> rule;
@@ -188,8 +253,11 @@ void Project::import(){
 }
 
 void Project::import(string const& PATH){
-	for(vector<string> rule: Project::read_project(PATH)){
-		build_rules.push_back(Build_rule::parse(rule));
+	for(vector<string> rule: Project::read_rules(PATH)){
+		rules.push_back(Rule::parse(rule));
+	}
+	for(vector<string> library: Project::read_libraries(PATH)){
+		libraries.push_back(Library::parse(library));
 	}
 }
 
@@ -198,29 +266,32 @@ void Project::make_tests()const{
 }
 
 void Project::make_tests(std::string const& PATH)const{
-	for(Build_rule a: build_rules){
+	for(Rule a: rules){
 		a.make_test(PATH);
 	}
 }
 
 int main(){
 	{
-		Build_rule a = Build_rule::parse("test/test");
-		cout<<"ONE\n"<<a<<"\n";
-		a.make_test("test/");
+		Rule a = Rule::parse("test1/test");
+		cout<<"Test1\n"<<a<<"\n";
+		a.make_test("test1/");
 		cout<<"\n";
 	}
 	{
-		Project a;
-		cout<<"TWO\n"<<a<<"\n";
-		cout<<"\n";
-	}
-	{
-		cout<<"THREE\n";
+		cout<<"Test2\n";
 		Project a;
 		a.import("test2/");
 		cout<<a<<"\n";
 		a.make_tests("test2/");
+		cout<<"\n";
+	}
+	{
+		cout<<"Test3\n";
+		Project a;
+		a.import("test3/");
+		cout<<a<<"\n";
+		a.make_tests("test3/");
 		cout<<"\n";
 	}
 }

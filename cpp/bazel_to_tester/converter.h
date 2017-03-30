@@ -4,38 +4,76 @@
 #include <vector>
 #include <iostream>
 
-struct Build_rule{
+struct Rule{	
 	private:
-	std::string name;
-	std::string out;
-	std::vector<std::string> srcs;
-	std::vector<std::string> copts;
-	std::vector<std::string> deps;
-	std::string timeout;
+	#define RULE_ITEMS(X) \
+		X(std::string,name,NAME,SINGLE) \
+		X(std::string,out,OUT,SINGLE) \
+		X(std::vector<std::string>,srcs,SRCS,MULTIPLE) \
+		X(std::vector<std::string>,copts,COPTS,MULTIPLE) \
+		X(std::vector<std::string>,deps,DEPS,MULTIPLE) \
+		X(std::string,timeout,TIMEOUT,SINGLE)
+	#define X(TYPE,NAME,C,D) TYPE NAME;
+	RULE_ITEMS(X)
+	#undef X
 	
 	public:
+	#define X(A,B,ATTRIBUTE_NAME,D) static const std::string ATTRIBUTE_NAME;
+	RULE_ITEMS(X)
+	#undef X
+
 	std::string get_name()const;
 	
-	static Build_rule parse(std::string const&);
-	static Build_rule parse(std::vector<std::string> const&);
+	static Rule parse(std::string const&);
+	static Rule parse(std::vector<std::string> const&);
+	
 	void make_test()const;
 	void make_test(std::string const&)const;
 	
-	Build_rule();
+	Rule();
 	
-	friend std::ostream& operator<<(std::ostream&,Build_rule const&);
+	friend std::ostream& operator<<(std::ostream&,Rule const&);
+};
+
+struct Library{	
+	private:
+	#define LIBRARY_ITEMS(X) \
+		X(std::string,name,NAME,SINGLE) \
+		X(std::vector<std::string>,srcs,SRCS,MULTIPLE) \
+		X(std::vector<std::string>,hdrs,HDRS,MULTIPLE) \
+		X(std::vector<std::string>,deps,DEPS,MULTIPLE)
+	#define X(TYPE,NAME,C,D) TYPE NAME;
+	LIBRARY_ITEMS(X)
+	#undef X
+	
+	public:
+	#define X(A,B,ATTRIBUTE_NAME,D) static const std::string ATTRIBUTE_NAME;
+	LIBRARY_ITEMS(X)
+	#undef X
+	
+	std::string get_name()const;
+	
+	static Library parse(std::string const&);
+	static Library parse(std::vector<std::string> const&);
+		
+	Library();
+	
+	friend std::ostream& operator<<(std::ostream&,Library const&);
 };
 
 struct Project{
 	static const std::string SOURCE;
 	
 	private:
-	std::vector<Build_rule> build_rules;
-	static std::vector<std::vector<std::string>> read_project(std::string const&); 
+	std::vector<Rule> rules;
+	std::vector<Library> libraries;
+	static std::vector<std::vector<std::string>> read(std::string const&,std::string const&); 
+	static std::vector<std::vector<std::string>> read_rules(std::string const&); 
+	static std::vector<std::vector<std::string>> read_libraries(std::string const&); 
 	
 	public:
-	void import(std::string const&);
 	void import();
+	void import(std::string const&);
 	
 	void make_tests()const;
 	void make_tests(std::string const&)const;
