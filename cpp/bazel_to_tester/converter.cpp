@@ -1,6 +1,5 @@
 #include "converter.h"
 #include "../util/util.h"
-#include <sstream>
 #include <fstream>
 
 using namespace std;
@@ -47,16 +46,16 @@ vector<string> read(string const& FILENAME){
 
 vector<string> split(string const& STRING,char BREAK){//TODO move to util?
 	vector<string> r;
-	stringstream ss;//TODO find out is stringstream is needed
+	string s;
 	for(char c: STRING){
 		if(c==BREAK){
-			r.push_back(ss.str());
-			ss.str("");
+			r.push_back(s);
+			s = "";
 		} else{
-			ss<<c;
+			s += c;
 		}
 	}
-	if(ss.str().size()) r.push_back(ss.str());
+	if(s.size() > 0) r.push_back(s);
 	return r;
 }
 Build_rule Build_rule::parse(string const& FILENAME){//TODO take advantage of Maybe?
