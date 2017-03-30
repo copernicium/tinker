@@ -101,7 +101,7 @@ void Rule::make_test(std::string const& PATH)const{
 	}
 }
 
-Rule Rule::parse(string const& FILENAME){
+Maybe<Rule> Rule::parse(string const& FILENAME){
 	return Rule::parse(read(FILENAME));
 }
 
@@ -149,9 +149,10 @@ vector<string> trim_lines(vector<string> const& LINES,string const& HEADING){
 
 #define PARSE_ITEM(A,INSTANCE_VARIABLE,ATTRIBUTE_NAME) ::parse(ATTRIBUTE_NAME,line,parseable.INSTANCE_VARIABLE); 	
 
-Rule Rule::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
-	Rule rule;
+Maybe<Rule> Rule::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
 	vector<string> rule_lines = trim_lines(LINES,Rule::HEADING);
+	if(rule_lines.size() == 0) return Maybe<Rule>();
+	Maybe<Rule> rule;
 	{//parse the chunk of lines 
 		Rule parseable;		
 		for(string line: rule_lines){ 
@@ -164,26 +165,31 @@ Rule Rule::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
 	{//remove header files from sources
 		vector<string> new_srcs;
 		static const string HEADER_EXTENSION = ".h";
-		for(string src: rule.srcs){
+		for(string src: (*rule).srcs){
 			if(src.size() >= HEADER_EXTENSION.size()){
 				if(src.substr(src.size() - HEADER_EXTENSION.size()) != HEADER_EXTENSION){
 					new_srcs.push_back(src);
 				}
 			}
 		}
-		rule.srcs = new_srcs;
+		(*rule).srcs = new_srcs;
 	}
 	return rule;
 }
 
-Library Library::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
-	Library parseable;	
+Maybe<Library> Library::parse(vector<string> const& LINES){//TODO take advantage of Maybe?
 	vector<string> library_lines = trim_lines(LINES,Library::HEADING);
-	for(string line: library_lines){ //parse the lines
-		if(line == "") continue; 
-		LIBRARY_ITEMS(PARSE_ITEM) 
+	if(library_lines.size() ==0) return Maybe<Library>();
+	Maybe<Library> library;	
+	{
+		Library parseable;
+		for(string line: library_lines){ //parse the lines
+			if(line == "") continue; 
+			LIBRARY_ITEMS(PARSE_ITEM) 
+		}
+		library = parseable;
 	}
-	return parseable;
+	return library;
 }
 
 #undef PARSE_ITEM
@@ -209,7 +215,7 @@ string Library::get_name()const{
 	return name;
 }
 
-Library Library::parse(string const& FILENAME){
+Maybe<Library> Library::parse(string const& FILENAME){
 	return Library::parse(read(FILENAME));
 }
 
@@ -263,11 +269,21 @@ void Project::import(){
 }
 
 void Project::import(string const& PATH){
-	for(vector<string> rule: Project::read(PATH,Rule::HEADING)){
-		rules.push_back(Rule::parse(rule));
+	for(vector<string> rule_str: Project::read(PATH,Rule::HEADING)){
+		Maybe<Rule> rule = Rule::parse(rule_str);
+		if(!rule){
+			cerr<<"Error: failed to parse rule\n";
+		} else{
+			rules.push_back(*rule);
+		}
 	}
-	for(vector<string> library: Project::read(PATH,Library::HEADING)){
-		libraries.push_back(Library::parse(library));
+	for(vector<string> library_str: Project::read(PATH,Library::HEADING)){
+		Maybe<Library> library = Library::parse(library_str);
+		if(!library){
+			cerr<<"Error: failed to parse library\n";
+		} else{
+			libraries.push_back(*library);
+		}
 	}
 }
 
@@ -284,7 +300,7 @@ void Project::make_tests(std::string const& PATH)const{
 int main(){
 	{
 		cout<<"Test 1 - Parsing a Rule out of a file containging one Rule and one Rule only\n";
-		Rule a = Rule::parse("test1/test");
+		Rule a = *Rule::parse("test1/test");
 		cout<<a<<"\n";
 		a.make_test("test1/");
 		cout<<"\n";
@@ -299,7 +315,7 @@ int main(){
 	}
 	{
 		cout<<"Test 3.1 - Parsing a single Library out of a BUILD file with both rules and libraries\n";
-		Library a = Library::parse("test3/BUILD");
+		Library a = *Library::parse("test3/BUILD");
 		cout<<a<<"\n";
 		cout<<"\n";
 	}

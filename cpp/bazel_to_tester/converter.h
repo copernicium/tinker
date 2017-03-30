@@ -3,8 +3,9 @@
 
 #include <vector>
 #include <iostream>
+#include "../util/maybe.h"
 
-struct Rule{	
+struct Rule{
 	private:
 	#define RULE_ITEMS(X) \
 		X(std::string,name,NAME) \
@@ -24,8 +25,8 @@ struct Rule{
 
 	std::string get_name()const;
 	
-	static Rule parse(std::string const&);
-	static Rule parse(std::vector<std::string> const&);
+	static Maybe<Rule> parse(std::string const&);
+	static Maybe<Rule> parse(std::vector<std::string> const&);
 	
 	void make_test()const;
 	void make_test(std::string const&)const;
@@ -54,8 +55,8 @@ struct Library{
 	
 	std::string get_name()const;
 	
-	static Library parse(std::string const&);
-	static Library parse(std::vector<std::string> const&);
+	static Maybe<Library> parse(std::string const&);
+	static Maybe<Library> parse(std::vector<std::string> const&);
 		
 	Library();
 	
