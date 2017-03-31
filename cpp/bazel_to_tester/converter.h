@@ -82,6 +82,8 @@ struct Project{
 	static std::vector<std::vector<std::string>> read(std::string const&,std::string const&); 
 	
 	public:
+	std::string all_to_string()const;
+	
 	void import();
 	void import(std::string const&);
 	

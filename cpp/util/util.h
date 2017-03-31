@@ -4,6 +4,7 @@
 #include <set>
 #include <vector>
 #include <iostream>
+#include <sstream>
 
 template<typename FUNC,typename T>
 std::vector<T> filter(FUNC f,std::vector<T> v){
@@ -49,6 +50,13 @@ std::ostream& operator<<(std::ostream& o, std::set<T> const& v){
 	}
 	o<<"]";
 	return o;
+}
+
+template<typename T>
+std::string as_string(T const& t){
+	std::stringstream ss;
+	ss<<t;
+	return ss.str();
 }
 
 #endif

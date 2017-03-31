@@ -11,7 +11,7 @@ vector<string> read(string const& FILENAME){
 	vector<string> lines;
 	ifstream f(FILENAME);
 	if(!f.good()){
-		cerr<<"Error: could not open file\n";
+		cerr<<"Error: could not open file \""<<FILENAME<<"\"\n";
 		return lines;
 	}
 	while(!f.eof()){
@@ -19,7 +19,7 @@ vector<string> read(string const& FILENAME){
 		getline(f,original);
 		string line = "";
 		for(char c: original){
-			if(c == '\n' || c == '\r' || c == '\t' || c == ',' || c == ' ' || c == '[' || c == ']' || c == ':') continue;//ignore certain characters
+			if(c == '\n' || c == '\r' || c == '\t' || c == ',' || c == ' ' || c == ':') continue;//ignore certain characters
 			line += c;
 		}
 		if(line != ""){
@@ -154,7 +154,6 @@ void Rule::make_test(string const& PATH,vector<Library> const& LIBRARIES)const{
 		}
 		rule.srcs = new_srcs;
 	}
-	cout<<"\nRule:"<<rule<<"\n";
 	{//manage deps
 		Maybe<Rule> rule_with_deps = Rule::integrate_deps(rule,LIBRARIES);
 		if(!rule_with_deps){
@@ -197,26 +196,6 @@ Maybe<Rule> Rule::parse(string const& FILENAME){
 	return Rule::parse(read(FILENAME));
 }
 
-void parse(string const& ATTRIBUTE_NAME, string const& LINE, vector<string>& instance_variable){
-	if(LINE.find(ATTRIBUTE_NAME) != string::npos){
-		vector<string> parts = split(LINE,'\"'); 
-		for(string part: parts){  
-			if(part == ATTRIBUTE_NAME || part == "") continue; 
-			instance_variable.push_back(part); 
-		} 
-	}
-}
-
-void parse(string const& ATTRIBUTE_NAME, string const& LINE, string& instance_variable){
-	if(LINE.find(ATTRIBUTE_NAME) != string::npos){ 
-		vector<string> parts = split(LINE,'\"'); 
-		for(string part: parts){ 
-			if(part == ATTRIBUTE_NAME || part == "") continue; 
-			instance_variable = part;
-		}
-	} 
-}
-
 vector<string> trim_lines(vector<string> const& LINES,string const& HEADING){
 	vector<string> trimmed_lines;
 	{
@@ -238,34 +217,77 @@ vector<string> trim_lines(vector<string> const& LINES,string const& HEADING){
 	return trimmed_lines;
 }
 
-#define PARSE_ITEM(A,INSTANCE_VARIABLE,ATTRIBUTE_NAME) ::parse(ATTRIBUTE_NAME,line,parseable.INSTANCE_VARIABLE); 	
+bool exists(string const& S,vector<string> const& LINES){
+	bool exists = false;
+	for(string a: LINES){
+		if(a.find(S) != string::npos){
+			exists = true;
+			break;
+		}
+	}
+	return exists;
+}
+
+string get_from(string const& START, char const& START_SECTION, char const& END_SECTION, vector<string> const& LINES){
+	string s;
+	bool collect = false, start_search = false;
+	for(string line: LINES){
+		if(line.find(START) != string::npos){
+			start_search = true;
+		}
+		if(start_search){
+			for(char c: line){
+				if(collect && c == END_SECTION){
+					return s;
+				}
+				if(collect) s += c;
+				if(c == START_SECTION){
+					collect = true;
+				} 
+			}
+		}
+	}	
+	return s;
+}
+
+void parse(string const& ATTRIBUTE_NAME, vector<string> const& LINES, vector<string>& instance_variable){
+	if(!exists(ATTRIBUTE_NAME,LINES)) return;
+	static const char START_SECTION = '[', END_SECTION = ']';
+	string attribute_specific = get_from(ATTRIBUTE_NAME,START_SECTION,END_SECTION,LINES);
+	
+	for(string part: split(attribute_specific,'\"')){  
+		if(part == "") continue; 
+		instance_variable.push_back(part); 
+	} 
+}
+
+void parse(string const& ATTRIBUTE_NAME, vector<string> const& LINES, string& instance_variable){
+	if(!exists(ATTRIBUTE_NAME,LINES)) return;
+	static const char START_SECTION = '\"', END_SECTION = '\"';
+	instance_variable = get_from(ATTRIBUTE_NAME,START_SECTION,END_SECTION,LINES);
+}
+
+#define PARSE_ITEM(A,INSTANCE_VARIABLE,ATTRIBUTE_NAME) ::parse(ATTRIBUTE_NAME,lines,parseable.INSTANCE_VARIABLE); 	
 
 Maybe<Rule> Rule::parse(vector<string> const& LINES){
-	vector<string> rule_lines = trim_lines(LINES,Rule::HEADING);
-	if(rule_lines.empty()) return Maybe<Rule>();
+	vector<string> lines = trim_lines(LINES,Rule::HEADING);
+	if(lines.empty()) return Maybe<Rule>();
 	Maybe<Rule> rule;
 	{//parse the chunk of lines 
 		Rule parseable;		
-		for(string line: rule_lines){ 
-			if(line == "") continue; 
-			RULE_ITEMS(PARSE_ITEM) 
-		}
-		
+		RULE_ITEMS(PARSE_ITEM) 	
 		rule = parseable;
 	}
 	return rule;
 }
 
 Maybe<Library> Library::parse(vector<string> const& LINES){
-	vector<string> library_lines = trim_lines(LINES,Library::HEADING);
-	if(library_lines.empty()) return Maybe<Library>();
+	vector<string> lines = trim_lines(LINES,Library::HEADING);
+	if(lines.empty()) return Maybe<Library>();
 	Maybe<Library> library;	
 	{
 		Library parseable;
-		for(string line: library_lines){ //parse the lines
-			if(line == "") continue; 
-			LIBRARY_ITEMS(PARSE_ITEM) 
-		}
+		LIBRARY_ITEMS(PARSE_ITEM) 
 		library = parseable;
 	}
 	return library;
@@ -361,6 +383,23 @@ std::ostream& operator<<(std::ostream& o,Project const& a){
 	return o;
 }
 
+string Project::all_to_string()const{
+	string s;
+	s += "Project(";
+	s += "Rules(";
+	for(Rule rule: rules){
+		s += "[" + as_string(rule) + "] ";
+	}
+	s += ") ";
+	s += " Libraries(";
+	for(Library library: libraries){
+		s += "[" + as_string(library) + "] ";
+	}
+	s += ")";
+	s += ")";
+	return s;
+}
+
 vector<vector<string>> Project::read(string const& PATH, string const& HEADING){
 	vector<string> lines = ::read(PATH + SOURCE);
 	vector<vector<string>> rules;
@@ -449,12 +488,20 @@ int main(){
 		a.make_tests("test3/");
 		cout<<"\n";
 	}
-	{
+	{ //TODO
 		cout<<"Test 4 - Parsing chainsaw's BUILD file\n";
 		Project a;
 		a.import("test4/");
 		cout<<a<<"\n";
 		a.make_tests("test4/");
+		cout<<"\n";
+	}
+	{
+		cout<<"Test 5 - Parsing a Rule that has arrays which occupy multiple lines\n";
+		Project a;
+		a.import("test5/");
+		cout<<a.all_to_string()<<"\n";
+		a.make_tests("test5/");
 		cout<<"\n";
 	}
 }
