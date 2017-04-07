@@ -1,4 +1,5 @@
 Important
+	- Add inheritance for copts and linkopts for dependencies
 	- Handle paths to certain things better?
 
 Nice things to have
