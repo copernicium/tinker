@@ -532,7 +532,7 @@ void Project::import(){
 }
 
 void Project::make_tests()const{
-	{
+	if(output_path != ""){
 		static const string COMMAND = "mkdir -p"; 
 		const string EXECUTABLE = COMMAND + " " + output_path;
 		run_command(EXECUTABLE);
@@ -559,7 +559,14 @@ Project Project::parse(unsigned argc, char* argv[]){
 	static const string END = "-";
 
 	if(args.find(HELP_ARG) != string::npos){
-		cout<<"HELP - TODO\n";
+		string help_msg;
+		help_msg += "Usage: convereter [options] \n";
+		help_msg += "\n";
+		help_msg += "Options: \n";
+		help_msg += "        --help                              Show this help message and exit \n";
+		help_msg += "        --source=[PATH/FILENAME]            Run converter with a given path to and the name of the BUILD file. If none is given, searches for the BUILD file within the current directory \n";
+		help_msg += "        --out=[PATH]                        Specify a directory to store the generated test files. If none is given, stores them with the BUILD file \n";
+		cout<<help_msg;
 		exit(0);
 	}
 	
