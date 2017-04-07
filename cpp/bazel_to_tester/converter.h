@@ -76,18 +76,7 @@ struct Rule{
 };
 
 struct Project{
-	public:
-	#define OUTPUT_MODES \
-		X(OUTPUT_PATH) \
-		X(INHERIT_OUTPUT_PATH) \
-		X(ERROR) 
-	#define X(MODE) MODE,
-	enum class Output_mode{OUTPUT_MODES};	
-	#undef X
-	
 	private:
-	Output_mode output_mode;
-	
 	std::string source;
 	std::string output_path;
 	
@@ -103,13 +92,10 @@ struct Project{
 	void make_tests()const;
 	
 	Project();
-	static Project use_path(std::string const&,std::string const&);
-	static Project inherit(std::string const&);
-	static Project parse(int, char*[]);
+	Project(std::string const&,std::string const&);
+	static Project parse(unsigned, char*[]);
 	
 	friend std::ostream& operator<<(std::ostream&,Project const&);
 };
-
-std::ostream& operator<<(std::ostream&,Project::Output_mode const&);
 
 #endif

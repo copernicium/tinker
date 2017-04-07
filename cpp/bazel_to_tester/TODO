@@ -1,11 +1,5 @@
 Important
-	- Handle paths
-		- Source paths
-		- Output paths
-	- Accept arguemts
-		- Source file path / name
-		- Output files path 
-		- Put output files where their primary target exists
+	- Handle different output paths (relative to BUILD)
 	- Add inheritance for copts ? 
 
 Nice things to have
