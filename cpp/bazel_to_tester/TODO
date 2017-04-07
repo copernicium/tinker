@@ -7,7 +7,7 @@ Important
 		- Output files path 
 		- Put output files where their primary target exists
 	- Add inheritance for copts and linkopts for dependencies
- 
+
 Nice things to have
 	- Take care of block comments
  
