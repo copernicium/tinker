@@ -25,6 +25,7 @@ struct Library{
 	
 	std::string get_name()const;
 	std::vector<std::string> get_srcs()const;
+	std::vector<std::string> get_linkopts()const;
 	static Maybe<Library> integrate_deps(Library const&,std::vector<Library> const&);
 	
 	static Maybe<Library> parse(std::string const&);

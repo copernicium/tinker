@@ -119,7 +119,7 @@ Maybe<Rule> Rule::integrate_deps(Rule const& RULE,vector<Library> const& LIBRARI
 			}
 		}
 	}
-	
+		
 	vector<string> dependencies_srcs = [&]{
 		vector<string> v;
 		for(Library library: dependencies){
@@ -130,10 +130,23 @@ Maybe<Rule> Rule::integrate_deps(Rule const& RULE,vector<Library> const& LIBRARI
 		return v;
 	}();
 	
+
+	vector<string> dependent_copts = [&]{
+		vector<string> v;
+		for(Library library: dependencies){
+			for(string copt: library.get_linkopts()){
+				v.push_back(copt);
+			}
+		}
+		return v;
+	}();
+	
 	vector<string> new_srcs = merge(RULE.srcs, dependencies_srcs);
+	vector<string> new_copts = merge(RULE.copts, dependent_copts);
 	
 	Maybe<Rule> rule = Maybe<Rule>(RULE);
 	(*rule).srcs = new_srcs;
+	(*rule).copts = new_copts;
 	
 	return rule;
 }
@@ -340,20 +353,35 @@ Maybe<Library> Library::integrate_deps(Library const& LIBRARY,vector<Library> co
 	vector<string> dependencies_srcs = [&]{
 		vector<string> v;
 		for(Library l: dependencies){
-			for(string src: l.get_srcs()){
+			for(string src: l.srcs){
 				v.push_back(src);
+			}
+		}
+		return v;
+	}();
+
+	vector<string> dependencies_linkopts = [&]{
+		vector<string> v;
+		for(Library l: dependencies){
+			for(string linkopt: l.linkopts){
+				v.push_back(linkopt);
 			}
 		}
 		return v;
 	}();
 	
 	vector<string> new_srcs = merge(LIBRARY.srcs,dependencies_srcs);
+	vector<string> new_linkopts = merge(LIBRARY.linkopts,dependencies_linkopts);
 	Maybe<Library> library = Maybe<Library>(LIBRARY);
 	(*library).srcs = new_srcs;
+	(*library).linkopts = new_linkopts;
 	
 	return library;
 }
 
+vector<string> Library::get_linkopts()const{
+	return linkopts;
+}
 
 vector<string> Library::get_srcs()const{
 	return srcs;
