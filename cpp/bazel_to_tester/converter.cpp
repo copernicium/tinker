@@ -59,7 +59,7 @@ const string Rule::HEADING = "cc_test(";
 const string Rule::COMPILER = "g++";
 const vector<string> Rule::CARGS = {"-std=c++14","-Wall","-Werror"};
 
-std::ostream& operator<<(std::ostream& o,Rule const& a){
+ostream& operator<<(ostream& o,Rule const& a){
 	o<<"Rule(";
 	#define X(A,NAME,C) o<<" "#NAME":"<<a.NAME;
 	RULE_ITEMS(X)
@@ -76,8 +76,14 @@ Maybe<Rule> Rule::find(string const& NAME,vector<Rule> const& RULES){
 	return Maybe<Rule>();
 }
 
-std::string Rule::get_name()const{
+string Rule::get_name()const{
 	return name;
+}
+
+string Rule::make_inherited_output_path()const{
+	string inherited_output_path = "";
+	NYI //TODO
+	return inherited_output_path;
 }
 
 vector<string> merge(vector<string> const& A, vector<string> const& B){
@@ -132,11 +138,7 @@ Maybe<Rule> Rule::integrate_deps(Rule const& RULE,vector<Library> const& LIBRARI
 	return rule;
 }
 
-void Rule::make_test()const{
-	make_test("");
-}
-
-void Rule::make_test(std::string const& PATH)const{
+void Rule::make_test(string const& PATH)const{
 	make_test(PATH,{});
 }
 
@@ -320,7 +322,7 @@ Maybe<Library> Library::find(string const& NAME,vector<Library> const& LIBRARIES
 	return Maybe<Library>();
 }
 
-Maybe<Library> Library::integrate_deps(Library const& LIBRARY,vector<Library> const& LIBRARIES){//TODO: manage deps
+Maybe<Library> Library::integrate_deps(Library const& LIBRARY,vector<Library> const& LIBRARIES){
 	if(LIBRARY.deps.empty()) return Maybe<Library>(LIBRARY);
 	vector<Library> dependencies;
 	for(string dep: LIBRARY.deps){
@@ -363,11 +365,28 @@ Maybe<Library> Library::parse(string const& FILENAME){
 	return Library::parse(read(FILENAME));
 }
 
-Project::Project():rules({}){}
+Project Project::inherit(string const& s){
+	Project a;
+	a.output_mode = Output_mode::INHERIT_OUTPUT_PATH;
+	a.source = s;
+	a.output_path = "";
+	a.rules = {};
+	a.libraries = {};
+	return a;
+}
 
-const string Project::SOURCE = "BUILD";
+Project Project::use_path(string const& s,string const& op){
+	Project a;
+	a.output_mode = Output_mode::OUTPUT_PATH;
+	a.source = s;
+	a.output_path = op;
+	a.rules = {};
+	a.libraries = {};
+	return a;
+}
+Project::Project():output_mode(Output_mode::OUTPUT_PATH),source("BUILD"),output_path(""),rules({}),libraries({}){}//TODO: change to inherit
 
-std::ostream& operator<<(std::ostream& o,Project const& a){
+ostream& operator<<(ostream& o,Project const& a){
 	o<<"Project(";
 	vector<string> rule_names;
 	for(Rule rule: a.rules){
@@ -400,8 +419,8 @@ string Project::all_to_string()const{
 	return s;
 }
 
-vector<vector<string>> Project::read(string const& PATH, string const& HEADING){
-	vector<string> lines = ::read(PATH + SOURCE);
+vector<vector<string>> Project::read(string const& HEADING){
+	vector<string> lines = ::read(source);
 	vector<vector<string>> rules;
 	
 	vector<string> rule;
@@ -426,11 +445,7 @@ vector<vector<string>> Project::read(string const& PATH, string const& HEADING){
 }
 
 void Project::import(){
-	import("");
-}
-
-void Project::import(string const& PATH){
-	for(vector<string> rule_str: Project::read(PATH,Rule::HEADING)){
+	for(vector<string> rule_str: read(Rule::HEADING)){
 		Maybe<Rule> rule = Rule::parse(rule_str);
 		if(!rule){
 			cerr<<"Error: failed to parse rule\n";
@@ -438,7 +453,7 @@ void Project::import(string const& PATH){
 			rules.push_back(*rule);
 		}
 	}
-	for(vector<string> library_str: Project::read(PATH,Library::HEADING)){
+	for(vector<string> library_str: read(Library::HEADING)){
 		Maybe<Library> library = Library::parse(library_str);
 		if(!library){
 			cerr<<"Error: failed to parse library\n";
@@ -449,16 +464,40 @@ void Project::import(string const& PATH){
 }
 
 void Project::make_tests()const{
-	make_tests("");
-}
-
-void Project::make_tests(std::string const& PATH)const{
-	for(Rule a: rules){
-		a.make_test(PATH,libraries);
+	switch(output_mode){
+		case Output_mode::INHERIT_OUTPUT_PATH:
+			for(Rule a: rules){
+				a.make_test(a.make_inherited_output_path(),libraries);
+			}
+			break;
+		case Output_mode::OUTPUT_PATH:
+			for(Rule a: rules){
+				a.make_test(output_path,libraries);
+			}
+			break;
+		default:
+			NYI
 	}
 }
 
-int main(){
+Project Project::parse(int argc, char* argv[]){
+	(void)argc;
+	(void)argv;
+	//TODO
+	return {};
+}
+
+ostream& operator<<(ostream& o,Project::Output_mode const& a){
+	switch(a){
+		#define X(MODE) case Project::Output_mode::MODE: return o<<""#MODE;
+		OUTPUT_MODES
+		#undef X
+		default:
+			NYI
+	}
+}
+
+void test(){
 	{
 		cout<<"Test 1 - Parsing a Rule out of a file containging one Rule and one Rule only\n";
 		Rule a = *Rule::parse("test1/test");
@@ -468,10 +507,10 @@ int main(){
 	}
 	{
 		cout<<"Test 2 - Parsing a Project out of a BUILD file containging only rules with no deps\n";
-		Project a;
-		a.import("test2/");
+		Project a = Project::use_path("test2/BUILD","test2/");
+		a.import();
 		cout<<a<<"\n";
-		a.make_tests("test2/");
+		a.make_tests();
 		cout<<"\n";
 	}
 	{
@@ -482,26 +521,34 @@ int main(){
 	}
 	{
 		cout<<"Test 3.2 - Parsing a Project out of a BUILD file with Rules, Libraries, and deps\n";
-		Project a;
-		a.import("test3/");
+		Project a = Project::use_path("test3/BUILD","test3/");
+		a.import();
 		cout<<a<<"\n";
-		a.make_tests("test3/");
+		a.make_tests();
 		cout<<"\n";
 	}
-	{ //TODO
+	{ 
 		cout<<"Test 4 - Parsing chainsaw's BUILD file\n";
-		Project a;
-		a.import("test4/");
+		Project a = Project::use_path("test4/BUILD","test4/");
+		a.import();
 		cout<<a<<"\n";
-		a.make_tests("test4/");
+		a.make_tests();
 		cout<<"\n";
 	}
 	{
 		cout<<"Test 5 - Parsing a Rule that has arrays which occupy multiple lines\n";
-		Project a;
-		a.import("test5/");
+		Project a = Project::use_path("test5/BUILD","test5/");
+		a.import();
 		cout<<a.all_to_string()<<"\n";
-		a.make_tests("test5/");
+		a.make_tests();
 		cout<<"\n";
+	}	
+}
+
+int main(int argc, char* argv[]){
+	{
+		Project project = Project::parse(argc,argv);//TODO
 	}
+	
+	test();
 }

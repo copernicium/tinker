@@ -1,5 +1,11 @@
 Important
-	- Handle paths to certain things better?
+	- Handle paths
+		- Source paths
+		- Output paths
+	- Accept arguemts
+		- Source file path / name
+		- Output files path 
+		- Put output files where their primary target exists
 
 Nice things to have
 	- Take care of block comments

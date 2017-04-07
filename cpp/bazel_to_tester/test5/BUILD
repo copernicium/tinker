@@ -1,0 +1,9 @@
+cc_test(
+	name="point_test",
+	srcs=["util/point.cpp","util/point.h",
+	"util/interface.h","util/maybe.h","util/driver_station_interface.h","util/maybe_inline.h"
+	,"util/checked_array.h","util/util.h"],
+	deps=[],
+	copts=["-DPOINT_TEST"],
+	timeout="short"
+)

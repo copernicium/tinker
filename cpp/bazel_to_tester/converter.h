@@ -24,10 +24,10 @@ struct Library{
 	
 	std::string get_name()const;
 	std::vector<std::string> get_srcs()const;
+	static Maybe<Library> integrate_deps(Library const&,std::vector<Library> const&);
 	
 	static Maybe<Library> parse(std::string const&);
 	static Maybe<Library> parse(std::vector<std::string> const&);
-	static Maybe<Library> integrate_deps(Library const&,std::vector<Library> const&);
 	
 	static Maybe<Library> find(std::string const&,std::vector<Library> const&);
 		
@@ -57,6 +57,7 @@ struct Rule{
 	#undef X
 
 	std::string get_name()const;
+	std::string make_inherited_output_path()const;
 	
 	static Maybe<Rule> parse(std::string const&);
 	static Maybe<Rule> parse(std::vector<std::string> const&);
@@ -64,7 +65,6 @@ struct Rule{
 	
 	static Maybe<Rule> find(std::string const&,std::vector<Rule> const&);
 	
-	void make_test()const;//TODO: make static
 	void make_test(std::string const&)const;
 	void make_test(std::string const&,std::vector<Library> const&)const;
 	
@@ -74,24 +74,40 @@ struct Rule{
 };
 
 struct Project{
-	static const std::string SOURCE;
+	public:
+	#define OUTPUT_MODES \
+		X(OUTPUT_PATH) \
+		X(INHERIT_OUTPUT_PATH) \
+		X(ERROR) 
+	#define X(MODE) MODE,
+	enum class Output_mode{OUTPUT_MODES};	
+	#undef X
 	
 	private:
+	Output_mode output_mode;
+	
+	std::string source;
+	std::string output_path;
+	
 	std::vector<Rule> rules;
 	std::vector<Library> libraries;
-	static std::vector<std::vector<std::string>> read(std::string const&,std::string const&); 
+	
+	std::vector<std::vector<std::string>> read(std::string const&); 
 	
 	public:
 	std::string all_to_string()const;
 	
 	void import();
-	void import(std::string const&);
-	
 	void make_tests()const;
-	void make_tests(std::string const&)const;
 	
 	Project();
+	static Project use_path(std::string const&,std::string const&);
+	static Project inherit(std::string const&);
+	static Project parse(int, char*[]);
+	
 	friend std::ostream& operator<<(std::ostream&,Project const&);
 };
+
+std::ostream& operator<<(std::ostream&,Project::Output_mode const&);
 
 #endif
