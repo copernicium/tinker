@@ -7,6 +7,11 @@ using namespace std;
 
 static const string ENDING = ")";
 
+void run_command(string const& EXECUTABLE){ //move to util?
+	const char* SYSTEM_ARG = EXECUTABLE.c_str();
+	system(SYSTEM_ARG);
+}
+
 vector<string> read(string const& FILENAME){
 	vector<string> lines;
 	ifstream f(FILENAME);
@@ -197,9 +202,9 @@ void Rule::make_test(string const& PATH,string const& ABS_PATH, vector<Library> 
 	ofstream o(PATH + rule.name);
 	o<<file_out;
 	{ 
-		const string MAKE_EXECUTABLE = "chmod +x " + PATH + rule.name;
-		const char* SYSTEM_ARG = MAKE_EXECUTABLE.c_str();
-		system(SYSTEM_ARG);
+		static const string COMMAND = "chmod +x";
+		const string EXECUTABLE = COMMAND + " " + PATH + rule.name;
+		run_command(EXECUTABLE);
 	}
 }
 
@@ -455,8 +460,8 @@ string make_path_absolute(string const& RELATIVE){ //TODO: move to util?
 	string path;
 	{
 		static const string COMMAND = "realpath";
-		const string MAKE_EXECUTABLE = COMMAND + " " + RELATIVE; 
-		const char* SYSTEM_ARG = MAKE_EXECUTABLE.c_str();
+		const string EXECUTABLE = COMMAND + " " + RELATIVE; 
+		const char* SYSTEM_ARG = EXECUTABLE.c_str();
 
 		FILE *in;
 		char buffer[512];
@@ -527,6 +532,11 @@ void Project::import(){
 }
 
 void Project::make_tests()const{
+	{
+		static const string COMMAND = "mkdir -p"; 
+		const string EXECUTABLE = COMMAND + " " + output_path;
+		run_command(EXECUTABLE);
+	}
 	for(Rule a: rules){
 		a.make_test(output_path,pop_filename(source),libraries);
 	}
