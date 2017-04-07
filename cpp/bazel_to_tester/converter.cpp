@@ -297,12 +297,13 @@ Maybe<Library> Library::parse(vector<string> const& LINES){
 
 #undef PARSE_ITEM
 
-Library::Library():name(""),srcs({}),hdrs({}),deps({}){}
+Library::Library():name(""),srcs({}),hdrs({}),deps({}),linkopts({}){}
 
 const string Library::NAME = Rule::NAME;
 const string Library::SRCS = Rule::SRCS;
 const string Library::DEPS = Rule::DEPS;
 const string Library::HDRS = "hdrs=";
+const string Library::LINKOPTS = "linkopts=";
 const string Library::HEADING = "cc_library(";
 
 ostream& operator<<(ostream& o,Library const& a){
@@ -542,7 +543,15 @@ void test(){
 		cout<<a.all_to_string()<<"\n";
 		a.make_tests();
 		cout<<"\n";
-	}	
+	}
+	{
+		cout<<"Test 6 - Parsing chainsaw\n";
+		Project a = Project::use_path("chainsaw/BUILD","chainsaw/");
+		a.import();
+		cout<<a.all_to_string()<<"\n";
+		a.make_tests();
+		cout<<"\n";
+	}
 }
 
 int main(int argc, char* argv[]){

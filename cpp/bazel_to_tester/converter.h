@@ -11,7 +11,8 @@ struct Library{
 		X(std::string,name,NAME) \
 		X(std::vector<std::string>,srcs,SRCS) \
 		X(std::vector<std::string>,hdrs,HDRS) \
-		X(std::vector<std::string>,deps,DEPS)
+		X(std::vector<std::string>,deps,DEPS) \
+		X(std::vector<std::string>,linkopts,LINKOPTS) 
 	#define X(TYPE,INSTANCE_VARIABLE,ATTRIBUTE_NAME) TYPE INSTANCE_VARIABLE;
 	LIBRARY_ITEMS(X)
 	#undef X
