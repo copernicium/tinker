@@ -144,6 +144,7 @@ void Rule::make_test(string const& PATH)const{
 
 void Rule::make_test(string const& PATH,vector<Library> const& LIBRARIES)const{
 	Rule rule = *this;
+	string file_out;
 	{//remove header files from sources
 		vector<string> new_srcs;
 		static const string HEADER_EXTENSION = ".h";
@@ -167,16 +168,15 @@ void Rule::make_test(string const& PATH,vector<Library> const& LIBRARIES)const{
 	{
 		rule.copts = merge(rule.copts,Rule::CARGS);
 	}
-	ofstream o(PATH + rule.name);
-	o<<Rule::COMPILER<<" ";
+	file_out += Rule::COMPILER + " ";
 	for(string copt: rule.copts){
-		o<<copt<<" ";
+		file_out += copt + " ";
 	}
-	o<<" \\\n";
+	file_out += " \\\n";
 	for(unsigned i =0; i < rule.srcs.size(); i++){
 		string src = rule.srcs[i];
-		o<<"\t"<<src<<" \\";
-		if(i < rule.srcs.size() - 1) o<<"\n";
+		file_out += "\t" + src + " \\";
+		if(i < rule.srcs.size() - 1) file_out += "\n";
 	}
 	string out = [&]{
 	//make the out file name
@@ -186,12 +186,14 @@ void Rule::make_test(string const& PATH,vector<Library> const& LIBRARIES)const{
 		}
 		NYI
 	}();
-	o<<"\n\t-o "<<out<<" 2>&1 && ./"<<out;
+	file_out += "\n\t-o "+ out + " 2>&1 && ./" + out;
 	{ 
 		const string MAKE_EXECUTABLE = "chmod +x " + PATH + rule.name;
 		const char* SYSTEM_ARG = MAKE_EXECUTABLE.c_str();
 		system(SYSTEM_ARG);
 	}
+	ofstream o(PATH + rule.name);
+	o<<file_out;
 }
 
 Maybe<Rule> Rule::parse(string const& FILENAME){
@@ -331,10 +333,12 @@ Maybe<Library> Library::integrate_deps(Library const& LIBRARY,vector<Library> co
 		if(!library){
 			cerr<<"Cannot handle dep \""<<dep<<"\" - Library not found\n";
 		} else{
+			library = Library::integrate_deps(*library,LIBRARIES);	
 			dependencies.push_back(*library);
+			
 		}
 	}
-	
+
 	vector<string> dependencies_srcs = [&]{
 		vector<string> v;
 		for(Library l: dependencies){
@@ -345,8 +349,10 @@ Maybe<Library> Library::integrate_deps(Library const& LIBRARY,vector<Library> co
 		return v;
 	}();
 	
+	//cout<<"EMPTY:"<<LIBRARIES.empty()<<" "<<LIBRARIES<<"\n";
+	//cout<<"before:"<<LIBRARY.srcs<<" "<<dependencies_srcs<<"\n";
 	vector<string> new_srcs = merge(LIBRARY.srcs,dependencies_srcs);
-	
+	//cout<<"after: "<<LIBRARY.srcs<<" "<<dependencies_srcs<<"\n";
 	Maybe<Library> library = Maybe<Library>(LIBRARY);
 	(*library).srcs = new_srcs;
 	
@@ -499,6 +505,7 @@ ostream& operator<<(ostream& o,Project::Output_mode const& a){
 }
 
 void test(){
+	/*
 	{
 		cout<<"Test 1 - Parsing a Rule out of a file containging one Rule and one Rule only\n";
 		Rule a = *Rule::parse("test1/test");
@@ -543,7 +550,7 @@ void test(){
 		cout<<a.all_to_string()<<"\n";
 		a.make_tests();
 		cout<<"\n";
-	}
+	}*/
 	{
 		cout<<"Test 6 - Parsing chainsaw\n";
 		Project a = Project::use_path("chainsaw/BUILD","chainsaw/");
