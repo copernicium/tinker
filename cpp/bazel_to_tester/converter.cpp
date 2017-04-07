@@ -146,10 +146,10 @@ Maybe<Rule> Rule::integrate_deps(Rule const& RULE,vector<Library> const& LIBRARI
 }
 
 void Rule::make_test(string const& PATH)const{
-	make_test(PATH,{});
+	make_test(PATH,"",{});
 }
 
-void Rule::make_test(string const& PATH,vector<Library> const& LIBRARIES)const{
+void Rule::make_test(string const& PATH,string const& ABS_PATH, vector<Library> const& LIBRARIES)const{
 	string file_out;
 	Rule rule = *this;
 	{//remove header files from sources
@@ -182,7 +182,7 @@ void Rule::make_test(string const& PATH,vector<Library> const& LIBRARIES)const{
 	file_out += " \\\n";
 	for(unsigned i =0; i < rule.srcs.size(); i++){
 		string src = rule.srcs[i];
-		file_out += "\t" + src + " \\";
+		file_out += "\t" + ABS_PATH + src + " \\";
 		if(i < rule.srcs.size() - 1) file_out += "\n";
 	}
 	string out = [&]{
@@ -442,6 +442,46 @@ string Project::all_to_string()const{
 	return s;
 }
 
+string pop_filename(string const& PATH){
+	string p;
+	static const char DIR_MARKER = '/';
+	if(PATH.rfind(DIR_MARKER) != string::npos){
+		return PATH.substr(0,min(PATH.rfind(DIR_MARKER) + 1, PATH.size()));
+	}
+	return PATH;
+}
+
+string make_path_absolute(string const& RELATIVE){ //TODO: move to util?
+	string path;
+	{
+		static const string COMMAND = "realpath";
+		const string MAKE_EXECUTABLE = COMMAND + " " + RELATIVE; 
+		const char* SYSTEM_ARG = MAKE_EXECUTABLE.c_str();
+
+		FILE *in;
+		char buffer[512];
+
+		in = popen(SYSTEM_ARG, "r");
+		if(!in){
+			return "";
+		}
+		fgets(buffer, sizeof(buffer), in);
+		if(buffer != NULL){
+			string s = buffer;
+			for(char c: s){
+				if(c != '\n' && c != '\r') path += c;
+			}	
+		}
+		pclose(in);
+	}
+	const char DIR_MARKER = '/';
+	if(RELATIVE.size() > 0 && RELATIVE[RELATIVE.size() - 1] == DIR_MARKER){
+		path += DIR_MARKER; //readpath does not include the last "/" on directories, so add that back in
+	}
+
+	return path;
+}
+
 vector<vector<string>> Project::read(string const& HEADING){
 	vector<string> lines = ::read(source);
 	vector<vector<string>> rules;
@@ -488,11 +528,11 @@ void Project::import(){
 
 void Project::make_tests()const{
 	for(Rule a: rules){
-		a.make_test(output_path,libraries);
+		a.make_test(output_path,pop_filename(source),libraries);
 	}
 }
 
-Project Project::parse(unsigned argc, char* argv[]){ //TODO
+Project Project::parse(unsigned argc, char* argv[]){ 
 	// --source=[PATH/FILENAME]  // "BUILD"
 	// --out=[PATH] // "tests/"
 	// --add-copt //TODO
@@ -514,18 +554,16 @@ Project Project::parse(unsigned argc, char* argv[]){ //TODO
 	}
 	
 	if(args.find(SOURCE_ARG) != string::npos){
-		a.source = get_from(SOURCE_ARG,END,{args});
+		a.source = make_path_absolute(get_from(SOURCE_ARG,END,{args}));
 	} else {
 		a.source = "BUILD";
 	}
 	if(args.find(OUT_ARG) != string::npos){
-		a.output_path = get_from(OUT_ARG,END,{args});
+		a.output_path = make_path_absolute(get_from(OUT_ARG,END,{args}));
 	} else {
 		a.output_path = "";
 	}
-
-	cout<<"source:\""<<a.source<<"\"\n"; 
-	cout<<"out:\""<<a.output_path<<"\"\n"; 
+	
 	a.rules = {};
 	a.libraries= {};
 	return a;
@@ -589,7 +627,7 @@ void test(){
 
 int main(int argc, char* argv[]){
 	{
-		Project project = Project::parse(argc,argv);//TODO
+		Project project = Project::parse(argc,argv);
 		project.import();
 		project.make_tests();
 	}

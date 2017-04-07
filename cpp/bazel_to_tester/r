@@ -1,2 +1,2 @@
 make converter
-./converter
+./converter --source=chainsaw/BUILD --out=chainsaw/tests/ 

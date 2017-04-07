@@ -68,7 +68,7 @@ struct Rule{
 	static Maybe<Rule> find(std::string const&,std::vector<Rule> const&);
 	
 	void make_test(std::string const&)const;
-	void make_test(std::string const&,std::vector<Library> const&)const;
+	void make_test(std::string const&,std::string const&,std::vector<Library> const&)const;
 	
 	Rule();
 	
