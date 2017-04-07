@@ -211,9 +211,7 @@ vector<string> trim_lines(vector<string> const& LINES,string const& HEADING){
 			}
 			if(found){
 				trimmed_lines.push_back(line);
-			}
-			if(found && line.find(ENDING) != string::npos){
-				break;
+				if(line.find(ENDING) != string::npos) break;
 			}
 		}
 		if(!found) return {};
@@ -349,10 +347,7 @@ Maybe<Library> Library::integrate_deps(Library const& LIBRARY,vector<Library> co
 		return v;
 	}();
 	
-	//cout<<"EMPTY:"<<LIBRARIES.empty()<<" "<<LIBRARIES<<"\n";
-	//cout<<"before:"<<LIBRARY.srcs<<" "<<dependencies_srcs<<"\n";
 	vector<string> new_srcs = merge(LIBRARY.srcs,dependencies_srcs);
-	//cout<<"after: "<<LIBRARY.srcs<<" "<<dependencies_srcs<<"\n";
 	Maybe<Library> library = Maybe<Library>(LIBRARY);
 	(*library).srcs = new_srcs;
 	
@@ -505,7 +500,6 @@ ostream& operator<<(ostream& o,Project::Output_mode const& a){
 }
 
 void test(){
-	/*
 	{
 		cout<<"Test 1 - Parsing a Rule out of a file containging one Rule and one Rule only\n";
 		Rule a = *Rule::parse("test1/test");
@@ -550,7 +544,7 @@ void test(){
 		cout<<a.all_to_string()<<"\n";
 		a.make_tests();
 		cout<<"\n";
-	}*/
+	}
 	{
 		cout<<"Test 6 - Parsing chainsaw\n";
 		Project a = Project::use_path("chainsaw/BUILD","chainsaw/");
