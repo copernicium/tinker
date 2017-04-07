@@ -1,6 +1,12 @@
 Important
+	- Handle paths
+		- Source paths
+		- Output paths
+	- Accept arguemts
+		- Source file path / name
+		- Output files path 
+		- Put output files where their primary target exists
 	- Add inheritance for copts and linkopts for dependencies
-	- Handle paths to certain things better?
 
 Nice things to have
 	- Take care of block comments
