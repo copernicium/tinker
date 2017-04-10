@@ -1,5 +1,7 @@
 package ComputerScience.Labs.Elevens.Activity3;
 
+import java.util.Arrays;
+
 /**
  * This class provides a convenient way to test shuffling methods.
  * @Author Logan Traffas
@@ -9,10 +11,9 @@ package ComputerScience.Labs.Elevens.Activity3;
  */
 public class Shuffler {
 	/**
-	 * The number of consecutive shuffle steps to be performed in each call
-	 * to each sorting procedure.
+	 * The number of consecutive shuffle steps to be performed in each call to each sorting procedure.
 	 */
-	private static final int SHUFFLE_COUNT = 1;
+	private static final int SHUFFLE_COUNT = 4;
 
 	/**
 	 * The number of values to shuffle.
@@ -24,39 +25,53 @@ public class Shuffler {
 	 * @param args is not used.
 	 */
 	public static void main(String[] args) {
-		int[] values1 = new int[VALUE_COUNT];
-		for (int i = 0; i < values1.length; i++) {
-			values1[i] = i;
-		}
-		System.out.println("Original:");
-		for (int k = 0; k < values1.length; k++) {
-			System.out.print(" " + values1[k]);
-		}
-		System.out.println("\nResults of " + SHUFFLE_COUNT + " consecutive perfect shuffles:");
-		for (int j = 1; j <= SHUFFLE_COUNT; j++) {
-			values1 = perfectShuffle(values1);
-			System.out.print("  " + j + ":");
-			for (int k = 0; k < values1.length; k++) {
-				System.out.print(" " + values1[k]);
-			}
-			System.out.println();
-		}
-		System.out.println();
+		{
+			System.out.println("Shuffler");
+			{
+				int[] values = new int[VALUE_COUNT];
+				for(int i = 0; i < values.length; i++){
+					values[i] = i;
+				}
+				System.out.println("Original: " + Arrays.toString(values));
 
-		System.out.println("Results of " + SHUFFLE_COUNT + " consecutive efficient selection shuffles:");
-		Integer[] values2 = new Integer[VALUE_COUNT];
-		for (int i = 0; i < values2.length; i++) {
-			values2[i] = i;
-		}
-		for (int j = 1; j <= SHUFFLE_COUNT; j++) {
-			values2 = selectionShuffle(values2);
-			System.out.print("  " + j + ":");
-			for (int k = 0; k < values2.length; k++) {
-				System.out.print(" " + values2[k]);
+				for (int i = 1; i <= SHUFFLE_COUNT; i++) {
+					values = perfectShuffle(values);
+					System.out.println("Results of " + i + " consecutive perfect shuffles: " + Arrays.toString(values));
+				}
 			}
+			{
+
+				Integer[] values = new Integer[VALUE_COUNT];
+				for (int i = 0; i < values.length; i++) {
+					values[i] = i;
+				}
+				System.out.println("Original: " + Arrays.toString(values));
+
+				for (int i = 1; i <= SHUFFLE_COUNT; i++) {
+					values = selectionShuffle(values);
+					System.out.println("Results of " + i + " consecutive efficient selection shuffles: " + Arrays.toString(values));
+				}
+			}
+		}
+		{
+			System.out.println("Question 1");
+			for (int i = 0; i < 10; i++) {
+				flip();
+			}
+		}
+
+		{
+			System.out.println("Question 1");
+			int[] a = {0,1,2,3,4,5};
+			int[] b = {1,2,4,0,5,3};
+			int[] c = {9,8,1,3,7,0};
+			System.out.println("a: " + Arrays.toString(a) + " vs b:" + Arrays.toString(b) + " arePermutations:" + arePermutations(a,b));
+			System.out.println("a: " + Arrays.toString(a) + " vs c:" + Arrays.toString(b) + " arePermutations:" + arePermutations(a,c));
+		}
+		{
+			System.out.println("Question 3");
 			System.out.println();
 		}
-		System.out.println();
 	}
 
 	/**
@@ -104,5 +119,42 @@ public class Shuffler {
 		}
 		return shuffled;
 	}
-}
 
+	public static void flip(){
+		int TOTAL = 3;
+		int i = (int)(Math.random() * TOTAL);
+		if(i == 0) System.out.println("Tails");
+		else System.out.println("Heads");
+	}
+
+	/**
+	 * Given two int arrays of the same length with no duplicate elements
+	 * @param a
+	 * @param b
+	 * @return Returns true if one array is a permutation of the other (i.e., the
+	arrays differ only in how their contents are arranged). Otherwise, it should return false.
+	 */
+	public static boolean arePermutations(int[] a, int[] b){
+		for(int x : a){
+			boolean contains = false;
+			for(int y: b){
+				if(x == y){
+					contains = true;
+					break;
+				}
+			}
+			if(!contains) return false;
+		}
+		for(int x : b){
+			boolean contains = false;
+			for(int y: a){
+				if(x == y) {
+					contains = true;
+					break;
+				}
+			}
+			if(!contains) return false;
+		}
+		return true;
+	}
+}
