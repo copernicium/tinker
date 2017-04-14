@@ -33,7 +33,6 @@ public class Shuffler {
 					values[i] = i;
 				}
 				System.out.println("Original: " + Arrays.toString(values));
-
 				for (int i = 1; i <= SHUFFLE_COUNT; i++) {
 					values = perfectShuffle(values);
 					System.out.println("Results of " + i + " consecutive perfect shuffles: " + Arrays.toString(values));
@@ -46,7 +45,6 @@ public class Shuffler {
 					values[i] = i;
 				}
 				System.out.println("Original: " + Arrays.toString(values));
-
 				for (int i = 1; i <= SHUFFLE_COUNT; i++) {
 					values = selectionShuffle(values);
 					System.out.println("Results of " + i + " consecutive efficient selection shuffles: " + Arrays.toString(values));
@@ -59,9 +57,8 @@ public class Shuffler {
 				flip();
 			}
 		}
-
 		{
-			System.out.println("Question 1");
+			System.out.println("Question 2");
 			int[] a = {0,1,2,3,4,5};
 			int[] b = {1,2,4,0,5,3};
 			int[] c = {9,8,1,3,7,0};
@@ -70,7 +67,7 @@ public class Shuffler {
 		}
 		{
 			System.out.println("Question 3");
-			System.out.println();
+			System.out.println("Random numbers 3, then 2, then 1, then 0 in the efficient selection shuffle would grab the integers in [ 1 2 3 4 ] and move them to [ 4 3 2 1 ]");
 		}
 	}
 

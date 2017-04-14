@@ -73,7 +73,7 @@ public class Deck {
 			}
 		}
 		this.size = this.cards.size();
-		//shuffle();//TODO
+		shuffle();
 	}
 
 	/**
@@ -96,8 +96,18 @@ public class Deck {
 	 * Randomly permute the given collection of cards
 	 * and reset the size to represent the entire deck.
 	 */
-	public void shuffle() { //TODO
-		Util.nyi(Util.getFileName(),Util.getLineNumber());
+	public void shuffle() {
+		ArrayList<Card> newCards = new ArrayList<>();
+		int[] indexes = new int[this.cards.size()];
+		for(int i = 0; i < this.cards.size(); i++){
+			indexes[i] = i;
+		}
+		Shuffler.selectionShuffle(indexes);
+		for(int i: indexes){
+			newCards.add(this.cards.get(i));
+		}
+		this.cards = newCards;
+		this.size = this.cards.size();
 	}
 
 	/**
@@ -123,7 +133,7 @@ public class Deck {
 		s += "\tsize = " + this.size;
 
 		s += "\n\tUn-dealt cards: \n\t\t";
-		if(this.size - 1 ==0){
+		if(this.isEmpty()){
 			s += "None\n";
 		} else {
 			for (int i = this.size - 1; i >= 0; i--) {
@@ -132,7 +142,7 @@ public class Deck {
 				if (notEnd) {
 					s += ", ";
 				}
-				boolean startNewLine = (this.size - i) % 2 == 0;
+				boolean startNewLine = (this.size - i) % 3 == 0;
 				if(startNewLine) {
 					// Insert carriage returns so entire deck is visible on console.
 					s += "\n";
@@ -145,7 +155,7 @@ public class Deck {
 
 		s += "\n\tDealt cards: \n\t\t";
 		if(this.cards.size() == this.size) {
-			s += "None\n";
+			s += "None";
 		} else {
 			for (int i = this.cards.size() - 1; i >= this.size; i--) {
 				s += this.cards.get(i);
@@ -164,7 +174,7 @@ public class Deck {
 			}
 		}
 
-		s += ")";
+		s += "\n)";
 		return s;
 	}
 }

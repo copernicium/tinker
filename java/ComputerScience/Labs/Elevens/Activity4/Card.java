@@ -7,7 +7,7 @@ import Util.Util;
  * @Author Logan Traffas
  * @Date 4/3/2017.
  * @Version 1.0.0
- * @Assignment Elevens Lab-Activity 3-Shuffle the Deck
+ * @Assignment Elevens Lab--Activity 4 --Adding Shuffle Method to Deck Class
  */
 public class Card {
 	public enum Suit{HEARTS,CLUBS,DIAMONDS,SPADES}
