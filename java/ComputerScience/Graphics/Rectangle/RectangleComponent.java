@@ -14,8 +14,6 @@ import javax.swing.*;
 public class RectangleComponent extends JComponent {
     private int frameWidth, frameHeight;//px
 
-    private static int TASKBAR_HEIGHT = 40;//px
-
     public RectangleComponent(){
         this(0,0);
     }
@@ -33,9 +31,8 @@ public class RectangleComponent extends JComponent {
     public RectangleComponent(JFrame frame,boolean handleTaskbar){
         switch(frame.getExtendedState()){
             case Frame.MAXIMIZED_BOTH:
-                this.frameWidth = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth() - (frame.getInsets().left + frame.getInsets().right);
-                this.frameHeight = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight() - (frame.getInsets().top + frame.getInsets().bottom);
-                if(handleTaskbar) this.frameHeight -= TASKBAR_HEIGHT;
+                this.frameWidth = Util.Graphics.generateFullscreenDimension(handleTaskbar).width;
+                this.frameHeight = Util.Graphics.generateFullscreenDimension(handleTaskbar).height;
                 break;
             case Frame.NORMAL:
                 this.frameWidth = frame.getContentPane().getWidth();
@@ -44,7 +41,6 @@ public class RectangleComponent extends JComponent {
             default:
                 break;
         }
-        System.out.println(this.toString());
     }
 
     @Override
@@ -53,10 +49,11 @@ public class RectangleComponent extends JComponent {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(java.awt.Graphics g) {
         Graphics2D g2 = (Graphics2D) g;// Recover Graphics2D
 
         {
+            /*
             final int PADDING = 20, WIDTH = 10, HEIGHT = 10;//px
 
             Rectangle upperLeft = new Rectangle(0 + PADDING, 0 + PADDING, WIDTH, HEIGHT);
@@ -73,25 +70,24 @@ public class RectangleComponent extends JComponent {
 
             Rectangle center = new Rectangle((this.frameWidth - WIDTH) / 2, (this.frameHeight - HEIGHT) / 2, WIDTH, HEIGHT);
             g2.fill(center);
-
+            */
         }
         {
-
             final int PADDING = 20, WIDTH = 10, HEIGHT = 10;//px
-            int alignedHeight = this.frameHeight - (this.frameHeight % (PADDING + HEIGHT)), alignedWidth = this.frameWidth - (this.frameWidth % (PADDING + WIDTH));
-            for(int i = PADDING; i < alignedWidth; i += WIDTH + PADDING){
+            int alignedHeight = this.frameHeight - PADDING - ((this.frameHeight - PADDING) % (HEIGHT + PADDING)),
+                    alignedWidth = this.frameWidth - PADDING - ((this.frameWidth - PADDING) % (WIDTH + PADDING));
+            for(int i = PADDING; i < this.frameWidth - PADDING; i += WIDTH + PADDING){
                 Rectangle top  = new Rectangle(i, PADDING, WIDTH, HEIGHT);
                 g2.draw(top);
                 Rectangle bottom = new Rectangle(i, alignedHeight - HEIGHT, WIDTH, HEIGHT);
                 g2.draw(bottom);
             }
-            for(int i = PADDING; i < alignedHeight; i += HEIGHT + PADDING){
+            for(int i = PADDING; i < this.frameHeight - PADDING; i += HEIGHT + PADDING){
                 Rectangle left  = new Rectangle(PADDING, i, WIDTH, HEIGHT);
                 g2.draw(left);
                 Rectangle right = new Rectangle(alignedWidth - WIDTH, i, WIDTH, HEIGHT);
                 g2.draw(right);
             }
-
         }
     }
 }
