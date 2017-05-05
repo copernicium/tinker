@@ -1,6 +1,6 @@
 package ComputerScience.Graphics.Rectangle;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.*;
 import java.util.Scanner;
 
@@ -12,18 +12,27 @@ import java.util.Scanner;
  */
 public class RectangleViewer {
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
         JFrame frame = new JFrame();
-
-        frame.setSize(500,500);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setTitle("Two rectangles");
+        frame.setTitle("Rectangles");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        RectangleComponent component = new RectangleComponent(frame);
+        {//set the size of the frame
+            Dimension size = new Dimension(500, 500);
+            size = new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight());
+            {
+                size = new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth() - (frame.getInsets().left + frame.getInsets().right),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight() - (frame.getInsets().top + frame.getInsets().bottom) - 40);
 
-        frame.add(component);
+            }
 
+            frame.setSize(size);
+            frame.getContentPane().setPreferredSize(new Dimension(size));//fill frame
+            frame.pack();
+         //   frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        }
+
+        frame.add(new RectangleComponent(frame, true));
+
+        Scanner in = new Scanner(System.in);
         while(true) {
             System.out.print("Display frame?(y/n/quit) ");
             String input = in.next().trim();
