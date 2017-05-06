@@ -1,7 +1,9 @@
 package ComputerScience.Graphics;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import java.awt.Dimension;
+import java.awt.Color;
+import java.util.ArrayList;
 
 /**
  * @Author Logan Traffas
@@ -13,14 +15,15 @@ public class Animation {
     public static void main(String[] args){
         Dimension fullscreen = Util.Graphics.generateFullscreenDimension(true);
         double ratio = (double)fullscreen.width / (double)fullscreen.height;
+        final Color color = Color.black;
+        JFrame frame = new JFrame();
+        frame.getContentPane().setBackground(color);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         for(int i = 0; i < fullscreen.height; i++){
             Dimension size = new Dimension((int)(ratio * (double)i),i);
-            JFrame frame = new JFrame();
             frame.setSize(size);
             frame.getContentPane().setPreferredSize(new Dimension(size));
-            frame.pack();
-            frame.setVisible(true);
-            frame.setVisible(false);
         }
     }
 }

@@ -27,18 +27,18 @@ public class RectangleViewer {
             frame.pack();
         }
 
-            frame.add(new RectangleComponent(frame, handleTaskbar));
+        frame.add(new RectangleComponent(frame, handleTaskbar));
 
         Scanner in = new Scanner(System.in);
         while(true) {
             System.out.print("Display frame?(y/n/quit) ");
             String input = in.next().trim();
-            if(true || input.equals("quit")){
-                frame.setVisible(false);
-                frame.dispose();
+            if(input.equals("quit")){
                 break;
             }
-            frame.setVisible(true /*input.equals("y")*/);
+            frame.setVisible(input.equals("y"));
         }
+        frame.setVisible(false);
+        frame.dispose();
     }
 }
