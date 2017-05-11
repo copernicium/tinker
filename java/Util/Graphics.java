@@ -24,4 +24,11 @@ public class Graphics {
         return size;
     }
 
+    public static JFrame setSize(JFrame frame, Dimension size){
+        frame.setSize(size);
+        frame.getContentPane().setPreferredSize(new Dimension(size));
+        frame.pack();
+        return frame;
+    }
+
 }

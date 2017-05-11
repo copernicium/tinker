@@ -18,13 +18,12 @@ public class RectangleViewer {
 
         boolean handleTaskbar = true;
 
-        {//set the size of the frame
-            boolean fullscreen = false;
+        {//set the size of the framea
+            boolean fullscreen = true;
             Dimension size = fullscreen ? Util.Graphics.generateFullscreenDimension(handleTaskbar) : new Dimension(500, 500);
 
-            frame.setSize(size);
-            frame.getContentPane().setPreferredSize(new Dimension(size));//fill frame
-            frame.pack();
+            frame = Util.Graphics.setSize(frame,size);
+
         }
 
         frame.add(new RectangleComponent(frame, handleTaskbar));

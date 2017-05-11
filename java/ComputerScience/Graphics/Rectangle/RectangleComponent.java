@@ -53,7 +53,7 @@ public class RectangleComponent extends JComponent {
         Graphics2D g2 = (Graphics2D) g;// Recover Graphics2D
 
         {
-            /*
+
             final int PADDING = 20, WIDTH = 10, HEIGHT = 10;//px
 
             Rectangle upperLeft = new Rectangle(0 + PADDING, 0 + PADDING, WIDTH, HEIGHT);
@@ -70,9 +70,10 @@ public class RectangleComponent extends JComponent {
 
             Rectangle center = new Rectangle((this.frameWidth - WIDTH) / 2, (this.frameHeight - HEIGHT) / 2, WIDTH, HEIGHT);
             g2.fill(center);
-            */
+
         }
         {
+            /*
             final int PADDING = 20, WIDTH = 10, HEIGHT = 10;//px
             int alignedHeight = this.frameHeight - PADDING - ((this.frameHeight - PADDING) % (HEIGHT + PADDING)),
                     alignedWidth = this.frameWidth - PADDING - ((this.frameWidth - PADDING) % (WIDTH + PADDING));
@@ -88,6 +89,7 @@ public class RectangleComponent extends JComponent {
                 Rectangle right = new Rectangle(alignedWidth - WIDTH, i, WIDTH, HEIGHT);
                 g2.draw(right);
             }
+            */
         }
     }
 }
