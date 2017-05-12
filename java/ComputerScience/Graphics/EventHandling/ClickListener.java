@@ -13,6 +13,6 @@ import java.awt.event.ActionListener;
  */
 public class ClickListener implements ActionListener {
     public void actionPerformed(ActionEvent event){
-        System.out.println("I was clicked.");
+        System.out.println("Juice was added.");
     }
 }

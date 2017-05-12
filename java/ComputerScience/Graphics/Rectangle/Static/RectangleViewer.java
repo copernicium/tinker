@@ -1,4 +1,4 @@
-package ComputerScience.Graphics.Rectangle;
+package ComputerScience.Graphics.Rectangle.Static;
 
 import javax.swing.*;
 import java.awt.*;

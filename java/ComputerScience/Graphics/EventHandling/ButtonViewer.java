@@ -1,7 +1,6 @@
 package ComputerScience.Graphics.EventHandling;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 
 /**
@@ -13,10 +12,10 @@ import javax.swing.*;
  * @Assignment GR10.7--Event Handling
  */
 public class ButtonViewer {
-    private static final int FRAME_WIDTH = 100;//px
-    private static final int FRAME_HEIGHT = 60;//px
+    private static final int FRAME_WIDTH = 500;//px
+    private static final int FRAME_HEIGHT = 300;//px
 
-    private static final boolean FULLSCREEN = true;
+    private static final boolean FULLSCREEN = false;
     private static final boolean HANDLE_TASKBAR = true;
 
     public static void main(String[] args){
@@ -26,7 +25,9 @@ public class ButtonViewer {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        JButton button = new JButton("Click me!");
+        JButton button = new JButton("Add juice");
+        final Dimension BUTTON_SIZE = new Dimension(100,100);
+        button.setPreferredSize(BUTTON_SIZE);
         button.addActionListener(new ClickListener());
 
         JPanel buttonPane = new JPanel();
