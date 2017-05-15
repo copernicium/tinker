@@ -9,13 +9,17 @@ package ComputerScience.Graphics.InvestmentButtons.VersionTwo;
  * @Assignment GR10.8--Building Applications with Buttons
  */
 public class BankAccount {
+    private double initial;
     private double balance;
+    private int transactions;
 
     /**
      Constructs a bank account with a zero balance.
      */
     public BankAccount() {
         balance = 0;
+        initial = new Double(balance);
+        transactions = 0;
     }
 
     /**
@@ -24,6 +28,8 @@ public class BankAccount {
      */
     public BankAccount(double initialBalance) {
         balance = initialBalance;
+        initial = balance;
+        transactions = 0;
     }
 
     /**
@@ -33,6 +39,7 @@ public class BankAccount {
     public void deposit(double amount) {
         double newBalance = balance + amount;
         balance = newBalance;
+        transactions++;
     }
 
     /**
@@ -42,6 +49,7 @@ public class BankAccount {
     public void withdraw(double amount) {
         double newBalance = balance - amount;
         balance = newBalance;
+        transactions++;
     }
 
     /**
@@ -50,5 +58,18 @@ public class BankAccount {
      */
     public double getBalance() {
         return balance;
+    }
+
+    /**
+     * Gets the number of transactions of the bank account.
+     * @return the total number of transactions
+     */
+    public int getTransactions() {
+        return transactions;
+    }
+
+    public void reset(){
+        balance = initial;
+        transactions = 0;
     }
 }
