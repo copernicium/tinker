@@ -20,7 +20,7 @@ public class InvestmentViewer {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         Dimension size = FULLSCREEN  ? Util.Graphics.generateFullscreenDimension(HANDLE_TASKBAR) : new Dimension(FRAME_WIDTH, FRAME_HEIGHT);
-        frame = Util.Graphics.setSize(frame, size);
+        frame = Util.Graphics.createJFrameOfSize(frame, size);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 

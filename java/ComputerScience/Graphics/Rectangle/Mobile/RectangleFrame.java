@@ -17,23 +17,35 @@ public class RectangleFrame extends JFrame {
     private static final int FRAME_WIDTH = 300;
     private static final int FRAME_HEIGHT = 400;
 
-    private RectangleComponent scene;
+    private RectangleComponent scene1;
+    private RectangleComponent scene2;
 
     class TimerListener implements ActionListener {
+        private Util.Point<Integer> moveBy;
+
         public void actionPerformed(ActionEvent event) {
-            scene.moveRectangleBy(1, 1);
+            scene1.moveRectangleBy(moveBy.getX(), moveBy.getY());
+            scene2.moveRectangleBy(moveBy.getX(), moveBy.getY());
+        }
+
+        public TimerListener(){
+            this(1,1);
+        }
+
+        public TimerListener(int a, int b){
+            this.moveBy = new Util.Point(a,b);
         }
     }
 
     public RectangleFrame() {
-        scene = new RectangleComponent();
-        add(scene);
+        scene1 = new RectangleComponent();
+        add(scene1 );
 
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
         ActionListener listener = new TimerListener();
 
-        final int DELAY = 100; // Milliseconds between timer ticks
+        final int DELAY = 10; // Milliseconds between timer ticks
         Timer t = new Timer(DELAY, listener);
         t.start();
     }

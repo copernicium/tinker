@@ -21,6 +21,11 @@ public class RectangleComponent extends JComponent {
 
     private Rectangle box;
 
+    public RectangleComponent(int x, int y) {
+        // The rectangle that the paintComponent method draws
+        box = new Rectangle(x, y, BOX_WIDTH, BOX_HEIGHT);
+    }
+
     public RectangleComponent() {
         // The rectangle that the paintComponent method draws
         box = new Rectangle(BOX_X, BOX_Y, BOX_WIDTH, BOX_HEIGHT);

@@ -22,7 +22,7 @@ public class RectangleViewer {
             boolean fullscreen = true;
             Dimension size = fullscreen ? Util.Graphics.generateFullscreenDimension(handleTaskbar) : new Dimension(500, 500);
 
-            frame = Util.Graphics.setSize(frame,size);
+            frame = Util.Graphics.createJFrameOfSize(frame,size);
 
         }
 
