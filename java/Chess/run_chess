@@ -1,3 +1,4 @@
 cd ../
 make Game.class -C Chess/
 java -classpath . Chess.Game
+

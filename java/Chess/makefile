@@ -34,7 +34,7 @@ ChessBoard.class: ChessBoard.java
 	javac ChessBoard.java Pawn.java Queen.java ChessPieces.java Rook.java King.java Knight.java Bishop.java ../Util/Util.java ChessPiece.java ChessPosition.java
 
 Game.class: Game.java
-	javac -O Game.java Opponent.java ChessBoard.java  CapturedPiece.java Queen.java ChessPieces.java Pawn.java Rook.java King.java Knight.java Bishop.java ../Util/Util.java ChessPiece.java ChessPosition.java
+	javac -O Game.java Opponent.java ChessBoard.java CapturedPiece.java Queen.java ChessPieces.java Pawn.java Rook.java King.java Knight.java Bishop.java ../Util/Util.java ChessPiece.java ChessPosition.java
 	
 ChessPieces.class: ChessPieces.java 
 	javac ChessPieces.java ChessBoard.java  CapturedPiece.java Queen.java Game.java Pawn.java Rook.java King.java Knight.java Bishop.java ../Util/Util.java ChessPiece.java ChessPosition.java
