@@ -179,4 +179,14 @@ public class Util{
 		System.err.println("NYI " + fileName + ":" + lineNumber);
 		System.exit(1);
 	}
+
+	/**
+	 * Determines is a double is of an integer value
+	 * @param d the double to check
+	 * @return true if the double is an integer
+	 */
+	public static boolean isDoubleInt(double d){
+		double TOLERANCE = 1E-5;
+		return Math.abs(Math.floor(d) - d) < TOLERANCE;
+	}
 }
