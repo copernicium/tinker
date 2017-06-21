@@ -1,7 +1,5 @@
 package TicTacToe;
 
-import Util.Point;
-
 import java.util.Scanner;
 
 /**
@@ -27,10 +25,10 @@ public class Game {
 
 	private static void testRotation(){
 		Board board = new Board();
-		board.set(new Point<Integer>(0,0));
-		board.set(new Point<Integer>(2,2));
-		board.set(new Point<Integer>(2,0));
-		board.set(new Point<Integer>(0,2));
+		board.set(0,0);
+		board.set(2,2);
+		board.set(2,0);
+		board.set(0,2);
 		System.out.println(board.toPrintable());
 		board.rotate90();
 		System.out.println("Rotated");
