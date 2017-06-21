@@ -1,0 +1,4 @@
+cd ../
+make Game.class -C TicTacToe/
+java -classpath . TicTacToe.Game
+
