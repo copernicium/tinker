@@ -24,7 +24,7 @@ public class Point<T>{
 
     @Override
 	public String toString(){
-    	return "Point(" + x + "," + y + ")";
+    	return "(" + x + "," + y + ")";
 	}
 
     public Point(){

@@ -26,6 +26,11 @@ public class AI implements Player{
 	}
 
 	@Override
+	public String toString(){
+		return "AI";
+	}
+
+	@Override
 	public Move getMove(Board board){
 		Move move = getRandomMove(board);
 		System.out.print(move.getPosition() + "\n");

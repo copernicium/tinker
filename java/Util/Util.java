@@ -189,4 +189,14 @@ public class Util{
 		double TOLERANCE = 1E-5;
 		return Math.abs(Math.floor(d) - d) < TOLERANCE;
 	}
+
+	public static boolean isInt(String str){
+		try{
+			Integer i = Integer.parseInt(str);
+		}
+		catch(NumberFormatException nfe){
+			return false;
+		}
+		return true;
+	}
 }

@@ -27,8 +27,9 @@ public class Board {
 	@Override
 	public String toString(){
 		String o = "Board(";
-		o += "marks: " + Arrays.toString(this.marks);
+		o += "marks: " + Arrays.deepToString(this.marks);
 		o += " nextMark: " + this.nextMark;
+		o += " status:" + this.status;
 		o += ")";
 		return o;
 	}
@@ -226,6 +227,11 @@ public class Board {
 			}
 		}
 		return o;
+	}
+
+	public Board(Status status){
+		this();
+		this.status = status;
 	}
 
 	public Board(){
