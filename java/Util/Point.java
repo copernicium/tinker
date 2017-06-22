@@ -22,6 +22,11 @@ public class Point<T>{
         this.y = y;
     }
 
+    @Override
+	public String toString(){
+    	return "Point(" + x + "," + y + ")";
+	}
+
     public Point(){
     }
 
