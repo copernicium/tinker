@@ -73,7 +73,7 @@ void Point::update(Point_array const& grid){
 			get_neighbors()
 		).size();
 		if(alive_){//if current point is alive
-			if(neighbors == 2 || neighbors == 3){
+			if(neighbors == 2 || neighbors == 3){ //TODO: can easily be simplified with the else
 				return true;
 			}
 			return false; 

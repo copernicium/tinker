@@ -2,9 +2,8 @@
 #include <vector>
 #include <memory>
 
-#define X_LEN 190
-#define Y_LEN 65
-
+#define X_LEN 180
+#define Y_LEN 75 //TODO: find some way of calculating these
 
 struct Point;
 
