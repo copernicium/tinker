@@ -27,8 +27,9 @@ public class Board {
 	@Override
 	public String toString(){
 		String o = "Board(";
-		o += "marks: " + Arrays.toString(this.marks);
+		o += "marks: " + Arrays.deepToString(this.marks);
 		o += " nextMark: " + this.nextMark;
+		o += " status:" + this.status;
 		o += ")";
 		return o;
 	}
@@ -158,10 +159,22 @@ public class Board {
 		return (x >= 0 && x < DIMENSION) && (y >= 0 && y < DIMENSION);
 	}
 
+	public static Point<Integer> intToPoint(int pos, int dimension){
+		int x = pos % dimension;
+		int y =(int)Math.floor((double)pos / (double)dimension);
+		return new Point<Integer>(x,y);
+	}
+
+	public static Point<Integer> intToPoint(int pos){
+		return intToPoint(pos,DIMENSION);
+	}
+
+	public Mark[][] getMarks(){
+		return this.marks;
+	}
+
 	public void set(int pos){
-		int x = pos % DIMENSION;
-		int y =(int)Math.floor((double)pos / (double)DIMENSION);
-		set(x,y);
+		set(intToPoint(pos,DIMENSION));
 	}
 
 	public void set(Point<Integer> pos){
@@ -214,6 +227,11 @@ public class Board {
 			}
 		}
 		return o;
+	}
+
+	public Board(Status status){
+		this();
+		this.status = status;
 	}
 
 	public Board(){
