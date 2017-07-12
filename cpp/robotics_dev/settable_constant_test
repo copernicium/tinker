@@ -1,0 +1,3 @@
+g++ --std=c++11 -Wall -Werror -DSETTABLE_CONSTANT_TEST \
+	settable_constant.cpp \
+	-o settable_constant 2>&1 && ./settable_constant
