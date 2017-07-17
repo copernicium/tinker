@@ -1,7 +1,7 @@
 cc_library(
 	name="pixy_uart",
-	srcs=["pixycam/PixyUART.cpp","pixycam/PixyImpl.cpp","pixycam/PixyBlock.cpp"],
-	hdrs=["pixycam/PixyUART.h","pixycam/Pixy.h"],
+	srcs=["input/pixycam/PixyUART.cpp","input/pixycam/PixyImpl.cpp","input/pixycam/PixyBlock.cpp"],
+	hdrs=["input/pixycam/PixyUART.h","input/pixycam/Pixy.h"],
 	linkopts=["-pthread"]
 )
 
@@ -221,17 +221,33 @@ cc_test(
 )
 
 cc_library(
+	name="persistent_tracker",
+	srcs=["util/persistent_tracker.cpp"],
+	hdrs=["util/persistent_tracker.h","util/maybe.h"],
+	deps=[":util"]
+)
+
+cc_test(
+	name="persistent_tracker_test",
+	srcs=["util/persistent_tracker.cpp","util/persistent_tracker.h","util/maybe.h"],
+	copts=["-DPERSISTENT_TRACKER_TEST"],
+	deps=[":util"],
+	timeout="short"
+)
+
+
+cc_library(
 	name="stall_monitor",
 	srcs=["util/stall_monitor.cpp"],
 	hdrs=["util/stall_monitor.h"],
-	deps=[":interface"]
+	deps=[":interface",":persistent_tracker"]
 )
 
 cc_test(
 	name="stall_monitor_test",
 	srcs=["util/stall_monitor.cpp","util/stall_monitor.h"],
 	copts=["-DSTALL_MONITOR_TEST"],
-	deps=[":stall_monitor"],
+	deps=[":stall_monitor",":persistent_tracker"],
 	timeout="short"
 )
 
@@ -627,7 +643,18 @@ cc_test(
 	name="sim_test",
 	srcs=["control/sim.cpp"],
 	copts=["-DSIM_TEST","-g"],
-	deps=[":step",":toplevel",":point",":type",":nop", ":main",":util"],
+	deps=[
+		":chain",
+		":step",
+		":teleop",
+		":toplevel",
+		":point",
+		":type",
+		":nop",
+		":main",
+		":util",
+		":align"
+	],
 	timeout="short"
 )
 
@@ -700,6 +727,13 @@ cc_library(
 	deps=[":executive",":posedge_trigger_debounce",":posedge_toggle",":motion_profile",":step"]
 )
 
+cc_library(
+	name="teleop",
+	srcs=["executive/teleop.cpp"],
+	hdrs=["executive/teleop.h"],
+	deps=[":executive",":posedge_trigger_debounce",":posedge_toggle",":test"]
+)
+
 cc_test(
 	name="teleop_test",
 	srcs=["executive/teleop.cpp","executive/teleop.h"],
@@ -746,11 +780,34 @@ cc_library(
 	hdrs=["executive/step.h"],
 	deps=[":executive",":motion_profile"]
 )
+
+cc_library(
+	name="chain",
+	srcs=["executive/chain.cpp"],
+	hdrs=["executive/chain.h"],
+	deps=[":step",":executive_impl"]
+)
+
 cc_library(
 	name="align",
 	srcs=["executive/align.cpp"],
 	hdrs=["executive/align.h"],
 	deps=[":executive",":motion_profile",":step"]
+)
+
+cc_test(
+	name="align_test",
+	srcs=["executive/align.cpp","executive/align.h"],
+	copts=["-DALIGN_TEST"],
+	deps=[
+		":executive",
+		":step",
+		":test",
+		":teleop",
+		":chain",
+		":motion_profile"
+	],
+	timeout="short"
 )
 
 cc_test(

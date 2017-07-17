@@ -14,10 +14,12 @@ using namespace std;
 
 static int print_count=0;
 
-Main::Main():
-	mode(Executive{Teleop()}),//start in teleop because it is safer (it starts autonomous if it needs to anyway)
+Main::Main(Executive start):
+	mode(start),
 	autonomous_start(0)
 {}
+
+Main::Main():Main(Executive{Teleop()}){}//start in teleop because it is safer (it starts autonomous if it needs to anyway)
 
 Robot_outputs Main::operator()(const Robot_inputs in,ostream& /*print_stream*/){
 	print_count++;
@@ -63,7 +65,7 @@ Robot_outputs Main::operator()(const Robot_inputs in,ostream& /*print_stream*/){
 	
 	log(in,status,r);
 
-	#if 0
+	#ifdef PRINT_OUTS
 	if(in.ds_info.connected && (print_count % 10) == 0){
 		cout<<"mode: "<<mode<<"\n\n";
 		cout<<"panel:"<<panel<<"\n";

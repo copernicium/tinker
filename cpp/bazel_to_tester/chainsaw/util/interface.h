@@ -6,7 +6,7 @@
 #include "driver_station_interface.h"
 #include "maybe_inline.h"
 #include "checked_array.h"
-#include "../pixycam/PixyUART.h"
+#include "../input/pixycam/PixyUART.h"
 
 typedef double Time;//Seconds
 typedef bool Solenoid_output;
@@ -169,7 +169,7 @@ enum class Digital_in{OUTPUT,_0,_1,ENCODER};
 std::ostream& operator<<(std::ostream&,Digital_in);
 std::set<Digital_in> examples(Digital_in*);
 
-typedef int Encoder_output;
+typedef int Encoder_output;//TODO: is this not an input?
 
 struct Digital_inputs{
 	Checked_array<Digital_in,Robot_outputs::DIGITAL_IOS> in;
@@ -184,6 +184,7 @@ bool operator!=(Digital_inputs const&,Digital_inputs const&);
 std::ostream& operator<<(std::ostream&,Digital_inputs const&);
 
 struct Camera{
+	static const double FOV; //degrees
 	bool enabled;
 	std::vector<Pixy::Block> blocks;
 	

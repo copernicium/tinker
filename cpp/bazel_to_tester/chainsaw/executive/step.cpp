@@ -27,7 +27,7 @@ Toplevel::Goal Step::run(Run_info info){
 	return impl->run(info,{});
 }
 
-const double RIGHT_SPEED_CORRECTION = -0.045; // 0.0;// 0 is for comp bot. //left and right sides of the practice robot drive at different speeds given the same power, adjust this to make the robot drive straight
+const double RIGHT_SPEED_CORRECTION = /*-0.045; */ 0.0;// 0 is for comp bot. //left and right sides of the practice robot drive at different speeds given the same power, adjust this to make the robot drive straight
 
 Drivebase::Distances Turn::angle_to_distances(Rad target_angle){
 	Inch side_goal = target_angle * 0.5 * ROBOT_WIDTH;
@@ -365,7 +365,7 @@ bool Combo::operator==(Combo const& b)const{
 	return step_a == b.step_a && step_b == b.step_b;
 }
 
-Turn_on_light::Turn_on_light():lights_goal({Lights::Loading_indicator::GEARS,true}){}
+Turn_on_light::Turn_on_light():lights_goal({Lights::Loading_indicator::GEARS,true,Lights::Blinky_mode::NO_FLASH}){}
 
 Step::Status Turn_on_light::done(Next_mode_info info){
 	return (ready(status(info.status.lights),lights_goal)) ? Step::Status::FINISHED_SUCCESS : Step::Status::UNFINISHED;
