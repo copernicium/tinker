@@ -1,0 +1,2 @@
+g++ -std=c++14 -o pwm_transcriber -DPWM_TRANSCRIBER_TEST pwm_transcriber.cpp
+./pwm_transcriber
