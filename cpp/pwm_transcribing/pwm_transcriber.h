@@ -100,7 +100,22 @@ class PWM_transcriber{ //This class is used to manage conversion of a data set t
 		all_transcriptions.insert(std::pair<std::string,Transcriber_base*>(NAME, (Transcriber_base*)(new Transcriber<T>(highest_unassigned_value,KEYS))));
 	}
 
-	friend std::ostream& operator<<(std::ostream&, const PWM_transcriber&);
+	friend std::ostream& operator<<(std::ostream& o, const PWM_transcriber& a) {
+		o<<"{";
+		for(auto i = a.all_transcriptions.begin(); i != a.all_transcriptions.end(); i++){
+			o<<i -> first<<": ";
+			auto t = i -> second;
+			t -> print(o);
+			
+			auto second_to_last = a.all_transcriptions.end();
+			second_to_last--;
+			if(i != second_to_last){
+				o<<",   ";
+			}
+		}
+		o<<"}";
+		return o;
+	}
 
 	PWM_transcriber():highest_unassigned_value(0){}
 };
@@ -108,23 +123,6 @@ class PWM_transcriber{ //This class is used to manage conversion of a data set t
 template<typename T>
 std::ostream& operator<<(std::ostream& o, const PWM_transcriber::Transcriber<T>& a){
 	a.print(o);
-	return o;
-}
-
-std::ostream& operator<<(std::ostream& o, const PWM_transcriber& a){
-	o<<"{";
-	for(auto i = a.all_transcriptions.begin(); i != a.all_transcriptions.end(); i++){
-		o<<i -> first<<": ";
-		auto t = i -> second;
-		t -> print(o);
-		
-		auto second_to_last = a.all_transcriptions.end();
-		second_to_last--;
-		if(i != second_to_last){
-			o<<",   ";
-		}
-	}
-	o<<"}";
 	return o;
 }
 
