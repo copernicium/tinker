@@ -215,6 +215,7 @@ vector<Move> solver(Maze& a,bool& found,vector<Move>& path,vector<Location>& vis
 	if(possible_moves.size()>0){
 		path.push_back(possible_moves[weight(a,possible_moves,visited)]);//get_random(possible_moves.size())]);
 		a=update(path.back(),a,visited);
+		
 		visited.push_back(a.solver.loc);
 	}
 	else{
@@ -228,6 +229,7 @@ vector<Move> solver(Maze& a,bool& found,vector<Move>& path,vector<Location>& vis
 }
 
 vector<Move> get_path(Maze a){//Tries to get a path of the shortest length
+	Maze backup = a;
 	if(a.solver.loc==a.target)return vector<Move>{};
 	bool found=0;
 	vector<Move> path;
@@ -235,6 +237,78 @@ vector<Move> get_path(Maze a){//Tries to get a path of the shortest length
 	while(!found){
 		path=solver(a,found,path,visited); 
 	}
+	//M
+		vector<Location> path_locations = [&] {
+			vector<Location> v;
+			Location l=backup.solver.loc;
+			for(unsigned int i=0; i<path.size(); i++){
+				switch(path[i]){
+					case Move::FORWARD:
+						l.second++;
+						break;
+					case Move::BACKWARD:
+						l.second--;
+						break;
+					case Move::LEFT:
+						l.first--;
+						break;
+					case Move::RIGHT:
+						l.first++;
+						break;
+					default:
+						assert(0);
+				}
+				v.push_back(l);
+			}
+			return v;
+		}();
+		cout<<"\n"<<path_locations<<"\n";
+		ofstream mascot("m.txt",ios_base::app);
+		for(unsigned i = 0; i < path_locations.size(); i++){
+				mascot<<"[\n";
+				for(unsigned r = 0; r < 12; r++){
+					mascot<<"[";
+					for(unsigned c = 0; c < 16; c++){
+						bool part_of_path = false;
+						for(unsigned p_l = 0; p_l < i; p_l++){
+							Location loc = path_locations[p_l];
+							if(make_pair((int)c,(int)r) == make_pair(loc.first,11 - loc.second)){
+								mascot<<"[\"ff\",\"ff\",\"00\"]";
+								part_of_path = true;
+							}
+						}
+						if(!part_of_path){
+							bool wall = false;
+							for(Location b: backup.blocks){
+								if(make_pair((int)c,(int)r) == make_pair(b.first, 11 - b.second)){
+									mascot<<"[\"ff\",\"ff\",\"ff\"]";
+									wall = true;
+								}
+							}
+							if(wall){
+								//null
+							} else if(make_pair((int)c,(int)r) == make_pair(backup.target.first,11 - backup.target.second)){
+								mascot<<"[\"00\",\"ff\",\"00\"]";
+							} else {
+								mascot<<"[\"00\",\"00\",\"00\"]";
+							}
+						}
+						
+						if((c + 1) < 16){
+							mascot<<", ";
+						}
+					}
+					mascot<<"]";
+					if((r + 1) < 12){
+						mascot<<",";
+					}
+					mascot<<"\n";
+				}
+				mascot<<"\n],\n";
+			
+		}
+		mascot.close();
+		//M
 	if(found)return path;
 	cout<<"\nAn error may have occurred: line:"<<__LINE__<<"\n";
 	exit(44); 
