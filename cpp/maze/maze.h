@@ -40,7 +40,7 @@ bool operator==(vector<T>, vector<T>);
 
 vector<vector<char>> print_maze(Maze, vector<Move> path=vector<Move>{},bool add_boundary=1,bool print_line=0);
 
-vector<Move> get_path(Maze);
+vector<Move> get_path(const Maze&);
 
 Maze import_maze(const string filename="maze.txt");
 
