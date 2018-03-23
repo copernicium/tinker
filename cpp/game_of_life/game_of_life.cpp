@@ -127,10 +127,10 @@ string Grid::to_string(){
 void write_mascot_frame(const string GRID_STR,const long FRAME){	
 	ofstream design_file(DESIGN_FILE,ios_base::app);
 
-	design_file<<"[\n";
+	design_file<<"\t[\n";
 	
 	for(unsigned row = 0; row < Y_LEN; row++){
-		design_file<<"\t[";
+		design_file<<"\t\t[";
 		for(unsigned column = 0; column < X_LEN; column++){	
 			if(GRID_STR[row * Y_LEN + column] == 'X'){
 				design_file<<"[\"ff\",\"ff\",\"ff\"]"; //wall color
@@ -149,7 +149,7 @@ void write_mascot_frame(const string GRID_STR,const long FRAME){
 		design_file<<"\n";
 	}
 	
-	design_file<<"]";
+	design_file<<"\t]";
 	if((FRAME + 1) < FRAMES){
 		design_file<<",";
 	}
