@@ -129,18 +129,25 @@ void write_mascot_frame(const string GRID_STR,const long FRAME){
 
 	design_file<<"\t[\n";
 	
+	unsigned grid_str_i = 0;
+	
 	for(unsigned row = 0; row < Y_LEN; row++){
 		design_file<<"\t\t[";
-		for(unsigned column = 0; column < X_LEN; column++){	
-			if(GRID_STR[row * Y_LEN + column] == 'X'){
+		for(unsigned column = 0; column < X_LEN;){	
+			char pixel = GRID_STR[grid_str_i]; 
+			if(pixel == 'X'){
 				design_file<<"[\"ff\",\"ff\",\"ff\"]"; //wall color
-			} else {
+			} else if(pixel == ' '){
 				design_file<<"[\"00\",\"00\",\"00\"]"; //background color
 			}
 			
-			if((column + 1) < 16){
-				design_file<<", ";
+			if(pixel == 'X' || pixel == ' '){
+				if((column + 1) < 16){
+					design_file<<", ";
+				}
+				column++;
 			}
+			grid_str_i++;
 		}
 		design_file<<"]";
 		if((row + 1) < 12){
@@ -173,7 +180,9 @@ void run(const long FRAME_COUNT = -1){
 		}
 		string grid_str = grid.to_string();
 		string last_grid = grid_str;
-		//cout<<grid_str<<"\n";
+		/*
+		cout<<grid_str<<"\n";\
+		*/
 		unsigned i = 0;
 		while(true){
 			if(FRAME_COUNT!=-1 && i >= FRAME_COUNT){
