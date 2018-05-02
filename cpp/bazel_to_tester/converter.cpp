@@ -3,9 +3,6 @@
 #include <fstream>
 #include "../util/nyi.h"
 
-#include <windows.h>//for use in retrieving absolute path
-#undef RELATIVE //macro name conflict from windows.h
-
 using namespace std;
 
 static const string ENDING = ")";
@@ -457,48 +454,6 @@ string pop_filename(string const& PATH){
 		return PATH.substr(0,min(PATH.rfind(DIR_MARKER) + 1, PATH.size()));
 	}
 	return PATH;
-}
-
-string make_path_absolute(string const& RELATIVE){ 
-	NYI//TODO: move to util and get working on both linux and windows
-	string path;
-	{
-		/*
-		static const string COMMAND = "realpath";
-		const string EXECUTABLE = COMMAND + " " + RELATIVE; 
-		const char* SYSTEM_ARG = EXECUTABLE.c_str();
-
-		FILE *in;
-		char buffer[512];
-		
-		in = popen(SYSTEM_ARG, "r");
-		if(!in){
-			return "";
-		}
-		fgets(buffer, sizeof(buffer), in);
-		if(buffer != NULL){
-			string s = buffer;
-			for(char c: s){
-				if(c != '\n' && c != '\r') path += c;
-			}	
-		}
-		pclose(in);
-		*/
-	}
-	{
-		/*
-		char full_path[MAX_PATH];
-		GetFullPathName(RELATIVE.c_str(), MAX_PATH, full_path, NULL);
-		path = full_path;
-		cout<<"\n\""<<full_path<<"\"\n";
-		*/
-	}
-	const char DIR_MARKER = '/';
-	if(RELATIVE.size() > 0 && RELATIVE[RELATIVE.size() - 1] == DIR_MARKER){
-		path += DIR_MARKER; //readpath does not include the last "/" on directories, so add that back in
-	}
-
-	return path;
 }
 
 vector<vector<string>> Project::read(string const& HEADING){
