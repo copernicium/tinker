@@ -68,8 +68,8 @@ std::string as_string(T const& t){
 std::string make_path_absolute(std::string const& REL_PATH){ 
 	std::string path;
 	#ifdef __linux__
-		static const string COMMAND = "realpath";
-		const string EXECUTABLE = COMMAND + " " + REL_PATH; 
+		static const std::string COMMAND = "realpath";
+		const std::string EXECUTABLE = COMMAND + " " + REL_PATH; 
 		const char* SYSTEM_ARG = EXECUTABLE.c_str();
 
 		FILE *in;
@@ -81,7 +81,7 @@ std::string make_path_absolute(std::string const& REL_PATH){
 		}
 		fgets(buffer, sizeof(buffer), in);
 		if(buffer != NULL){
-			string s = buffer;
+			std::string s = buffer;
 			for(char c: s){
 				if(c != '\n' && c != '\r') path += c;
 			}	
