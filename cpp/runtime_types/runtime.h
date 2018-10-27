@@ -30,12 +30,22 @@ public:
 		inner->run();
 	}
 
-	A():inner(Input::create()){}
+	static A setup(){
+		A a;
+		a.inner = Input::create();
+		return a;
+	}
+
+	A():inner(nullptr){}
 };
 
 struct B: public Base{
 	void run()const{
 		std::cout << "Ran B";
+	}
+
+	static B setup(){
+		return B();
 	}
 };
 
@@ -49,5 +59,11 @@ public:
 		inner->run();
 	}
 
-	C():inner(Input::create()){}
+	static C setup(){
+		C a;
+		a.inner = Input::create();
+		return a;
+	}
+
+	C():inner(nullptr){}
 };

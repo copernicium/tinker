@@ -20,11 +20,11 @@ std::shared_ptr<Base> Input::create(){
 		in->erase(0, 1);
 
 		if(type == "A"){
-			return std::make_shared<A>(A());
+			return std::make_shared<A>(A::setup());
 		} else if(type == "B"){
-			return std::make_shared<B>(B());
+			return std::make_shared<B>(B::setup());
 		} else if(type == "C"){
-			return std::make_shared<C>(C());
+			return std::make_shared<C>(C::setup());
 		} else {
 			std::cout << "Parsing failed - type input \"" << type << "\"\n";
 			exit(1);
