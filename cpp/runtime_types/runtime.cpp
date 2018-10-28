@@ -1,46 +1,24 @@
 #include "runtime.h"
+#include <iostream>
 
-#include <cassert>
-
-std::shared_ptr<std::string> Input::in = nullptr;
-
-std::shared_ptr<Base> Input::create(const std::string& a){
-	if(in == nullptr){
-		in = std::make_shared<std::string>();
-	}
-
-	*in = a;
-	return create();
-}
-
-std::shared_ptr<Base> Input::create(){
-	if(in->size() > 0){
-		std::string type = in->substr(0,1);
-
-		in->erase(0, 1);
-
-		if(type == "A"){
-			return std::make_shared<A>(A::setup());
-		} else if(type == "B"){
-			return std::make_shared<B>(B::setup());
-		} else if(type == "C"){
-			return std::make_shared<C>(C::setup());
-		} else {
-			std::cout << "Parsing failed - type input \"" << type << "\"\n";
-			exit(1);
-		}
-	}
-	std::cout << "Parsing failed - end of input\n";
-	exit(1);
-}
+// Int a = 5
+// Int b = 5
+// Int c = a + b
 
 int main(){
-	std::string types;
-	std::cout << "Types: ";
-	std::cin >> types;
+	std::string type_str;
+	std::cout<<"Type: ";
+	std::cin>>type_str;
+	
+	ObjectBase::Type type = (type_str == "Real") ? ObjectBase::Type::REAL : ObjectBase::Type::INT;
+	
+	std::shared_ptr<ObjectBase> a = create(type);
+	set(a, 5);
+	
+	std::shared_ptr<ObjectBase> b = create(type);
+	set(b, 5);
 
-	std::shared_ptr<Base> result = Input::create(types);
-
-	result->run();
-	std::cout<<"\n";
+	std::shared_ptr<ObjectBase> c = visit(a, b, add);
+	
+	std::cout<<c->toString()<<"\n";
 }

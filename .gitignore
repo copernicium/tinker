@@ -1,6 +1,7 @@
 *.exe
 *.exe.stackdump
 *.out
+*.out.stackdump
 *.o
 *.class
 *.ctxt

@@ -1,69 +1,93 @@
-#pragma once
-
-#include <iostream>
+#include <cassert>
 #include <memory>
-#include <type_traits>
 
-struct Base{
-	virtual void run()const = 0;
-};
+// Object types
 
-struct Input{
-private:
-	static std::shared_ptr<std::string> in;
+struct ObjectBase{
+	enum class Type{INT, REAL};
 
-public:
-	static std::shared_ptr<Base> create(const std::string&);
-
-	static std::shared_ptr<Base> create();
-
-	Input() = delete;
-};
-
-struct A: public Base{
-private:
-	std::shared_ptr<Base> inner;
+protected:
+	Type type;
 
 public:
-	void run()const{
-		std::cout << "Ran A -> ";
-		inner->run();
+	Type getType()const noexcept{
+		return type;
 	}
-
-	static A setup(){
-		A a;
-		a.inner = Input::create();
-		return a;
-	}
-
-	A():inner(nullptr){}
+	
+	ObjectBase(const Type& t)noexcept: type(t){}
+	
+	virtual std::string toString()const noexcept = 0;
 };
 
-struct B: public Base{
-	void run()const{
-		std::cout << "Ran B";
-	}
-
-	static B setup(){
-		return B();
-	}
-};
-
-struct C: public Base{
+template<typename T, ObjectBase::Type ObjectType>
+struct Object: public ObjectBase{
 private:
-	std::shared_ptr<Base> inner;
+	T value;
 
 public:
-	void run()const{
-		std::cout << "Ran C -> ";
-		inner->run();
+	T getValue()const noexcept{
+		return value;
 	}
-
-	static C setup(){
-		C a;
-		a.inner = Input::create();
-		return a;
+	
+	void setValue(T a)noexcept{
+		value = a;
 	}
-
-	C():inner(nullptr){}
+	
+	std::string toString()const noexcept{
+		return "Object(" + std::to_string(value) + ")";
+	}
+	
+	Object(T v)noexcept: ObjectBase(ObjectType), value(v){}
+	Object()noexcept: ObjectBase(ObjectType), value(T()){}
 };
+
+using Int = Object<int,ObjectBase::Type::INT>;
+using Real = Object<double, ObjectBase::Type::REAL>;
+
+// Visitors
+
+struct Add{
+	template<typename T>
+	std::shared_ptr<ObjectBase> operator()(T a, T b)const noexcept{
+		return std::make_shared<T>(T(a.getValue() + b.getValue()));
+	}
+};
+static constexpr Add add;
+
+template<typename F>
+std::shared_ptr<ObjectBase> visit(std::shared_ptr<ObjectBase> a, std::shared_ptr<ObjectBase> b, F op){
+	assert(a->getType() == b->getType());
+	switch(a->getType()){
+	case ObjectBase::Type::REAL:
+		return op(*std::dynamic_pointer_cast<Real>(a), *std::dynamic_pointer_cast<Real>(b));
+	case ObjectBase::Type::INT:
+		return op(*std::dynamic_pointer_cast<Int>(a), *std::dynamic_pointer_cast<Int>(b));
+	default:
+		assert(0);
+	}
+}
+
+template<typename T>
+void set(std::shared_ptr<ObjectBase> a, T value){
+	switch(a->getType()){
+	case ObjectBase::Type::REAL:
+		std::dynamic_pointer_cast<Real>(a)->setValue(value);
+		break;
+	case ObjectBase::Type::INT:
+		std::dynamic_pointer_cast<Int>(a)->setValue(value);
+		break;
+	default:
+		assert(0);
+	}
+}
+	
+std::shared_ptr<ObjectBase> create(const ObjectBase::Type& TYPE){
+	switch(TYPE){
+	case ObjectBase::Type::REAL:
+		return std::make_shared<Real>(Real());
+	case ObjectBase::Type::INT:
+		return std::make_shared<Int>(Int());
+	default:
+		assert(0);
+	}
+}
