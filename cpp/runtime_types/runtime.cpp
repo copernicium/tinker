@@ -5,11 +5,11 @@
 // Int b = TEST_VAL
 // Int c = a + b
 
-ObjectBase::Type toType(const std::string& IN){
+Type toType(const std::string& IN){
 	if(IN == "Real"){
-		return ObjectBase::Type::REAL;
+		return Type::REAL;
 	} else if(IN == "Int"){
-		return ObjectBase::Type::INT;
+		return Type::INT;
 	}
 	assert(0);
 }
@@ -18,23 +18,27 @@ int main(){
 	constexpr unsigned TEST_VAL = 5;
 
 	std::string type_str;
-	std::cout<<"Type: ";
-	std::cin>>type_str;
-
-	ObjectBase::Type type = toType(type_str);
+	Type type;
 
 	{
-		std::shared_ptr<ObjectBase> a = create(type);
-		visit(a, assign, TEST_VAL);
+		std::cout<<"Primitive example -\n";
 
-		std::shared_ptr<ObjectBase> b = create(type);
-		visit(b, assign, TEST_VAL);
+		std::cout<<"Type: ";
+		std::cin>>type_str;
+		type = toType(type_str);
 
-		std::shared_ptr<ObjectBase> c = visit(a, b, add);
+		Object a = Object::primitive(type);
+		Object::visit(assign, a, TEST_VAL);
 
-		std::cout<<c->toString()<<"\n";
+		Object b = Object::primitive(type);
+		Object::visit(assign, b, TEST_VAL);
+
+		Object c = Object::visit(add, a, b);
+
+		std::cout<<Object::visit(toString, c)<<"\n";
 	}
 	{
+		std::cout<<"\nList example -\n";
 		int size = 0, index = 0;
 
 		std::cout<<"Type: ";
@@ -47,14 +51,18 @@ int main(){
 		std::cout<<"Test index: ";
 		std::cin>>index;
 
-		std::shared_ptr<ObjectBase> list = create(create(type), size);
-		visit(at(list, index), assign, TEST_VAL);
+		Object list = Object::list(Object::create(type), size);
+		Object::visit(assign, list.at(index), TEST_VAL);
 
-		std::cout<<list->toString()<<"\n";
-		std::cout<<at(list, index)->toString()<<"\n";
+		std::cout<<"[";
+		for(unsigned i = 0; i < list.size(); i++){
+			std::cout<<Object::visit(toString, list.at(i))<<" ";
+		}
+		std::cout<<"]\n";
 	}
 	{
-		std::vector<std::shared_ptr<ObjectBase>> types;
+		std::cout<<"\nCollection example -\n";
+		std::vector<std::shared_ptr<Object>> types;
 		int index = 0;
 
 		while(true){
@@ -63,16 +71,19 @@ int main(){
 			if(type_str == "q"){
 				break;
 			}
-			types.push_back(create(toType(type_str)));
+			types.push_back(Object::create(toType(type_str)));
 		}
 
 		std::cout<<"Test index: ";
 		std::cin>>index;
 
-		std::shared_ptr<ObjectBase> collection = create(types);
-		visit(at(collection, index), assign, TEST_VAL);
+		Object collection = Object::collection(types);
+		Object::visit(assign, collection.at(index), TEST_VAL);
 
-		std::cout<<collection->toString()<<"\n";
-		std::cout<<at(collection, index)->toString()<<"\n";
+		std::cout<<"[";
+		for(unsigned i = 0; i < collection.size(); i++){
+			std::cout<<Object::visit(toString, collection.at(i))<<" ";
+		}
+		std::cout<<"]\n";
 	}
 }
